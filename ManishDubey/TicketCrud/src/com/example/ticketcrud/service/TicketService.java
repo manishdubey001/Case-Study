@@ -246,7 +246,12 @@ public class TicketService {
         Iterator<Integer> iterator  = tickets.keySet().iterator();
         System.out.println("---------------------------------------------");
         if(tickets.size() > 0) {
-            TreeMap<String, Integer> agent = new TreeMap<>();
+            TreeMap<String, Integer> agent = new TreeMap<>(new Comparator<String>() {
+                @Override
+                public int compare(String s1, String s2) {
+                    return s1.toLowerCase().compareTo(s2.toLowerCase());
+                }
+            });
             while (iterator.hasNext()) {
                 int id = iterator.next();
                 String agentName = tickets.get(id).getAgentName();
