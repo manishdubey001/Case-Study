@@ -59,7 +59,7 @@ public class TicketHelper /*implements Comparable<Tickets>*/ {
             }
 
             map.put("tags",s1);
-            s1 = null; tmp1= null;
+            s1 = null; tmp1= null; // cjm - this isn't necessary
 
         }
 
@@ -85,6 +85,7 @@ public class TicketHelper /*implements Comparable<Tickets>*/ {
 
         Tickets ticket = (Tickets) Tickets.ticketList.get(id);
         if (ticket ==null){
+            // cjm - I would not call this a Duplicate Entry. I think in all cases I would simply use an existing exception or else define TicketNotFoundException
             throw new DuplicateEntryException("Record with id: "+id +" does not exists");
         }
 
@@ -237,6 +238,7 @@ public class TicketHelper /*implements Comparable<Tickets>*/ {
 
             searchKey = values[0].toLowerCase();
 
+            // cjm - good use of streams
             a= (List) Tickets.getListStream().filter(
                     (obj) ->{ Map.Entry me = (Map.Entry)obj;
                         if (key.equals("agent")){
@@ -251,6 +253,7 @@ public class TicketHelper /*implements Comparable<Tickets>*/ {
             //this block is reserved for future usage
         }
 
+        // cjm - can you see how to combine the sort with the stream operations above?
         Collections.sort(a, (o1, o2) ->{
             if ( ( (Tickets)(((Map.Entry) o1).getValue()) ).getModified() <=
                     ( (Tickets)(((Map.Entry) o2).getValue()) ).getModified() )
