@@ -9,7 +9,7 @@ import java.security.InvalidParameterException;
  * Created by root on 30/12/15.
  */
 public class TicketUtil {
-
+// cjm - I like splitting these kind of methods out into a separate class
     public static BufferedReader reader = null;
     private static int currentTicketId = 0;
 

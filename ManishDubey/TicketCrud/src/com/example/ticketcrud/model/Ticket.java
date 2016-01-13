@@ -67,6 +67,7 @@ public class Ticket {
         return modified;
     }
 
+    // cjm - I would not expose this and setCreated; let the Ticket class manage these.
     public void setModified(Date modified) {
         this.modified = modified;
     }

@@ -13,6 +13,9 @@ import java.util.*;
  */
 public class TicketService {
 
+    // cjm - it does not make much difference in this case study, but I would avoid making everything static
+    // Where it will start to make a difference is when you want to do sophisticated unit tests with mocking/dependency injection,
+    // or when you want to subclass TicketService.
     public static HashMap<Integer,Ticket> tickets = new HashMap<>();
 
     /**
@@ -22,7 +25,7 @@ public class TicketService {
     {
         try {
             BufferedReader reader = TicketUtil.getReader();
-            int id = TicketUtil.getNextTicketId();
+            int id = TicketUtil.getNextTicketId(); // cjm - I would push this logic into TicketFactory, perhaps with a "createNextTicket()" method
             System.out.println("Enter Ticket subject: ");
             String subject = reader.readLine();
             System.out.println("Enter Agent name: ");
@@ -30,8 +33,8 @@ public class TicketService {
             System.out.println("Enter comma separated tags of ticket: ");
             String tags = reader.readLine();
             HashSet<String> tagsSet = new HashSet<>(Arrays.asList(tags.toLowerCase().split(",")));
-            Date created  = new Date();
-            Date modified  = new Date();
+            Date created  = new Date(); // cjm - I would have the Ticket class handle its own create/modified times
+            Date modified  = new Date(); // cjm - And I would set these dates to be exactly equal for a newly created ticket
             if(!subject.isEmpty() && !agentName.isEmpty()) {
                 tickets.put(id, TicketFactory.newInstance(id, subject, agentName, tagsSet, created, modified));
                 System.out.println("Ticket successfully created with id : "+id);
@@ -51,6 +54,16 @@ public class TicketService {
     {
         System.out.println("Ticket List ....");
         List<Ticket> ticketList = new ArrayList<>(tickets.values());
+        // cjm - streams can be a more efficient way to accomplish this compared to creating a new ArrayList (profile to be sure)
+        // The stream version would look something like
+//        tickets.values()
+//                .stream()
+//                .sorted((Ticket o1, Ticket o2) -> {
+//                    return -o1.getModified().compareTo(o2.getModified());
+//                })
+//                .forEach(ticket -> {
+//                    System.out.println(ticket.getId() + "\t" + ticket.getSubject() + "\t" + ticket.getAgentName() + "\t" + ticket.getTags() + "\t" + ticket.getCreated() + "\t" + ticket.getModified() + "\t");
+//                });
         Collections.sort(ticketList,(Ticket o1, Ticket o2) -> {return -o1.getModified().compareTo(o2.getModified());});
         Iterator<Ticket> iterator  = ticketList.iterator();
         System.out.println("---------------------------------------------");
@@ -134,6 +147,8 @@ public class TicketService {
                 if(!tags.isEmpty() || !agentName.isEmpty()) {
                     ticket.setModified(new Date());
                     tickets.put(id, ticket);
+                    // cjm - notice that you didn't copy the ticket; it was modififed in place, so you don't actually need to put it again.
+                    // The changes you have been making have been on the very same ticket that is stored in the tickets map.
                     System.out.println("Ticket with id: " + id + " updated with following details : ");
                     System.out.println(tickets.get(id).getId() + "\t" + tickets.get(id).getSubject() + "\t" + tickets.get(id).getAgentName() + "\t" + tickets.get(id).getTags() + "\t" + tickets.get(id).getCreated() + "\t" + tickets.get(id).getModified() + "\t");
                 }else
@@ -187,6 +202,7 @@ public class TicketService {
                         flag = true;
                     }
                 }
+                // cjm - Can you see how to accomplish this with streams? I can help if not.
                 if (!flag) {
                     System.out.println("No tickets founds with this agent name");
                 }
