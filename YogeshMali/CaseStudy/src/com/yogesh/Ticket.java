@@ -73,7 +73,7 @@ public class Ticket implements Comparable<Ticket> {
     public void setModified(Date modified) {
         this.modified = modified;
     }
-
+// cjm - I would not make setModified/setTimestamp public. I would let the Ticket class manage these.
 
     @Override
     public int compareTo(Ticket o) {
