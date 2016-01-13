@@ -54,6 +54,7 @@ public class Ticket {
 		return modified;
 	}
 
+	// cjm - I would remove this accessor and have the Ticket manage setting this.
 	public void setModified(long modified) {
 		this.modified = modified;
 	}

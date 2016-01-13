@@ -10,7 +10,7 @@ public class caseStudy {
 	public int input = 0;
 	public boolean createFlag = true;
 	public Scanner scanner = new Scanner(System.in);
-	HashMap<Integer, Ticket> ticketDetails = new HashMap();
+	HashMap<Integer, com.caseStudy.Ticket> ticketDetails = new HashMap();
 
 	// menu section for displaying operations
 	public void menuPopUp() {
@@ -44,10 +44,10 @@ public class caseStudy {
 					do {
 						System.out.println("Do you wish to add more tickets? Y/N");
 						String answer = scanner.next();
-						if (answer.equals("y") || answer.equals("Y"))
+						if (answer.equals("y") || answer.equals("Y")) // cjm - Another option here is answer.toLowerCase().equals("y")
 							createTicket();
 						else if (answer.equals("n") || answer.equals("N"))
-							createFlag = false;
+							createFlag = false; // cjm - This is never set back to true, so the next time through, it won't work as expected
 					}
 					while (createFlag);
 					System.out.println("Ticket(s) created successfully");
@@ -134,7 +134,7 @@ public class caseStudy {
 			System.out.println("Please enter a valid ticket Id");
 		}
 		finally {
-			scanner.nextLine();
+			scanner.nextLine(); // cjm - Is this line necessary?
 		}
 
 	}
@@ -148,10 +148,10 @@ public class caseStudy {
 		else {
 			System.out.println("Enter the ticket id");
 			int id = scanner.nextInt();
-			Ticket ticketObj = ticketDetails.get(id);
-			System.out.println("Change subject?? y/n");
+			Ticket ticketObj = ticketDetails.get(id); // cjm - You don't validate that there really is a ticket as entered!
+			System.out.println("Change subject?? y/n"); // cjm - note that changing t
 			String selection = scanner.next();
-			updateInfo(selection, ticketObj, "sub");
+			updateInfo(selection, ticketObj, "sub"); // cjm - Exception will propagate to the caller here if the ticket wasn't found
 
 			System.out.println("Change agent assigned?? y/n");
 			selection = scanner.next();
@@ -164,15 +164,15 @@ public class caseStudy {
 	}
 
 	// update info of the ticket
-	public void updateInfo(String selection, Ticket ticketObj, String field) {
+	public void updateInfo(String selection, com.caseStudy.Ticket ticketObj, String field) {
 		if (selection.equals("y") || selection.equals("Y")) {
-
+			// cjm - I would break this up into three methods and not use the switch/case.
 			switch (field) {
-				case "sub":
+				case "sub": // cjm - Defining strings like this can be error prone and hard to maintain
 					System.out.println("Enter the data");
 					String data = scanner.next();
 					ticketObj.setSubject(data);
-					ticketObj.setModified(System.currentTimeMillis() / 1000L);
+					ticketObj.setModified(System.currentTimeMillis() / 1000L); // cjm - I would let the ticket class manage its modified date
 					break;
 				case "ag":
 					System.out.println("Enter the data");
@@ -195,7 +195,7 @@ public class caseStudy {
 		Scanner scanner = new Scanner(System.in);
 		System.out.println("Enter the tags (comma separated)");
 		String tags = scanner.nextLine();
-		HashSet set = new HashSet(Arrays.asList(tags.split("\\s*,\\s*")));
+		HashSet set = new HashSet(Arrays.asList(tags.split("\\s*,\\s*"))); // cjm - Just using "," here is enough.
 		return set;
 	}
 
@@ -205,7 +205,7 @@ public class caseStudy {
 			System.out.println("No tickets available.");
 		else {
 			switch (operation) {
-				case "delete":
+				case "delete": // cjm - same advice as before, break this into several methods
 					int id = getTicketId();
 					ticketDetails.remove(id);
 					System.out.println("Ticket " + id + " has been deleted");
@@ -218,7 +218,7 @@ public class caseStudy {
 				case "showList":
 					Set hmKeySet = ticketDetails.keySet();
 					for (Object key : hmKeySet)
-						this.printData(key);
+						this.printData(key); // cjm - remember this was supposed to be sorted by modified date
 					break;
 
 				default:
@@ -260,7 +260,7 @@ public class caseStudy {
 				Ticket eachTicket = ticketDetails.get(key);
 				String agent = eachTicket.getAgent();
 				if (agent.equals(ag))
-					this.printData(key);
+					this.printData(key); // cjm - also should be sorted by modified date
 				else
 					System.out.println("Tickets for agent " + ag + " not present");
 			}
@@ -287,7 +287,7 @@ public class caseStudy {
 					agTicketCount.put(ag, 1);
 			}
 			Set keys = agTicketCount.keySet();
-			System.out.println("Agent -> Count");
+			System.out.println("Agent -> Count"); // cjm - this is supposed to be sorted by agent name
 			for (Object key : keys) {
 				System.out.println(key + " -> " + agTicketCount.get(key));
 			}
@@ -307,7 +307,7 @@ public class caseStudy {
 				Ticket eachTicket = ticketDetails.get(key);
 				Set tags = eachTicket.getTags();
 				if (tags.contains(tag))
-					printData(key);
+					printData(key); // cjm - modified date sort
 				else
 					System.out.println("Tickets for tag " + tag + " not present");
 			}
@@ -327,6 +327,7 @@ public class caseStudy {
 		while (proceed.equals("y"));
 	}
 
+	// cjm - The three functions below are not used
 	public void deleteTicket() {
 		if (ticketDetails.isEmpty()) {
 			System.out.println("No tickets available to delete.");
