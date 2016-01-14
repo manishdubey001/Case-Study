@@ -14,13 +14,13 @@ public class Ticket {
     private Date created;
     private Date modified;
 
-    public Ticket(int id, String subject, String agentName, HashSet<String> tags, Date created, Date modified) {
+    public Ticket(int id, String subject, String agentName, HashSet<String> tags) {
         this.id = id;
         this.subject = subject;
         this.agentName = agentName;
         this.tags = tags;
-        this.created = created;
-        this.modified = modified;
+        this.created = new Date();
+        this.modified = new Date();
     }
 
     public int getId() {
@@ -45,6 +45,7 @@ public class Ticket {
 
     public void setAgentName(String agentName) {
         this.agentName = agentName;
+        this.setModified(new Date());
     }
 
     public HashSet<String> getTags() {
@@ -53,21 +54,18 @@ public class Ticket {
 
     public void setTags(HashSet<String> tags) {
         this.tags = tags;
+        this.setModified(new Date());
     }
 
     public Date getCreated() {
         return created;
     }
 
-    public void setCreated(Date created) {
-        this.created = created;
-    }
-
     public Date getModified() {
         return modified;
     }
 
-    public void setModified(Date modified) {
+    private void setModified(Date modified) {
         this.modified = modified;
     }
 }
