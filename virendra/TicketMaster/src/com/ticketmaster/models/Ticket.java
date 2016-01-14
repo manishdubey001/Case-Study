@@ -1,7 +1,7 @@
 package com.ticketmaster.models;
 
 import com.ticketmaster.Main;
-import com.ticketmaster.exceptions.DuplicateEntryException;
+import com.ticketmaster.exceptions.TicketNotFoundException;
 
 import java.io.*;
 import java.util.*;
@@ -10,7 +10,7 @@ import java.util.stream.Stream;
 /**
  * Created by root on 31/12/15.
  */
-public class Tickets implements Serializable{
+public class Ticket /*implements Serializable*/{
     int id;
     String subject;
     String agent;
@@ -20,35 +20,32 @@ public class Tickets implements Serializable{
     static private int k = 1;
     public Set<String> tags;
 
-    static public Map<Integer,? super Tickets> ticketList; //contains all tickets
+    static public Map<Integer,? super Ticket> ticketList; //contains all tickets
     static public Set<String> agentList;
     public static Set<String> tagList;
 
     /**
      * Default constructor
      */
-    public Tickets(){
-
-        if (Tickets.ticketList == null){
+    public Ticket(){
+        if (Ticket.ticketList == null){
             switch(Main.collectionChoice) {
                 case 1:
                 default:
-                    Tickets.ticketList = new HashMap<>();
+                    Ticket.ticketList = new HashMap<>();
                     break;
                 case 2:
-                    Tickets.ticketList = new TreeMap<>();
+                    Ticket.ticketList = new TreeMap<>();
                     break;
                 case 3:
-                    Tickets.ticketList = new LinkedHashMap<>();
+                    Ticket.ticketList = new LinkedHashMap<>();
                     break;
             }
-
-
         }
-        if (Tickets.agentList == null)
-            Tickets.agentList = new HashSet<>();
-        if (Tickets.tagList == null)
-            Tickets.tagList = new HashSet<>();
+        if (Ticket.agentList == null)
+            Ticket.agentList = new HashSet<>();
+        if (Ticket.tagList == null)
+            Ticket.tagList = new HashSet<>();
 
     }
 
@@ -97,7 +94,6 @@ public class Tickets implements Serializable{
      * @param values
      */
     public void setValues(Map<String,? extends Object> values){
-
         Set s = values.entrySet();
         s.forEach((e)->{ Map.Entry me = (Map.Entry)e;
             switch(me.getKey().toString()) {
@@ -141,22 +137,22 @@ public class Tickets implements Serializable{
      * @return
      * @throws IOException
      * @throws ClassNotFoundException
-     * @throws DuplicateEntryException
+     * @throws TicketNotFoundException
      */
-    public boolean save() throws IOException, ClassNotFoundException, DuplicateEntryException {
+    public boolean save() throws IOException, ClassNotFoundException, TicketNotFoundException {
 
         beforeSave();
         setId(k);
 
-        k = getId() == k ?  k+=1 : k;
+        k = getId() == k ?  k+1 : k;
 
-        Tickets.ticketList.put(getId(), this);
-        Tickets.agentList.add(getAgent());
+        Ticket.ticketList.put(getId(), this);
+        Ticket.agentList.add(getAgent());
 
         if (this.tags != null)
-            Tickets.tagList.addAll(this.tags);
+            Ticket.tagList.addAll(this.tags);
 
-        return Tickets.ticketList.get(getId()) != null;
+        return Ticket.ticketList.get(getId()) != null;
     }
 
     /**
@@ -164,11 +160,11 @@ public class Tickets implements Serializable{
      * @return boolean <code></>true</code>
      * @throws IOException
      * @throws ClassNotFoundException
-     * @throws DuplicateEntryException
+     * @throws TicketNotFoundException
      */
-    public boolean update()  throws IOException, ClassNotFoundException, DuplicateEntryException{
+    public boolean update()  throws IOException, ClassNotFoundException, TicketNotFoundException{
         beforeSave();
-        Tickets.ticketList.put(this.getId(), this);
+        Ticket.ticketList.put(this.getId(), this);
         return true;
     }
 
@@ -179,9 +175,28 @@ public class Tickets implements Serializable{
      */
     public static Stream getListStream(){
 
-        return Tickets.ticketList.entrySet().stream();
+        return Ticket.ticketList.entrySet().stream();
 
     }
+
+    /**
+     *
+     * @param name
+     * @return
+     */
+    public static boolean hasAgent(String name) {
+        return Ticket.agentList.contains(name);
+    }
+
+    /**
+     *
+     * @param name
+     * @return
+     */
+    public static boolean hasTag(String name) {
+        return Ticket.tagList.contains(name);
+    }
+
 
     /**
      * overridden method
@@ -194,13 +209,13 @@ public class Tickets implements Serializable{
     }
 
 
-    /*private Map<Integer, ? super Tickets> deserializeTickets() throws IOException, ClassNotFoundException, DuplicateEntryException {
+    /*private Map<Integer, ? super Ticket> deserializeTickets() throws IOException, ClassNotFoundException, TicketNotFoundException {
 
         //save the ticket in TreeMap
 
         ObjectInputStream in=new ObjectInputStream(new FileInputStream("tickets.ser"));
 
-        ticketList = (TreeMap<Integer, Tickets>) in.readObject();
+        ticketList = (TreeMap<Integer, Ticket>) in.readObject();
 
         if (ticketList.isEmpty()) {
             ticketList = new TreeMap<>();
@@ -210,7 +225,7 @@ public class Tickets implements Serializable{
 
     }
 
-    private void  serializeTickets() throws IOException, ClassNotFoundException, DuplicateEntryException {
+    private void  serializeTickets() throws IOException, ClassNotFoundException, TicketNotFoundException {
 
         ObjectOutputStream fOut = new ObjectOutputStream(new FileOutputStream("tickets.ser"));
 

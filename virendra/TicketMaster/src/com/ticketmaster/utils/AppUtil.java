@@ -23,8 +23,8 @@ public class AppUtil {
         menu.put(4,"Get Ticket detail (By Id)");
         menu.put(5,"Retrieve all tickets");
         menu.put(6,"Select ticket Assigned to agent");
-        menu.put(7,"Number of Tickets assigned to each Agents");
-        menu.put(8,"Tickets marked with selected Tag");
+        menu.put(7,"Number of Ticket assigned to each Agents");
+        menu.put(8,"Ticket marked with selected Tag");
         menu.put(9,"End (Quit)");
         return menu;
     }
