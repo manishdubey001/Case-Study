@@ -1,22 +1,19 @@
 package com.ticketmaster.helpers;
 
-import com.ticketmaster.exceptions.DuplicateEntryException;
-import com.ticketmaster.models.Tickets;
+import com.ticketmaster.exceptions.TicketNotFoundException;
+import com.ticketmaster.models.Ticket;
 
-import javax.xml.transform.sax.SAXSource;
 import java.io.IOException;
 import java.util.*;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * TicketHelper class
  * This class is service class to perform actions on ticket object
  * Created by Virendra on 31/12/15.
  */
-public class TicketHelper /*implements Comparable<Tickets>*/ {
-    private Tickets ticket;
+public class TicketHelper /*implements Comparable<Ticket>*/ {
+    private Ticket ticket;
     public Map<String, ? super Object> map;
 
     /**
@@ -33,10 +30,10 @@ public class TicketHelper /*implements Comparable<Tickets>*/ {
      * @return
      * @throws IOException
      * @throws ClassNotFoundException
-     * @throws DuplicateEntryException
+     * @throws TicketNotFoundException
      */
-    public boolean createTicket() throws IOException, ClassNotFoundException, DuplicateEntryException {
-        ticket = new Tickets();
+    public boolean createTicket() throws IOException, ClassNotFoundException, TicketNotFoundException {
+        ticket = new Ticket();
         Scanner s = new Scanner(System.in);
 
 
@@ -76,16 +73,16 @@ public class TicketHelper /*implements Comparable<Tickets>*/ {
      * @return
      * @throws IOException
      * @throws ClassNotFoundException
-     * @throws DuplicateEntryException
+     * @throws TicketNotFoundException
      */
-    public boolean updateTicket() throws IOException, ClassNotFoundException, DuplicateEntryException {
+    public boolean updateTicket() throws IOException, ClassNotFoundException, TicketNotFoundException {
         Scanner s = new Scanner(System.in);
         System.out.println("Enter Ticket id:");
         int id = s.nextInt();
 
-        Tickets ticket = (Tickets) Tickets.ticketList.get(id);
+        Ticket ticket = (Ticket) Ticket.ticketList.get(id);
         if (ticket ==null){
-            throw new DuplicateEntryException("Record with id: "+id +" does not exists");
+            throw new TicketNotFoundException("Record with id: "+id +" does not exists");
         }
 
         System.out.println("Enter details you want to update");
@@ -114,8 +111,6 @@ public class TicketHelper /*implements Comparable<Tickets>*/ {
             }
 
             map.put("tags", s1);
-            s1 = null;
-            tmp1 = null;
 
         }
         ticket.setValues(map);
@@ -129,23 +124,23 @@ public class TicketHelper /*implements Comparable<Tickets>*/ {
      *
      * @throws IOException
      * @throws ClassNotFoundException
-     * @throws DuplicateEntryException
+     * @throws TicketNotFoundException
      */
-    public void deleteTicket() throws IOException, ClassNotFoundException, DuplicateEntryException {
+    public void deleteTicket() throws IOException, ClassNotFoundException, TicketNotFoundException {
 
         Scanner s = new Scanner(System.in);
         System.out.println("Enter Ticket id:");
         int id = s.nextInt();
 
-        Tickets ticket = (Tickets) Tickets.ticketList.get(id);
+        Ticket ticket = (Ticket) Ticket.ticketList.get(id);
         if (ticket ==null){
-            throw new DuplicateEntryException("Record with id: "+id +" does not exists");
+            throw new TicketNotFoundException("Record with id: "+id +" does not exists");
         }
         System.out.printf("Are you sure you want to delete ticket #%010d ? (y/n)", ticket.getId());
 
         if (s.next().equals("y")) {
-            Tickets.ticketList.remove(ticket.getId());
-            System.out.println("Ticket deleted. (New size: "+ Tickets.ticketList.size()+")");
+            Ticket.ticketList.remove(ticket.getId());
+            System.out.println("Ticket deleted. (New size: "+ Ticket.ticketList.size()+")");
 
         }
 
@@ -156,17 +151,17 @@ public class TicketHelper /*implements Comparable<Tickets>*/ {
      * @return
      * @throws IOException
      * @throws ClassNotFoundException
-     * @throws DuplicateEntryException
+     * @throws TicketNotFoundException
      */
-    public Map getTicket() throws IOException, ClassNotFoundException, DuplicateEntryException {
+    public Map getTicket() throws IOException, ClassNotFoundException, TicketNotFoundException {
 
         Scanner s = new Scanner(System.in);
         System.out.println("Enter Ticket id:");
         int id = s.nextInt();
 
-        Tickets ticket = (Tickets) Tickets.ticketList.get(id);
+        Ticket ticket = (Ticket) Ticket.ticketList.get(id);
         if (ticket ==null){
-            throw new DuplicateEntryException("Record with id: "+id +" does not exists");
+            throw new TicketNotFoundException("Record with id: "+id +" does not exists");
         }
         Map m = new LinkedHashMap<>();
         m.put("id", ticket.getId());
@@ -185,24 +180,24 @@ public class TicketHelper /*implements Comparable<Tickets>*/ {
      * @return
      * @throws IOException
      * @throws ClassNotFoundException
-     * @throws DuplicateEntryException
+     * @throws TicketNotFoundException
      */
-    public List<Map<String,? super Object>> getTickets() throws IOException, ClassNotFoundException, DuplicateEntryException {
+    public List<Map<String,? super Object>> getTickets() throws IOException, ClassNotFoundException, TicketNotFoundException {
 
-        if (Tickets.ticketList == null){
-            return null;//(List<Map<String, ? super Object>>) Tickets.ticketList;
-//            throw new DuplicateEntryException("No Records Found");
+        if (Ticket.ticketList == null){
+            return null;//(List<Map<String, ? super Object>>) Ticket.ticketList;
+//            throw new TicketNotFoundException("No Records Found");
         }
 
-        List l = new LinkedList<>(Tickets.ticketList.entrySet());
+        List l = new LinkedList<>(Ticket.ticketList.entrySet());
 
         //traditional coding
         /*Collections.sort(l, new Comparator() {
             @Override
             public int compare(Object o1, Object o2) {
 
-                if ( ( (Tickets)(((Map.Entry) o1).getValue()) ).getModified() <=
-                ( (Tickets)(((Map.Entry) o2).getValue()) ).getModified() )
+                if ( ( (Ticket)(((Map.Entry) o1).getValue()) ).getModified() <=
+                ( (Ticket)(((Map.Entry) o2).getValue()) ).getModified() )
                     return 1;
                 else return -1;
 
@@ -212,8 +207,8 @@ public class TicketHelper /*implements Comparable<Tickets>*/ {
 
         //lambda code : v1.8 or later
         Collections.sort(l, (o1, o2) ->{
-            if ( ( (Tickets)(((Map.Entry) o1).getValue()) ).getModified() <
-                    ( (Tickets)(((Map.Entry) o2).getValue()) ).getModified() )
+            if ( ( (Ticket)(((Map.Entry) o1).getValue()) ).getModified() <
+                    ( (Ticket)(((Map.Entry) o2).getValue()) ).getModified() )
                     return 1;
             else return -1;
             });
@@ -237,26 +232,33 @@ public class TicketHelper /*implements Comparable<Tickets>*/ {
 
             searchKey = values[0].toLowerCase();
 
-            a= (List) Tickets.getListStream().filter(
+            a= (List) Ticket.getListStream().filter(
                     (obj) ->{ Map.Entry me = (Map.Entry)obj;
                         if (key.equals("agent")){
-                            return ( (Tickets)(me.getValue())).getAgent().toLowerCase().equals(searchKey);
+                            return ( (Ticket)(me.getValue())).getAgent().toLowerCase().equals(searchKey);
                         }else {
-                            return ( (Tickets)(me.getValue())).tags.contains(searchKey);
+                            return ( (Ticket)(me.getValue())).tags.contains(searchKey);
                         }
                     } )
-                    .collect(Collectors.toList());
+                    .sorted((o1, o2) ->{
+                if ( ( (Ticket)(((Map.Entry) o1).getValue()) ).getModified() <=
+                        ( (Ticket)(((Map.Entry) o2).getValue()) ).getModified() )
+                    return 1;
+                else return -1;
+                }).collect(Collectors.toList());
 
         }else {
             //this block is reserved for future usage
         }
 
-        Collections.sort(a, (o1, o2) ->{
-            if ( ( (Tickets)(((Map.Entry) o1).getValue()) ).getModified() <=
-                    ( (Tickets)(((Map.Entry) o2).getValue()) ).getModified() )
+        //adding sorted section in streams to further optimize
+
+       /* Collections.sort(a, (o1, o2) ->{
+            if ( ( (Ticket)(((Map.Entry) o1).getValue()) ).getModified() <=
+                    ( (Ticket)(((Map.Entry) o2).getValue()) ).getModified() )
                 return 1;
             else return -1;
-        });
+        });*/
 
         return formatPrintData(a);
 
@@ -270,13 +272,13 @@ public class TicketHelper /*implements Comparable<Tickets>*/ {
     public Map<String,Integer> getTicketCount(){
         Map<String,Integer> m = new LinkedHashMap<>();
 
-        Set s= Tickets.ticketList.entrySet();
+        Set s= Ticket.ticketList.entrySet();
         Iterator it = s.iterator();
-        Tickets tmp;
+        Ticket tmp;
         while (it.hasNext()){
             int count = 0;
             Map.Entry me = (Map.Entry)it.next();
-            tmp = (Tickets) me.getValue();
+            tmp = (Ticket) me.getValue();
 
             if(m.containsKey(tmp.getAgent()) ){
                 count = m.get(tmp.getAgent());
@@ -294,10 +296,10 @@ public class TicketHelper /*implements Comparable<Tickets>*/ {
 
     /**
      * getTicketObject method
-     * used to get the cusrrent object of Tickets class
+     * used to get the cusrrent object of Ticket class
      * @return
      */
-    public Tickets getTicketObject(){
+    public Ticket getTicketObject(){
         return this.ticket;
     }
 
@@ -309,7 +311,7 @@ public class TicketHelper /*implements Comparable<Tickets>*/ {
 
             Map.Entry t1 = (Map.Entry) e;
 
-            Tickets t = (Tickets) t1.getValue();
+            Ticket t = (Ticket) t1.getValue();
 
             m.put("id", t.getId());
             m.put("subject", t.getSubject());
@@ -327,7 +329,7 @@ public class TicketHelper /*implements Comparable<Tickets>*/ {
 
 /*
     @Override
-    public int compareTo(Tickets obj) {
+    public int compareTo(Ticket obj) {
 
         return  obj.getAgent().toLowerCase().compareTo(obj.getAgent().toLowerCase());
     }*/

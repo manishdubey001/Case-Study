@@ -1,8 +1,8 @@
 package com.ticketmaster;
 
-import com.ticketmaster.exceptions.DuplicateEntryException;
+import com.ticketmaster.exceptions.TicketNotFoundException;
 import com.ticketmaster.helpers.TicketHelper;
-import com.ticketmaster.models.Tickets;
+import com.ticketmaster.models.Ticket;
 import com.ticketmaster.utils.AppUtil;
 
 import java.io.BufferedReader;
@@ -36,10 +36,10 @@ public class AppRunner {
 
     /**
      * start method is the main method which starts the application
-     * @throws DuplicateEntryException
+     * @throws TicketNotFoundException
      * @throws IOException
      */
-    public void start() throws DuplicateEntryException, IOException{
+    public void start() throws TicketNotFoundException, IOException{
         boolean flag = false;
         int ch =0;
 
@@ -52,7 +52,7 @@ public class AppRunner {
 
         }catch (InputMismatchException | IOException  e){
 
-            e.printStackTrace(); //check stack trace
+//            e.printStackTrace(); //check stack trace
             System.out.println("Invalid Option Selection");
 
         }catch (ClassNotFoundException e){
@@ -61,14 +61,15 @@ public class AppRunner {
             System.out.println("Ops! class you are looking does not exist");
 
         }catch (Exception e){
-            e.printStackTrace();
+//            e.printStackTrace();
             System.out.println("Application halted due to exception: "+e.getMessage());
 
         }finally {
 
             if(ch!=9){
                 System.out.println("Do You want to continue (y/n) ? ");
-                b = new BufferedReader(new InputStreamReader(System.in));
+                if(b == null)
+                    b = new BufferedReader(new InputStreamReader(System.in));
                 String c = b.readLine();; //read the selection of user
                 if(c.equals("y")) {
                     AppRunner.app().start(); //starting application again
@@ -120,12 +121,12 @@ public class AppRunner {
      * @param ch int <p></p>
      * @throws IOException
      * @throws ClassNotFoundException
-     * @throws DuplicateEntryException
+     * @throws TicketNotFoundException
      */
-    protected void processChoice(int ch) throws IOException, ClassNotFoundException, DuplicateEntryException {
+    protected void processChoice(int ch) throws IOException, ClassNotFoundException, TicketNotFoundException {
         TicketHelper helper= new TicketHelper();
-        Map m;
-        List a = null;
+        Map tmpMap;
+        List tempList = null;
         b = new BufferedReader(new InputStreamReader(System.in));
 
         switch (ch){
@@ -135,74 +136,60 @@ public class AppRunner {
             case 3: helper.deleteTicket(); break;
 
             case 4:
-                m = helper.getTicket();
-                if (m!= null){
-                    System.out.printf("==== Ticket #%010d ====\n",m.get("id"));
-                    m.forEach((k,v)->System.out.println(k+"\t:\t"+v));
+                tmpMap = helper.getTicket();
+                if (tmpMap!= null){
+                    System.out.printf("==== Ticket #%010d ====\n",tmpMap.get("id"));
+                    tmpMap.forEach((k,v)->System.out.println(k+"\t:\t"+v));
                 }
 
                 break;
 
             case 5:
-                a = helper.getTickets();
-                System.out.println("Total tickets: "+(a!= null ? a.size(): 0)+"\nResults:");
-                if (a!= null)
-                    a.forEach(System.out::println); //printing result by method referencing of lambda expressions
-
-                //traditional method
-               /* Iterator i = a.iterator();
-                while (i.hasNext()){
-                    LinkedHashMap lm = (LinkedHashMap) i.next();
-                    System.out.println(lm);
-                }*/
+                tempList = helper.getTickets();
+                System.out.println("Total tickets: "+(tempList!= null ? tempList.size(): 0)+"\nResults:");
+                if (tempList != null) {
+                    tempList.forEach(System.out::println); //printing result by method referencing of lambda expressions
+                }
 
                 break;
 
             case 6:
-                b = new BufferedReader(new InputStreamReader(System.in));
                 System.out.println("Enter name of agent: ");
                 String name = b.readLine();
 
-                if (! Tickets.agentList.contains(name)){
+                if (!Ticket.hasAgent(name)){
                     System.out.println(String.format("Agent \"%s\" is not present in the system", name ));
-
-                }else
-                    a=  helper.searchTicket("agent", name);
-
-
-                if (a!=null)
-                    System.out.println("Total tickets: "+a.size()+"\nResults:");
-                else
-                    System.out.println("Total tickets: 0\nResults:");
-
-                a.forEach(System.out::println);
-
+                }else {
+                    tempList = helper.searchTicket("agent", name);
+                    if (tempList != null) {
+                        System.out.println("Total tickets: "+tempList.size()+"\nResults:");
+                        tempList.forEach(System.out::println);
+                    }else {
+                        System.out.println("Total tickets: 0");
+                    }
+                }
 
                 break;
             case 7:
-                m= helper.getTicketCount();
-                System.out.println("Agent Name\t\t|\tNo. of Tickets");
-                m.forEach((k,e)-> System.out.println(k+"\t\t| \t\t"+e));
-//                System.out.println(m);
+                tmpMap= helper.getTicketCount();
+                System.out.println("Agent Name\t\t|\tNo. of Ticket");
+                tmpMap.forEach((k,e)-> System.out.println(k+"\t\t| \t\t"+e));
                 break;
 
             case 8:
-
                 System.out.println("Enter tag name: ");
-                String t = b.readLine();
-                if (! Tickets.tagList.contains(t)){
-                    System.out.println(String.format("Tag \"%s\" is not present in the system", t ));
-
-                }else
-                   a=  helper.searchTicket("tags", t);
-
-                if (a!=null){
-                    System.out.println("Total tickets: "+a.size()+"\nResults:");
+                String tag = b.readLine();
+                if (! Ticket.hasTag(tag)){
+                    System.out.println(String.format("Tag \"%s\" is not present in the system", tag ));
                 }else {
-                    System.out.println("Total tickets: 0\nResults:");
+                    tempList=  helper.searchTicket("tags", tag);
+                    if (tempList!=null){
+                        System.out.println("Total tickets: "+tempList.size()+"\nResults:");
+                        tempList.forEach(System.out::println);  //printing result by method referencing of lambda expressions
+                    }else {
+                        System.out.println("Total tickets: 0");
+                    }
                 }
-
-                a.forEach(System.out::println); //printing result by method referencing of lambda expressions
 
                 break;
 
