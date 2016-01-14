@@ -18,9 +18,9 @@ public class AppManager {
         do{
             TicketUtil.displayTicketMenu();
             userInput = TicketUtil.acceptUserInput();
-            if(userInput >=1 || userInput <=8)
+            if(userInput >=1 || userInput <=9)
                 processUserInput(userInput);
-        }while (userInput != 9);
+        }while (userInput != 10);
     }
 
     /**
@@ -52,6 +52,9 @@ public class AppManager {
                 break;
             case 8:
                 ticketService.displayTicketsByTag();
+                break;
+            case 9:
+                ticketService.loadDummyTickets();
                 break;
             default:
                 System.out.println("You Entered Wrong Option...");

@@ -23,7 +23,8 @@ public class TicketUtil {
         System.out.println("6.\tSelect tickets assigned to specific agent");
         System.out.println("7.\tTicket count grouped by agent name(order by agent name)");
         System.out.println("8.\tSearch all tickets by specific tag");
-        System.out.println("9.\tQuit");
+        System.out.println("9.\tLoad dummy Tickets");
+        System.out.println("10.\tQuit");
         System.out.println("=================================================================\n");
         System.out.print("Enter your option: ");
     }
@@ -37,13 +38,13 @@ public class TicketUtil {
         int userInput  = 0;
         try {
             userInput = Integer.parseInt(reader.readLine());
-            if (userInput <= 0 || userInput > 9)
+            if (userInput <= 0 || userInput > 10)
                 throw new InvalidParameterException();
-            if(userInput == 9){
+            if(userInput == 10){
                 System.out.print("You are sure want to quit(y/n)?: ");
                 String ch = reader.readLine();
                 if(ch.toLowerCase().equals("y")) {
-                    userInput = 9;
+                    userInput = 10;
                    reader.close();
                 }
                 else if(ch.toLowerCase().equals("n"))

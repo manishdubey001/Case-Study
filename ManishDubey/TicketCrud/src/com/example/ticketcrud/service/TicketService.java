@@ -8,6 +8,8 @@ import com.example.ticketcrud.util.TicketUtil;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 /**
  * Created by root on 31/12/15.
@@ -194,23 +196,6 @@ public class TicketService {
             if (!tag.isEmpty()) {
                 System.out.println(" Following Tickets are tagged by tag "+tag);
                 System.out.println("---------------------------------------------");
-//                boolean flag = false;
-//                List<Ticket> ticketList = new ArrayList<>(tickets.values());
-//                Collections.sort(ticketList,(Ticket o1, Ticket o2) -> {return -o1.getModified().compareTo(o2.getModified());});
-//                Iterator<Ticket> iterator  = ticketList.iterator();
-//                while (iterator.hasNext())
-//                {
-//                    Ticket ticket = iterator.next();
-//                    if(ticket.getTags().contains(tag.toLowerCase())) {
-//                        System.out.println(ticket.getId() + "\t" + ticket.getSubject() + "\t" + ticket.getAgentName() + "\t" + ticket.getTags() + "\t" + ticket.getCreated() + "\t" + ticket.getModified() + "\t");
-//                        System.out.println("---------------------------------------------");
-//                        flag = true;
-//                    }
-//                }
-//                if(!flag)
-//                {
-//                    System.out.println("No tickets tagged by this tag");
-//                }
                 tickets.values()
                         .stream()
                         .filter(ticket -> ticket.getTags().contains(tag.toLowerCase()))
@@ -232,29 +217,27 @@ public class TicketService {
     public void displayTicketCountOfAgentInAsc()
     {
         System.out.println(" Ticket count grouped by agent (ascending order). ");
-        Iterator<Integer> iterator  = tickets.keySet().iterator();
         System.out.println("---------------------------------------------");
         if(tickets.size() > 0) {
-            TreeMap<String, Integer> agent = new TreeMap<>((String s1, String s2) -> s1.toLowerCase().compareTo(s2.toLowerCase()));
-            while (iterator.hasNext()) {
-                int id = iterator.next();
-                String agentName = tickets.get(id).getAgentName();
-                if (agent.containsKey(agentName)) {
-                    agent.put(agentName, agent.get(agentName) + 1);
-                } else {
-                    agent.put(agentName, 1);
-                }
-            }
-            Iterator<String> agentIterator = agent.keySet().iterator();
-            while (agentIterator.hasNext()) {
-                String agentName = agentIterator.next();
-                System.out.println("AgentName \t\t\t Count");
-                System.out.println(agentName + "\t\t" + agent.get(agentName));
-                System.out.println("---------------------------------------------");
-            }
+            Map<String,List<Ticket>> groupByAgent = tickets.values()
+                    .stream()
+                    .collect(Collectors.groupingBy(Ticket::getAgentName));
+            groupByAgent.forEach((String agentName,List<Ticket> ticketsList)->System.out.println(agentName+"\t\t"+ticketsList.size()));
         }
         else{
             System.out.println("No ticket founds");
+        }
+    }
+
+    public void loadDummyTickets(){
+        Random rd = new Random();
+        for (int i = 0; i<100000; i++){
+            String agentName = "Agent"+rd.nextInt(1000);
+            HashSet<String> tagsSet = new HashSet<>();
+            tagsSet.add("tag"+rd.nextInt(1000));
+            tagsSet.add("tag"+rd.nextInt(1000));
+            Ticket ticket = TicketFactory.newInstance("Subject"+i, agentName , tagsSet);
+            tickets.put(ticket.getId(),ticket);
         }
     }
 
