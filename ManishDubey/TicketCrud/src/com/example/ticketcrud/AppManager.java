@@ -8,13 +8,13 @@ import com.example.ticketcrud.util.TicketUtil;
  */
 public class AppManager {
 
-    public TicketService ticketService = new TicketService();
+    public TicketService ticketService = null;
     /**
      * Boot ticket crud application
      */
     public void startTicketApp() {
         int userInput = 0;
-
+        this.ticketService = new TicketService();
         do{
             TicketUtil.displayTicketMenu();
             userInput = TicketUtil.acceptUserInput();
