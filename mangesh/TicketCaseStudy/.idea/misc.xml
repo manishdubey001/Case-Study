@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+<<<<<<< HEAD:.idea/misc.xml
+=======
+  <component name="EntryPointsManager">
+    <entry_points version="2.0" />
+  </component>
+>>>>>>> eab36420589c27170d5b917ce11c4d4eb8a9b5ea:mangesh/TicketCaseStudy/.idea/misc.xml
   <component name="MavenProjectsManager">
     <option name="originalFiles">
       <list>
@@ -17,7 +23,11 @@
     <ConfirmationsSetting value="0" id="Add" />
     <ConfirmationsSetting value="0" id="Remove" />
   </component>
+<<<<<<< HEAD:.idea/misc.xml
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" assert-keyword="true" jdk-15="true" project-jdk-name="1.8 (1)" project-jdk-type="JavaSDK">
+=======
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" assert-keyword="true" jdk-15="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+>>>>>>> eab36420589c27170d5b917ce11c4d4eb8a9b5ea:mangesh/TicketCaseStudy/.idea/misc.xml
     <output url="file://$PROJECT_DIR$/out" />
   </component>
 </project>
