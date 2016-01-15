@@ -28,9 +28,11 @@ public class TicketOperations {
         this.menuList();
     }
 
+    /**
+     * Displaying ticket operation menu
+     */
     public void menuList(){
         System.out.println("");
-
         System.out.println("==================== Ticket Operations ======================");
         System.out.println("'");
 
@@ -50,6 +52,9 @@ public class TicketOperations {
         this.selectTicketOperation();
     }
 
+    /**
+     * Taking input from user
+     */
     public void selectTicketOperation() {
 
         this.loop = true;
@@ -65,6 +70,11 @@ public class TicketOperations {
         }
     }
 
+    /**
+     * Performing user selected operation
+     * @param input
+     * @return
+     */
     public int performTicketAction(int input){
         switch(input){
             case 1 : this.createTicket();
@@ -90,6 +100,10 @@ public class TicketOperations {
         return input;
     }
 
+    /**
+     * Creating a new ticket
+     * Adding tags
+     */
     public void createTicket(){
         boolean subjLoop = true;
         System.out.println("Enter Ticket Subject : ");
@@ -149,6 +163,11 @@ public class TicketOperations {
         this.menuList();
     }
 
+    /**
+     * Updating Ticket count for a agent
+     * @param agent
+     * @param action
+     */
     public void updateAgentsTicketCount(String agent, int action){
         int agentCount = 0 ;
         if(agentTicketsTotalCounts.containsKey(agent)){
@@ -164,11 +183,9 @@ public class TicketOperations {
         agentTicketsTotalCounts.put(agent, agentCount);
     }
 
-    public static void main(String[] args) {
-        //TicketOperations ticketObj = new TicketOperations();
-        new TicketOperations();
-    }
-
+    /**
+     * showing all ticket details
+     */
     public void showAllTickets() {
         // need to do sort on modified
 
@@ -189,6 +206,9 @@ public class TicketOperations {
         }
     }
 
+    /**
+     * Update ticket details.
+     */
     public void updateTicket(){
         System.out.println("Enter Ticket Id :: ");
         boolean updateLoop = true;
@@ -267,6 +287,11 @@ public class TicketOperations {
         }
     }
 
+    /**
+     * check given ticket is present or not in the system.
+     * @param ticketId
+     * @return
+     */
     public boolean isTicketExist(int ticketId) {
         //System.out.println("ic check :: "  + masterTicketData.get(ticketId));
 
@@ -277,6 +302,10 @@ public class TicketOperations {
         return false;
     }
 
+    /**
+     * Show ticket details by id & delete ticket by id
+     * @param choice
+     */
     public void deleteOrShowTicket(int choice){
         System.out.println("Enter Ticket Id :: ");
         boolean loop = true;
@@ -319,6 +348,9 @@ public class TicketOperations {
         }
     }
 
+    /**
+     * Showing ticket by agent name
+     */
     public void showTicketByAgentName() {
         System.out.println("Enter Agent Name :: ");
         String agentName = console.nextLine();
@@ -339,6 +371,9 @@ public class TicketOperations {
         this.menuList();
     }
 
+    /**
+     * Showing Ticket count(s) grouped by agent name
+     */
     public void ticketCountsByAgentName(){
         System.out.println("Agent Count  |   Total Count");
 
@@ -353,6 +388,9 @@ public class TicketOperations {
         this.menuList();
     }
 
+    /**
+     * Searching ticket by using tag name
+     */
     public void searchTicketsByTagName() {
         System.out.println("Enter Tag Name :: ");
         String tagName = console.nextLine();
@@ -377,6 +415,11 @@ public class TicketOperations {
 
     }
 
+    /**
+     * Adding / updating ticket ids into tag set
+     * @param tagsList
+     * @param ticketId
+     */
     public void updateTags(List<String> tagsList, int ticketId){
         for (String tag : tagsList) {
             if (this.tagsWithTicketIds.containsKey(tag)) {
@@ -392,6 +435,11 @@ public class TicketOperations {
         }
     }
 
+    /**
+     * Removing ticket id from tags set
+     * @param oldTicketTags
+     * @param ticketId
+     */
     public void removeTicketTags(List<String> oldTicketTags, int ticketId){
         for (String tag : oldTicketTags){
             if(oldTicketTags.contains(tag)) {
@@ -399,5 +447,10 @@ public class TicketOperations {
                 allTags.remove(ticketId);
             }
         }
+    }
+
+    public static void main(String[] args) {
+        //TicketOperations ticketObj = new TicketOperations();
+        new TicketOperations();
     }
 }
