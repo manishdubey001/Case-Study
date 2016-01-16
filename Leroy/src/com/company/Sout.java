@@ -5,7 +5,7 @@ package com.company;
  */
 public class Sout {
     static final String ACT_CHOOSE = "\n\nEnter an appropriate command:";
-    static final String ACT_CREATE_TICKET = "\n---------------------------------------\n 1 - Create Ticket initialized\n------------------------------";
+    static final String ACT_CREATE_TICKET = "\n---------------------------------------\n 1 - Create Ticket initialized\n---------------------------------------";
     static final String ACT_NOT_FOUND = "Ticket/Tickets not found in the system";
     static final String ACT_THANKYOU = "THANK YOU..!!:";
     static final String ACT_INVALID = "Invalid Input: ";
@@ -15,7 +15,7 @@ public class Sout {
     static final String ACT_TTAGS = "Enter a TagName (use ',' for multiple TagsNames)";
     static final String ACT_TTAGS_SINGLE = "Enter a Tag name";
     static final String ACT_TIDUPDATE = "Please enter a Ticket Id to update: ";
-    static final String ACT_CHOOSE_TAG_AGENT = "\n---------------------------------------\n a - Change Agent name\n b - Change Tag name\n--------------------------------";
+    static final String ACT_CHOOSE_TAG_AGENT = "\n---------------------------------------\n a - Change Agent name\n b - Change Tag name\n----------------------------------------";
     static final String ACT_TABLE_HEADER = "  ID  |  AGENT  |  SUBJECT  |  TAGS  |  CREATED  |  MODIFIED  ";
     static final String ACT_TID = "Enter a Ticket Id: ";
     static final String ACT_ARE_YOU_SURE = "Are you sure: ";

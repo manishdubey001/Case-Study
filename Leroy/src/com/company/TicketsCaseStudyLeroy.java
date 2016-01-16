@@ -8,8 +8,8 @@ public class TicketsCaseStudyLeroy {
     public static void main(String[] args) {
         Sout.getAllCommands();
         TicketComponent ticketComponent = new TicketComponent();
-        Ticket t  = new Ticket();
         Map<Integer, Ticket> thm = new HashMap<Integer, Ticket>();
+        Ticket t  = new Ticket();
         int count = 0;
         int MAXTRY = 3;
         while(true) {

@@ -45,22 +45,17 @@ public class TicketComponent {
      * @param thm
      */
     public void updateTicket(Map<Integer, Ticket> thm){
-        System.out.println(Sout.ACT_TIDUPDATE);
+        List<Ticket> listTickets = new ArrayList<>(thm.values());
+        System.out.println(Sout.ACT_TICKETS_IN_SYSTEM);
+        this.display(listTickets);
         try{
+            System.out.println(Sout.ACT_TIDUPDATE);
             int id = scanWhat().nextInt();
             if(thm.containsKey(id)) {
                 Ticket t3 = thm.get(id);
 
                 System.out.println(Sout.ACT_CHOOSE_TAG_AGENT);
                 String sel = scanWhat().next();
-
-                List<Ticket> listTickets = new ArrayList<>(thm.values());
-                Collections.sort(listTickets);
-                System.out.println(Sout.ACT_TICKETS_IN_SYSTEM);
-                System.out.println(Sout.ACT_TABLE_HEADER);
-                for (Ticket obj : listTickets)
-                    System.out.println(obj);
-
                 if (Objects.equals(sel, "a" )) {
                     System.out.println(Sout.ACT_TAGENTNAME);
                     String selA = scanWhat().next();
@@ -82,12 +77,8 @@ public class TicketComponent {
                     thm.put(id,t3);
                 }
                 System.out.println(Sout.ACT_TICKETS_IN_SYSTEM);
-                System.out.println(Sout.ACT_TABLE_HEADER);
                 List<Ticket> listTickets2 = new ArrayList<>(thm.values());
-                Collections.sort(listTickets2);
-                for (Ticket obj : listTickets2)
-                    System.out.println(obj);
-
+                this.display(listTickets2);
 
             }// Entered wrong
         }catch(InputMismatchException Im){
@@ -101,11 +92,8 @@ public class TicketComponent {
      * @param thm
      */
     public void removeTicketById(Map<Integer, Ticket> thm){
-        System.out.println(Sout.ACT_TABLE_HEADER);
         List<Ticket> listTickets = new ArrayList<>(thm.values());
-        Collections.sort(listTickets);
-        for (Ticket obj : listTickets)
-            System.out.println(obj);
+        this.display(listTickets);
 
         System.out.println(Sout.ACT_TID);
 
@@ -122,10 +110,7 @@ public class TicketComponent {
         System.out.println(Sout.ACT_TICKETS_IN_SYSTEM);
 
         List<Ticket> listTickets2 = new ArrayList<>(thm.values());
-        Collections.sort(listTickets2);
-        for (Ticket obj2 : listTickets2)
-            System.out.println(obj2);
-
+        this.display(listTickets2);
     }
 
     /**
@@ -134,12 +119,8 @@ public class TicketComponent {
      */
     public void getAllTicketsById(Map<Integer, Ticket> thm){
         System.out.println(Sout.ACT_TICKETS_IN_SYSTEM);
-        System.out.println(Sout.ACT_TABLE_HEADER);
         List<Ticket> listTickets2 = new ArrayList<>(thm.values());
-        Collections.sort(listTickets2);
-        for (Ticket obj2 : listTickets2)
-            System.out.println(obj2);
-
+        this.display(listTickets2);
         System.out.println(Sout.ACT_TID);
 
         int selT = scanWhat().nextInt();
@@ -167,10 +148,7 @@ public class TicketComponent {
         }
 
         if(!l.isEmpty()){
-            System.out.println(Sout.ACT_TABLE_HEADER);
-            Collections.sort(l);
-            for (Ticket str : l)
-                System.out.println(str.toString());
+            this.display(l);
         }
 
     }
@@ -181,12 +159,7 @@ public class TicketComponent {
      */
     public void getAllTickets(Map<Integer, Ticket> thm){
         List<Ticket> t3 = new ArrayList<>(thm.values());
-        Collections.sort(t3);
-        System.out.println(Sout.ACT_TABLE_HEADER);
-
-        for (Ticket str: t3) {
-            System.out.println(str);
-        }
+        this.display(t3);
     }
 
     /**
@@ -231,6 +204,15 @@ public class TicketComponent {
             }
         }
 
+    }
+
+    public void display(List<Ticket> t3){
+        Collections.sort(t3);
+        System.out.println(Sout.ACT_TABLE_HEADER);
+
+        for (Ticket str: t3) {
+            System.out.println(str);
+        }
     }
     public static Scanner scanWhat(){
         Scanner sc = new Scanner(System.in);

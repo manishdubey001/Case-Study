@@ -70,14 +70,6 @@ public class Ticket implements Comparable<Ticket>{
     public int compareTo(Ticket compareTicket){
         return compareTicket.getModified().compareTo(this.getModified());
     }
-    /*public static Comparator<Ticket> ModifiedComparator = new Comparator<Ticket>() {
-        public int compare(Ticket ticket1, Ticket ticket2) {
-            long mod1 = ticket1.getModified();
-            long mod2 = ticket2.getModified();
-            return Long.compare(mod2, mod1);
-        }
-    };
-    */
     public static Comparator<Ticket> ByAgentNameComparator = new Comparator<Ticket>() {
         @Override
         public int compare(Ticket ticket1, Ticket ticket2) {
