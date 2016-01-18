@@ -11,7 +11,6 @@ import java.util.Scanner;
 public class ConsolIO {
 
     public static String getAgentNAme() {
-        Scanner scanIn = new Scanner(System.in);
         System.out.println("Enter Agent name ");
         String agentName = getString();
         return agentName;
@@ -19,7 +18,6 @@ public class ConsolIO {
 
 
     public static String getSubject() {
-        Scanner scanIn = new Scanner(System.in);
         System.out.println("Enter Subject ");
         String agentName = getString();
         return agentName;

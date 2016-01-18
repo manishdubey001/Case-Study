@@ -66,7 +66,6 @@ public class MenuClass {
         List<String> list = ConsolIO.getTags();
 
         ticketService.createTicketService(id, subject, agentName, list);
-        msg();
     }
 
     private void updateTicket() {
@@ -88,18 +87,15 @@ public class MenuClass {
             Helper.showMsg("Ticket is not Exists");
         }
 
-        msg();
     }
 
     private void showAllTicket() {
         ticketService.showAllTicketService();
-        msg();
     }
 
     private void showSingleTicket() {
         int id = ConsolIO.getTicketId();
         ticketService.showSingleTicketService(id);
-        msg();
     }
 
     private void searchTicketsUsingtag() {
@@ -113,20 +109,18 @@ public class MenuClass {
     private void showTicketcountAgent() {
 
         ticketService.showTicketcountAgentService();
-        msg();
     }
 
 
     private void removeTicket() {
 
         ticketService.removeTicketService(ConsolIO.getTicketId());
-        msg();
     }
 
     private void searchTicketsUsingAgentname() {
 
         ticketService.searchTicketsUsingAgentnameService(ConsolIO.getAgentNAme());
-        msg();
+
     }
 
     private void exit() {
@@ -160,6 +154,7 @@ public class MenuClass {
         Helper.showMsg("Select Operation ");
         int menuId = ConsolIO.getIntvalue();
         this.operation(menuId);
+        msg();
     }
 
 
