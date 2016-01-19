@@ -2,6 +2,7 @@ package com.Tickets;
 
 import sun.invoke.empty.Empty;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 /**
@@ -47,39 +48,64 @@ public class Sout {
         ticketServiceComponent = new TicketServiceComponent();
     }
     public void soutCreate(){
-        System.out.println(Sout.ACT_CREATE_TICKET);
+        System.out.println(ACT_CREATE_TICKET);
 
-        System.out.println(Sout.ACT_TSUBJECT);
+        System.out.println(ACT_TSUBJECT);
         String sub = scanWhat().next();
 
-        System.out.println(Sout.ACT_TAGENTNAME);
+        System.out.println(ACT_TAGENTNAME);
         String agent = scanWhat().next();
 
-        System.out.println(Sout.ACT_TTAGS);
+        System.out.println(ACT_TTAGS);
         String tags = scanWhat().next();
 
         ticketServiceComponent.createTicket(sub, agent, tags);
 
     }
 
-    public void soutUpdate(int id, String type){
-        if(id !=0 && type.equals("agent")){
+    public void soutUpdate(){
+        try {
+            System.out.println(ACT_TIDUPDATE);
+            int tid = scanWhat().nextInt();
+            String type = null;
+            String value = null;
+            boolean check = ticketServiceComponent.checkIfExists(tid);
+            if (check){
 
-        }else if (id != 0 && type.equals("tags")){
+                System.out.println(ACT_CHOOSE_TAG_AGENT);
 
+                String sel = scanWhat().next();
+                if(sel.equals("a")){
+                    System.out.println(Sout.ACT_TAGENTNAME);
+                    String selA = scanWhat().next();
+                    type = "agent";
+                    value = selA;
+                }else if (sel.equals("b")){
+                    System.out.println(Sout.ACT_TTAGS);
+                    String selB = scanWhat().next();
+                    type = "tags";
+                    value = selB;
+                }
+                ticketServiceComponent.updateTicket(tid, type, value);
+
+            }else
+                System.out.println(ACT_NOT_FOUND);
+         }catch(InputMismatchException Im){
+            System.out.println(Sout.ACT_INVALID+Im);
+         }
+    }
+
+    public void removeTicket(){
+        System.out.println(Sout.ACT_TID);
+        int selT = scanWhat().nextInt();
+        boolean check = ticketServiceComponent.checkIfExists(selT);
+        if (check){
+            System.out.println(Sout.ACT_ARE_YOU_SURE+selT);
+            System.out.println(Sout.ACT_YES_OR_NO);
+            int selA = scanWhat().nextInt();
+            ticketServiceComponent.removeTicketById(selT);
         }else
-        System.out.println(Sout.ACT_TIDUPDATE);
-        int tid = scanWhat().nextInt();
-        System.out.println(Sout.ACT_CHOOSE_TAG_AGENT);
-
-        id = tid;
-        String sel = scanWhat().next();
-        if(sel.equals("a")){
-            type = "agent";
-        }else if (sel.equals("b")){
-            type = "tags";
-        }
-
+            System.out.println(ACT_NOT_FOUND);
     }
     public static Scanner scanWhat(){
         Scanner sc = new Scanner(System.in);

@@ -6,96 +6,63 @@ import java.util.*;
  * Created by root on 14/1/16.
  */
 public class TicketServiceComponent {
-    private Map<Integer, Ticket> thm = null;
-    Sout sout = new Sout();
-    TicketServiceComponent(){
-        thm  = new HashMap<>();
+    public Map<Integer, Ticket> thm = new HashMap<>();
+
+    public boolean createTicket(String sub, String agent, String tags){
+        if(!sub.isEmpty() && !agent.isEmpty() && !tags.isEmpty()){
+            String[] tag = tags.split(",");
+            Set set = new HashSet<>();
+            for (int index = 0; index<tag.length; index++)
+                set.add(tag[index]);
+
+            Ticket ticket = TicketWareHouse.getInstance(sub,set,agent);
+
+            thm.put(ticket.getId(),ticket);
+            if (checkIfExists(ticket.getId())) {
+                System.out.println(Sout.ACT_TICKETS_IN_SYSTEM);
+                System.out.println(thm.get(ticket.getId()));
+                return true;
+            }
+        }
+
+        return false;
     }
 
-    public void createTicket(String sub, String agent, String tags){
-        String[] tag = tags.split(",");
-        Set set = new HashSet<>();
-        for (int index = 0; index<tag.length; index++)
-            set.add(tag[index]);
-
-        Ticket ticket = TicketWareHouse.getInstance(sub,set,agent);
-
-        thm.put(ticket.getId(),ticket);
-
-        System.out.println(Sout.ACT_TICKETS_IN_SYSTEM);
-        System.out.println(thm.get(ticket.getId()));
-
-    }
-
-    /**
-     * Function to Update Ticket as per Id.
-     * Only Agent name or Tags are updated.
-     * @param id
-     */
-    public void updateTicket(int id, String type){
+    public void updateTicket(int id, String type, String val){
         try{
-            if(thm.containsKey(id)) {
-                Ticket t3 = thm.get(id);
+            Ticket t3 = thm.get(id);
+            if (type.equals("agent")) {
+                t3.setAgent_name(val);
+                t3.setModified(System.currentTimeMillis());
+                thm.put(id, t3);
 
-                if(t3 != null){
-                    System.out.println(Sout.ACT_CHOOSE_TAG_AGENT);
+            } else if (type.equals("tags")) {
+                String [] tags1 = val.split(",");
+                Set set1 = new HashSet<>();
+                for (int index = 0; index <tags1.length; index++)
+                    set1.add(tags1[index]);
 
-                }
-                String sel = scanWhat().next();
-                if (Objects.equals(sel, "a" )) {
-                    System.out.println(Sout.ACT_TAGENTNAME);
-                    String selA = scanWhat().next();
-                    t3.setAgent_name(selA);
-                    t3.setModified(System.currentTimeMillis());
-                    thm.put(id, t3);
+                t3.setTags(set1);
 
-                } else if (Objects.equals(sel, "b")) {
-                    System.out.println(Sout.ACT_TTAGS);
-                    String selB = scanWhat().next();
-                    String [] tags1 = selB.split(",");
-                    Set set1 = new HashSet<>();
-                    for (int index = 0; index <tags1.length; index++)
-                        set1.add(tags1[index]);
-
-                    t3.setTags(set1);
-
-                    t3.setModified(System.currentTimeMillis());
-                    thm.put(id,t3);
-                }
+                t3.setModified(System.currentTimeMillis());
+                thm.put(id,t3);
+            }
                 System.out.println(Sout.ACT_TICKETS_IN_SYSTEM);
                 List<Ticket> listTickets2 = new ArrayList<>(thm.values());
                 this.display(listTickets2);
 
-            }else
-                System.out.println(Sout.ACT_NOT_FOUND);
         }catch(InputMismatchException Im){
             System.out.println(Sout.ACT_INVALID+Im);
         }
 
     }
 
-    /**
-     * Function to remove a particular ticket from the system
-     * @param thm
-     */
-    public void removeTicketById(Map<Integer, Ticket> thm){
-        List<Ticket> listTickets = new ArrayList<>(thm.values());
-        this.display(listTickets);
-
-        System.out.println(Sout.ACT_TID);
-
-        int selT = scanWhat().nextInt();
-        if(thm.containsKey(selT)){
-            System.out.println(Sout.ACT_ARE_YOU_SURE+selT);
-            System.out.println(Sout.ACT_YES_OR_NO);
-            int selA = scanWhat().nextInt();
-            if (selA > 0){
-                thm.remove(selT);
-                System.out.println(Sout.ACT_REMOVE_SUCCESS+selT);
-            }
+    public void removeTicketById(int id){
+        if (id > 0){
+            thm.remove(id);
+            System.out.println(Sout.ACT_REMOVE_SUCCESS+id);
         }
         System.out.println(Sout.ACT_TICKETS_IN_SYSTEM);
-
         List<Ticket> listTickets2 = new ArrayList<>(thm.values());
         this.display(listTickets2);
     }
@@ -202,8 +169,8 @@ public class TicketServiceComponent {
         }
     }
 
-    public void checkIfExists(){
-        
+    public boolean checkIfExists(int id){
+        return (thm.containsKey(id)) ? true : false;
     }
     public static Scanner scanWhat(){
         Scanner sc = new Scanner(System.in);

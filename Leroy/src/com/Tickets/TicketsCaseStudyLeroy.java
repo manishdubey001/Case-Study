@@ -26,14 +26,11 @@ public class TicketsCaseStudyLeroy {
                             sout.soutUpdate();
                             break;
 
-                       /* case 3:
-                            if(!thm.isEmpty())
-                                ticketComponent.removeTicketById(thm);
-                            else
-                                System.out.println(Sout.ACT_NOT_FOUND);
+                        case 3:
+                            sout.removeTicket();
                             break;
 
-                        case 4:
+                        /*case 4:
                             if(!thm.isEmpty())
                                 ticketComponent.getAllTicketsById(thm);
                             else
