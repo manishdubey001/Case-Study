@@ -56,7 +56,7 @@ public class TicketHelper /*implements Comparable<Ticket>*/ {
             }
 
             map.put("tags",s1);
-            s1 = null; tmp1= null;
+            s1 = null; tmp1= null; // cjm - this isn't necessary
 
         }
 
@@ -82,7 +82,12 @@ public class TicketHelper /*implements Comparable<Ticket>*/ {
 
         Ticket ticket = (Ticket) Ticket.ticketList.get(id);
         if (ticket ==null){
+<<<<<<< HEAD
             throw new TicketNotFoundException("Record with id: "+id +" does not exists");
+=======
+            // cjm - I would not call this a Duplicate Entry. I think in all cases I would simply use an existing exception or else define TicketNotFoundException
+            throw new DuplicateEntryException("Record with id: "+id +" does not exists");
+>>>>>>> 23943d27d44d5d69bde762d486ad7a20c7771220
         }
 
         System.out.println("Enter details you want to update");
@@ -232,7 +237,8 @@ public class TicketHelper /*implements Comparable<Ticket>*/ {
 
             searchKey = values[0].toLowerCase();
 
-            a= (List) Ticket.getListStream().filter(
+            // cjm - good use of streams
+            a= (List) Tickets.getListStream().filter(
                     (obj) ->{ Map.Entry me = (Map.Entry)obj;
                         if (key.equals("agent")){
                             return ( (Ticket)(me.getValue())).getAgent().toLowerCase().equals(searchKey);
@@ -256,6 +262,11 @@ public class TicketHelper /*implements Comparable<Ticket>*/ {
        /* Collections.sort(a, (o1, o2) ->{
             if ( ( (Ticket)(((Map.Entry) o1).getValue()) ).getModified() <=
                     ( (Ticket)(((Map.Entry) o2).getValue()) ).getModified() )
+        // cjm - can you see how to combine the sort with the stream operations above?
+        Collections.sort(a, (o1, o2) ->{
+            if ( ( (Tickets)(((Map.Entry) o1).getValue()) ).getModified() <=
+                    ( (Tickets)(((Map.Entry) o2).getValue()) ).getModified() )
+
                 return 1;
             else return -1;
         });*/

@@ -7,10 +7,12 @@ import java.util.*;
  * Created by root on 31/12/15.
  */
 public class CaseStudy {
+    // cjm - think about creating at least a couple of classes from this one. One to manage the menu, and another to manage the ticket list
 
     ArrayList<Ticket> arrTicketList = new ArrayList();
     HashMap<String, HashSet> hmticketTags = new HashMap<>();
     TreeMap<String, Integer> tmCount = new TreeMap<>();
+    // cjm - It can be complicated to maintain parallel collections like this; consider just searching/sorting the tickets array instead.
     Scanner scanIn;
 
     public CaseStudy() {
@@ -218,7 +220,7 @@ public class CaseStudy {
     private void showAllTicket() {
 
         // sort is based on modified date field Descending Order
-
+        // cjm - nice use of Comparable; however, what if you wanted to sometimes sort by other fields?
         Collections.sort(this.arrTicketList);
 
         System.out.println("Id  |  Subject  | Agent Name |  Tags  |      Created      |   Modified    ");
@@ -374,7 +376,7 @@ public class CaseStudy {
         }
 
         System.out.println("Enter ticket Subject ");
-        String subject = scanIn.next();
+        String subject = scanIn.next(); // cjm - Note that this will not allow subjects with spaces
         System.out.println("Enter Agent Name ");
         String agentName = scanIn.next();
 

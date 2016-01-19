@@ -128,6 +128,11 @@ public class AppRunner {
         Map tmpMap;
         List tempList = null;
         b = new BufferedReader(new InputStreamReader(System.in));
+        // cjm - 'b' is an OK name for a BufferedReader, but 'a' is not a descriptive name for the list.
+        // Prefer to declare the list in the context where you plan to use it (unless you need it to survive longer.
+        // In this case if you use a type parameter List<T>, T would be different from block to block, so you would have
+        // to use a separate list.
+
 
         switch (ch){
 
@@ -157,6 +162,9 @@ public class AppRunner {
                 System.out.println("Enter name of agent: ");
                 String name = b.readLine();
 
+
+                // cjm - here let Tickets or another class manage this search. Don't expose the collection directly
+                // (so implement something like Tickets.hasAgent())
                 if (!Ticket.hasAgent(name)){
                     System.out.println(String.format("Agent \"%s\" is not present in the system", name ));
                 }else {
@@ -168,6 +176,7 @@ public class AppRunner {
                         System.out.println("Total tickets: 0");
                     }
                 }
+
 
                 break;
             case 7:
