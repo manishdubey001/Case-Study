@@ -16,16 +16,6 @@ import static junit.framework.TestCase.assertEquals;
 public class TicketServiceTest {
 	TicketService ticketService = new TicketService();
 	Set tags = new HashSet(Arrays.asList("a", "b"));
-//	Ticket ticket = ticketService.getTicketData(1, "Complain", "Evans", tags);
-
-	@Test
-	public void testGetTicketData() throws Exception {
-
-//		assertEquals(1, ticket.getId());
-//		assertEquals("Complain", ticket.getSubject());
-//		assertEquals("Evans", ticket.getAgent());
-//		assertEquals(tags, ticket.getTags());
-	}
 
 	@Test
 	public void testUpdateAgent() throws Exception {

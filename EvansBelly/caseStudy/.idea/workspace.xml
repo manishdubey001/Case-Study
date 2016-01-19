@@ -45,11 +45,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="TicketOperations.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="TicketOperations.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/caseStudy/Factory/TicketOperations.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.5552283">
-              <caret line="99" column="49" selection-start-line="99" selection-start-column="49" selection-end-line="99" selection-end-column="49" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="97" column="35" selection-start-line="97" selection-start-column="34" selection-end-line="97" selection-end-column="35" />
               <folding>
                 <element signature="method#dataInsertion#0;class#TicketOperations#0" expanded="false" />
                 <element signature="method#setTicketData#0;class#TicketOperations#0" expanded="false" />
@@ -59,11 +59,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="TicketOperationsTest.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="TicketOperationsTest.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/test/java/com/caseStudy/Factory/TicketOperationsTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="60" column="1" selection-start-line="60" selection-start-column="1" selection-end-line="60" selection-end-column="1" />
+            <state vertical-scroll-proportion="0.20471281">
+              <caret line="9" column="44" selection-start-line="9" selection-start-column="44" selection-end-line="9" selection-end-column="44" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -85,7 +85,7 @@
         <entry file="file://$PROJECT_DIR$/src/test/java/com/caseStudy/Service/TicketServiceTest.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="27" column="5" selection-start-line="27" selection-start-column="5" selection-end-line="27" selection-end-column="5" />
+              <caret line="18" column="0" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -117,9 +117,9 @@
         <option value="$PROJECT_DIR$/src/test/java/com/caseStudy/CaseStudyApplicationTests.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/caseStudy/Factory/TicketOperationsTest.java" />
         <option value="$PROJECT_DIR$/src/test/java/com/caseStudy/Factory/TicketOperationsTest.java" />
-        <option value="$PROJECT_DIR$/src/test/java/com/caseStudy/Service/TicketServiceTest.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/caseStudy/Service/TicketService.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/caseStudy/Factory/TicketOperations.java" />
+        <option value="$PROJECT_DIR$/src/test/java/com/caseStudy/Service/TicketServiceTest.java" />
       </list>
     </option>
   </component>
@@ -912,7 +912,7 @@
       <created>1453195476880</created>
       <option name="number" value="Default" />
       <updated>1453195476880</updated>
-      <workItem from="1453195478130" duration="11573000" />
+      <workItem from="1453195478130" duration="12144000" />
     </task>
     <servers />
   </component>
@@ -949,7 +949,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="11573000" />
+    <option name="totallyTimeSpent" value="12144000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="1981" y="24" width="1859" height="1056" extended-state="6" />
@@ -1045,32 +1045,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/com/caseStudy/Service/TicketServiceTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="27" column="5" selection-start-line="27" selection-start-column="5" selection-end-line="27" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/com/caseStudy/Factory/TicketOperationsTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="60" column="1" selection-start-line="60" selection-start-column="1" selection-end-line="60" selection-end-column="1" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/com/caseStudy/CalculationTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="5" column="30" selection-start-line="5" selection-start-column="30" selection-end-line="5" selection-end-column="30" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/caseStudy/Service/TicketService.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1083,12 +1057,38 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/caseStudy/Factory/TicketOperations.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5552283">
-          <caret line="99" column="49" selection-start-line="99" selection-start-column="49" selection-end-line="99" selection-end-column="49" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="97" column="35" selection-start-line="97" selection-start-column="34" selection-end-line="97" selection-end-column="35" />
           <folding>
             <element signature="method#dataInsertion#0;class#TicketOperations#0" expanded="false" />
             <element signature="method#setTicketData#0;class#TicketOperations#0" expanded="false" />
             <element signature="e#3156#3171#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/caseStudy/Service/TicketServiceTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="18" column="0" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/caseStudy/CalculationTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="5" column="30" selection-start-line="5" selection-start-column="30" selection-end-line="5" selection-end-column="30" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/caseStudy/Factory/TicketOperationsTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.20471281">
+          <caret line="9" column="44" selection-start-line="9" selection-start-column="44" selection-end-line="9" selection-end-column="44" />
+          <folding>
+            <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
