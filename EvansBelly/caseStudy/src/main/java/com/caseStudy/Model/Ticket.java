@@ -7,6 +7,16 @@ import java.util.Set;
  */
 public class Ticket implements Comparable<Ticket> {
 
+	public Ticket(int id, String subject, String agent, Set tags) {
+
+		this.id = id;
+		this.subject = subject;
+		this.agent = agent;
+		this.tags = tags;
+		this.created = System.currentTimeMillis() / 1000L;
+		this.modified = System.currentTimeMillis() / 1000L;
+	}
+
 	public String getSubject() {
 		return subject;
 	}

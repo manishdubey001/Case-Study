@@ -1,6 +1,7 @@
 package com.caseStudy.Factory;
 
 import com.caseStudy.Model.Ticket;
+import com.caseStudy.Service.TicketService;
 import com.caseStudy.Util.Util;
 
 import java.util.*;
@@ -13,6 +14,7 @@ public class TicketOperations {
 	public HashMap<Integer, Ticket> ticketDetails = new HashMap();
 	public Scanner scanner = new Scanner(System.in);
 	public boolean createFlag = true;
+	TicketService ticketService = new TicketService();
 	Util utilOps = new Util();
 
 	//create ticket
@@ -45,13 +47,17 @@ public class TicketOperations {
 				System.out.println("Enter the agent name : \t");
 				String ag_name = scanner.next();
 
-				HashSet set = tagsInfo();
+				String tagString = readTags();
+				HashSet tags = ticketService.getTagsInfo(tagString);
 
-				Ticket ticketData = new Ticket();
-				ticketData.setId(id);
-				ticketData.setSubject(subject);
-				ticketData.setAgent(ag_name);
-				ticketData.setTags(set);
+				Ticket ticketData = ticketService.getTicketData(id, subject, ag_name, tags);
+
+//				Ticket ticketData = new Ticket();
+//				ticketData.setId(id);
+//				ticketData.setSubject(subject);
+//				ticketData.setAgent(ag_name);
+//				ticketData.setTags(set);
+//				Ticket ticketData = create(id,subject,ag_name,tags);
 
 				this.ticketDetails.put(id, ticketData);
 				System.out.println("Ticket " + id + " has been added successfully \n");
@@ -81,14 +87,19 @@ public class TicketOperations {
 				// change agent assigned
 				System.out.println("Change agent assigned?? y/n");
 				String selection = scanner.next();
-				if (selection.toLowerCase().equals("y"))
-					updateAgent(ticketObj);
+				if (selection.toLowerCase().equals("y")) {
+					System.out.println("Enter the agent name");
+					String data = scanner.next();
+					ticketService.updateAgent(ticketObj, data);
+				}
 
 				//change tags
 				System.out.println("Change tags?? y/n");
 				selection = scanner.next();
-				if (selection.toLowerCase().equals("y"))
-					updatetags(ticketObj);
+				if (selection.toLowerCase().equals("y")) {
+					String tagString = readTags();
+					ticketService.updatetags(ticketObj, tagString);
+				}
 			}
 			else {
 				System.out.println("No such Ticket Id present to update");
@@ -97,16 +108,18 @@ public class TicketOperations {
 	}
 
 	// update agent
-	public void updateAgent(Ticket ticketObj) {
-		System.out.println("Enter the agent name");
-		String data = scanner.next();
-		ticketObj.setAgent(data);
-	}
+//	public void updateAgent(Ticket ticketObj, String data) {
+////		System.out.println("Enter the agent name");
+////		String data = scanner.next();
+//		ticketObj.setAgent(data);
+//	}
 
 	// update tags
-	public void updatetags(Ticket ticketObj) {
-		ticketObj.setTags(tagsInfo());
-	}
+//	public void updatetags(Ticket ticketObj) {
+//		String tagString = readTags();
+//		HashSet tags = ticketService.getTagsInfo(tagString);
+//		ticketObj.setTags(tags);
+//	}
 
 	// delete ticket
 	public void deleteTicket() {
@@ -144,12 +157,18 @@ public class TicketOperations {
 	}
 
 	// get tags info to update
-	public HashSet tagsInfo() {
+//	public HashSet getTagsInfo(String tagString) {
+////		Scanner scanner = new Scanner(System.in);
+////		System.out.println("Enter the tags (comma separated)");
+////		String tags = scanner.nextLine();
+//		HashSet set = new HashSet(Arrays.asList(tagString.split("\\s*,\\s*")));
+//		return set;
+//	}
+
+	public String readTags() {
 		Scanner scanner = new Scanner(System.in);
 		System.out.println("Enter the tags (comma separated)");
-		String tags = scanner.nextLine();
-		HashSet set = new HashSet(Arrays.asList(tags.split("\\s*,\\s*")));
-		return set;
+		return scanner.nextLine();
 	}
 
 	// get ticket id
