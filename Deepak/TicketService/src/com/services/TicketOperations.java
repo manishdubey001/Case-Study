@@ -51,10 +51,10 @@ public class TicketOperations {
     public long createTicket(String subject, String agent_name, Set<String> tagHashSet){
 
         Ticket ticket = null;
-        if(subject.trim().equals("") || subject == null){
+        if(subject == null || subject.isEmpty()){
             System.out.println("Please enter proper subject!");
         }
-        else if(agent_name.trim().equals("") || subject == null){
+        else if(agent_name == null || agent_name.isEmpty()){
             System.out.println("Please enter proper Agent Name!");
         }
         else if(tagHashSet == null){
@@ -92,16 +92,16 @@ public class TicketOperations {
     public List<Ticket> showTicketById(int id){
 
         /* if id beyond the limit */
-        List<Ticket> tempTicketList = new ArrayList<>();
+        List<Ticket> tempTicketList = null;
         if(id <= 0 || id > Ticket.getCountId()){
             System.out.println("No ticket available for Ticket Id: "+id);
             return tempTicketList;
         }
 
+        tempTicketList = new ArrayList<>();
 
         for (int i = 0; i<ticketArrayList.size(); i++){
             if(ticketArrayList.get(i).getId() == id){
-                //tempTicketList.add(ticketArrayList.get(i));
                 tempTicketList = ticketArrayList.subList(i, i+1);
             }
         }
@@ -114,7 +114,7 @@ public class TicketOperations {
     /*
     * Show the selected list of tickets */
     public void showTickets(List<Ticket> ticketList){
-        if(ticketList.size() == 0 || ticketList == null){
+        if(ticketList == null || ticketList.size() == 0){
             System.out.println("No Ticket available!");
             return;
         }
@@ -148,10 +148,8 @@ public class TicketOperations {
     /*
     * To update ticket's agent name and tags by ticket id */
     public void updateTicketById(int id){
-        List<Ticket> tempTicketList = new ArrayList<>();
-        tempTicketList = showTicketById(id);
-        if(tempTicketList.size() == 0){
-            System.out.println("No ticket available to update!s");
+        if(id <= 0){
+            System.out.println("Ticket id is not valid");
             return;
         }
 
@@ -162,11 +160,44 @@ public class TicketOperations {
         agent_name = UserConsoleInput.getAgentName();
         tagHashSet = UserConsoleInput.getTagNames();
 
-        tempTicketList.get(0).setAgent_name(agent_name);
-        tempTicketList.get(0).setTags2(tagHashSet);
+        int status = updateTicket(id, agent_name, tagHashSet);
+
+        if(status == 0){
+            System.out.println("Ticket update failed!");
+        }
+        else{
+            System.out.println("Ticket update successful");
+        }
+
+    }
+
+
+    public int updateTicket(int id, String agent_name, Set<String> tagHashSet){
+        if(id <= 0 || agent_name == null|| agent_name.isEmpty()){
+            System.out.println("Please provide proper Agent Name!");
+            return 0;
+        }
+
+        List<Ticket> tempTicketList = new ArrayList<>();
+        tempTicketList = showTicketById(id);
+        if(tempTicketList.size() == 0){
+            System.out.println("No ticket available to update!s");
+            return 0;
+        }
 
         long unixTime = System.currentTimeMillis() / 1000L;
-        tempTicketList.get(0).setModified(unixTime);
+
+        try {
+            tempTicketList.get(0).setAgent_name(agent_name);
+            tempTicketList.get(0).setTags2(tagHashSet);
+            tempTicketList.get(0).setModified(unixTime);
+        }
+        catch (Exception e){
+            System.out.println("Error in update ticket");
+            return 0;
+        }
+
+        return id;
 
     }
 
@@ -182,10 +213,13 @@ public class TicketOperations {
             return;
         }
 
-        if(tempTicketList.remove(0) != null)
+        if(tempTicketList.remove(0) != null){
+            Ticket.setCountId((Ticket.getCountId() - 1));
             System.out.println("Ticket id: "+id +" remove successful ");
-        else
+        }
+        else {
             System.out.println("There is some problem in deletion pls try later!");
+        }
     }
 
 

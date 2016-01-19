@@ -40,8 +40,6 @@ public class TicketMenu {
                     System.out.println("Enter ticket Id");
                     int id2 = UserConsoleInput.acceptNumber();
                     objTicktOperation.updateTicketById(id2);
-                    System.out.println("Ticket update successful");
-                    //autoLoad();
                     break;
 
                 case 4:
@@ -60,7 +58,6 @@ public class TicketMenu {
                     break;
                 case 7:
                     System.out.println("Show All the Tickets");
-                    //objTicktOperation.showAllTicket();
                     objTicktOperation.showTickets(objTicktOperation.showAllTicket());
                     break;
                 case 8:
