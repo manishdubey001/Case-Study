@@ -1,4 +1,4 @@
- zpackage com.caseStudy;
+package com.caseStudy;
 
 import java.util.Set;
 
@@ -7,8 +7,8 @@ import java.util.Set;
  */
 public class Ticket {
 
-	private int		id;
-	private String	agent;
+	private int id;
+	private String agent;
 
 	public String getSubject() {
 		return subject;
@@ -59,8 +59,8 @@ public class Ticket {
 		this.modified = modified;
 	}
 
-	private String	subject;
-	private Set     tags;
-	private long	created;
-	private long	modified;
+	private String subject;
+	private Set tags;
+	private long created;
+	private long modified;
 }

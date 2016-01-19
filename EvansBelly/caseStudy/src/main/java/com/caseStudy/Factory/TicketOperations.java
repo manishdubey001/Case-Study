@@ -19,25 +19,29 @@ public class TicketOperations {
 
 	//create ticket
 	public void createTicket() {
-		this.dataInsertion();
-		do {
-			System.out.println("Do you wish to add more tickets? Y/N");
-			String answer = scanner.next();
-			if (answer.toLowerCase().equals("y"))
-				this.dataInsertion();
-			else if (answer.toLowerCase().equals("n"))
-				createFlag = false;
+		int id = this.dataInsertion();
+		if (id != 0) {
+			do {
+				System.out.println("Do you wish to add more tickets? Y/N");
+				String answer = scanner.next();
+				if (answer.toLowerCase().equals("y")) {
+					id = this.dataInsertion();
+				}
+				else if (answer.toLowerCase().equals("n"))
+					createFlag = false;
+			}
+			while (createFlag);
+			System.out.println("Ticket(s) created successfully");
+			createFlag = true;
 		}
-		while (createFlag);
-		System.out.println("Ticket(s) created successfully");
-		createFlag = true;
 	}
 
 	// ticket data insertion
-	public void dataInsertion() {
+	public int dataInsertion() {
 		System.out.println("Enter the ticket id");
+		int validId = 0;
+		int id = scanner.nextInt();
 		try {
-			int id = scanner.nextInt();
 			if (ticketDetails.containsKey(id))
 				System.out.println("Duplicate ticket id " + id);
 			else {
@@ -50,17 +54,7 @@ public class TicketOperations {
 				String tagString = readTags();
 				HashSet tags = ticketService.getTagsInfo(tagString);
 
-				Ticket ticketData = ticketService.getTicketData(id, subject, ag_name, tags);
-
-//				Ticket ticketData = new Ticket();
-//				ticketData.setId(id);
-//				ticketData.setSubject(subject);
-//				ticketData.setAgent(ag_name);
-//				ticketData.setTags(set);
-//				Ticket ticketData = create(id,subject,ag_name,tags);
-
-				this.ticketDetails.put(id, ticketData);
-				System.out.println("Ticket " + id + " has been added successfully \n");
+				validId = setTicketData(id, subject, ag_name, tags);
 			}
 		}
 		catch (InputMismatchException e) {
@@ -69,12 +63,26 @@ public class TicketOperations {
 		finally {
 			scanner.nextLine();
 		}
-
+		return validId;
 	}
 
+	public int setTicketData(int id, String subject, String ag_name, Set tags) {
+		if (id <= 0 || (subject.isEmpty() || ag_name.isEmpty() || tags.isEmpty())) {
+			return 0;
+		}
+
+		Ticket ticketData = TicketFactory.ticketInstance(id, subject, ag_name, tags);
+
+		this.ticketDetails.put(id, ticketData);
+		System.out.println("Ticket " + id + " has been added successfully \n");
+		return id;
+	}
+
+
 	//update ticket
-	public void updateTicket() {
+	public Ticket updateTicket() {
 		System.out.println("Ticket id : " + ticketDetails);
+		Ticket ticketObj = null;
 		if (ticketDetails.isEmpty()) {
 			System.out.println("No tickets available to update.");
 		}
@@ -82,7 +90,7 @@ public class TicketOperations {
 			System.out.println("Enter the ticket id");
 			int id = scanner.nextInt();
 			if (ticketDetails.containsKey(id)) {
-				Ticket ticketObj = ticketDetails.get(id);
+				ticketObj = ticketDetails.get(id);
 
 				// change agent assigned
 				System.out.println("Change agent assigned?? y/n");
@@ -90,7 +98,7 @@ public class TicketOperations {
 				if (selection.toLowerCase().equals("y")) {
 					System.out.println("Enter the agent name");
 					String data = scanner.next();
-					ticketService.updateAgent(ticketObj, data);
+					ticketObj = ticketService.updateAgent(ticketObj, data);
 				}
 
 				//change tags
@@ -98,13 +106,14 @@ public class TicketOperations {
 				selection = scanner.next();
 				if (selection.toLowerCase().equals("y")) {
 					String tagString = readTags();
-					ticketService.updatetags(ticketObj, tagString);
+					ticketObj = ticketService.updatetags(ticketObj, tagString);
 				}
 			}
 			else {
 				System.out.println("No such Ticket Id present to update");
 			}
 		}
+		return ticketObj;
 	}
 
 	// update agent

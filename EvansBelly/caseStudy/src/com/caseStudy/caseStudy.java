@@ -1,3 +1,4 @@
+/*
 package com.caseStudy;
 
 import com.caseStudy.Factory.TicketOperations;
@@ -5,9 +6,11 @@ import com.caseStudy.Util.Util;
 
 import java.util.*;
 
+*/
 /**
  * Created by root on 30/12/15.
- */
+ *//*
+
 public class caseStudy {
 
 	public Scanner scanner = new Scanner(System.in);
@@ -359,3 +362,4 @@ public class caseStudy {
 		}
 	}
 }
+*/
