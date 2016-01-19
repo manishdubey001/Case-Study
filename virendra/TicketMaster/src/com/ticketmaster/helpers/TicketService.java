@@ -37,7 +37,7 @@ public class TicketService /*implements Comparable<Ticket>*/ {
     public Ticket createTicket(String subject,String agent,Set tags)
             throws IOException, ClassNotFoundException, TicketNotFoundException {
 
-        if (subject == null || agent == null || tags == null){
+        if (subject == null || agent == null){
             //if any of one is not set then return null
             return null;
         }

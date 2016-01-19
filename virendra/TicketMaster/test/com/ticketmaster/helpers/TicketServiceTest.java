@@ -1,7 +1,7 @@
-package com.ticketmaster;
+package com.ticketmaster.helpers;
 
+import com.ticketmaster.Main;
 import com.ticketmaster.exceptions.TicketNotFoundException;
-import com.ticketmaster.helpers.TicketService;
 import com.ticketmaster.models.Ticket;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,11 +18,14 @@ import static junit.framework.TestCase.assertNull;
 /**
  * Created by root on 19/1/16.
  */
-public class TicketCreateTest {
+public class TicketServiceTest {
+
+    TicketService service;
 
     @Before
     public void beforeMethodStart(){
         Main.collectionChoice = 1; //using HashMap to setup test
+        service = new TicketService();
     }
 
     /**
@@ -32,7 +35,6 @@ public class TicketCreateTest {
     @Test
     public void createTicketWithNoData() {
 
-        TicketService service = new TicketService();
         Ticket object = null;
         final String txtSubject = null;
         final String txtAgent   = null;
@@ -55,7 +57,6 @@ public class TicketCreateTest {
     @Test
     public void createTicketWithSubject() {
 
-        TicketService service = new TicketService();
         Ticket object = null;
         final String txtSubject = "testSubject";
         final String txtAgent   = null;
@@ -78,7 +79,6 @@ public class TicketCreateTest {
     @Test
     public void createTicketWithAgent() {
 
-        TicketService service = new TicketService();
         Ticket object = null;
         final String txtSubject = null;
         final String txtAgent   = "testAgent";
@@ -101,7 +101,6 @@ public class TicketCreateTest {
     @Test
     public void createTicketWithTags() {
 
-        TicketService service = new TicketService();
         Ticket object = null;
         final String txtSubject = null;
         final String txtAgent   = null;
@@ -121,13 +120,89 @@ public class TicketCreateTest {
     }
 
     /**
+     * createTicketWithSubjectAgent test method
+     * supply subject and agent
+     */
+    @Test
+    public void createTicketWithSubjectAgent() {
+
+        Ticket object = null;
+        final String txtSubject = "testSubject";
+        final String txtAgent   = "testAgent";
+        final Set tagsSet       = null;
+
+        try{
+            object = service.createTicket(txtSubject, txtAgent, tagsSet);
+        }catch (TicketNotFoundException | IOException | ClassNotFoundException e){
+            e.printStackTrace();
+        }
+        //adding asserts
+        //must return ticket object
+        assertNotNull(object);
+        assertEquals(txtSubject, object.getSubject());
+        assertEquals(txtAgent, object.getAgent());
+        assertTrue(object.tags.isEmpty());
+
+        //after all details are verified
+        //delete crated ticket entry
+        object.deleteTicket(object.getId());
+    }
+
+    /**
+     * createTicketWithAgentTags test method
+     * supply agent and tag
+     */
+    @Test
+    public void createTicketWithAgentTags() {
+
+        Ticket object = null;
+        final String txtSubject = null;
+        final String txtAgent   = "testAgent";
+        Set tagsSet       = new HashSet();
+        tagsSet.add("Tag1");
+        tagsSet.add("Tag2");
+
+        try{
+            object = service.createTicket(txtSubject, txtAgent, tagsSet);
+        }catch (TicketNotFoundException | IOException | ClassNotFoundException e){
+            e.printStackTrace();
+        }
+        //adding asserts
+        //must return null
+        assertNull(object);
+    }
+
+    /**
+     * createTicketWithSubjectTags test method
+     * supply subject and tag
+     */
+    @Test
+    public void createTicketWithSubjectTags() {
+
+        Ticket object = null;
+        final String txtSubject = "testSubject";
+        final String txtAgent   = null;
+        Set tagsSet       = new HashSet();
+        tagsSet.add("Tag1");
+        tagsSet.add("Tag2");
+
+        try{
+            object = service.createTicket(txtSubject, txtAgent, tagsSet);
+        }catch (TicketNotFoundException | IOException | ClassNotFoundException e){
+            e.printStackTrace();
+        }
+        //adding asserts
+        //must return null
+        assertNull(object);
+    }
+
+    /**
      * createTicketWithAllInput test method
      * supply all input data
      */
     @Test
     public void createTicketWithAllInput() {
 
-        TicketService service = new TicketService();
         Ticket object = null;
         final String txtSubject = "testSubject";
         final String txtAgent   = "testAgent";
@@ -149,6 +224,7 @@ public class TicketCreateTest {
         //after all details are verified
         //delete crated ticket entry
         object.deleteTicket(object.getId());
+
     }
 
 

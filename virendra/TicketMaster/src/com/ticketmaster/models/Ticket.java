@@ -48,7 +48,9 @@ public class Ticket /*implements Serializable*/{
         }
 
         public TicketBuilder withTags(Set tags){
-            this.tags = (Set<String>)tags;
+            if (tags != null){
+                this.tags = (Set<String>)tags;
+            }
             return this;
         }
 

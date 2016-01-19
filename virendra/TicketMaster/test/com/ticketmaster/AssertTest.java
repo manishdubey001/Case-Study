@@ -7,7 +7,8 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- * Created by root on 18/1/16.
+ * This test case is created to understand the test case fundamentals with Asserts
+ * Created by Virendra on 18/1/16.
  */
 public class AssertTest {
 
