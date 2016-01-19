@@ -43,7 +43,7 @@
       <file leaf-file-name="TicketServiceTest.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/test/com/ticketmaster/helpers/TicketServiceTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.5681818">
+            <state vertical-scroll-proportion="-0.06993007">
               <caret line="444" column="0" selection-start-line="444" selection-start-column="0" selection-end-line="444" selection-end-column="0" />
               <folding>
                 <element signature="docComment;class#TicketServiceTest#0" expanded="false" />
@@ -985,7 +985,7 @@
       <workItem from="1453179782382" duration="10761000" />
       <workItem from="1453196837662" duration="36000" />
       <workItem from="1453197456811" duration="6000" />
-      <workItem from="1453203545473" duration="7207000" />
+      <workItem from="1453203545473" duration="7257000" />
     </task>
     <servers />
   </component>
@@ -1022,7 +1022,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="137496000" />
+    <option name="totallyTimeSpent" value="137546000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1580,7 +1580,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/test/com/ticketmaster/helpers/TicketServiceTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5681818">
+        <state vertical-scroll-proportion="-0.06993007">
           <caret line="444" column="0" selection-start-line="444" selection-start-column="0" selection-end-line="444" selection-end-column="0" />
           <folding>
             <element signature="docComment;class#TicketServiceTest#0" expanded="false" />
