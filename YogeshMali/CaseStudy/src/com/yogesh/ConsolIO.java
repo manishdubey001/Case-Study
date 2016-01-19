@@ -87,6 +87,7 @@ public class ConsolIO {
 
     public static void ticketListHeader() {
         System.out.println("Id  |  Subject  | Agent Name |  Tags  |      Created      |   Modified    ");
+        System.out.println();
     }
 
     public static void showMsg(String msg) {

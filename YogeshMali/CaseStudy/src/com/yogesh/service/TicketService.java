@@ -16,13 +16,6 @@ import java.util.*;
 public class TicketService {
 
     public ArrayList<Ticket> arrTicketList = new ArrayList();
-    Scanner scanIn;
-
-    public void exitService() {
-        scanIn = null;
-        arrTicketList = null;
-        System.exit(0);
-    }
 
     /**
      * this method for search ticket based on Agent name
@@ -31,7 +24,6 @@ public class TicketService {
         boolean ticketFlag = false;
 
         ConsolIO.ticketListHeader();
-        System.out.println();
         for (Ticket ticket : this.arrTicketList) {
             if (ticket.getAgentName().equals(agentName)) {
                 ConsolIO.showTicket(ticket);
@@ -50,7 +42,6 @@ public class TicketService {
      */
     public void removeTicketService(int id) {
 
-
         if (isTicketIdExit(id)) {
             for (Ticket ticket : this.arrTicketList) {
                 if (ticket.getId() == id) {
@@ -65,7 +56,6 @@ public class TicketService {
         }
 
     }
-
 
     /**
      * this method for Ticket count grouped by agent name(order by agent name).
@@ -119,7 +109,6 @@ public class TicketService {
     public Ticket showSingleTicketService(int id) {
         boolean ticketFlag = false;
         ConsolIO.ticketListHeader();
-        System.out.println();
         for (Ticket ticket : this.arrTicketList) {
 
             if (ticket.getId() == id) {
@@ -146,7 +135,7 @@ public class TicketService {
         Collections.sort(this.arrTicketList, new DateComparator());
 
         ConsolIO.ticketListHeader();
-        System.out.println();
+
 
         if (this.arrTicketList.isEmpty()) {
             ConsolIO.showMsg("No record Found");
@@ -161,10 +150,7 @@ public class TicketService {
     /**
      * @param id
      */
-    public void updateTags(int id) {
-
-        List<String> newlist = ConsolIO.getTags();
-
+    public void updateTags(int id, List<String> newlist) {
         if (!newlist.isEmpty()) {
             for (Ticket ticket : this.arrTicketList) {
                 if (ticket.getId() == id) {
@@ -183,29 +169,29 @@ public class TicketService {
      *
      * @param id
      */
-    public void updateAgentName(int id) {
 
-        String newAgentName = ConsolIO.getAgentNAme();
+    public boolean updateAgentName(int id, String newAgentName) {
 
-        for (Ticket ticket : this.arrTicketList) {
-            if (ticket.getId() == id) {
-
-                ticket.setAgentName(newAgentName);
-                ConsolIO.showMsg(" Agent name has been updated ");
+        if (id > 0) {
+            for (Ticket ticket : this.arrTicketList) {
+                if (ticket.getId() == id) {
+                    System.out.println(ticket.getId());
+                    ticket.setAgentName(newAgentName);
+                    return true;
+                }
+                break;
             }
-            break;
         }
-
+        return false;
     }
 
     /**
-     *
      * this method for create new ticket
      */
     public boolean createTicketService(int id, String subject, String agentName, List<String> list) {
 
-        if( id > 0 && !subject.equals(null) && !agentName.equals(null)) {
-            Ticket ticket = TicketFactory.newInstance(id,subject,agentName,list);
+        if (id > 0 && !subject.equals("") && !agentName.equals("")) {
+            Ticket ticket = TicketFactory.newInstance(id, subject, agentName, list);
 
             if (this.isTicketIdExit(id)) {
                 ConsolIO.showMsg("ticket Id is already Exist");
@@ -213,7 +199,7 @@ public class TicketService {
                 this.arrTicketList.add(ticket);
                 ConsolIO.showMsg("Ticket has been added successfully");
             }
-            return  true;
+            return true;
         }
         return false;
     }
@@ -234,6 +220,10 @@ public class TicketService {
         return false;
     }
 
+    public void exitService() {
+        arrTicketList = null;
+        System.exit(0);
+    }
 
 }
 

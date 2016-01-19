@@ -66,27 +66,28 @@ public class MenuClass {
         List<String> list = ConsolIO.getTags();
 
         ticketService.createTicketService(id, subject, agentName, list);
+
     }
 
     private void updateTicket() {
         int id = ConsolIO.getTicketId();
-
         if (ticketService.isTicketIdExit(id)) {
             ConsolIO.showMsg("Press a to update Agent name  ");
             String updatedId = ConsolIO.getString();
             if (updatedId.equals("a")) {
-                ticketService.updateAgentName(id);
+                String newAgentName = ConsolIO.getAgentNAme();
+                ticketService.updateAgentName(id, newAgentName);
             }
-
             ConsolIO.showMsg("Press t to update Tags  ");
             String updatedTag = ConsolIO.getString();
             if (updatedTag.equals("t")) {
-                ticketService.updateTags(id);
+                List<String> newlist = ConsolIO.getTags();
+                ticketService.updateTags(id, newlist);
             }
+            ConsolIO.showMsg(" Agent name has been updated ");
         } else {
             ConsolIO.showMsg("Ticket is not Exists");
         }
-
     }
 
     private void showAllTicket() {
@@ -99,7 +100,6 @@ public class MenuClass {
     }
 
     private void searchTicketsUsingtag() {
-
         ConsolIO.showMsg("Enter the tag want to search");
         String tag = ConsolIO.getString();
         ticketService.searchTicketsUsingtagService(tag);
@@ -107,26 +107,21 @@ public class MenuClass {
     }
 
     private void showTicketcountAgent() {
-
         ticketService.showTicketcountAgentService();
     }
 
 
     private void removeTicket() {
-
         ticketService.removeTicketService(ConsolIO.getTicketId());
     }
 
     private void searchTicketsUsingAgentname() {
-
         ticketService.searchTicketsUsingAgentnameService(ConsolIO.getAgentNAme());
-
     }
 
     private void exit() {
         ticketService.exitService();
     }
-
 
     /**
      * this method handle continue process or exit

@@ -40,4 +40,54 @@ public class TicketServiceTest {
         List<String> categories = asList("one", "two", "three");
         assertFalse( ticketService.createTicketService(id, subject, agent, categories ));
     }
+
+    @Test
+    public void testCreateTicketServicewithSubjectNull() throws Exception {
+
+        int id = 1;
+        String subject = "";
+        String agent = "James";
+        List<String> categories = asList("one", "two", "three");
+        assertFalse( ticketService.createTicketService(id, subject, agent, categories ));
+    }
+
+    @Test
+    public void testCreateTicketServicewithAllNullValue() throws Exception {
+
+        int id = 0;
+        String subject = "";
+        String agent = "";
+        List<String> categories = asList("one", "two", "three");
+        assertFalse( ticketService.createTicketService(id, subject, agent, categories ));
+    }
+
+    @Test
+    public void testUpdateTicketAgentNameService() throws Exception {
+
+        int id = 1;
+        String subject = "Subject";
+        String agent = "James";
+        List<String> categories = asList("one", "two", "three");
+        assertTrue( ticketService.createTicketService(id, subject, agent, categories ));
+
+        String newagent = "Yogesh";
+        assertTrue( ticketService.updateAgentName(id,newagent));
+        Ticket ticket = ticketService.showSingleTicketService(id);
+        Assert.assertEquals("Yogesh",ticket.getAgentName());
+
+    }
+
+    @Test
+    public void testUpdateTicketAgentNameServicewithIdlessOne() throws Exception {
+
+        int id = 1;
+        String subject = "Subject";
+        String agent = "James";
+        List<String> categories = asList("one", "two", "three");
+        ticketService.createTicketService(id, subject, agent, categories );
+
+        id=0;
+        String newAgent = "Yogesh";
+        assertFalse( ticketService.updateAgentName(id,newAgent));
+    }
 }
