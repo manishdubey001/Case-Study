@@ -4,7 +4,7 @@ package com.yogesh.service;
 import com.yogesh.ConsolIO;
 
 import com.yogesh.DateComparator;
-import com.yogesh.Helper;
+import com.yogesh.ConsolIO;
 import com.yogesh.model.Ticket;
 import com.yogesh.pattern.TicketFactory;
 
@@ -30,7 +30,7 @@ public class TicketService {
     public void searchTicketsUsingAgentnameService(String agentName) {
         boolean ticketFlag = false;
 
-        Helper.ticketListHeader();
+        ConsolIO.ticketListHeader();
         System.out.println();
         for (Ticket ticket : this.arrTicketList) {
             if (ticket.getAgentName().equals(agentName)) {
@@ -40,7 +40,7 @@ public class TicketService {
         }
 
         if (ticketFlag == false) {
-            Helper.showMsg("Ticket Not found");
+            ConsolIO.showMsg("Ticket Not found");
         }
 
     }
@@ -56,12 +56,12 @@ public class TicketService {
                 if (ticket.getId() == id) {
                     List<String> oldTagsList = ticket.getTags();
                     this.arrTicketList.remove(ticket);
-                    Helper.showMsg(" Ticket deleted Successfully");
+                    ConsolIO.showMsg(" Ticket deleted Successfully");
                     break;
                 }
             }
         } else {
-            Helper.showMsg("Ticket Not Fount");
+            ConsolIO.showMsg("Ticket Not Fount");
         }
 
     }
@@ -72,7 +72,7 @@ public class TicketService {
      */
     public void showTicketcountAgentService() {
 
-        Helper.showMsg("Agent Count  =>   Total Count");
+        ConsolIO.showMsg("Agent Count  =>   Total Count");
 
         TreeMap<String, Integer> tmCount = new TreeMap<>();
 
@@ -89,7 +89,7 @@ public class TicketService {
         for (Map.Entry<String, Integer> entry : tmCount.entrySet()) {
             String agentName = entry.getKey();
             Integer count = entry.getValue();
-            Helper.showMsg(agentName + " => " + count);
+            ConsolIO.showMsg(agentName + " => " + count);
         }
     }
 
@@ -100,9 +100,9 @@ public class TicketService {
 
 
         if (this.arrTicketList.isEmpty()) {
-            Helper.showMsg("No record Found");
+            ConsolIO.showMsg("No record Found");
         } else {
-            Helper.ticketListHeader();
+            ConsolIO.ticketListHeader();
             System.out.println();
             for (Ticket ticket : this.arrTicketList) {
                 if (ticket.getTags().contains(tag)) {
@@ -118,7 +118,7 @@ public class TicketService {
      */
     public Ticket showSingleTicketService(int id) {
         boolean ticketFlag = false;
-        Helper.ticketListHeader();
+        ConsolIO.ticketListHeader();
         System.out.println();
         for (Ticket ticket : this.arrTicketList) {
 
@@ -130,7 +130,7 @@ public class TicketService {
             }
         }
         if (ticketFlag == false) {
-            Helper.showMsg("Ticket Not found");
+            ConsolIO.showMsg("Ticket Not found");
         }
         return null;
     }
@@ -145,11 +145,11 @@ public class TicketService {
 
         Collections.sort(this.arrTicketList, new DateComparator());
 
-        Helper.ticketListHeader();
+        ConsolIO.ticketListHeader();
         System.out.println();
 
         if (this.arrTicketList.isEmpty()) {
-            Helper.showMsg("No record Found");
+            ConsolIO.showMsg("No record Found");
         } else {
             for (Ticket ticket : this.arrTicketList) {
                 ConsolIO.showTicket(ticket);
@@ -169,7 +169,7 @@ public class TicketService {
             for (Ticket ticket : this.arrTicketList) {
                 if (ticket.getId() == id) {
                     ticket.setTags(newlist);
-                    Helper.showMsg("Ticket Tags has been updated");
+                    ConsolIO.showMsg("Ticket Tags has been updated");
                     break;
                 }
             }
@@ -191,7 +191,7 @@ public class TicketService {
             if (ticket.getId() == id) {
 
                 ticket.setAgentName(newAgentName);
-                Helper.showMsg(" Agent name has been updated ");
+                ConsolIO.showMsg(" Agent name has been updated ");
             }
             break;
         }
@@ -208,10 +208,10 @@ public class TicketService {
             Ticket ticket = TicketFactory.newInstance(id,subject,agentName,list);
 
             if (this.isTicketIdExit(id)) {
-                Helper.showMsg("ticket Id is already Exist");
+                ConsolIO.showMsg("ticket Id is already Exist");
             } else {
                 this.arrTicketList.add(ticket);
-                Helper.showMsg("Ticket has been added successfully");
+                ConsolIO.showMsg("Ticket has been added successfully");
             }
             return  true;
         }
