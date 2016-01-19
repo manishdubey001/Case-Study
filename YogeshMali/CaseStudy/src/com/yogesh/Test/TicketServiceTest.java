@@ -29,7 +29,6 @@ public class TicketServiceTest {
         Assert.assertEquals(1,ticket.getId());
         Assert.assertEquals("Subject",ticket.getSubject());
         Assert.assertEquals(asList("one", "two", "three"),ticket.getTags());
-        System.out.println("Mangesh");
     }
 
     @Test

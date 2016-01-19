@@ -72,19 +72,19 @@ public class MenuClass {
         int id = ConsolIO.getTicketId();
 
         if (ticketService.isTicketIdExit(id)) {
-            Helper.showMsg("Press a to update Agent name  ");
+            ConsolIO.showMsg("Press a to update Agent name  ");
             String updatedId = ConsolIO.getString();
             if (updatedId.equals("a")) {
                 ticketService.updateAgentName(id);
             }
 
-            Helper.showMsg("Press t to update Tags  ");
+            ConsolIO.showMsg("Press t to update Tags  ");
             String updatedTag = ConsolIO.getString();
             if (updatedTag.equals("t")) {
                 ticketService.updateTags(id);
             }
         } else {
-            Helper.showMsg("Ticket is not Exists");
+            ConsolIO.showMsg("Ticket is not Exists");
         }
 
     }
@@ -100,7 +100,7 @@ public class MenuClass {
 
     private void searchTicketsUsingtag() {
 
-        Helper.showMsg("Enter the tag want to search");
+        ConsolIO.showMsg("Enter the tag want to search");
         String tag = ConsolIO.getString();
         ticketService.searchTicketsUsingtagService(tag);
         msg();
@@ -133,16 +133,14 @@ public class MenuClass {
      */
     public void msg() {
 
-        Helper.showMsg("Please Press 1 : Continue   ");
+        ConsolIO.showMsg("Please Press 1 : Continue   ");
         int msgId = ConsolIO.getIntvalue();
         if (msgId == 1) {
             displayList();
 
         } else {
-            Helper.showMsg("thank you");
+            ConsolIO.showMsg("thank you");
         }
-
-
     }
 
     /**
@@ -150,12 +148,11 @@ public class MenuClass {
      */
     public void displayList() {
 
-        Helper.displayList();
-        Helper.showMsg("Select Operation ");
+        ConsolIO.displayList();
+        ConsolIO.showMsg("Select Operation ");
         int menuId = ConsolIO.getIntvalue();
         this.operation(menuId);
         msg();
     }
-
 
 }

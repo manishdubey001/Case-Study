@@ -13,11 +13,11 @@ public class DateComparator implements Comparator<Ticket> {
     @Override
     public int compare(Ticket date1, Ticket date2) {
         Date d = date1.getModified();
-        Date date =  date2.getModified();
+        Date date = date2.getModified();
 
-        if (d.before(date) ) {
+        if (d.before(date)) {
             return 1;
-        } else if (d.after(date) ) {
+        } else if (d.after(date)) {
             return -1;
         } else {
             return 0;

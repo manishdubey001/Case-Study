@@ -199,16 +199,16 @@ public class TicketService {
     }
 
     /**
-     * /**
+     *
      * this method for create new ticket
      */
     public boolean createTicketService(int id, String subject, String agentName, List<String> list) {
 
-        if(  0 < id && !subject.equals(null) && !agentName.equals(null)) {
+        if( id > 0 && !subject.equals(null) && !agentName.equals(null)) {
             Ticket ticket = TicketFactory.newInstance(id,subject,agentName,list);
 
             if (this.isTicketIdExit(id)) {
-                System.out.println("ticket Id is already Exist");
+                Helper.showMsg("ticket Id is already Exist");
             } else {
                 this.arrTicketList.add(ticket);
                 Helper.showMsg("Ticket has been added successfully");
