@@ -56,15 +56,17 @@ public class ConsolIO {
     }
 
     static String getString() {
-
         Scanner scanIn = new Scanner(System.in);
         String s = scanIn.nextLine();
         return s;
+
     }
 
 
     public static void showTicket(Ticket ticket) {
+
         System.out.println(ticket.getId() + " | " + ticket.getSubject() + "  |   " + ticket.getAgentName() + "  |   " + ticket.getTags() + "  |  " + ticket.getCreated() + "  |  " + ticket.getModified());
+//        System.out.println();
     }
 
     /**
