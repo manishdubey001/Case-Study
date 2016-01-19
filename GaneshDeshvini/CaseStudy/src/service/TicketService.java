@@ -1,5 +1,6 @@
 package service;
 
+import factory.TicketModelFactory;
 import helpers.DateTime;
 import helpers.ConsoleReader;
 import helpers.Util;
@@ -11,8 +12,6 @@ import java.util.*;
  * Created by root on 5/1/16.
  */
 public class TicketService {
-
-    TicketModel tm = null;
 
     /**
      * processCreateTicket ticket service object
@@ -30,8 +29,46 @@ public class TicketService {
      * @return
      */
     private HashSet<String> getTags(String tags) {
-//        return Util.isNotEmpty(tags) ? new HashSet<String>(Arrays.asList(tags.toLowerCase().split(","))) : new HashSet<String>();
-        return Util.isNotEmpty(tags) ? new HashSet<String>(Arrays.asList(tags.toLowerCase().split(","))) : null;
+        final String pattern = "\\s*,\\s*";
+        return Util.isStringValid(tags) ? new HashSet<String>(Arrays.asList(tags.toLowerCase().split(pattern))) : null;
+    }
+
+
+    /**
+     * check if duplicate ticket id
+     *
+     * @param id
+     * @return boolean
+     */
+    boolean isDuplicateTicketId(int id) {
+        return TicketModelFactory.getInstance().isExists(id);
+    }
+
+    /**
+     * create ticket
+     *
+     * @param id
+     * @param subject
+     * @param agentName
+     * @param tags
+     * @return
+     */
+    public boolean createTicket(int id, String subject, String agentName, String tags) {
+        if (id > 0 && Util.isStringValid(subject) && Util.isStringValid(agentName)) {
+            if (isDuplicateTicketId(id)) {
+                System.out.println("Duplicate ticket id!!!");
+                return false;
+            }
+            TicketModel tm = TicketModelFactory.getInstance();
+            tm.setId(id);
+            tm.setAgentName(agentName);
+            tm.setSubject(subject);
+            HashSet<String> hs = getTags(tags);
+            tm.setTags(hs);
+            return tm.save();
+        }
+        System.out.println("Invalid input");
+        return false;
     }
 
     /**
@@ -40,62 +77,48 @@ public class TicketService {
      * @return
      */
     public void processCreateTicket() {
+        Scanner scanner = ConsoleReader.getInstance();
         try {
-            Scanner scanner = ConsoleReader.getInstance();
+            int id = processId();
 
-            int id = processId(scanner, false);
+            System.out.println("Enter subject");
+            String subject = scanner.next();
 
-            if (id > 0) {
-                System.out.println("Enter subject");
-                String subject = scanner.next();
+            System.out.println("Enter agent name");
+            String agentName = scanner.next();
 
-                System.out.println("Enter agent name");
-                String agentName = scanner.next();
-
-                System.out.println("Enter tags (Comma separated if multiple)");
-                String tags = scanner.next();
-
-                tm = new TicketModel();
-                tm.setId(id);
-                tm.setAgentName(agentName);
-                tm.setSubject(subject);
-                HashSet<String> hs = getTags(tags);
-                tm.setTags(hs);
-                if (tm.save()) {
-                    System.out.println("Ticket created successfully");
-                } else {
-                    System.out.println("Error while creating ticket");
-                }
+            System.out.println("Enter tags (Comma separated if multiple)");
+            scanner = ConsoleReader.getInstance();
+            String tags = scanner.nextLine();
+            System.out.println(tags);
+            if (createTicket(id, subject, agentName, tags)) {
+                System.out.println("Ticket created successfully");
+            } else {
+                System.out.println("Error while creating ticket");
             }
+
         } catch (InputMismatchException ime) {
 //            ime.printStackTrace();
             System.out.println("Invalid input provided!!!");
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            scanner = null;
         }
     }
 
+
     /**
      * get id as input, check for valid id
-     * @param scanner
-     * @param isUpdate
+     *
      * @return
      */
-    private int processId(Scanner scanner, boolean isUpdate) {
+    private int processId() {
         try {
+            Scanner scanner = ConsoleReader.getInstance();
             System.out.println("Enter id");
             int id = scanner.nextInt();
-
-            if (id > 0) {
-                //if update operation then skip checking existing
-                if (!isUpdate && TicketModel.getInstance().isExists(id)) {
-                    System.out.println("Id : " + id + " already taken, please try with another id");
-                } else {
-                    return id;
-                }
-            } else {
-                System.out.println("Invalid input provided!!!");
-            }
+            return id;
         } catch (InputMismatchException ime) {
             System.out.println("Invalid input provided!!!");
         } catch (Exception e) {
@@ -105,43 +128,56 @@ public class TicketService {
     }
 
     /**
+     * update ticket
+     *
+     * @param id
+     * @param agentName
+     * @param tags
+     * @return
+     */
+    boolean updateTicket(int id, String agentName, String tags) {
+        if (id > 0 && TicketModelFactory.getInstance().isExists(id)) {
+            TicketModel tm = TicketModelFactory.getInstance().find(id);
+
+            tm.isUpdate = true;
+            if (Util.isStringValid(agentName)) {
+                tm.setAgentName(agentName);
+            }
+            HashSet<String> hs = getTags(tags);
+            tm.setTags(hs);
+            return tm.save();
+        }
+        System.out.println("Invalid input provided!!!");
+        return false;
+    }
+
+    /**
      * processUpdateTicket operation
      *
      * @return
      */
     public void processUpdateTicket() {
+        Scanner scanner = ConsoleReader.getInstance();
         try {
-            Scanner scanner = ConsoleReader.getInstance();
-            int id = processId(scanner, true);
-            if (id > 0) {
-                if (TicketModel.getInstance().isExists(id)) {
+            int id = processId();
+            System.out.println("Enter agent name");
+            String agentName = scanner.next();
 
-                    TicketModel tm = TicketModel.getInstance().find(id);
-                    System.out.println("Enter agent name");
-                    String agentName = scanner.next();
+            scanner = ConsoleReader.getInstance();
+            System.out.println("Enter tags (Comma separated if multiple)");
+            String tags = scanner.next();
 
-                    System.out.println("Enter tags (Comma separated if multiple)");
-                    String tags = scanner.next();
-
-                    tm.isUpdate = true;
-                    if (agentName != null) {
-                        tm.setAgentName(agentName);
-                    }
-                    if (tags != null) {
-                        HashSet<String> hs = getTags(tags);
-                        tm.setTags(hs);
-                    }
-                    if (tm.save()) {
-                        System.out.println("Ticket created successfully");
-                    } else {
-                        System.out.println("Error while creating ticket");
-                    }
-                }
+            if (updateTicket(id, agentName, tags)) {
+                System.out.println("Ticket updated successfully");
+            } else {
+                System.out.println("Error while updating ticket");
             }
         } catch (InputMismatchException ime) {
             System.out.println("Invalid input provided!!!");
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            scanner = null;
         }
     }
 
@@ -152,7 +188,7 @@ public class TicketService {
      * @return
      */
     public TicketModel getTicketDetail(int id) {
-        return TicketModel.getInstance().find(id);
+        return TicketModelFactory.getInstance().find(id);
     }
 
     /**
@@ -161,7 +197,7 @@ public class TicketService {
      * @return
      */
     public List<TicketModel> getTicketList() {
-        return TicketModel.getInstance().findAll();
+        return TicketModelFactory.getInstance().findAll();
     }
 
     /**
@@ -171,8 +207,8 @@ public class TicketService {
      * @return
      */
     public List<TicketModel> findAllTicketsByAgentName(String agentName) {
-        if (agentName != null && !agentName.isEmpty()) {
-            return TicketModel.getInstance().findAllByAgentName(agentName);
+        if (Util.isStringValid(agentName)) {
+            return TicketModelFactory.getInstance().findAllByAgentName(agentName);
         }
         return new ArrayList<TicketModel>();
     }
@@ -183,9 +219,9 @@ public class TicketService {
      * @param tag
      * @return
      */
-    public List<TicketModel> getAllTIcketsByTag(String tag) {
-        if (tag != null && !tag.isEmpty()) {
-            return TicketModel.getInstance().findAllByTag(tag);
+    public List<TicketModel> getAllTicketsByTags(String tag) {
+        if (Util.isStringValid(tag)) {
+            return TicketModelFactory.getInstance().findAllByTag(tag);
         }
         return new ArrayList<TicketModel>();
     }
@@ -195,7 +231,7 @@ public class TicketService {
      */
     public void processAgentWithTicketCount() {
         try {
-            TreeMap<String, Integer> tmAgentNameCount = TicketModel.getInstance().findAllAgentWithTicketCount();
+            TreeMap<String, Integer> tmAgentNameCount = TicketModelFactory.getInstance().findAllAgentWithTicketCount();
             if (Util.isMapValid(tmAgentNameCount)) {
                 System.out.println("-------------------------------------");
                 System.out.println("|Agent Name\t|Count|");
@@ -213,15 +249,27 @@ public class TicketService {
     }
 
     /**
+     * delete ticket
+     *
+     * @param id
+     * @return
+     */
+    boolean deleteTicket(int id) {
+        if (id > 0) {
+            return TicketModelFactory.getInstance().delete(id);
+        }
+        System.out.println("Invalid input provided!!!");
+        return false;
+    }
+
+    /**
      * select individual ticket by Id ticket menu
      */
     public void processDeleteTicket() throws InterruptedException {
         try {
-            System.out.println("Enter id");
-            int id = ConsoleReader.getInstance().nextInt();
+            int id = processId();
 
-            boolean b = TicketModel.getInstance().delete(id);
-            if (b) {
+            if (deleteTicket(id)) {
                 System.out.println("Entry removed successfully");
             } else {
                 System.out.println("No data found!!!");
@@ -238,15 +286,27 @@ public class TicketService {
     }
 
     /**
+     * get ticket details
+     *
+     * @param id
+     * @return
+     */
+    TicketModel getTicket(int id) {
+        if (id > 0) {
+            return getTicketDetail(id);
+        }
+        System.out.println("Invalid input provided!!!");
+        return null;
+    }
+
+    /**
      * select individual ticket by Id ticket menu
      */
     public void processGetTicketDetail() {
         try {
-            Scanner scanner = ConsoleReader.getInstance();
-            System.out.println("Enter id");
-            int id = scanner.nextInt();
+            int id = processId();
 
-            TicketModel tm = getTicketDetail(id);
+            TicketModel tm = getTicket(id);
             if (tm != null) {
                 printTicketDetails(tm);
             } else {
@@ -265,14 +325,16 @@ public class TicketService {
      * @param tm
      */
     void printTicketDetails(TicketModel tm) {
-        System.out.println("----------------------");
-        System.out.println("Ticket id  : " + tm.getId());
-        System.out.println("Subject    : " + tm.getSubject());
-        System.out.println("Agent name : " + tm.getAgentName());
-        System.out.println("Tags       : " + Util.convertSetToString(tm.getTags()));
-        System.out.println("Created    : " + DateTime.getFormattedDateTime(tm.getCreated()));
-        System.out.println("Modified   : " + DateTime.getFormattedDateTime(tm.getModified()));
-        System.out.println("----------------------");
+        if (tm != null) {
+            System.out.println("----------------------");
+            System.out.println("Ticket id  : " + tm.getId());
+            System.out.println("Subject    : " + tm.getSubject());
+            System.out.println("Agent name : " + tm.getAgentName());
+            System.out.println("Tags       : " + Util.convertSetToString(tm.getTags()));
+            System.out.println("Created    : " + DateTime.getFormattedDateTime(tm.getCreated()));
+            System.out.println("Modified   : " + DateTime.getFormattedDateTime(tm.getModified()));
+            System.out.println("----------------------");
+        }
     }
 
     /**
@@ -280,7 +342,7 @@ public class TicketService {
      */
     public void processGetAllTicketList() {
         List<TicketModel> ls = getTicketList();
-        if (ls != null && ls.size() > 0) {
+        if (Util.isCollectionValid(ls)) {
             for (TicketModel tm : ls) {
                 printTicketDetails(tm);
             }
@@ -298,7 +360,7 @@ public class TicketService {
             String agentName = ConsoleReader.getInstance().next();
 
             List<TicketModel> ls = findAllTicketsByAgentName(agentName);
-            if (ls != null && ls.size() > 0) {
+            if (Util.isCollectionValid(ls)) {
                 for (TicketModel tm : ls) {
                     printTicketDetails(tm);
                 }
@@ -319,8 +381,8 @@ public class TicketService {
             System.out.println("Enter a tag");
             String tag = ConsoleReader.getInstance().next();
 
-            List<TicketModel> ls = getAllTIcketsByTag(tag);
-            if (ls != null && ls.size() > 0) {
+            List<TicketModel> ls = getAllTicketsByTags(tag);
+            if (Util.isCollectionValid(ls)) {
                 for (TicketModel tm : ls) {
                     printTicketDetails(tm);
                 }

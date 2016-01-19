@@ -45,7 +45,7 @@ public class Util {
      * @param s
      * @return
      */
-    public static boolean isNotEmpty(String s) {
+    public static boolean isStringValid(String s) {
         return s != null && !s.isEmpty();
     }
 }

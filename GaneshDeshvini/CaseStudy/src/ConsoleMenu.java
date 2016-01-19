@@ -1,3 +1,4 @@
+import factory.TicketServiceFactory;
 import helpers.ConsoleReader;
 import service.TicketService;
 
@@ -10,41 +11,42 @@ public class ConsoleMenu {
     public void start() {
         Scanner scanner = ConsoleReader.getInstance();
         boolean flag = true;
+        TicketService ticketService = TicketServiceFactory.getInstance();
         do {
             printStartMenu();
             try {
                 int n = scanner.nextInt();
                 switch (n) {
                     case 1:
-                        TicketService.getInstance().processCreateTicket();
+                        ticketService.processCreateTicket();
                         break;
 
                     case 2:
-                        TicketService.getInstance().processUpdateTicket();
+                        ticketService.processUpdateTicket();
                         break;
 
                     case 3:
-                        TicketService.getInstance().processDeleteTicket();
+                        ticketService.processDeleteTicket();
                         break;
 
                     case 4:
-                        TicketService.getInstance().processGetTicketDetail();
+                        ticketService.processGetTicketDetail();
                         break;
 
                     case 5:
-                        TicketService.getInstance().processGetAllTicketList();
+                        ticketService.processGetAllTicketList();
                         break;
 
                     case 6:
-                        TicketService.getInstance().processGetTicketsByAgentName();
+                        ticketService.processGetTicketsByAgentName();
                         break;
 
                     case 7:
-                        TicketService.getInstance().processAgentWithTicketCount();
+                        ticketService.processAgentWithTicketCount();
                         break;
 
                     case 8:
-                        TicketService.getInstance().processGetAllTicketsByTag();
+                        ticketService.processGetAllTicketsByTag();
                         break;
 
                     case 9:
@@ -68,6 +70,7 @@ public class ConsoleMenu {
             flag = continueMenu();
         }
         while (flag);
+        scanner = null;
     }
 
     /**
