@@ -98,6 +98,7 @@ public class TicketOperations {
                      break;
             case 9 :
                 System.out.println("End of operation");
+                //ticketService.closeAllServices();
                 this.loop = false;
         }
         return input;
@@ -157,8 +158,8 @@ public class TicketOperations {
         else
         {
             System.out.println("Entered ticket " + ticketId + " is not present in the system.");
-            this.menuList();
         }
+        this.menuList();
     }
 
     public void deleteTicketById(){

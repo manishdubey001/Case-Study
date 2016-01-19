@@ -25,7 +25,8 @@ public class TicketService {
         }
 
         Date date = new Date();
-        Ticket ticket = new Ticket();
+        Ticket ticket = TicketFactory.newInstance(ticketId, subject, agentName, tagsList);
+        //Ticket ticket = new Ticket();
 
         ticket.setId(ticketId);
         ticket.setSubject(subject);

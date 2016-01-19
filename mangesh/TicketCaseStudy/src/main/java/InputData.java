@@ -48,7 +48,7 @@ public class InputData {
         try {
             tags = br.readLine();
         }catch (IOException io){
-
+            io.printStackTrace();
         }
         List<String> tagsList = Arrays.asList(tags.split(","));
         return tagsList;
@@ -66,7 +66,6 @@ public class InputData {
             catch (InputMismatchException ie){
                 System.out.println("Invalid Input !!! Please enter only Number :: ");
                 updateLoop = false;
-
             }
         }
         return id;
@@ -83,7 +82,7 @@ public class InputData {
             userChoice = Integer.valueOf(br.readLine());
         }
         catch(IOException ie){
-
+            ie.printStackTrace();
         }
 
         return userChoice;

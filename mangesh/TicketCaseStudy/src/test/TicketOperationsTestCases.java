@@ -18,8 +18,8 @@ public class TicketOperationsTestCases {
     List<String> tagList = Arrays.asList(tags.split(","));
 
     @Test
-    public void testCreateTicketWithNullSubject() {
-        System.out.println("Start - createTicketWithNullSubject");
+    public void testCreateTicketWithEmptySubject() {
+        System.out.println("Start - testCreateTicketWithEmptySubject");
         TicketService ticketService = new TicketService();
 
         String subject = "";
@@ -28,12 +28,12 @@ public class TicketOperationsTestCases {
 
         Assert.assertEquals(100, id);
         Assert.assertEquals(0, returnValue);
-        System.out.println("End - createTicketWithNullSubject");
+        System.out.println("End - testCreateTicketWithEmptySubject");
     }
 
     @Test
-    public void testCreateTicketWithNullAgentName() {
-        System.out.println("Start - createTicketWithNullAgentName");
+    public void testCreateTicketWithEmptyAgentName() {
+        System.out.println("Start - testCreateTicketWithEmptyAgentName");
 
         TicketService ticketService = new TicketService();
 
@@ -44,16 +44,27 @@ public class TicketOperationsTestCases {
         Assert.assertEquals(100, id);
         Assert.assertEquals(0, returnValue);
 
-        System.out.println("End - createTicketWithNullAgentName");
+        System.out.println("End - testCreateTicketWithEmptyAgentName");
     }
 
     @Test
-    public void testCreateTicketWithNullAgentAndSubject() {
-        System.out.println("Start - createTicketWithNullAgentAndSubject");
+    public void testCreateTicketWithEmptyAgentAndSubject() {
+        System.out.println("Start - testCreateTicketWithEmptyAgentAndSubject");
+        TicketService ticketService = new TicketService();
+        String subject = "";
+        String agentName = "";
+
+        int returnValue = ticketService.createTicket(this.id, subject, agentName, this.tagList);
+
+        Assert.assertEquals(100, id);
+        Assert.assertEquals(0, returnValue);
+
+        System.out.println("End - testCreateTicketWithEmptyAgentAndSubject");
+
     }
 
     @Test
-    public void testCreateTicketTestCase() {
+    public void testCreateTicket() {
         System.out.println("Start - createTicketTestCase");
         TicketService ticketservice = new TicketService();
 
