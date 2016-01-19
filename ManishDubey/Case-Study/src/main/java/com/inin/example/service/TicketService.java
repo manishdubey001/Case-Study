@@ -45,7 +45,7 @@ public class TicketService {
     {
         Ticket ticket = tickets.get(id);
         if (ticket != null) {
-            if (!agentName.isEmpty())
+            if (agentName != null && !agentName.isEmpty())
                 ticket.setAgentName(agentName);
             if (tags != null)
                 ticket.setTags(tags);

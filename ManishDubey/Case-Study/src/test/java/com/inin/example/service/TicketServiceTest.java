@@ -3,7 +3,6 @@ package com.inin.example.service;
 import com.inin.example.model.Ticket;
 import org.junit.Assert;
 import org.junit.Test;
-
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -39,6 +38,17 @@ public class TicketServiceTest {
         Ticket ticket = ticketService.create("Test Subject","",new HashSet<>());
         Assert.assertNull(ticket);
     }
+
+    @Test
+    public void testCreateTicketWithNullTags()
+    {
+        TicketService ticketService = new TicketService();
+        Ticket ticket = ticketService.create("Test Subject","Agent1",null);
+        Assert.assertEquals("Test Subject",ticket.getSubject());
+        Assert.assertEquals("Agent1",ticket.getAgentName());
+        Assert.assertEquals(null,ticket.getTags());
+    }
+
     @Test
     public void testCreateTicket()
     {
@@ -48,6 +58,28 @@ public class TicketServiceTest {
         Assert.assertEquals("Test Subject",ticket.getSubject());
         Assert.assertEquals("Agent1",ticket.getAgentName());
         Assert.assertEquals(tags,ticket.getTags());
+    }
+
+
+    @Test
+    public void testUpdateTicketWithAgentAndNullTags()
+    {
+        TicketService ticketService = new TicketService();
+        Ticket ticket = ticketService.create("Test Subject","Agent1",new HashSet<>(Arrays.asList("tag1","tag2","tag3")));
+        Ticket ticket1 = ticketService.update(ticket.getId(),"Agent2",null);
+        Assert.assertEquals("Agent2",ticket1.getAgentName());
+        Assert.assertEquals(ticket.getTags(),ticket1.getTags());
+    }
+
+    @Test
+    public void testUpdateTicketWithTagsAndWithNullAgent()
+    {
+        TicketService ticketService = new TicketService();
+        Ticket ticket = ticketService.create("Test Subject","Agent1",new HashSet<>(Arrays.asList("tag1","tag2","tag3")));
+        HashSet<String > tags = new HashSet<>(Arrays.asList("tag4","tag5","tag6"));
+        Ticket ticket1 = ticketService.update(ticket.getId(),null,tags);
+        Assert.assertEquals(ticket.getAgentName(),ticket1.getAgentName());
+        Assert.assertEquals(tags,ticket1.getTags());
     }
 
     @Test
@@ -76,7 +108,7 @@ public class TicketServiceTest {
         TicketService ticketService = new TicketService();
         HashSet<String> tags = new HashSet<>(Arrays.asList("tag1","tag2","tag3"));
         Ticket ticket = ticketService.create("Test Subject","Agent1",tags);
-        Assert.assertNull(ticketService.getTicket(45));
+        Assert.assertNull(ticketService.getTicket(100000000));
         Ticket ticket1 = ticketService.getTicket(ticket.getId());
         Assert.assertEquals("Test Subject",ticket1.getSubject());
         Assert.assertEquals("Agent1",ticket1.getAgentName());

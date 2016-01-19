@@ -51,11 +51,15 @@ public class TicketManager {
         if(ticketService.isTicketExist(id)){
             System.out.println("Enter Agent name. Click enter to continue");
             String agentName = InputReader.readString();
-            System.out.println("Enter comma separated tags of ticket. Click enter to continue");
+            System.out.println("Enter comma separated tags of ticket. Click enter to continue or enter 'clear' for clear tags");
             String tags = InputReader.readString();
             HashSet<String>  tagSet = null;
-            if(!tags.isEmpty())
-                tagSet =  new HashSet<>(Arrays.asList(tags.split(",")));
+            if(!tags.isEmpty()) {
+                if(tags.equals("clear"))
+                    tagSet = new HashSet<>();
+                else
+                    tagSet = new HashSet<>(Arrays.asList(tags.split(",")));
+            }
             if(!agentName.isEmpty() || !tags.isEmpty()) {
                 Ticket ticket = ticketService.update(id,agentName,tagSet);
                 System.out.println("Ticket with id: " + id + " updated with following details : ");
