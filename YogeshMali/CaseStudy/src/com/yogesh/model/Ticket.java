@@ -1,4 +1,4 @@
-package com.yogesh;
+package com.yogesh.model;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -17,15 +17,18 @@ public class Ticket {
     Date created;
     Date modified;
 
-    public Long getTimestamp() {
-        return timestamp;
+    public Ticket()
+    {
+
     }
 
-    public void setTimestamp(Long timestamp) {
-        this.timestamp = timestamp;
+    public Ticket(int id, String subject, String agentName, List tags)
+    {
+        this.setId(id);
+        this.setSubject(subject);
+        this.setAgentName(agentName);
+        this.setTags(tags);
     }
-
-    Long timestamp;
 
     public int getId() {
         return id;
@@ -33,6 +36,7 @@ public class Ticket {
 
     public void setId(int id) {
         this.id = id;
+        setCreated(new Date());
     }
 
     public String getSubject() {
@@ -76,23 +80,7 @@ public class Ticket {
     private void setModified(Date modified) {
         this.modified = modified;
     }
-// cjm - I would not make setModified/setTimestamp public. I would let the Ticket class manage these.
 
 
-}
 
-class DateComparator implements Comparator<Ticket> {
-    @Override
-    public int compare(Ticket date1, Ticket date2) {
-        Date d = date1.getModified();
-        Date date =  date2.getModified();
-
-        if (d.before(date) ) {
-            return 1;
-        } else if (d.after(date) ) {
-            return -1;
-        } else {
-            return 0;
-        }
-    }
 }
