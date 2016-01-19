@@ -1,5 +1,7 @@
 package com.yogesh;
 
+import com.yogesh.model.Ticket;
+
 import java.util.Arrays;
 import java.util.InputMismatchException;
 import java.util.List;
