@@ -117,6 +117,8 @@ public class TicketModel {
      * @return
      */
     public boolean isExists(int id) {
+        System.out.println("checking id = " + id);
+        System.out.println("contains= " + Repository.getInstance().ticketData.containsKey(id));
         return Repository.getInstance().ticketData.containsKey(id);
     }
 

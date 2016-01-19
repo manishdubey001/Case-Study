@@ -2,6 +2,7 @@ package tests;
 
 import factory.TicketServiceFactory;
 import model.TicketModel;
+import org.junit.runners.MethodSorters;
 import service.TicketService;
 
 import org.junit.*;
@@ -14,6 +15,7 @@ import static org.junit.Assert.*;
 /**
  * Created by root on 19/1/16.
  */
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TicketServiceTest {
 
     TicketService ts = TicketServiceFactory.getInstance();
@@ -24,7 +26,7 @@ public class TicketServiceTest {
     TicketModel ticketModel;
 
     @Test
-    public void testValidCreateTicket() throws Exception {
+    public void test1ValidCreateTicket() throws Exception {
         id = 1;
         subject = "sub";
         agent = "a1";
@@ -40,16 +42,16 @@ public class TicketServiceTest {
     }
 
     @Test
-    public void testCreateTicketDuplicateId() throws Exception {
+    public void test2CreateTicketDuplicateId() throws Exception {
         id = 1;
-        subject = "sub";
-        agent = "a1";
-        tags = "a, b";
+        subject = "sub2";
+        agent = "a2";
+        tags = "d, b";
         assertFalse(ts.createTicket(id, subject, agent, tags));
     }
 
     @Test
-    public void testCreateTicketNullSubject() throws Exception {
+    public void test3CreateTicketNullSubject() throws Exception {
         id = 2;
         subject = null;
         agent = "a2";
@@ -58,16 +60,16 @@ public class TicketServiceTest {
     }
 
     @Test
-    public void testCreateTicketNullAgentName() throws Exception {
+    public void test4CreateTicketNullAgentName() throws Exception {
         id = 3;
         subject = "sub";
         agent = null;
         tags = "";
         assertFalse(ts.createTicket(id, subject, agent, tags));
     }
-
+//
     @Test
-    public void testCreateTicketNullTags() throws Exception {
+    public void test5CreateTicketNullTags() throws Exception {
         id = 4;
         subject = "sub";
         agent = "a1";
