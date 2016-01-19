@@ -1,5 +1,8 @@
 package com.caseStudy;
 
+import com.caseStudy.Factory.TicketOperations;
+import com.caseStudy.Util.Util;
+
 import java.util.*;
 
 /**
@@ -7,39 +10,37 @@ import java.util.*;
  */
 public class caseStudy {
 
-	public int input = 0;
-	public boolean createFlag = true;
 	public Scanner scanner = new Scanner(System.in);
+<<<<<<< HEAD:EvansBelly/caseStudy/src/com/caseStudy/caseStudy.java
 	HashMap<Integer, com.caseStudy.Ticket> ticketDetails = new HashMap();
+=======
+	TicketOperations ticketOperations = new TicketOperations();
+	Util utilOps = new Util();
 
-	// menu section for displaying operations
-	public void menuPopUp() {
-		System.out.println(
-				"1. Create Ticket\n" +
-						"2. Update Ticket by id\n" +
-						"3. Delete/Remove Ticket by id\n" +
-						"4. Select single Ticket by id\n" +
-						"5. Select all Tickets\n" +
-						"6. Select tickets assigned to specific agent.\n" +
-						"7. Ticket count grouped by agent name(order by agent name).\n" +
-						"8. Search all tickets by specific tag. \n" +
-						"9. Exit. \n" +
-						"Select the operation you want to perform:");
-		this.input = scanner.nextInt();
-//		System.out.println("The option selected is " + this.input + "\n" +
-//				"Are you sure you want to continue?? Y/N");
-//		String selection = scanner.next();
-//		if (selection.equals("y") || selection.equals("Y"))
-//			System.out.println(selection);
-//		else if (selection.equals("n") || selection.equals("N"))
-//			System.exit(0);
+	// main method
+	public static void main(String[] args) {
+>>>>>>> master:EvansBelly/caseStudy/src/main/java/com/caseStudy/caseStudy.java
+
+		String proceed;
+		caseStudy caseStudy = new caseStudy();
+		do {
+			caseStudy.selectCase();
+			System.out.println("\nContinue with other operations??  y/n");
+			proceed = caseStudy.scanner.next();
+		}
+		while (proceed.toLowerCase().equals("y"));
 	}
 
 	// select operations
 	public void selectCase() {
+
 		try {
-			switch (this.input) {
+			// menu section for displaying operations
+			utilOps.menuPopUp();
+			// select cases for each operation.
+			switch (scanner.nextInt()) {
 				case 1:
+<<<<<<< HEAD:EvansBelly/caseStudy/src/com/caseStudy/caseStudy.java
 					createTicket();
 					do {
 						System.out.println("Do you wish to add more tickets? Y/N");
@@ -51,32 +52,30 @@ public class caseStudy {
 					}
 					while (createFlag);
 					System.out.println("Ticket(s) created successfully");
+=======
+					ticketOperations.createTicket();
+>>>>>>> master:EvansBelly/caseStudy/src/main/java/com/caseStudy/caseStudy.java
 					break;
-
 				case 2:
-					updateTicket();
+					ticketOperations.updateTicket();
 					break;
-
 				case 3:
-//				deleteTicket();
-					ticketOperation("delete");
+					ticketOperations.deleteTicket();
 					break;
 				case 4:
-//				showTicket();
-					ticketOperation("show");
+					ticketOperations.showTicket();
 					break;
 				case 5:
-//				showTicketList();
-					ticketOperation("showList");
+					ticketOperations.showTicketList();
 					break;
 				case 6:
-					agentSearch();
+					ticketOperations.agentSearch();
 					break;
 				case 7:
-					ticketCount();
+					ticketOperations.ticketCount();
 					break;
 				case 8:
-					tagSearch();
+					ticketOperations.tagSearch();
 					break;
 				case 9:
 					System.exit(0);
@@ -87,6 +86,7 @@ public class caseStudy {
 			}
 		}
 		catch (Exception e) {
+<<<<<<< HEAD:EvansBelly/caseStudy/src/com/caseStudy/caseStudy.java
 			System.out.println("No input selected");
 		}
 	}
@@ -364,4 +364,10 @@ public class caseStudy {
 			}
 		}
 	}
+=======
+			System.out.println("No input or wrong input selected");
+		}
+	}
+
+>>>>>>> master:EvansBelly/caseStudy/src/main/java/com/caseStudy/caseStudy.java
 }

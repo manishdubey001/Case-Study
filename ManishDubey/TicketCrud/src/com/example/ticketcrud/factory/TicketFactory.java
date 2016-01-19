@@ -1,6 +1,7 @@
 package com.example.ticketcrud.factory;
 
 import com.example.ticketcrud.model.Ticket;
+import com.example.ticketcrud.util.TicketUtil;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -9,18 +10,27 @@ import java.util.HashSet;
  * Created by root on 31/12/15.
  */
 public class TicketFactory {
+
+    private static int currentTicketId = 0;
     /**
      * Create new Ticket object
-     * @param id
      * @param subject
      * @param agentName
      * @param tags
-     * @param created
-     * @param modified
      * @return Ticket
      */
-    public static Ticket newInstance(int id, String subject, String agentName, HashSet<String> tags, Date created, Date modified)
+    public static Ticket newInstance(String subject, String agentName, HashSet<String> tags)
     {
-        return new Ticket(id,subject,agentName,tags,created,modified);
+        int id = getNextTicketId();
+        return new Ticket(id,subject,agentName,tags);
+    }
+
+    /**
+     * Return the next ticket Id
+     * @return int
+     */
+    public static int getNextTicketId()
+    {
+        return ++currentTicketId;
     }
 }

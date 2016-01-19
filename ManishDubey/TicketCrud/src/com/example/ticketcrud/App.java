@@ -9,6 +9,6 @@ public class App {
      * @param args
      */
     public static void main(String[] args) {
-        AppManager.startTicketApp();
+        new AppManager().startTicketApp();
     }
 }

@@ -1,15 +1,16 @@
 package com.yogesh;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
 /**
  * Created by root on 31/12/15.
  */
-public class Ticket implements Comparable<Ticket> {
+public class Ticket {
 
-    int  id;
+    int id;
     String subject;
     String agentName;
     List<String> tags;
@@ -48,6 +49,7 @@ public class Ticket implements Comparable<Ticket> {
 
     public void setAgentName(String agentName) {
         this.agentName = agentName;
+        setModified(new Date());
     }
 
     public List getTags() {
@@ -56,6 +58,7 @@ public class Ticket implements Comparable<Ticket> {
 
     public void setTags(List tags) {
         this.tags = tags;
+        setModified(new Date());
     }
 
     public Date getCreated() {
@@ -70,15 +73,26 @@ public class Ticket implements Comparable<Ticket> {
         return modified;
     }
 
-    public void setModified(Date modified) {
+    private void setModified(Date modified) {
         this.modified = modified;
     }
 // cjm - I would not make setModified/setTimestamp public. I would let the Ticket class manage these.
 
+
+}
+
+class DateComparator implements Comparator<Ticket> {
     @Override
-    public int compareTo(Ticket o) {
-        return o.getModified().compareTo(getModified());
+    public int compare(Ticket date1, Ticket date2) {
+        Date d = date1.getModified();
+        Date date =  date2.getModified();
+
+        if (d.before(date) ) {
+            return 1;
+        } else if (d.after(date) ) {
+            return -1;
+        } else {
+            return 0;
+        }
     }
-
-
 }

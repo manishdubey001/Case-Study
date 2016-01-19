@@ -8,48 +8,53 @@ import com.example.ticketcrud.util.TicketUtil;
  */
 public class AppManager {
 
+    public TicketService ticketService = null;
     /**
      * Boot ticket crud application
      */
-    public static void startTicketApp() {
+    public void startTicketApp() {
         int userInput = 0;
+        this.ticketService = new TicketService();
         do{
             TicketUtil.displayTicketMenu();
             userInput = TicketUtil.acceptUserInput();
-            if(userInput >=1 || userInput <=8)
+            if(userInput >=1 || userInput <=9)
                 processUserInput(userInput);
-        }while (userInput != 9);
+        }while (userInput != 10);
     }
 
     /**
      * Process entered user option
      * @param option
      */
-    public static void processUserInput(int option){
+    public void processUserInput(int option){
         switch (option){
             case 1:
-                TicketService.create();
+                ticketService.create();
                 break;
             case 2:
-                TicketService.update();
+                ticketService.update();
                 break;
             case 3:
-                TicketService.delete();
+                ticketService.delete();
                 break;
             case 4:
-                TicketService.displaySingleTicketDetails();
+                ticketService.displaySingleTicketDetails();
                 break;
             case 5:
-                TicketService.displayAllTickets();
+                ticketService.displayAllTickets();
                 break;
             case 6:
-                TicketService.displayAgentTickets();
+                ticketService.displayAgentTickets();
                 break;
             case 7:
-                TicketService.displayTicketCountOfAgentInAsc();
+                ticketService.displayTicketCountOfAgentInAsc();
                 break;
             case 8:
-                TicketService.displayTicketsByTag();
+                ticketService.displayTicketsByTag();
+                break;
+            case 9:
+                ticketService.loadDummyTickets();
                 break;
             default:
                 System.out.println("You Entered Wrong Option...");

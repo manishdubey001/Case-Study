@@ -2,16 +2,12 @@ package com.example.ticketcrud.util;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.security.InvalidParameterException;
 
 /**
  * Created by root on 30/12/15.
  */
 public class TicketUtil {
-
-    public static BufferedReader reader = null;
-    private static int currentTicketId = 0;
 
     /**
      * Display Ticket menu on console
@@ -27,7 +23,8 @@ public class TicketUtil {
         System.out.println("6.\tSelect tickets assigned to specific agent");
         System.out.println("7.\tTicket count grouped by agent name(order by agent name)");
         System.out.println("8.\tSearch all tickets by specific tag");
-        System.out.println("9.\tQuit");
+        System.out.println("9.\tLoad dummy Tickets");
+        System.out.println("10.\tQuit");
         System.out.println("=================================================================\n");
         System.out.print("Enter your option: ");
     }
@@ -37,17 +34,17 @@ public class TicketUtil {
      * @return int
      */
     public static int acceptUserInput(){
-        BufferedReader reader = TicketUtil.getReader();
+        BufferedReader reader = InputReader.getReader();
         int userInput  = 0;
         try {
             userInput = Integer.parseInt(reader.readLine());
-            if (userInput <= 0 || userInput > 9)
+            if (userInput <= 0 || userInput > 10)
                 throw new InvalidParameterException();
-            if(userInput == 9){
+            if(userInput == 10){
                 System.out.print("You are sure want to quit(y/n)?: ");
                 String ch = reader.readLine();
                 if(ch.toLowerCase().equals("y")) {
-                    userInput = 9;
+                    userInput = 10;
                    reader.close();
                 }
                 else if(ch.toLowerCase().equals("n"))
@@ -66,23 +63,7 @@ public class TicketUtil {
         return userInput;
     }
 
-    /**
-     * Return the reader to read data from command line
-     * @return BufferedReader
-     */
-    public static BufferedReader getReader()
-    {
-        if(reader == null)
-            reader = new BufferedReader(new InputStreamReader(System.in));
-        return reader;
-    }
 
-    /**
-     * Return the next ticket Id
-     * @return int
-     */
-    public static int getNextTicketId()
-    {
-        return ++currentTicketId;
-    }
+
+
 }
