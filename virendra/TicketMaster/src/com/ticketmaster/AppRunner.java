@@ -1,9 +1,10 @@
 package com.ticketmaster;
 
 import com.ticketmaster.exceptions.TicketNotFoundException;
-import com.ticketmaster.helpers.TicketHelper;
 import com.ticketmaster.models.Ticket;
+import com.ticketmaster.helpers.TicketService;
 import com.ticketmaster.utils.AppUtil;
+import com.ticketmaster.utils.DetailProvider;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -19,7 +20,11 @@ public class AppRunner {
     private static AppRunner _instance = null;
     private BufferedReader b;
     private Scanner s;
+    DetailProvider details;
     private AppRunner(){
+        if (details == null){
+            details = DetailProvider.init();
+        }
 
     }
 
@@ -44,6 +49,7 @@ public class AppRunner {
         int ch =0;
 
         s = new Scanner(System.in);
+
         try{
             do{
                 ch = printMenu(); //print menu and ask for user selection
@@ -57,7 +63,6 @@ public class AppRunner {
 
         }catch (ClassNotFoundException e){
 //            e.printStackTrace(); // check stack trace
-
             System.out.println("Ops! class you are looking does not exist");
 
         }catch (Exception e){
@@ -124,21 +129,92 @@ public class AppRunner {
      * @throws TicketNotFoundException
      */
     protected void processChoice(int ch) throws IOException, ClassNotFoundException, TicketNotFoundException {
-        TicketHelper helper= new TicketHelper();
+        TicketService helper= new TicketService();
         Map tmpMap;
-        List tempList = null;
-        b = new BufferedReader(new InputStreamReader(System.in));
+
         // cjm - 'b' is an OK name for a BufferedReader, but 'a' is not a descriptive name for the list.
         // Prefer to declare the list in the context where you plan to use it (unless you need it to survive longer.
         // In this case if you use a type parameter List<T>, T would be different from block to block, so you would have
         // to use a separate list.
 
+        List tempList;
+        Set tagsSet;
+        int id;
+        String txtAgent, txtSubject;
 
         switch (ch){
 
-            case 1: helper.createTicket(); break;
-            case 2: helper.updateTicket(); break;
-            case 3: helper.deleteTicket(); break;
+            case 1:
+                //read details for ticket
+
+                System.out.println("Enter Ticket Subject: ");
+                txtSubject = details.readStringInput();
+
+                System.out.println("Enter Agent Name: ");
+                txtAgent = details.readStringInput();
+
+                tagsSet = details.readTagsInput();
+
+                Ticket object = helper.createTicket(txtSubject, txtAgent, tagsSet);
+
+                if(object != null){
+                    System.out.println("Ticket "+String.format("#%010d", object.getId())+" saved successfully");
+                }
+
+                break;
+            case 2:
+
+                boolean flag = false;
+
+                System.out.println("Enter Ticket id:");
+                id = details.readIntInput();
+
+                Ticket ticket = helper.getTicketDetail(id);
+
+                if (ticket == null){
+                    throw new TicketNotFoundException("Record with id: "+id +" does not exists");
+                }
+
+                System.out.println("Update Agent?(y/n)");
+
+                if(details.readStringInput().equals("y")){
+                    System.out.println("Enter Agent Name: ");
+                    txtAgent = details.readStringInput();
+
+                    ticket.setAgent(txtAgent);
+                    flag = true;
+
+                }else{
+                    txtAgent = null;
+                }
+
+
+                System.out.println("Enter tags (y/n): ");
+
+                if (details.readStringInput().equals("y")) {
+                    tagsSet = new HashSet<>();
+                    details.readTagsInput();
+
+                    flag = true;
+                }else {
+                    tagsSet = null;
+                }
+
+                ticket = helper.updateTicket(ticket, txtAgent, tagsSet);
+
+                if (ticket == null){
+                    System.out.println("Nothing to update");
+                }else {
+                    System.out.println("Ticket (id: "+String.format("%010d", ticket.getId())+") updated successfully");
+                }
+
+                break;
+            case 3:
+                System.out.println("Enter Ticket id:");
+                id = details.readIntInput();
+
+                helper.deleteTicket(id, details);
+                break;
 
             case 4:
                 tmpMap = helper.getTicket();

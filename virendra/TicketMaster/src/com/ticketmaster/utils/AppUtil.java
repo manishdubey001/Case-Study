@@ -1,8 +1,6 @@
 package com.ticketmaster.utils;
 
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by root on 31/12/15.

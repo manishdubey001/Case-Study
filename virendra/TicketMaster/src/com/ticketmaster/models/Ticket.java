@@ -8,7 +8,8 @@ import java.util.*;
 import java.util.stream.Stream;
 
 /**
- * Created by root on 31/12/15.
+ * Ticket Model class
+ * Created by Virendra on 31/12/15.
  */
 public class Ticket /*implements Serializable*/{
     // cjm - Use a singular name like Tickets if this represents
@@ -18,24 +19,60 @@ public class Ticket /*implements Serializable*/{
     String agent;
     long created;
     long modified;
-    public String mode = "insert";
     static private int k = 1;
     public Set<String> tags;
 
     // cjm - Rather than make these static in the Tickets class, I would put them somewhere else.
     // Also don't expose them as public...maybe have a TicketService class with members to provide searches, etc. and these as private members
-    static public Map<Integer,? super Tickets> ticketList; //contains all tickets
+    static public Map<Integer,? super Ticket> ticketList; //contains all tickets
     // Using '? super Tickets' doesn't hurt anything here (you know the container can hold Tickets() but it doesn't really help either, and just adds complexity
     static public Set<String> agentList;
     public static Set<String> tagList;
     // cjm - Maintaining associated collections like agentList and tagList can be useful; however it can also be
     // hard to keep things in sync. For example when you delete a ticket, stale entries are left behind.
 
+    //creating inner class to setup details in the in ticket
+    public static class TicketBuilder{
+        private String subject = "";
+        private Set<String> tags = new HashSet<>();
+        private String agent = "";
+
+        public TicketBuilder withSubject(String subject){
+            this.subject = subject;
+            return this;
+        }
+
+        public TicketBuilder withAgent(String agent){
+            this.agent = agent;
+            return this;
+        }
+
+        public TicketBuilder withTags(Set tags){
+            this.tags = (Set<String>)tags;
+            return this;
+        }
+
+        public String getSubject(){
+            return subject;
+        }
+        public String getAgent(){
+            return agent;
+        }
+        public Set<String> getTags(){
+            return tags;
+        }
+
+        public Ticket build (){
+            return new Ticket(this);
+        }
+
+    }
+
     /**
      * Default constructor
      */
-    public Tickets(){
-        if (Tickets.ticketList == null){
+    public Ticket(){
+        if (Ticket.ticketList == null){
             switch(Main.collectionChoice) {
                 case 1:
                 default:
@@ -53,6 +90,19 @@ public class Ticket /*implements Serializable*/{
             Ticket.agentList = new HashSet<>();
         if (Ticket.tagList == null)
             Ticket.tagList = new HashSet<>();
+
+    }
+
+    /**
+     *
+     * @param obj TicketBuilder object
+     */
+
+    public Ticket(TicketBuilder obj){
+        this();
+        this.subject = obj.getSubject();
+        this.agent = obj.getAgent();
+        this.tags = obj.tags;
 
     }
 
@@ -97,9 +147,12 @@ public class Ticket /*implements Serializable*/{
     }
 
     /**
+     * method to set values of Ticket object
+     * This method is redundant and is removed because of concept of Builder pattern
      *
      * @param values
      */
+    /*
     public void setValues(Map<String,? extends Object> values){
         // cjm - In general I would avoid trying to represent an object this way. It can be very error prone.
         // Instead rely on serialization frameworks when you need them. (But doing it this way is probably going
@@ -107,9 +160,9 @@ public class Ticket /*implements Serializable*/{
         Set s = values.entrySet();
         s.forEach((e)->{ Map.Entry me = (Map.Entry)e;
             switch(me.getKey().toString()) {
-//                case "id":
-//                    setId( (Integer)me.getValue());
-//                    break;
+                case "id":
+                    setId( (Integer)me.getValue());
+                    break;
                 case "subject":
                     setSubject((String)me.getValue());
                     break;
@@ -123,13 +176,12 @@ public class Ticket /*implements Serializable*/{
             }
         });
 
-
-
     }
+    */
 
     /**
      *
-     * @return
+     * @return boolean
      */
     protected boolean beforeSave(){
 
@@ -144,7 +196,7 @@ public class Ticket /*implements Serializable*/{
 
     /**
      * save method saves the details of ticket
-     * @return
+     * @return boolean
      * @throws IOException
      * @throws ClassNotFoundException
      * @throws TicketNotFoundException
@@ -155,6 +207,7 @@ public class Ticket /*implements Serializable*/{
         setId(k++);
 
 
+
         // cjm - Can you explain how, in a single-threaded environment, we would ever fail the condition getId()==k?
         // Also, look at what you are assigning to k. In the case 'getId()==k' is true, you assign
         // k = k+=1;
@@ -162,6 +215,7 @@ public class Ticket /*implements Serializable*/{
 
         // cjm - In other words, can you explain how the above two lines of code are logically different from this line:
         // setId(k++);
+
 
         Ticket.ticketList.put(getId(), this);
         Ticket.agentList.add(getAgent());
@@ -198,8 +252,8 @@ public class Ticket /*implements Serializable*/{
 
     /**
      *
-     * @param name
-     * @return
+     * @param name name of the agent for lookup
+     * @return boolean
      */
     public static boolean hasAgent(String name) {
         return Ticket.agentList.contains(name);
@@ -207,13 +261,16 @@ public class Ticket /*implements Serializable*/{
 
     /**
      *
-     * @param name
-     * @return
+     * @param name name of the tag for lookup
+     * @return boolean
      */
     public static boolean hasTag(String name) {
         return Ticket.tagList.contains(name);
     }
 
+    public void deleteTicket(int id){
+        Ticket.ticketList.remove(id);
+    }
 
     /**
      * overridden method
@@ -221,7 +278,6 @@ public class Ticket /*implements Serializable*/{
      */
     @Override
     public int hashCode(){
-
         return getId()+getSubject().hashCode();
     }
 

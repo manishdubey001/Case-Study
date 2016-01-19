@@ -39,12 +39,9 @@ public class Main {
 
         //initialization of program
         Set<String> tags = new HashSet<>();
-//        Map<Integer, Object> lst = new HashMap<>();
 
         for (int i=0;i<size;i++){
-            Map<String,Object> m = new HashMap();
-            m.put("subject","subject-"+(i+1));
-            m.put("agent","a-"+((i+1)%agents != 0 ? (i+1)%agents:agents));
+
             int tSize = (int) ( Math.random() * 10)/2, j;
             j = 0;
             Set<String> tTags = new HashSet<>();
@@ -52,35 +49,20 @@ public class Main {
                 tTags.add("tag-"+j);
                 j++;
             }
-            m.put("tags",tTags);
-            m.get("tags");
-            if (m.get("tags") != null){
+
+            if (!tTags.isEmpty()){
                 tags.addAll(tTags);
-                if (Ticket.tagList == null) {
-                    Ticket.tagList = new HashSet();
-                }
+                if (Ticket.tagList == null) { Ticket.tagList = new HashSet(); }
                 Ticket.tagList.addAll(tTags);
             }
 
-            Ticket h = new Ticket();
-            h.setValues(m);
-//            Thread.currentThread().sleep(50); //make thread sleep
-            h.save();
+            new Ticket.TicketBuilder()
+                    .withSubject("subject-"+(i+1))
+                    .withAgent("a-"+((i+1)%agents != 0 ? (i+1)%agents:agents))
+                    .withTags(tTags)
+                    .build().save();
 
         }
-
-        /*System.out.println("after test");
-        Set s = Ticket.ticketList.entrySet();
-        Iterator it = s.iterator();
-
-        while (it.hasNext()){
-            Map.Entry mp = (Map.Entry) it.next();
-            System.out.println("Index: "+mp.getKey());
-            Ticket t = (Ticket) mp.getValue();
-            System.out.println(t.getId());
-        }
-        System.exit(0);
-        */
 
         System.out.println("Initialized application with "+size+" values...");
         AppUtil.logTime("end",false, s);
