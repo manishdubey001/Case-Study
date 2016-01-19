@@ -103,7 +103,8 @@ public class AppRunner {
      * @throws IOException
      */
 
-    private int printMenu() throws InputMismatchException, IOException {
+    private int printMenu()
+            throws InputMismatchException, IOException {
 
         Map<Integer, String> menu = AppUtil.getMenu();
 
@@ -123,12 +124,13 @@ public class AppRunner {
     /**
      * method processChoice is used to perform action based
      * on user selection from menu.
-     * @param ch int <p></p>
+     * @param ch int <p>input given by application user</p>
      * @throws IOException
      * @throws ClassNotFoundException
      * @throws TicketNotFoundException
      */
-    protected void processChoice(int ch) throws IOException, ClassNotFoundException, TicketNotFoundException {
+    protected void processChoice(int ch)
+            throws IOException, ClassNotFoundException, TicketNotFoundException {
         TicketService helper= new TicketService();
         Map tmpMap;
 
