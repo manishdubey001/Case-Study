@@ -18,37 +18,6 @@ public class Services {
     static private int max_id = 0;
     static HashMap<Integer, Tickets> tickets = new HashMap<Integer, Tickets>();
 
-    /*public void showMainMenu(){
-        for (String option: arry
-             ) {
-            System.out.println(option);
-        }
-        System.out.println("Enter your choice:");
-    }
-
-    public int readChoice(){
-        try {
-            return Integer.parseInt(this.readInput());
-        }
-        catch (Exception e){
-            return 0;
-        }
-    }
-
-    public String readInput(){
-        InputStreamReader ir = new InputStreamReader(System.in);
-        BufferedReader br = new BufferedReader(ir);
-        String str;
-        try{
-            str =  br.readLine();
-            if(str == null)
-                str = "0";
-        }
-        catch (Exception e){
-            str = "0";
-        }
-        return str;
-    }*/
 
     public void createTicket(){
         String subject,agent,tags;
