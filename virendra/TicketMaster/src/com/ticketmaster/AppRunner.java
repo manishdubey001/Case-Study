@@ -143,6 +143,7 @@ public class AppRunner {
         Set tagsSet;
         int id;
         String txtAgent, txtSubject;
+        Ticket ticket;
 
         switch (ch){
 
@@ -166,12 +167,10 @@ public class AppRunner {
                 break;
             case 2:
 
-                boolean flag = false;
-
                 System.out.println("Enter Ticket id:");
                 id = details.readIntInput();
 
-                Ticket ticket = helper.getTicketDetail(id);
+                ticket = helper.getTicketDetail(id);
 
                 if (ticket == null){
                     throw new TicketNotFoundException("Record with id: "+id +" does not exists");
@@ -182,10 +181,7 @@ public class AppRunner {
                 if(details.readStringInput().equals("y")){
                     System.out.println("Enter Agent Name: ");
                     txtAgent = details.readStringInput();
-
                     ticket.setAgent(txtAgent);
-                    flag = true;
-
                 }else{
                     txtAgent = null;
                 }
@@ -196,8 +192,6 @@ public class AppRunner {
                 if (details.readStringInput().equals("y")) {
                     tagsSet = new HashSet<>();
                     details.readTagsInput();
-
-                    flag = true;
                 }else {
                     tagsSet = null;
                 }
@@ -214,12 +208,31 @@ public class AppRunner {
             case 3:
                 System.out.println("Enter Ticket id:");
                 id = details.readIntInput();
+                ticket = null;
 
-                helper.deleteTicket(id, details);
+
+                System.out.printf("Are you sure you want to delete ticket #%010d ? (y/n)\n", id);
+                if(details.readStringInput().equals("y")){
+
+                    ticket = helper.deleteTicket(id);
+
+                    if (ticket == null){
+                        throw new TicketNotFoundException("Unable to delete ticket "+id +". Please try again later");
+                    }
+                    System.out.printf("Ticket %010d deleted. (New size: %d)\n", id, Ticket.getSize());
+
+                }else {
+                    System.out.println("Delete operation cancelled by User");
+                }
+
                 break;
 
             case 4:
-                tmpMap = helper.getTicket();
+                System.out.println("Enter Ticket id:");
+                id = details.readIntInput();
+
+                tmpMap = helper.getTicket(id);
+
                 if (tmpMap!= null){
                     System.out.printf("==== Ticket #%010d ====\n",tmpMap.get("id"));
                     tmpMap.forEach((k,v)->System.out.println(k+"\t:\t"+v));

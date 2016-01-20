@@ -21,7 +21,7 @@ public class Main {
     private static int agents = 30;
     public static int collectionChoice = 1;
 
-    public static void main(String[] args) throws ClassNotFoundException,TicketNotFoundException, IOException, InterruptedException {
+    public static void main(String[] args) throws ClassNotFoundException,TicketNotFoundException, IOException {
 
         System.out.println("Initializing program...");
         System.out.println("Enter initial ticket list size (integer) : ");
@@ -38,31 +38,8 @@ public class Main {
         long s = AppUtil.logTime("start",true, 0);
 
         //initialization of program
-        Set<String> tags = new HashSet<>();
+        AppUtil.initializeApp(size, agents);
 
-        for (int i=0;i<size;i++){
-
-            int tSize = (int) ( Math.random() * 10)/2, j;
-            j = 0;
-            Set<String> tTags = new HashSet<>();
-            while (j<tSize){
-                tTags.add("tag-"+j);
-                j++;
-            }
-
-            if (!tTags.isEmpty()){
-                tags.addAll(tTags);
-                if (Ticket.tagList == null) { Ticket.tagList = new HashSet(); }
-                Ticket.tagList.addAll(tTags);
-            }
-
-            new Ticket.TicketBuilder()
-                    .withSubject("subject-"+(i+1))
-                    .withAgent("a-"+((i+1)%agents != 0 ? (i+1)%agents:agents))
-                    .withTags(tTags)
-                    .build().save();
-
-        }
 
         System.out.println("Initialized application with "+size+" values...");
         AppUtil.logTime("end",false, s);

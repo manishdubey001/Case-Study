@@ -85,15 +85,13 @@ public class TicketService /*implements Comparable<Ticket>*/ {
 
     /**
      *
-     * @param id
-     * @param object
+     * @param id integer ticket id
      * @throws IOException
      * @throws ClassNotFoundException
      * @throws TicketNotFoundException
      */
-    public void deleteTicket(int id, DetailProvider object)
+    public Ticket deleteTicket(int id)
             throws IOException, ClassNotFoundException, TicketNotFoundException {
-
 
         Ticket ticket = this.getTicketDetail(id);
 
@@ -101,15 +99,7 @@ public class TicketService /*implements Comparable<Ticket>*/ {
             throw new TicketNotFoundException("Record with id: "+id +" does not exists");
         }
 
-        System.out.printf("Are you sure you want to delete ticket #%010d ? (y/n)", ticket.getId());
-        if (object.readStringInput().equals("y")) {
-            ticket.deleteTicket(ticket.getId());
-            System.out.println("Ticket deleted. (New size: " + Ticket.ticketList.size() + ")");
-
-        }
-
-
-
+        return ticket.delete();
     }
 
     /**
@@ -119,25 +109,22 @@ public class TicketService /*implements Comparable<Ticket>*/ {
      * @throws ClassNotFoundException
      * @throws TicketNotFoundException
      */
-    public Map getTicket() throws IOException, ClassNotFoundException, TicketNotFoundException {
+    public Map getTicket(int id) throws IOException, ClassNotFoundException, TicketNotFoundException {
 
-        Scanner s = new Scanner(System.in);
-        System.out.println("Enter Ticket id:");
-        int id = s.nextInt();
-
-        Ticket ticket = (Ticket) Ticket.ticketList.get(id);
+        Ticket ticket = getTicketDetail(id);
         if (ticket ==null){
             throw new TicketNotFoundException("Record with id: "+id +" does not exists");
         }
-        Map m = new LinkedHashMap<>();
-        m.put("id", ticket.getId());
-        m.put("subject", ticket.getSubject());
-        m.put("agent", ticket.getAgent());
-        m.put("tags", ticket.tags == null ? new HashSet(): ticket.tags.toString());
-        m.put("created", new Date(ticket.getCreated()));
-        m.put("updated", new Date(ticket.getModified()) );
 
-        return m;
+        Map tempMap = new LinkedHashMap<>();
+        tempMap.put("id", ticket.getId());
+        tempMap.put("subject", ticket.getSubject());
+        tempMap.put("agent", ticket.getAgent());
+        tempMap.put("tags", ticket.tags == null ? new HashSet(): ticket.tags.toString());
+        tempMap.put("created", new Date(ticket.getCreated()));
+        tempMap.put("updated", new Date(ticket.getModified()) );
+
+        return tempMap;
 
     }
 
@@ -148,7 +135,7 @@ public class TicketService /*implements Comparable<Ticket>*/ {
      * @throws ClassNotFoundException
      * @throws TicketNotFoundException
      */
-    public List<Map<String,? super Object>> getTickets() throws IOException, ClassNotFoundException, TicketNotFoundException {
+    public List<Map<String,? super Object>> getTickets() {
 
         if (Ticket.ticketList == null){
             return null;//(List<Map<String, ? super Object>>) Ticket.ticketList;
@@ -157,21 +144,7 @@ public class TicketService /*implements Comparable<Ticket>*/ {
 
         List l = new LinkedList<>(Ticket.ticketList.entrySet());
 
-        //traditional coding
-        /*Collections.sort(l, new Comparator() {
-            @Override
-            public int compare(Object o1, Object o2) {
 
-                if ( ( (Ticket)(((Map.Entry) o1).getValue()) ).getModified() <=
-                ( (Ticket)(((Map.Entry) o2).getValue()) ).getModified() )
-                    return 1;
-                else return -1;
-
-            }
-        });*/
-
-
-        //lambda code : v1.8 or later
         Collections.sort(l, (o1, o2) ->{
             if ( ( (Ticket)(((Map.Entry) o1).getValue()) ).getModified() <
                     ( (Ticket)(((Map.Entry) o2).getValue()) ).getModified() )
@@ -196,12 +169,12 @@ public class TicketService /*implements Comparable<Ticket>*/ {
 
         if(values.length == 1){ //fetch first value
 
-            searchKey = values[0].toLowerCase();
+            searchKey = values[0];
 
             a= (List) Ticket.getListStream().filter(
                     (obj) ->{ Map.Entry me = (Map.Entry)obj;
                         if (key.equals("agent")){
-                            return ( (Ticket)(me.getValue())).getAgent().toLowerCase().equals(searchKey);
+                            return ( (Ticket)(me.getValue())).getAgent().toLowerCase().equals(searchKey.toLowerCase());
                         }else {
                             return ( (Ticket)(me.getValue())).tags.contains(searchKey);
                         }
@@ -219,12 +192,6 @@ public class TicketService /*implements Comparable<Ticket>*/ {
 
         //adding sorted section in streams to further optimize
 
-       /* Collections.sort(a, (o1, o2) ->{
-            if ( ( (Ticket)(((Map.Entry) o1).getValue()) ).getModified() <=
-                    ( (Ticket)(((Map.Entry) o2).getValue()) ).getModified() )
-                return 1;
-            else return -1;
-        });*/
 
         return formatPrintData(a);
 
@@ -272,6 +239,10 @@ public class TicketService /*implements Comparable<Ticket>*/ {
     protected List<Map<String,? super Object>> formatPrintData(List l){
         List<Map<String,? super Object>> l1 = new ArrayList<>();
 
+        if (l == null){
+            return null;
+        }
+
         l.forEach( (e)-> {
             Map<String, ? super Object> m = new LinkedHashMap();
 
@@ -287,7 +258,6 @@ public class TicketService /*implements Comparable<Ticket>*/ {
             m.put("updated", new Date(t.getModified()));
 
             l1.add(m); //add in temporary storage
-            m = null; t= null;
         });
 
         return l1;
@@ -310,5 +280,9 @@ public class TicketService /*implements Comparable<Ticket>*/ {
             return  (Ticket) Ticket.ticketList.get(id);
         }
 
+    }
+
+    public void clearList(){
+        Ticket.clearList();
     }
 }

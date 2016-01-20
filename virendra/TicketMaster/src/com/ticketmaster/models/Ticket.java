@@ -149,6 +149,21 @@ public class Ticket /*implements Serializable*/{
     }
 
     /**
+     * delete method to delete the ticket entry from the list
+     * @return delete ticket details
+     */
+    public Ticket delete(){
+        int id = this.getId();
+        Ticket temp = null;
+        if (Ticket.ticketList.containsKey(id)){
+            temp = (Ticket) Ticket.ticketList.remove(id);
+        }
+        return temp == null ? null : temp;
+
+    }
+
+
+    /**
      * method to set values of Ticket object
      * This method is redundant and is removed because of concept of Builder pattern
      *
@@ -253,6 +268,14 @@ public class Ticket /*implements Serializable*/{
     }
 
     /**
+     * getSize method is used to get the size of ticket collection
+     * @return integer count of tickets
+     */
+    public static int getSize(){
+        return Ticket.ticketList.size();
+    }
+
+    /**
      *
      * @param name name of the agent for lookup
      * @return boolean
@@ -270,8 +293,8 @@ public class Ticket /*implements Serializable*/{
         return Ticket.tagList.contains(name);
     }
 
-    public void deleteTicket(int id){
-        Ticket.ticketList.remove(id);
+    public static void clearList(){
+        Ticket.ticketList.clear();
     }
 
     /**

@@ -1,5 +1,9 @@
 package com.ticketmaster.utils;
 
+import com.ticketmaster.exceptions.TicketNotFoundException;
+import com.ticketmaster.models.Ticket;
+
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -48,5 +52,35 @@ public class AppUtil {
         }
 
         return hasReturn ? s : 0;
+    }
+
+    public static void initializeApp(final int size, final int agents)
+            throws ClassNotFoundException,TicketNotFoundException, IOException{
+
+        Set<String> tags = new HashSet<>();
+
+        for (int i=0;i<size;i++){
+
+            int tSize = (int) ( Math.random() * 10)/2, j = 0;
+
+            Set<String> tTags = new HashSet<>();
+            while (j<tSize){
+                tTags.add("tag-"+j);
+                j++;
+            }
+
+            if (!tTags.isEmpty()){
+                tags.addAll(tTags);
+                if (Ticket.tagList == null) { Ticket.tagList = new HashSet(); }
+                Ticket.tagList.addAll(tTags);
+            }
+
+            new Ticket.TicketBuilder()
+                    .withSubject("subject-"+(i+1))
+                    .withAgent("a-"+((i+1)%agents != 0 ? (i+1)%agents:agents))
+                    .withTags(tTags)
+                    .build().save();
+
+        }
     }
 }

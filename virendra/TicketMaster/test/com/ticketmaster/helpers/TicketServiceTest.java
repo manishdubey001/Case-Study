@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import static junit.framework.Assert.*;
@@ -147,7 +148,7 @@ public class TicketServiceTest {
 
         //after all details are verified
         //delete crated ticket entry
-        object.deleteTicket(object.getId());
+        object.delete();
     }
 
     /**
@@ -225,7 +226,7 @@ public class TicketServiceTest {
         assertTrue(object.tags.contains("Tag1"));
         //after all details are verified
         //delete crated ticket entry
-        object.deleteTicket(object.getId());
+        object.delete();
 
     }
     /**
@@ -255,7 +256,7 @@ public class TicketServiceTest {
         assertTrue(object.tags.contains("testTag"));
         //after all details are verified
         //delete crated ticket entry
-        object.deleteTicket(object.getId());
+        object.delete();
     }
     /**
      * testCreateTicketWithLinkedHashMapAllData test method with LinkedHashMap
@@ -285,7 +286,7 @@ public class TicketServiceTest {
         assertTrue(object.tags.contains("Tag1"));
         //after all details are verified
         //delete crated ticket entry
-        object.deleteTicket(object.getId());
+        object.delete();
     }
 
     /* ========================= Update Ticket Test cases ========================= */
@@ -318,7 +319,7 @@ public class TicketServiceTest {
         assertFalse(object.equals(result));
 
         //after test is done delete the dummy ticket
-        object.deleteTicket(object.getId());
+        object.delete();
 
     }
 
@@ -354,7 +355,7 @@ public class TicketServiceTest {
         assertEquals(txtAgent, result.getAgent()); //check if tag is updated
 
         //after test is done delete the dummy ticket
-        object.deleteTicket(object.getId());
+        object.delete();
 
     }
     /**
@@ -391,7 +392,7 @@ public class TicketServiceTest {
         assertTrue(result.tags.contains( ("testTag" ) ) ); //check if tag is updated
 
         //after test is done delete the dummy ticket
-        object.deleteTicket(object.getId());
+        object.delete();
 
     }
     /**
@@ -427,29 +428,60 @@ public class TicketServiceTest {
         assertTrue(result.tags.contains( ("testTag" ) ) ); //check if agent is updated
 
         //after test is done delete the dummy ticket
-        object.deleteTicket(object.getId());
+        object.delete();
 
     }
 
-    /* ========================= Get Ticket Test cases ========================= */
+    /* ========================= Get Ticket Detail Test cases ========================= */
     /**
      * testGetTicketWIthInvalidId test method
      * supply random invalid id
      */
     @Test
-    public void testGetTicketWIthInvalidId(){
+    public void testGetTicketWithInvalidId(){
 
-        Ticket object = null,
-                result = null;
-        int randomId= 0;
-
+        Ticket object = null;
+        Map result = null;
+        int randomId = 0;
+        String exceptionMessage=null, expected= null;
 
         //create dummy entry
         try{
             object = service.createTicket("test-subject", "test-agent",null);
             //now try to get the value from list with random id
-            randomId = object.getId()+(int)(Math.random()*10);
-            result = service.getTicketDetail(randomId);
+            randomId = -1;
+            result = service.getTicket(randomId);
+
+        }catch (TicketNotFoundException | IOException | ClassNotFoundException e){
+            exceptionMessage = e.getMessage();
+        }
+        expected = "Record with id: "+randomId +" does not exists";
+
+        //adding asserts
+        //must return updated ticket object
+
+        assertNull(result);
+        assertTrue(exceptionMessage.equalsIgnoreCase(expected));
+        //after test is done delete the dummy ticket
+        object.delete();
+
+    }
+
+    /**
+     * testGetTicketWithValidId test method
+     * supply valid ticket id
+     */
+    @Test
+    public void testGetTicketWithValidId(){
+
+        Ticket object = null;
+        Map result = null;
+
+        //create dummy entry
+        try{
+            object = service.createTicket("test-subject", "test-agent",null);
+            //now try to get the value from list with random id
+            result = service.getTicket(object.getId());
 
         }catch (TicketNotFoundException | IOException | ClassNotFoundException e){
             e.printStackTrace();
@@ -458,10 +490,168 @@ public class TicketServiceTest {
         //adding asserts
         //must return updated ticket object
 
-        assertNull(result);
+        assertNotNull(result);
+        assertEquals(object.getAgent().toLowerCase(),result.get("agent"));
+//        assertEquals(object.getSubject().toLowerCase(), result.getSubject().toLowerCase());
+        assertEquals(object.getId(), result.get("id"));
+
         //after test is done delete the dummy ticket
-        object.deleteTicket(object.getId());
+        object.delete();
 
     }
+
+    /**
+     * testGetTicketObjectForId test method to check the result as ticket object
+     */
+    @Test
+    public void testGetTicketObjectForId(){
+
+        Ticket object = null,result = null;
+        int randomId = 0;
+        String exceptionMessage=null;
+
+        //create dummy entry
+        try{
+            object = service.createTicket("test-subject", "test-agent",null);
+            //now try to get the value from list with random id
+            randomId = object.getId();
+            result = service.getTicketDetail(randomId);
+
+        }catch (TicketNotFoundException | IOException | ClassNotFoundException e){
+            exceptionMessage = e.getMessage();
+        }
+
+        //adding asserts
+        //must return updated ticket object
+
+        assertNotNull(result);
+        assertEquals(object.hashCode(), result.hashCode());
+        assertEquals(object.getSubject(), result.getSubject());
+        //after test is done delete the dummy ticket
+        object.delete();
+
+    }
+    /**
+     * testGetTicketObjectForInvalidId test method
+     */
+    @Test
+    public void testGetTicketObjectForInvalidId(){
+
+        Ticket object = null,result = null, result1= null;
+        int randomId = 0;
+        String exceptionMessage=null;
+
+        //create dummy entry
+        try{
+            object = service.createTicket("test-subject", "test-agent",null);
+            //now try to get the value from list with random id
+            result = service.getTicketDetail(randomId); //fetch result for id 0
+
+            randomId = -1;
+            result1 = service.getTicketDetail(randomId); //fetch id for -1
+
+        }catch (TicketNotFoundException | IOException | ClassNotFoundException e){
+            exceptionMessage = e.getMessage();
+        }
+
+        assertNull(result);
+        assertNull(result1);
+        //after test is done delete the dummy ticket
+        object.delete();
+
+    }
+
+    /* ========================= Delete Ticket Test cases ========================= */
+    /**
+     *
+     */
+    @Test
+    public void testDeleteTicketForValidId(){
+
+        Ticket object = null,result = null, result1 = null;
+        int randomId = 0;
+        String exceptionMessage=null;
+
+        //create dummy entry
+        try{
+            object = service.createTicket("test-subject", "test-agent",null);
+            //now try to get the value from list with random id
+            randomId = object.getId();
+            result = service.deleteTicket(randomId); //delete result
+
+            //try to obtain the result from ticket list with same id
+            result1 = service.getTicketDetail(randomId);
+
+        }catch (TicketNotFoundException | IOException | ClassNotFoundException e){
+            exceptionMessage = e.getMessage();
+        }
+
+        assertNull(result1);
+        assertEquals(object.getId(), result.getId());
+        assertEquals(object.hashCode(), result.hashCode());
+
+    }
+
+    /**
+     *
+     */
+    @Test
+    public void testDeleteTicketIdForInvalidId(){
+
+        Ticket object = null,result  = null;
+        int randomId = 0;
+        String exceptionMessage=null, expected = null;
+
+        //create dummy entry
+        try{
+            object = service.createTicket("test-subject", "test-agent",null);
+            //now try to get the value from list with random id
+            randomId = -1;
+            result = service.deleteTicket(randomId); //fetch result for delete of id -1
+
+
+        }catch (TicketNotFoundException | IOException | ClassNotFoundException e){
+            exceptionMessage = e.getMessage();
+        }
+        expected = "Record with id: "+randomId +" does not exists";
+
+        assertNull(result);
+        assertTrue(exceptionMessage.equalsIgnoreCase(expected));
+
+    }
+
+    /**
+     *
+     */
+    @Test
+    public void testDeleteDeletedTicket(){
+
+        Ticket object = null,result  = null, result1 = null;
+        int randomId = 0;
+        String exceptionMessage=null, expected = null;
+
+        //create dummy entry
+        try{
+            object = service.createTicket("test-subject", "test-agent",null);
+            //now try to get the value from list with random id
+            randomId = object.getId();
+            result = service.deleteTicket(randomId); //fetch result for delete of id
+
+            //try to delete the same record again
+            result1 = service.deleteTicket(randomId);
+
+
+        }catch (TicketNotFoundException | IOException | ClassNotFoundException e){
+            exceptionMessage = e.getMessage();
+        }
+        expected = "Record with id: "+randomId +" does not exists";
+
+        assertNull(result1);
+        assertTrue(exceptionMessage.equalsIgnoreCase(expected));
+        assertNotNull(result);
+        assertEquals(object.getId(), result.getId());
+        assertEquals(object.hashCode(), result.hashCode());
+    }
+
 
 }
