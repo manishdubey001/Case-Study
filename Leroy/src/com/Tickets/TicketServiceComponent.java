@@ -1,5 +1,7 @@
 package com.Tickets;
 
+import sun.invoke.empty.Empty;
+
 import java.util.*;
 
 /**
@@ -28,15 +30,16 @@ public class TicketServiceComponent {
         return false;
     }
 
-    public void updateTicket(int id, String type, String val){
+    public boolean updateTicket(int id, String type, String val){
         try{
+            boolean updated = false;
             Ticket t3 = thm.get(id);
-            if (type.equals("agent")) {
+            if (type.equals("agent") && !val.isEmpty()) {
                 t3.setAgent_name(val);
                 t3.setModified(System.currentTimeMillis());
                 thm.put(id, t3);
-
-            } else if (type.equals("tags")) {
+                updated = true;
+            } else if (type.equals("tags") && !val.isEmpty()) {
                 String [] tags1 = val.split(",");
                 Set set1 = new HashSet<>();
                 for (int index = 0; index <tags1.length; index++)
@@ -46,118 +49,131 @@ public class TicketServiceComponent {
 
                 t3.setModified(System.currentTimeMillis());
                 thm.put(id,t3);
+                updated = true;
             }
+            if (updated){
                 System.out.println(Sout.ACT_TICKETS_IN_SYSTEM);
                 List<Ticket> listTickets2 = new ArrayList<>(thm.values());
                 this.display(listTickets2);
-
+                return true;
+            }
         }catch(InputMismatchException Im){
             System.out.println(Sout.ACT_INVALID+Im);
+            return false;
+        }catch (NullPointerException Null){
+            return false;
         }
-
+        return false;
     }
 
-    public void removeTicketById(int id){
+    public boolean removeTicketById(int id){
         if (id > 0){
-            thm.remove(id);
-            System.out.println(Sout.ACT_REMOVE_SUCCESS+id);
-        }
-        System.out.println(Sout.ACT_TICKETS_IN_SYSTEM);
-        List<Ticket> listTickets2 = new ArrayList<>(thm.values());
-        this.display(listTickets2);
-    }
-
-    /**
-     * Function to fetch a ticket by it Id
-     * @param thm
-     */
-    public void getAllTicketsById(Map<Integer, Ticket> thm){
-        System.out.println(Sout.ACT_TICKETS_IN_SYSTEM);
-        List<Ticket> listTickets2 = new ArrayList<>(thm.values());
-        this.display(listTickets2);
-        System.out.println(Sout.ACT_TID);
-
-        int selT = scanWhat().nextInt();
-        if (thm.containsKey(selT)){
-            System.out.println(Sout.ACT_TABLE_HEADER);
-            Ticket t3 = thm.get(selT);
-            System.out.println(t3);
-        }
-    }
-
-    /**
-     * Function to fetch tickets by Agent name
-     * @param thm
-     */
-    public void getTicketsByAgentName(Map<Integer, Ticket> thm){
-        System.out.println(Sout.ACT_TAGENTNAME);
-        String selA = scanWhat().next();
-
-        List<Ticket> c = new ArrayList<>(thm.values());
-        List<Ticket> l = new ArrayList<>();
-        for (int index = 0; index < c.size(); index++){
-            if((c.get(index).agent_name).equals(selA)){
-                l.add(c.get(index));
+            if (checkIfExists(id)){
+                thm.remove(id);
+                System.out.println(Sout.ACT_REMOVE_SUCCESS+id);
+                return true;
             }
         }
-
-        if(!l.isEmpty()){
-            this.display(l);
-        }
-
+        System.out.println(Sout.ACT_TICKETS_IN_SYSTEM);
+        List<Ticket> listTickets2 = new ArrayList<>(thm.values());
+        this.display(listTickets2);
+        return false;
     }
 
-    /**
-     * Function to fetch all tickets present in the system
-     * @param thm
-     */
-    public void getAllTickets(Map<Integer, Ticket> thm){
-        List<Ticket> t3 = new ArrayList<>(thm.values());
-        this.display(t3);
+
+    public Ticket getTicketById(int id){
+
+        boolean check = checkIfExists(id);
+        if (check){
+            System.out.println(Sout.ACT_TABLE_HEADER);
+            Ticket t3 = thm.get(id);
+            System.out.println(t3);
+            return t3;
+        }
+        return null;
+    }
+
+    public List getTicketsByAgentName(String name){
+        List<Ticket> l = new ArrayList<>();
+        if (!name.isEmpty()){
+            List<Ticket> c = new ArrayList<>(thm.values());
+            for (int index = 0; index < c.size(); index++){
+                if((c.get(index).agent_name).equals(name)){
+                    l.add(c.get(index));
+                }
+            }
+            if(!l.isEmpty()){
+                this.display(l);
+            }else {
+                System.out.println(Sout.ACT_NOT_FOUND);
+            }
+        }else{
+            System.out.println(Sout.ACT_NOT_FOUND);
+        }
+        return l;
+    }
+
+    public List getAllTickets(){
+        List<Ticket> t3 = new ArrayList<>();
+        if (!thm.isEmpty()){
+            t3 = new ArrayList<>(thm.values());
+            this.display(t3);
+            return t3;
+        }else {
+            System.out.println(Sout.ACT_NOT_FOUND);
+        }
+        return t3;
     }
 
     /**
      * function to fetch count of ticket with respect to its agent.
      * Data is grouped by Agent name in ascending order.
-     * @param thm
      */
-    public void getTicketsGroupByAgent(Map<Integer, Ticket> thm){
-        List<Ticket> l = new ArrayList<>(thm.values());
-        Collections.sort(l,Ticket.ByAgentNameComparator);
-        Map<String,Integer> map = new HashMap<String, Integer>();
-        for (int index = 0; index < l.size(); index++){
-            int countTicket = map.containsKey(l.get(index).agent_name) ? map.get(l.get(index).agent_name) : 0;
-            map.put(l.get(index).agent_name, countTicket+ 1);
-        }
+    public void getTicketsGroupByAgent(){
+        if (!thm.isEmpty()){
 
-        for (Map.Entry<String, Integer> entry : map.entrySet())
-            System.out.println(entry.getKey()+" : "+entry.getValue());
+            List<Ticket> l = new ArrayList<>(thm.values());
+            Collections.sort(l,Ticket.ByAgentNameComparator);
+            Map<String,Integer> map = new HashMap<String, Integer>();
+            for (int index = 0; index < l.size(); index++){
+                int countTicket = map.containsKey(l.get(index).agent_name) ? map.get(l.get(index).agent_name) : 0;
+                map.put(l.get(index).agent_name, countTicket+ 1);
+            }
+
+            for (Map.Entry<String, Integer> entry : map.entrySet())
+                System.out.println(entry.getKey()+" : "+entry.getValue());
+        }else {
+            System.out.println(Sout.ACT_NOT_FOUND);
+        }
     }
 
     /**
      * Function to fetch all ticket with respect to Tag.
-     * @param thm
      */
-    public void getAllTicketsByTag(Map<Integer, Ticket> thm){
-        List<Ticket> l = new ArrayList<>(thm.values());
-        Map<String, Set> map = new HashMap<>();
-        System.out.println(Sout.ACT_TTAGS_SINGLE);
-        String selT = scanWhat().next();
+    public Set getAllTicketsByTag(String tag){
         Set set2 = new HashSet<>();
-        for (int index = 0; index<l.size(); index++){
-            if(l.get(index).getTags().contains(selT))
-                set2.add(l.get(index));
-        }
-        if(!set2.isEmpty()){
-            List<Ticket> t3 = new ArrayList<>(set2);
-            Collections.sort(t3);
-            System.out.println(Sout.ACT_TABLE_HEADER);
+        if (!thm.isEmpty()){
 
-            for (Ticket str: t3) {
-                System.out.println(str);
+            List<Ticket> l = new ArrayList<>(thm.values());
+            Map<String, Set> map = new HashMap<>();
+            set2 = new HashSet<>();
+            for (int index = 0; index<l.size(); index++){
+                if(l.get(index).getTags().contains(tag))
+                    set2.add(l.get(index));
+            }
+            if(!set2.isEmpty()){
+                List<Ticket> t3 = new ArrayList<>(set2);
+                Collections.sort(t3);
+                System.out.println(Sout.ACT_TABLE_HEADER);
+
+                for (Ticket str: t3) {
+                    System.out.println(str);
+                }
+            }else {
+                System.out.println(Sout.ACT_NOT_FOUND);
             }
         }
-
+        return set2;
     }
 
     public void display(List<Ticket> t3){
@@ -171,9 +187,5 @@ public class TicketServiceComponent {
 
     public boolean checkIfExists(int id){
         return (thm.containsKey(id)) ? true : false;
-    }
-    public static Scanner scanWhat(){
-        Scanner sc = new Scanner(System.in);
-        return sc;
     }
 }

@@ -42,7 +42,7 @@ public class Sout {
         return "\n";
     }
 
-    private TicketServiceComponent ticketServiceComponent = null;
+    public TicketServiceComponent ticketServiceComponent = null;
 
     Sout(){
         ticketServiceComponent = new TicketServiceComponent();
@@ -95,7 +95,7 @@ public class Sout {
          }
     }
 
-    public void removeTicket(){
+    public void soutRemoveTicket(){
         System.out.println(Sout.ACT_TID);
         int selT = scanWhat().nextInt();
         boolean check = ticketServiceComponent.checkIfExists(selT);
@@ -107,9 +107,31 @@ public class Sout {
         }else
             System.out.println(ACT_NOT_FOUND);
     }
+
+    public void soutGetTicketById(){
+        System.out.println(Sout.ACT_TID);
+        int selT = scanWhat().nextInt();
+        ticketServiceComponent.getTicketById(selT);
+    }
+
+    public void soutTicketsByAgent(){
+        System.out.println(Sout.ACT_TAGENTNAME);
+        String selA = scanWhat().next();
+        ticketServiceComponent.getTicketsByAgentName(selA);
+    }
+
+    public void soutGetAllTicketsByTag(){
+
+        System.out.println(Sout.ACT_TTAGS_SINGLE);
+        String selT = scanWhat().next();
+        ticketServiceComponent.getAllTicketsByTag(selT);
+    }
+
     public static Scanner scanWhat(){
         Scanner sc = new Scanner(System.in);
         return sc;
     }
 
 }
+
+

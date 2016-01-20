@@ -27,44 +27,29 @@ public class TicketsCaseStudyLeroy {
                             break;
 
                         case 3:
-                            sout.removeTicket();
+                            sout.soutRemoveTicket();;
                             break;
 
-                        /*case 4:
-                            if(!thm.isEmpty())
-                                ticketComponent.getAllTicketsById(thm);
-                            else
-                                System.out.println(Sout.ACT_NOT_FOUND);
+                        case 4:
+                            sout.soutGetTicketById();
                             break;
 
                         case 5:
-                            if(!thm.isEmpty())
-                                ticketComponent.getAllTickets(thm);
-                            else
-                                System.out.println(Sout.ACT_NOT_FOUND);
+                            sout.ticketServiceComponent.getAllTickets();
                             break;
 
                         case 6:
-                            if(!thm.isEmpty())
-                                ticketComponent.getTicketsByAgentName(thm);
-                            else
-                                System.out.println(Sout.ACT_NOT_FOUND);
+                            sout.soutTicketsByAgent();
                             break;
 
                         case 7:
-                            if(!thm.isEmpty())
-                                ticketComponent.getTicketsGroupByAgent(thm);
-                            else
-                                System.out.println(Sout.ACT_NOT_FOUND);
+                                sout.ticketServiceComponent.getTicketsGroupByAgent();
                             break;
 
 
                         case 8:
-                            if(!thm.isEmpty())
-                                ticketComponent.getAllTicketsByTag(thm);
-                            else
-                                System.out.println(Sout.ACT_NOT_FOUND);
-                            break;*/
+                                sout.soutGetAllTicketsByTag();
+                            break;
                     }
                 }
                 while (i != 9);
