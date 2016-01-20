@@ -41,7 +41,7 @@ public class Services {
 
     public Tickets createTicket(String subject, String agent, HashSet<String> tg){
         Date d = new Date();
-        if(subject == null || agent == null)
+        if(subject == null || agent == null || subject.length() == 0 || agent.length() == 0)
             return null;
         Tickets t = new Tickets(++max_id,subject,agent,tg,d.getTime(),d.getTime());
         tickets.put(Integer.valueOf(t.getId()),t);
