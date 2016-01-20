@@ -7,6 +7,7 @@ package com.casestudy;
 
 import java.util.*;
 
+// Generally use singular name for classes (Ticket instead of Tickets) unless the class stores more than one per instance.
 public class Tickets implements Comparable<Tickets>{
     private int id;
     private String subject;
@@ -24,6 +25,8 @@ public class Tickets implements Comparable<Tickets>{
         this.updated = updated;
     }
 
+
+    // rather than create Longs here you can instead use Long.compare() on the primitive types
     @Override
     public int compareTo(Tickets t){
         return Long.valueOf(t.getUpdated()).compareTo(Long.valueOf(this.getUpdated()));
@@ -52,6 +55,15 @@ public class Tickets implements Comparable<Tickets>{
         return created;
     }
 
+    // A few points here.
+    // 1. Generally prefer to return an interface (Set<>) rather than the concrete implementation; this allows you to change implementation
+    // later without changing the accessor.
+    // 2. Call it getTags() since it returns a set.
+    // 3. Returning your internal collection directly allows callers to modify it outside this class's implementation. One way to account
+    // for this is to make a defensive copy, or to apply an immutable wrapper like Collections.unmodifiableSet(). So I would recommend this be
+    //
+    // public Set<String> getTags() { return Collections.unmodifiableSet(tags); }
+    //
     public HashSet<String> getTag() {
         return tags;
     }
@@ -60,10 +72,12 @@ public class Tickets implements Comparable<Tickets>{
         return updated;
     }
 
+    // Without any requirement to change a ticket's ID, I wouldn't even implement this. Not all fieldsshould have getter and setter.
     public void setId(int id) {
         this.id = id;
     }
 
+    // Since changing subject is not allowed, I would not implement this.
     public void setSubject(String subject) {
         this.subject = subject;
     }
@@ -72,14 +86,21 @@ public class Tickets implements Comparable<Tickets>{
         this.agent = agent;
     }
 
+    // Getters have similar problems to setters when you are using collections.
+    // 1. Prefer just taking a Set<> over a HashSet<> unless you have a specific reason to require HashSet<>.
+    // 2. It's good practice to make a copy of the caller's input. Otherwise the caller can modify it after you receive it.
+    // 3. Call it setTags() since there can be many
     public void setTag(HashSet<String> tags) {
         this.tags = tags;
     }
 
+    // I wouldn't implement this. I would make 'created' final because it shouldn't ever change.
     public void setCreated(long created) {
         this.created = created;
     }
 
+    // rather than allowing clients to set this, I would incorporate the logic to change 'updated' into
+    // the methods of this class that update the ticket (setSubject()/setAgent()/setTags()).
     public void setUpdated(long updated) {
         this.updated = updated;
     }

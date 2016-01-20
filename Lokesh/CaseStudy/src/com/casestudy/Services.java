@@ -8,10 +8,14 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+// Same comment as Tickets; just call this Service instead of Services
 public class Services {
 
 //    final String []arry = {"1) Create Ticket","2) Update Ticket","3) Delete Ticket","4) Get Ticket","5) Get all Tickets","6) Find Tickets assigned to Agent", "7) Get all Agent with Tickets Counts","8) Search Tickets By Tag","9) Exit"};
+
+    // No reason to make these static since you have an actual instance of Services to work with
     static private int max_id = 0;
+
     static HashMap<Integer, Tickets> tickets = new HashMap<>();
 
 
@@ -36,9 +40,12 @@ public class Services {
     }
 
     public Tickets createTicket(String subject, String agent, HashSet<String> tg){
+        // Java's original Date classes don't work very well. Java8 now has LocalDate/LocalDateTime
+        // which fix a lot of problems. Using these or another implementation like YodaTime is recommended.
         Date d = new Date();
         if(subject == null || agent == null || subject.length() == 0 || agent.length() == 0)
             return null;
+        // I think Ganesh's intention was to have the user provide the ticket ID, but this wasn't spelled out in the case study.
         Tickets t = new Tickets(++max_id,subject,agent,tg,d.getTime(),d.getTime());
         tickets.put(t.getId(),t);
         return t;
@@ -84,6 +91,11 @@ public class Services {
 
     public Tickets updateTicket(int id,String agent,String updateTag, HashSet<String> hs){
         Tickets t = tickets.get(id);
+        // I strongly recommend against taking "null" as a valid input to your own methods.
+        // The reality is that you force yourself to nest a bunch of null checks;
+        // So, you might as well just make separate, simpler methods.
+        // And rather than taking "updateTag" as an operator type with a string code, I would implement
+        // Add/Remove tag separately.
         if(t != null) {
             if(!(agent == null || agent.length() == 0))
                 t.setAgent(agent);
@@ -113,6 +125,9 @@ public class Services {
     }
 
     public void getTickets(){
+        // good use of streams. Two suggestions:
+        // 1. Inline the method reference to Tickets::getUpdated
+        // 2. No need to create a collection if all you want to do is print it; just use forEachOrdered(System.out::println)
         Function<Tickets, Long> byUpdated = Tickets::getUpdated; //tm -> tm.getUpdated();
         List<Tickets> list= tickets.values().stream().sorted(Comparator.comparing(byUpdated).reversed()).collect(Collectors.toList());
 
@@ -137,6 +152,7 @@ public class Services {
         String agent;
         agent = MyReader.readInput("Enter Agent Name: ");
         TreeSet<Tickets> l = new TreeSet<>(Tickets.updateComparator);
+        // see my comment below in ticketsByTag(); can you see how to do this with streams?
         tickets.forEach((k,v)->{
             if(v.getAgent().equals(agent))
                 l.add(v);
@@ -168,8 +184,15 @@ public class Services {
     public void ticketsByTag(){
         String tag = MyReader.readInput("Enter A Tag: ");
         TreeSet<Tickets> hs = new TreeSet<>(Tickets.updateComparator);
-        tickets.forEach((k,v)->{
-            if(v.getTag().contains(tag))
+        // your code works here. For practice, t's good to get used to java 8's streams.
+        // These can be more convenient and sometimes more efficient.
+        // The following line of code would output a sorted list of
+        // tickets with this tag, with no need to create an intermediate container.
+        // tickets.values().stream().filter(t->t.getTag().contains(tag)).sorted(Tickets.updateComparator).forEachOrdered(System.out::println);
+        // or by using comparing() you can get rid of updateComparator.
+
+        tickets.forEach((k, v) -> {
+            if (v.getTag().contains(tag))
                 hs.add(v);
         });
         if(hs.size() > 0)
