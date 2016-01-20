@@ -23,27 +23,29 @@ public class Services {
         String subject,agent,tags;
         HashSet<String> tg = new HashSet<>();
         do{
-            System.out.println("Enter Subject: ");
-            subject = MyReader.readInput();
+            subject = MyReader.readInput("Enter Subject: ");
         }while(subject.equals("0"));
 
         do{
-            System.out.println("Enter Agent Name: ");
-            agent = MyReader.readInput();
+            agent = MyReader.readInput("Enter Agent Name: ");
         }while (agent.equals("0"));
 
         do{
-            System.out.println("Assign tag?(Y/N)");
-            tags = MyReader.readInput();
+            tags = MyReader.readInput("Assign tag?(Y/N)");
         } while (!(tags.equals("Y") || tags.equals("N")));
 
         if(tags.equals("Y"))
             this.addTags(tg);
+        System.out.println(this.createTicket(subject,agent,tg).toString());
+    }
+
+    public Tickets createTicket(String subject, String agent, HashSet<String> tg){
         Date d = new Date();
+        if(subject == null || agent == null)
+            return null;
         Tickets t = new Tickets(++max_id,subject,agent,tg,d.getTime(),d.getTime());
         tickets.put(Integer.valueOf(t.getId()),t);
-        System.out.print("Ticket has been created: ");
-        System.out.println(t.toString());
+        return t;
     }
 
     public void createDummyTickets(){
@@ -52,27 +54,23 @@ public class Services {
     }
 
     public void updateTicket(){
-        System.out.println("Enter Ticket ID to update: ");
-        int id = MyReader.readChoice();
+        int id = MyReader.readChoice("Enter Ticket ID to update: ");
 //        System.out.println("Update ID: " + id);
         if(tickets.keySet().contains(Integer.valueOf(id))){
             String newAgent;
             Tickets t = tickets.get(id);
             do{
-                System.out.println("Update Agent Name?(Y/N)");
-                newAgent = MyReader.readInput();
+                newAgent = MyReader.readInput("Update Agent Name?(Y/N)");
             } while (!(newAgent.equals("Y") || newAgent.equals("N")));
             if(newAgent.equals("Y")){
                 do{
-                    System.out.println("Enter Agent Name: ");
-                    newAgent = MyReader.readInput();
+                    newAgent = MyReader.readInput("Enter Agent Name: ");
                 } while(newAgent.equals("0") || newAgent == null);
                 t.setAgent(newAgent);
             }
             String updateTag;
             do{
-                System.out.println("Add/Remove Tag?(A/R/N): ");
-                updateTag = MyReader.readInput();
+                updateTag = MyReader.readInput("Add/Remove Tag?(A/R/N): ");
             } while (!(updateTag.equals("A") || updateTag.equals("R") || updateTag.equals("N")));
             if(updateTag.equals("A")){
                 this.addTags(tickets.get(id).getTag());
@@ -90,8 +88,7 @@ public class Services {
 
     public void deleteTicket(){
         int id;
-        System.out.println("Enter Ticket ID to delete: ");
-        id = MyReader.readChoice();
+        id = MyReader.readChoice("Enter Ticket ID to delete: ");
         Tickets t = tickets.remove(id);
         if(t == null)
             System.out.println("No ticket found with Given ID.");
@@ -112,8 +109,7 @@ public class Services {
 
     public void tickets(){
         int id;
-        System.out.println("Enter ticket id to get detail: ");
-        id = MyReader.readChoice();
+        id = MyReader.readChoice("Enter ticket id to get detail: ");
         Tickets t = tickets.get(id);
         if(t == null)
             System.out.println("No ticket found with given ID.");
@@ -123,8 +119,7 @@ public class Services {
 
     public void ticketsOfAgent(){
         String agent;
-        System.out.println("Enter Agent Name: ");
-        agent = MyReader.readInput();
+        agent = MyReader.readInput("Enter Agent Name: ");
         TreeSet<Tickets> l = new TreeSet<>(Tickets.updateComparator);
         tickets.forEach((k,v)->{
             if(v.getAgent().equals(agent))
@@ -155,8 +150,7 @@ public class Services {
     }
 
     public void ticketsByTag(){
-        System.out.println("Enter A Tag: ");
-        String tag = MyReader.readInput();
+        String tag = MyReader.readInput("Enter A Tag: ");
         TreeSet<Tickets> hs = new TreeSet<Tickets>(Tickets.updateComparator);
         tickets.forEach((k,v)->{
             if(v.getTag().contains(tag))
@@ -174,26 +168,22 @@ public class Services {
     private void addTags(HashSet<String> tg){
         String tags,temp;
             do{
-                System.out.println("Enter Tag: ");
-                temp = MyReader.readInput();
+                temp = MyReader.readInput("Enter Tag: ");
                 if(temp != "0" && temp != null)
                     tg.add(temp);
-                System.out.println("More tag?(Y/N)");
-                tags = MyReader.readInput();
+                tags = MyReader.readInput("More tag?(Y/N)");
             } while (tags.equals("Y"));
     }
 
     private void removeTags(HashSet<String> tg){
         String temp,tags;
         do{
-            System.out.println("Enter tag to remove: ");
-            tags = MyReader.readInput();
+            tags = MyReader.readInput("Enter tag to remove: ");
             if(tg.remove(tags))
                 System.out.println("Tag removed.");
             else
                 System.out.println("Entered Tag is not applied.");
-            System.out.println("More tag to remove?(Y/N): ");
-            temp = MyReader.readInput();
+            temp = MyReader.readInput("More tag to remove?(Y/N): ");
         } while (temp.equals("Y"));
     }
 }

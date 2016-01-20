@@ -15,7 +15,7 @@ public class Main {
         int choice;
         do {
             showMainMenu();
-            choice = MyReader.readChoice();
+            choice = MyReader.readChoice("Enter your choice:");
             switch (choice) {
                 case 1:
                     //Create New Ticket
@@ -64,6 +64,5 @@ public class Main {
                 ) {
             System.out.println(option);
         }
-        System.out.println("Enter your choice:");
     }
 }
