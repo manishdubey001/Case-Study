@@ -40,21 +40,17 @@ public class TicketService {
     /**
      * this method for remove specific Ticket by id
      */
-    public void removeTicketService(int id) {
+    public boolean removeTicketService(int id) {
 
         if (isTicketIdExit(id)) {
             for (Ticket ticket : this.arrTicketList) {
                 if (ticket.getId() == id) {
-                    List<String> oldTagsList = ticket.getTags();
                     this.arrTicketList.remove(ticket);
-                    ConsolIO.showMsg(" Ticket deleted Successfully");
-                    break;
+                    return true;
                 }
             }
-        } else {
-            ConsolIO.showMsg("Ticket Not Fount");
         }
-
+    return false;
     }
 
     /**
@@ -107,19 +103,12 @@ public class TicketService {
      * Select single Ticket by id
      */
     public Ticket showSingleTicketService(int id) {
-        boolean ticketFlag = false;
-        ConsolIO.ticketListHeader();
+
         for (Ticket ticket : this.arrTicketList) {
 
             if (ticket.getId() == id) {
-                ConsolIO.showTicket(ticket);
-                ticketFlag = true;
                 return ticket;
-//                break;
             }
-        }
-        if (ticketFlag == false) {
-            ConsolIO.showMsg("Ticket Not found");
         }
         return null;
     }
@@ -128,39 +117,27 @@ public class TicketService {
     /**
      * Select all Tickets
      */
-    public void showAllTicketService() {
+    public List showAllTicketService() {
 
         // sort is based on modified date field Descending Order
-
         Collections.sort(this.arrTicketList, new DateComparator());
-
-        ConsolIO.ticketListHeader();
-
-
-        if (this.arrTicketList.isEmpty()) {
-            ConsolIO.showMsg("No record Found");
-        } else {
-            for (Ticket ticket : this.arrTicketList) {
-                ConsolIO.showTicket(ticket);
-            }
-        }
+        return this.arrTicketList;
     }
 
 
     /**
      * @param id
      */
-    public void updateTags(int id, List<String> newlist) {
-        if (!newlist.isEmpty()) {
+    public boolean updateTags(int id, List<String> newlist) {
+
             for (Ticket ticket : this.arrTicketList) {
                 if (ticket.getId() == id) {
                     ticket.setTags(newlist);
-                    ConsolIO.showMsg("Ticket Tags has been updated");
-                    break;
+                    return true;
                 }
             }
 
-        }
+        return false;
     }
 
 
@@ -172,14 +149,13 @@ public class TicketService {
 
     public boolean updateAgentName(int id, String newAgentName) {
 
-        if (id > 0) {
+        if (!newAgentName.equals("")) {
             for (Ticket ticket : this.arrTicketList) {
                 if (ticket.getId() == id) {
                     System.out.println(ticket.getId());
                     ticket.setAgentName(newAgentName);
                     return true;
                 }
-                break;
             }
         }
         return false;
@@ -190,15 +166,10 @@ public class TicketService {
      */
     public boolean createTicketService(int id, String subject, String agentName, List<String> list) {
 
-        if (id > 0 && !subject.equals("") && !agentName.equals("")) {
+        if (id > 0 && !subject.equals("") && !agentName.equals(""))
+        {
             Ticket ticket = TicketFactory.newInstance(id, subject, agentName, list);
-
-            if (this.isTicketIdExit(id)) {
-                ConsolIO.showMsg("ticket Id is already Exist");
-            } else {
-                this.arrTicketList.add(ticket);
-                ConsolIO.showMsg("Ticket has been added successfully");
-            }
+            this.arrTicketList.add(ticket);
             return true;
         }
         return false;

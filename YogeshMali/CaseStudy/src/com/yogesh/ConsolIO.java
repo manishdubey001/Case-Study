@@ -34,7 +34,6 @@ public class ConsolIO {
     }
 
     public static int getTicketId() {
-
         System.out.println("Enter ticket Id ");
         int id = getIntvalue();
         return id;
@@ -66,7 +65,6 @@ public class ConsolIO {
     public static void showTicket(Ticket ticket) {
 
         System.out.println(ticket.getId() + " | " + ticket.getSubject() + "  |   " + ticket.getAgentName() + "  |   " + ticket.getTags() + "  |  " + ticket.getCreated() + "  |  " + ticket.getModified());
-//        System.out.println();
     }
 
     /**

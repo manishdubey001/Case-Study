@@ -1,5 +1,6 @@
 package com.yogesh;
 
+import com.yogesh.model.Ticket;
 import com.yogesh.service.TicketService;
 
 import java.util.List;
@@ -65,7 +66,13 @@ public class MenuClass {
         String agentName = ConsolIO.getAgentNAme();
         List<String> list = ConsolIO.getTags();
 
-        ticketService.createTicketService(id, subject, agentName, list);
+        if (ticketService.isTicketIdExit(id)) {
+            ConsolIO.showMsg("ticket Id is already Exist");
+        } else {
+            if (ticketService.createTicketService(id, subject, agentName, list)) {
+                ConsolIO.showMsg("Ticket has been added successfully");
+            }
+        }
 
     }
 
@@ -76,27 +83,47 @@ public class MenuClass {
             String updatedId = ConsolIO.getString();
             if (updatedId.equals("a")) {
                 String newAgentName = ConsolIO.getAgentNAme();
-                ticketService.updateAgentName(id, newAgentName);
+                if (ticketService.updateAgentName(id, newAgentName)) {
+                    ConsolIO.showMsg(" Agent name has been updated ");
+                }
             }
             ConsolIO.showMsg("Press t to update Tags  ");
             String updatedTag = ConsolIO.getString();
             if (updatedTag.equals("t")) {
                 List<String> newlist = ConsolIO.getTags();
-                ticketService.updateTags(id, newlist);
+                if (ticketService.updateTags(id, newlist)) {
+                    ConsolIO.showMsg("Ticket Tags has been updated");
+                }
             }
-            ConsolIO.showMsg(" Agent name has been updated ");
+
         } else {
             ConsolIO.showMsg("Ticket is not Exists");
         }
     }
 
     private void showAllTicket() {
-        ticketService.showAllTicketService();
+
+        ConsolIO.ticketListHeader();
+        List<Ticket> list = ticketService.showAllTicketService();
+        if (list.isEmpty()) {
+            ConsolIO.showMsg("No record Found");
+
+        } else {
+            for (Ticket ticket : list) {
+                ConsolIO.showTicket(ticket);
+            }
+        }
     }
 
     private void showSingleTicket() {
+        ConsolIO.ticketListHeader();
         int id = ConsolIO.getTicketId();
-        ticketService.showSingleTicketService(id);
+        Ticket ticket = ticketService.showSingleTicketService(id);
+        if (ticket == null) {
+            ConsolIO.showMsg("Ticket Not found");
+        } else {
+            ConsolIO.showTicket(ticket);
+        }
     }
 
     private void searchTicketsUsingtag() {
@@ -112,7 +139,9 @@ public class MenuClass {
 
 
     private void removeTicket() {
-        ticketService.removeTicketService(ConsolIO.getTicketId());
+        if (ticketService.removeTicketService(ConsolIO.getTicketId())) {
+            ConsolIO.showMsg(" Ticket deleted Successfully");
+        }
     }
 
     private void searchTicketsUsingAgentname() {
