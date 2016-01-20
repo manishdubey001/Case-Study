@@ -60,6 +60,10 @@ public class TicketService {
                 return false;
             }
             TicketModel tm = TicketModelFactory.getInstance();
+            // rather than set these here, I would have a constructor that takes these parameters
+            // (or use a builder pattern). Otherwise you have an object that is sometimes in an
+            // invalid state in between each step. Not a big deal for TicketModel but it can be for
+            // other classes.
             tm.setId(id);
             tm.setAgentName(agentName);
             tm.setSubject(subject);

@@ -7,6 +7,8 @@ import java.util.TimeZone;
 /**
  * Created by root on 14/1/16.
  */
+// generally, use the Java8 classes like LocalDateTime,
+// or another impelmenation like YodaTime. No need to create your own.
 public class DateTime {
     /**
      * get current time stamp in seconds(GMT)
