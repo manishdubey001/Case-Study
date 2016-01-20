@@ -1,0 +1,10 @@
+#Ignore everything in this directory
+Deepak/TicketService/.idea/
+# add below if you dont want to add .class file in git
+Deepak/TicketService/out/
+.class
+.jar
+
+#Except this file
+!.gitignore
+
