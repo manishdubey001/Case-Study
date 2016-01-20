@@ -41,7 +41,7 @@ public class Services {
 
     public Tickets createTicket(String subject, String agent, HashSet<String> tg){
         // Java's original Date classes don't work very well. Java8 now has LocalDate/LocalDateTime
-        // which fix a lot of problems. Using these or another implementation like YodaTime is recommended.
+        // which fix a lot of problems. Using these or another implementation like JodaTime is recommended.
         Date d = new Date();
         if(subject == null || agent == null || subject.length() == 0 || agent.length() == 0)
             return null;
