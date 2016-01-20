@@ -4,10 +4,6 @@ package com.casestudy;
  * Created by root on 12/1/16.
  */
 
-import sun.security.krb5.internal.Ticket;
-
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -16,7 +12,7 @@ public class Services {
 
 //    final String []arry = {"1) Create Ticket","2) Update Ticket","3) Delete Ticket","4) Get Ticket","5) Get all Tickets","6) Find Tickets assigned to Agent", "7) Get all Agent with Tickets Counts","8) Search Tickets By Tag","9) Exit"};
     static private int max_id = 0;
-    static HashMap<Integer, Tickets> tickets = new HashMap<Integer, Tickets>();
+    static HashMap<Integer, Tickets> tickets = new HashMap<>();
 
 
     public void createTicket(){
@@ -35,7 +31,7 @@ public class Services {
         } while (!(tags.equals("Y") || tags.equals("N")));
 
         if(tags.equals("Y"))
-            this.addTags(tg);
+            tg = this.readTags();
         System.out.println(this.createTicket(subject,agent,tg).toString());
     }
 
@@ -44,46 +40,64 @@ public class Services {
         if(subject == null || agent == null || subject.length() == 0 || agent.length() == 0)
             return null;
         Tickets t = new Tickets(++max_id,subject,agent,tg,d.getTime(),d.getTime());
-        tickets.put(Integer.valueOf(t.getId()),t);
+        tickets.put(t.getId(),t);
         return t;
     }
 
     public void createDummyTickets(){
-        Tickets t = new Tickets(++max_id,"Subject"+max_id,"Agent" + max_id,new HashSet(),new Date().getTime(),new Date().getTime());
-        tickets.put(Integer.valueOf(t.getId()),t);
+        Tickets t = new Tickets(++max_id,"Subject"+max_id,"Agent" + max_id,new HashSet<>(),new Date().getTime(),new Date().getTime());
+        tickets.put(t.getId(),t);
     }
 
     public void updateTicket(){
         int id = MyReader.readChoice("Enter Ticket ID to update: ");
 //        System.out.println("Update ID: " + id);
-        if(tickets.keySet().contains(Integer.valueOf(id))){
-            String newAgent;
-            Tickets t = tickets.get(id);
+        if(tickets.keySet().contains(id)){
+            String newAgent, updateTag;
+            HashSet<String> newTags = new HashSet<>();
+            Tickets t ; // = tickets.get(id);
             do{
                 newAgent = MyReader.readInput("Update Agent Name?(Y/N)");
             } while (!(newAgent.equals("Y") || newAgent.equals("N")));
             if(newAgent.equals("Y")){
                 do{
                     newAgent = MyReader.readInput("Enter Agent Name: ");
-                } while(newAgent.equals("0") || newAgent == null);
-                t.setAgent(newAgent);
+                } while(newAgent.equals("0"));
+//                t.setAgent(newAgent);
             }
-            String updateTag;
             do{
                 updateTag = MyReader.readInput("Add/Remove Tag?(A/R/N): ");
             } while (!(updateTag.equals("A") || updateTag.equals("R") || updateTag.equals("N")));
-            if(updateTag.equals("A")){
-                this.addTags(tickets.get(id).getTag());
+            if(updateTag.equals("A") || updateTag.equals("R")){
+                newTags = this.readTags();
             }
-            else if(updateTag.equals("R")){
-                this.removeTags(tickets.get(id).getTag());
-            }
-            t.setUpdated(new Date().getTime());
+            t = this.updateTicket(id,newAgent,updateTag,newTags);
+
             System.out.println("Ticket has been updated: " + t.toString());
         }
         else{
             System.out.println("Ticket with given ID not Found.");
         }
+    }
+
+    public Tickets updateTicket(int id,String agent,String updateTag, HashSet<String> hs){
+        Tickets t = tickets.get(id);
+        if(t != null) {
+            if(!(agent == null || agent.length() == 0))
+                t.setAgent(agent);
+            if(updateTag.equals("A"))
+                hs.forEach((obj)->{
+                    HashSet ta = t.getTag();
+                    ta.add(obj);
+                });
+            else if(updateTag.equals("R"))
+                hs.forEach((obj)->{
+                    HashSet ta = t.getTag();
+                    ta.remove(obj);
+                });
+            t.setUpdated(new Date().getTime());
+        }
+        return t;
     }
 
     public void deleteTicket(){
@@ -97,7 +111,7 @@ public class Services {
     }
 
     public void getTickets(){
-        Function<Tickets, Long> byUpdated = tm -> tm.getUpdated();
+        Function<Tickets, Long> byUpdated = Tickets::getUpdated; //tm -> tm.getUpdated();
         List<Tickets> list= tickets.values().stream().sorted(Comparator.comparing(byUpdated).reversed()).collect(Collectors.toList());
 
         // Another Approach
@@ -136,13 +150,13 @@ public class Services {
         tickets.forEach((k,v)->{
             String agent = v.getAgent();
             if(t.containsKey(agent)){
-                t.put(agent,Integer.valueOf(t.get(agent).intValue() + 1));
+                t.put(agent,t.get(agent) + 1);
             }
             else
-                t.put(agent,Integer.valueOf(1));
+                t.put(agent,1);
         });
         if(t.size()>=1){
-            t.forEach((k,v)-> System.out.print("{" + k + ":" + v.intValue() + "},"));
+            t.forEach((k,v)-> System.out.print("{" + k + ":" + v + "},"));
             System.out.println();
         }
         else
@@ -151,7 +165,7 @@ public class Services {
 
     public void ticketsByTag(){
         String tag = MyReader.readInput("Enter A Tag: ");
-        TreeSet<Tickets> hs = new TreeSet<Tickets>(Tickets.updateComparator);
+        TreeSet<Tickets> hs = new TreeSet<>(Tickets.updateComparator);
         tickets.forEach((k,v)->{
             if(v.getTag().contains(tag))
                 hs.add(v);
@@ -165,17 +179,19 @@ public class Services {
         System.out.println(tickets);*/
     }
 
-    private void addTags(HashSet<String> tg){
+    private HashSet<String> readTags(){
         String tags,temp;
+        HashSet<String> tg = new HashSet<>();
             do{
                 temp = MyReader.readInput("Enter Tag: ");
-                if(temp != "0" && temp != null)
+                if(!temp.equals("0"))
                     tg.add(temp);
                 tags = MyReader.readInput("More tag?(Y/N)");
             } while (tags.equals("Y"));
+        return tg;
     }
 
-    private void removeTags(HashSet<String> tg){
+    /*private HashSet<String> removeTags(HashSet<String> tg){
         String temp,tags;
         do{
             tags = MyReader.readInput("Enter tag to remove: ");
@@ -185,5 +201,6 @@ public class Services {
                 System.out.println("Entered Tag is not applied.");
             temp = MyReader.readInput("More tag to remove?(Y/N): ");
         } while (temp.equals("Y"));
-    }
+        return tg;
+    }*/
 }
