@@ -15,7 +15,6 @@ import java.util.stream.Collectors;
  */
 public class TicketService /*implements Comparable<Ticket>*/ {
     private Ticket ticket;
-    private TicketService ticketService;
     public Map<String, ? super Object> map;
 
     /**

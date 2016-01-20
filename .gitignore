@@ -1,0 +1,7 @@
+# Ignore everything in this directory
+virendra/TicketMaster/.idea/*
+virendra/TicketMaster/out/*
+*.class
+*.jar
+# Except this file
+!.gitignore
