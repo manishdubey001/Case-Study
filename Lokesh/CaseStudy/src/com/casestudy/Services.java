@@ -65,6 +65,8 @@ public class Services {
                 } while(newAgent.equals("0"));
 //                t.setAgent(newAgent);
             }
+            else
+                newAgent = "";
             do{
                 updateTag = MyReader.readInput("Add/Remove Tag?(A/R/N): ");
             } while (!(updateTag.equals("A") || updateTag.equals("R") || updateTag.equals("N")));
