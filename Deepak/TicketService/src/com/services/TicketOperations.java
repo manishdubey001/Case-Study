@@ -33,7 +33,7 @@ public class TicketOperations {
 
         tagHashSet = UserConsoleInput.getTagNames();
 
-       long status = createTicket(subject, agent_name, tagHashSet);
+        long status = createTicket(subject, agent_name, tagHashSet);
         if(status == 0){
             System.out.println("Sorry your ticket has not been created!");
         }
@@ -44,7 +44,7 @@ public class TicketOperations {
     }
 
     /*
-    * Crating ticket using TicketFactory */
+    * Crating ticket using  */
     public long createTicket(String subject, String agent_name, Set<String> tagHashSet){
 
         Ticket ticket = null;
