@@ -117,7 +117,7 @@ public class TicketOperations {
 
         ticketId++;
 
-        if(returnValue == 1)
+        if(returnValue>0)
             System.out.println("Ticket has been added successfully");
         else
             System.out.println("ERROR : Creating ticket false");
@@ -129,7 +129,7 @@ public class TicketOperations {
      * showing all ticket details
      */
     public void showAllTickets() {
-        ticketService.showAllTickets();
+        ticketService.showTickets(ticketService.showAllTickets());
         this.menuList();
     }
 
@@ -146,8 +146,11 @@ public class TicketOperations {
 
             if(userChoice == 1){
                 String agentName = inputData.getAgentName();
-                ticketService.updateTicketAgent(ticketId, agentName);  // chk return value then print msg
-                System.out.println("Agent Name is updated Successfully!!!");
+                boolean successResponse = ticketService.updateTicketAgent(ticketId, agentName);  // chk return value then print msg
+                if(successResponse)
+                    System.out.println("Agent Name in ticket is updated Successfully!!!");
+                else
+                    System.out.println("ERROR - Ticket is not updated");
             }
             else if(userChoice == 2){
                 List<String> tags = inputData.getTagsList();
@@ -204,7 +207,7 @@ public class TicketOperations {
     public void showTicketByAgentName() {
         //user agent name
         String agentName = inputData.getAgentName();
-        ticketService.showTicketByAgentName(agentName);
+        ticketService.showTickets(ticketService.showTicketByAgentName(agentName));
         this.menuList();
     }
 

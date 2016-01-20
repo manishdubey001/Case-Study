@@ -44,6 +44,9 @@ public class TicketService {
     }
 
     public HashMap getTicketDetailsById(int id) {
+        if(!this.isTicketExist(id)){
+            return  null;
+        }
         HashMap TicketDetails = new HashMap();
         for (Ticket ticket : masterTicketData) {
             if (ticket.getId() == id) {
@@ -104,22 +107,27 @@ public class TicketService {
     /**
      * showing all ticket details
      */
-    public void showAllTickets() {
-        Collections.sort(this.masterTicketData);
+    public List<Ticket> showAllTickets() {
+        return masterTicketData;
+    }
 
-        if (this.masterTicketData.isEmpty()) {
+    public void showTickets(List<Ticket> ticketList){
+        if (ticketList.isEmpty()) {
             System.out.println("No Tickets Found!!!");
         } else {
+            Collections.sort(ticketList);
             System.out.println("Id | Subject | Agent Name | Tags | Created | Modified");
-            for (Ticket ticket : this.masterTicketData) {
+            for (Ticket ticket : ticketList) {
                 System.out.println(ticket.getId() + " | " + ticket.getSubject() + " | " + ticket.getAgent_name() + " | " + ticket.getTags() + " | " +
                         ticket.getCreated() + " | " + ticket.getModified());
             }
-            //System.out.println("tags :: " + tagsWithTicketIds);
         }
     }
 
     public boolean updateTicketAgent(int id, String agentName) {
+        if(agentName.isEmpty() || agentName == null)
+            return false;
+
         Date date = new Date();
         for (Ticket ticket : masterTicketData) {
             if (ticket.getId() == id) {
@@ -200,21 +208,16 @@ public class TicketService {
         return flag;
     }
 
-    public void showTicketByAgentName(String agentName){
-        boolean isTicket = false;
+    public ArrayList<Ticket> showTicketByAgentName(String agentName){
+        ArrayList<Ticket> tempList = new ArrayList<Ticket>();
         agentName.trim();
-        System.out.println("Id | Subject | Agent Name | Tags | Created | Modified");
+
         for (Ticket ticket : masterTicketData) {
             if(ticket.getAgent_name().equals(agentName)){
-                System.out.println(ticket.getId() + " | " + ticket.getSubject() + " | " + ticket.getAgent_name() + " | " + ticket.getTags() + " | " +
-                        ticket.getCreated() + " | " + ticket.getModified());
-                isTicket = true;
+                tempList.add(ticket);
             }
         }
-
-        if(isTicket == false) {
-            System.out.println("No Ticket(s) assigned to Agent " + agentName);
-        }
+        return tempList;
     }
 
     public void ticketCountsByAgentName() {

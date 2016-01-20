@@ -14,6 +14,9 @@ public class Ticket implements Comparable<Ticket>{
     Date created;
     Date modified;
 
+    public Ticket() {
+
+    }
     public Ticket(int id, String subject, String agentName, List<String> tagsList) {
         this.setId(id);
         this.setSubject(subject);
