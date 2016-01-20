@@ -61,15 +61,8 @@ public class TicketMenu {
                     break;
                 case 8:
                     System.out.println("Enter Agent Name");
-                    Map<String, Integer> ticketContMap = objTicktOperation.calculateAgentTicketCount();
+                    //Map<String, Integer> ticketContMap = objTicktOperation.calculateAgentTicketCount();
                     objTicktOperation.showAgentTicketCount(objTicktOperation.calculateAgentTicketCount());
-                    break;
-                case 9:
-                    Set<String> tagSet = new HashSet<>();
-                    tagSet.add("one");
-                    tagSet.add("two");
-                    tagSet.add("three");
-                    objTicktOperation.createTicket("Subject1", "Agent1", tagSet);
                     break;
                 case 0:
                     System.exit(0);

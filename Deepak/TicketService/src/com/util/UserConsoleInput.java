@@ -106,7 +106,7 @@ public class UserConsoleInput {
             }
 
         }catch (UserInputException e) {
-            System.out.println("Okay you don't want any tag on ticket, it's fine!");
+            System.out.println("Okay you don't want any tag, it's fine!");
         }
 
         return tagHashSet;

@@ -222,7 +222,17 @@ public class TicketOperations {
     public List<Ticket> searchTicketByAgent(){
         String agent_name = "";
         agent_name = UserConsoleInput.getAgentName();
+
+        return searchTicketsWithAgent(agent_name);
+    }
+
+
+    public List<Ticket> searchTicketsWithAgent(String agent_name){
+
         List<Ticket> tempTicketList = new ArrayList<>();
+        if(agent_name == null || agent_name.isEmpty()){
+            return tempTicketList;
+        }
 
         for (int i = 0; i<ticketArrayList.size(); i++){
             if(ticketArrayList.get(i).getAgent_name().toLowerCase().equals(agent_name.toLowerCase())){
@@ -238,8 +248,20 @@ public class TicketOperations {
     public List<Ticket> searchTicketByTag(){
         Set<String> tagHashSet = new HashSet<>();
         tagHashSet = UserConsoleInput.getTagNames();
+
+        return searchTicketsWithTags(tagHashSet);
+
+    }
+
+
+    public List<Ticket> searchTicketsWithTags(Set<String> tagHashSet){
+
         List<Ticket> tempTicketList = new ArrayList<>();
         Set<Ticket> tempTicketSet = new HashSet<>();
+
+        if(tagHashSet == null || tagHashSet.isEmpty()){
+            return tempTicketList;
+        }
 
         for (int i= 0; i<ticketArrayList.size(); i++){
             for(String tag_name : tagHashSet){
