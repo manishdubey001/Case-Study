@@ -21,17 +21,8 @@ public class Ticket implements Comparable<Ticket> {
 		return subject;
 	}
 
-	public void setSubject(String subject) {
-		this.subject = subject;
-	}
-
 	public int getId() {
 		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-		this.setCreated(System.currentTimeMillis()/1000L);
 	}
 
 	public String getAgent() {

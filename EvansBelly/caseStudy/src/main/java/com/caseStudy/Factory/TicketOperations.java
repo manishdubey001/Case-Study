@@ -15,6 +15,7 @@ public class TicketOperations {
 	public Scanner scanner = new Scanner(System.in);
 	public boolean createFlag = true;
 	TicketService ticketService = new TicketService();
+	Collection<Ticket> valueSet = ticketDetails.values();
 	Util utilOps = new Util();
 
 	//create ticket
@@ -52,7 +53,7 @@ public class TicketOperations {
 				String ag_name = scanner.next();
 
 				String tagString = readTags();
-				HashSet tags = ticketService.getTagsInfo(tagString);
+				TreeSet tags = ticketService.getTagsInfo(tagString);
 
 				validId = setTicketData(id, subject, ag_name, tags);
 			}
@@ -66,6 +67,7 @@ public class TicketOperations {
 		return validId;
 	}
 
+	// actual setting of data
 	public int setTicketData(int id, String subject, String ag_name, Set tags) {
 		if (id <= 0 || (subject.isEmpty() || ag_name.isEmpty() || tags.isEmpty())) {
 			return 0;
@@ -78,9 +80,8 @@ public class TicketOperations {
 		return id;
 	}
 
-
 	//update ticket
-	public Ticket updateTicket() {
+	public Ticket updateTicketOps() {
 		System.out.println("Ticket id : " + ticketDetails);
 		Ticket ticketObj = null;
 		if (ticketDetails.isEmpty()) {
@@ -106,7 +107,7 @@ public class TicketOperations {
 				selection = scanner.next();
 				if (selection.toLowerCase().equals("y")) {
 					String tagString = readTags();
-					ticketObj = ticketService.updatetags(ticketObj, tagString);
+					ticketObj = ticketService.updateTags(ticketObj, tagString);
 				}
 			}
 			else {
@@ -116,41 +117,34 @@ public class TicketOperations {
 		return ticketObj;
 	}
 
-	// update agent
-//	public void updateAgent(Ticket ticketObj, String data) {
-////		System.out.println("Enter the agent name");
-////		String data = scanner.next();
-//		ticketObj.setAgent(data);
-//	}
-
-	// update tags
-//	public void updatetags(Ticket ticketObj) {
-//		String tagString = readTags();
-//		HashSet tags = ticketService.getTagsInfo(tagString);
-//		ticketObj.setTags(tags);
-//	}
-
 	// delete ticket
-	public void deleteTicket() {
+	public void deleteTicketOps() {
 		if (ticketDetails.isEmpty()) {
 			System.out.println("No tickets available to delete.");
 		}
 		else {
 			int id = readTicketId();
-			ticketDetails.remove(id);
-			System.out.println("Ticket " + id + " has deleted");
+			boolean deletion = ticketService.deleteTicket(ticketDetails, id);
+			if (deletion) {
+				System.out.println("Ticket " + id + " has deleted");
+			}
+			else {
+				System.out.println("No such ticket with id: "+id+" available to delete");
+			}
 		}
 	}
 
 	// view selected ticket
-	public void showTicket() {
+	public void showTicketOps() {
 		if (ticketDetails.isEmpty()) {
 			System.out.println("No tickets available to display.");
 		}
 		else {
 			int id = readTicketId();
-			Ticket ticketInfo = ticketDetails.get(id);
+			Ticket ticketInfo = ticketService.showTicket(ticketDetails,id);
+			if (ticketInfo != null)
 			utilOps.printData(ticketInfo);
+			else System.out.println("Invalid ticket Id : "+ id +" given. No Content available.");
 		}
 	}
 
@@ -160,19 +154,10 @@ public class TicketOperations {
 			System.out.println("No tickets available to display.");
 		}
 		else {
-			List<Ticket> sortedList = sortedList();
+			List<Ticket> sortedList = utilOps.sortedList(valueSet);
 			sortedList.forEach(utilOps::printData);
 		}
 	}
-
-	// get tags info to update
-//	public HashSet getTagsInfo(String tagString) {
-////		Scanner scanner = new Scanner(System.in);
-////		System.out.println("Enter the tags (comma separated)");
-////		String tags = scanner.nextLine();
-//		HashSet set = new HashSet(Arrays.asList(tagString.split("\\s*,\\s*")));
-//		return set;
-//	}
 
 	public String readTags() {
 		Scanner scanner = new Scanner(System.in);
@@ -188,33 +173,23 @@ public class TicketOperations {
 	}
 
 	// agent specific ticket search
-	public void agentSearch() {
+	public void agentSearchTicketOps() {
 		if (ticketDetails.isEmpty()) {
 			System.out.println("No tickets available to display.");
 		}
 		else {
 			System.out.println("Enter the agent name");
-			String ag = scanner.next().trim();
+			String agent = scanner.next().trim();
 
-			List<Ticket> lt = sortedList();
-			for (Ticket ticketData : lt) {
-				String agent = ticketData.getAgent();
-				if (agent.equals(ag)) {
-					utilOps.printData(ticketData);
-				}
-			}
+			List<Ticket> ticketObjs = ticketService.agentSearchTicket(agent,ticketDetails);
+			if (!ticketObjs.isEmpty())
+			ticketObjs.forEach(utilOps ::printData);
+			else System.out.println("No Content available for agent : "+agent);
 		}
 	}
 
-	// sort according to modified timestamp
-	public List<Ticket> sortedList() {
-		List<Ticket> sortedList = new ArrayList<>(ticketDetails.values());
-		Collections.sort(sortedList);
-		return sortedList;
-	}
-
 	// count of tickets assigned to each agent
-	public void ticketCount() {
+	public void ticketCountOps() {
 		if (ticketDetails.isEmpty()) {
 			System.out.println("No tickets available to display.");
 		}
@@ -241,7 +216,7 @@ public class TicketOperations {
 	}
 
 	// tag specific ticket search
-	public void tagSearch() {
+	public void tagSearchOps() {
 		if (ticketDetails.isEmpty()) {
 			System.out.println("No tickets available to display.");
 		}
@@ -249,12 +224,10 @@ public class TicketOperations {
 			System.out.println("Enter the tag");
 			String tag = scanner.next();
 
-			List<Ticket> sortedList = sortedList();
-			for (Ticket ticketData : sortedList) {
-				Set tags = ticketData.getTags();
-				if (tags.contains(tag))
-					utilOps.printData(ticketData);
-			}
+			List<Ticket> ticketObjs = ticketService.tagSearchTicket(tag,ticketDetails);
+			if (!ticketObjs.isEmpty())
+				ticketObjs.forEach(utilOps::printData);
+			else System.out.println("No content available for tag : "+tag);
 		}
 	}
 }

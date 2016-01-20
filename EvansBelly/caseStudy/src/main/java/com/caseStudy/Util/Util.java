@@ -2,6 +2,11 @@ package com.caseStudy.Util;
 
 import com.caseStudy.Model.Ticket;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
 /**
  * Created by root on 15/1/16.
  */
@@ -32,6 +37,13 @@ public class Util {
 		System.out.println("tags     : " + ticketData.getTags());
 		System.out.println("Created  : " + ticketData.getCreated());
 		System.out.println("Modified : " + ticketData.getModified());
+	}
+
+	// sort according to modified timestamp
+	public List<Ticket> sortedList(Collection<Ticket> valueSet) {
+		List<Ticket> sortedList = new ArrayList<>(valueSet);
+		Collections.sort(sortedList);
+		return sortedList;
 	}
 
 	// ticket data insertion

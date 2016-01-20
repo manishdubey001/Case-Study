@@ -39,25 +39,25 @@ public class caseStudy {
 					ticketOperations.createTicket();
 					break;
 				case 2:
-					ticketOperations.updateTicket();
+					ticketOperations.updateTicketOps();
 					break;
 				case 3:
-					ticketOperations.deleteTicket();
+					ticketOperations.deleteTicketOps();
 					break;
 				case 4:
-					ticketOperations.showTicket();
+					ticketOperations.showTicketOps();
 					break;
 				case 5:
 					ticketOperations.showTicketList();
 					break;
 				case 6:
-					ticketOperations.agentSearch();
+					ticketOperations.agentSearchTicketOps();
 					break;
 				case 7:
-					ticketOperations.ticketCount();
+					ticketOperations.ticketCountOps();
 					break;
 				case 8:
-					ticketOperations.tagSearch();
+					ticketOperations.tagSearchOps();
 					break;
 				case 9:
 					System.exit(0);

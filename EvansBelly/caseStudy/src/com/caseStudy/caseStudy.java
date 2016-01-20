@@ -53,25 +53,25 @@ public class caseStudy {
 					System.out.println("Ticket(s) created successfully");
 					break;
 				case 2:
-					ticketOperations.updateTicket();
+					ticketOperations.updateTicketOps();
 					break;
 				case 3:
-					ticketOperations.deleteTicket();
+					ticketOperations.deleteTicketOps();
 					break;
 				case 4:
-					ticketOperations.showTicket();
+					ticketOperations.showTicketOps();
 					break;
 				case 5:
 					ticketOperations.showTicketList();
 					break;
 				case 6:
-					ticketOperations.agentSearch();
+					ticketOperations.agentSearchTicketOps();
 					break;
 				case 7:
-					ticketOperations.ticketCount();
+					ticketOperations.ticketCountOps();
 					break;
 				case 8:
-					ticketOperations.tagSearch();
+					ticketOperations.tagSearchOps();
 					break;
 				case 9:
 					System.exit(0);
@@ -137,7 +137,7 @@ public class caseStudy {
 	}
 
 	//update ticket
-	public void updateTicket() {
+	public void updateTicketOps() {
 		System.out.println("Ticket id : " + ticketDetails);
 		if (ticketDetails.isEmpty()) {
 			System.out.println("No tickets available to update.");
@@ -245,7 +245,7 @@ public class caseStudy {
 	}
 
 	// agent specific ticket search
-	public void agentSearch() {
+	public void agentSearchTicketOps() {
 		if (ticketDetails.isEmpty()) {
 			System.out.println("No tickets available to display.");
 		}
@@ -265,7 +265,7 @@ public class caseStudy {
 	}
 
 	// count of tickets assigned to each agent
-	public void ticketCount() {
+	public void ticketCountOps() {
 		if (ticketDetails.isEmpty()) {
 			System.out.println("No tickets available to display.");
 		}
@@ -292,7 +292,7 @@ public class caseStudy {
 	}
 
 	// tag specific ticket search
-	public void tagSearch() {
+	public void tagSearchOps() {
 		if (ticketDetails.isEmpty()) {
 			System.out.println("No tickets available to display.");
 		}
@@ -325,7 +325,7 @@ public class caseStudy {
 	}
 
 	// cjm - The three functions below are not used
-	public void deleteTicket() {
+	public void deleteTicketOps() {
 		if (ticketDetails.isEmpty()) {
 			System.out.println("No tickets available to delete.");
 		}
@@ -337,7 +337,7 @@ public class caseStudy {
 		}
 	}
 
-	public void showTicket() {
+	public void showTicketOps() {
 		if (ticketDetails.isEmpty()) {
 			System.out.println("No tickets available to display.");
 		}
