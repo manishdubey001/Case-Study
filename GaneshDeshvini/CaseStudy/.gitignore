@@ -1,0 +1,10 @@
+
+#Ignore everything in this directory
+/.idea/
+# add below if you dont want to add .class file in git
+/opt/work/inin/Case-Study/GaneshDeshvini/CaseStudy/out/
+.class
+.jar
+
+#Except this file
+!.gitignore

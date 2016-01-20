@@ -135,7 +135,7 @@ public class TicketService {
      * @param tags
      * @return
      */
-    boolean updateTicket(int id, String agentName, String tags) {
+    public boolean updateTicket(int id, String agentName, String tags) {
         if (id > 0 && TicketModelFactory.getInstance().isExists(id)) {
             TicketModel tm = TicketModelFactory.getInstance().find(id);
 
@@ -254,7 +254,7 @@ public class TicketService {
      * @param id
      * @return
      */
-    boolean deleteTicket(int id) {
+    public boolean deleteTicket(int id) {
         if (id > 0) {
             return TicketModelFactory.getInstance().delete(id);
         }
