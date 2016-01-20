@@ -99,7 +99,6 @@ public class Ticket {
         this.subject = subject;
         this.agent_name = agent_name;
         this.tags2 = tags2;
-        System.out.println(this.tags2.size());
         this.modified = unixTime;
         this.created = unixTime;
         countId++;

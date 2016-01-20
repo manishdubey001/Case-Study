@@ -1,7 +1,6 @@
 package com.services;
 
-import com.model.Tag;
-import com.model.Ticket;
+import com.util.UserConsoleInput;
 
 import java.util.*;
 

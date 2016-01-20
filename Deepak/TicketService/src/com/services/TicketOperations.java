@@ -1,6 +1,8 @@
 package com.services;
 
+import com.factory.TicketFactory;
 import com.model.Ticket;
+import com.util.UserConsoleInput;
 
 import java.util.*;
 
@@ -10,7 +12,7 @@ import java.util.*;
 public class TicketOperations {
 
     private ArrayList<Ticket> ticketArrayList = null;
-    protected Set<String> allTagHashSet = null;
+    public Set<String> allTagHashSet = null;
 
     public TicketOperations(){
         ticketArrayList = new ArrayList<>();
@@ -31,12 +33,7 @@ public class TicketOperations {
 
         tagHashSet = UserConsoleInput.getTagNames();
 
-        /*
-        Ticket ticket = new Ticket(subject, agent_name, tagHashSet);
-
-        ticketArrayList.add(ticket);*/
-
-        long status = createTicket(subject, agent_name, tagHashSet);
+       long status = createTicket(subject, agent_name, tagHashSet);
         if(status == 0){
             System.out.println("Sorry your ticket has not been created!");
         }
@@ -56,9 +53,6 @@ public class TicketOperations {
         }
         else if(agent_name == null || agent_name.isEmpty()){
             System.out.println("Please enter proper Agent Name!");
-        }
-        else if(tagHashSet == null){
-            System.out.println("Please enter proper Tags!");
         }
         else
         {
