@@ -1,6 +1,8 @@
 package Ticket;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class TicketController {
 	private HashMap<Integer, Ticket> tickets = new HashMap<Integer, Ticket>();
@@ -50,9 +52,43 @@ public class TicketController {
 		Logger.info("Get ticket detail operation started!");
 		return getTickets().get(id);
 	}
+	
+	public List<Ticket> getList(String mode, String filter) {
+		if(mode.equals("all"))
+			return getListDescendingByModified();
+		else if(mode.equals("agent"))
+			return getListByAgentName(filter);
+		else if(mode.equals("tag"))
+			return getListByTagName(filter);
+		
+		return getListDescendingByModified();
+	}
+	
+	public List<Ticket> getListDescendingByModified() {
+		return getTickets().values()
+                .stream()
+                .sorted((Ticket o1, Ticket o2) -> -o1.getModified().compareTo(o2.getModified()))
+                .collect(Collectors.toList());
+	}
+	
+	public List<Ticket> getListByAgentName(String agentName) {
+		List<Ticket> ticketList = getListDescendingByModified();
+		return ticketList.stream().filter(
+				ticket -> ticket.getAgentName().toLowerCase().equals(agentName.toLowerCase())
+			).collect(Collectors.toList());
+	}
+	
+	public List<Ticket> getListByTagName(String tagName) {
+		List<Ticket> ticketList = getListDescendingByModified();
+		return ticketList.stream().filter(
+				ticket -> ticket.getTags().contains(tagName.toLowerCase())
+			).collect(Collectors.toList());
+	}
 
 	public void printTicket(Ticket ticket) {
 		System.out.println("Ticket data id: " + ticket.getId() + " \n subject: " + ticket.getSubject() + " \n agent Name: "
-				+ ticket.getAgentName() + " \n Tags : " + ticket.getTags().toString());
+				+ ticket.getAgentName() + " \n Tags : " + ticket.getTags().toString() + " \n Created " + ticket.getCreated().toString()
+				+ " \n Modified " + ticket.getModified().toString()
+				);
 	}
 }

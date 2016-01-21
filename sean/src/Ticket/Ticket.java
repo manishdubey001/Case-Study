@@ -3,7 +3,7 @@ package Ticket;
 import java.util.Date;
 import java.util.Set;
 
-public class Ticket implements Comparable<Ticket> {
+public class Ticket {
 	private final int id;
 	private String subject;
 	private String agentName;
@@ -61,11 +61,6 @@ public class Ticket implements Comparable<Ticket> {
 
 	private void setModified() {
 		this.modified = new Date();
-	}
-
-	@Override
-	public int compareTo(Ticket ticket) {
-		return getModified().compareTo(ticket.getModified());
 	}
 
 	static class TicketBuilder {
