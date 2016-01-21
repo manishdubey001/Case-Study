@@ -231,7 +231,7 @@ public class TicketService {
      */
     public void processAgentWithTicketCount() {
         try {
-            TreeMap<String, Integer> tmAgentNameCount = TicketModelFactory.getInstance().findAllAgentWithTicketCount();
+            TreeMap<String, Integer> tmAgentNameCount = findAllAgentWithTicketCount();
             if (Util.isMapValid(tmAgentNameCount)) {
                 System.out.println("-------------------------------------");
                 System.out.println("|Agent Name\t|Count|");
@@ -246,6 +246,14 @@ public class TicketService {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * find all agent with respective ticket count
+     * @return
+     */
+    public TreeMap<String, Integer> findAllAgentWithTicketCount (){
+        return TicketModelFactory.getInstance().findAllAgentWithTicketCount();
     }
 
     /**

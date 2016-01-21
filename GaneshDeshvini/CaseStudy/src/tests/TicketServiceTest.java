@@ -351,4 +351,61 @@ public class TicketServiceTest {
         HashSet<Integer> hashSetExpected = hmTicketData.get(chkAgentName);
         assertEquals(hashSetExpected, hashSetActual);
     }
+
+    @Test
+    public void test96GetAgentWithTicketCount() throws Exception {
+        TreeMap<String, Integer> treeMapExpected = new TreeMap<String, Integer>();
+        Repository.getInstance().ticketData = new HashMap<Integer, TicketModel>();
+        for (int i = 1; i <= 10; i++) {
+            int randomNumber = getRandomNumber(1, 5);
+            id = i;
+            subject = "sub" + i;
+            agent = "agent" + randomNumber;
+
+            assertTrue(ts.createTicket(id, subject, agent, tags));
+
+            if (treeMapExpected.containsKey(agent)) {
+                treeMapExpected.put(agent, treeMapExpected.get(agent) + 1);
+            } else {
+                treeMapExpected.put(agent, 1);
+            }
+        }
+
+        TreeMap<String, Integer> treeMapActual = ts.findAllAgentWithTicketCount();
+        assertEquals(treeMapExpected, treeMapActual);
+    }
+
+    @Test
+    public void test97GetTicketByTag() throws Exception {
+        HashMap<String, HashSet<Integer>> hmTicketData = new HashMap<String, HashSet<Integer>>();
+        Repository.getInstance().ticketData = new HashMap<Integer, TicketModel>();
+        String chkTagName = "";
+        for (int i = 1; i <= 10; i++) {
+            int randomNumber = getRandomNumber(1, 5);
+            id = i;
+            subject = "sub" + i;
+            agent = "agent" + i;
+            tags = "tag" + randomNumber;
+            chkTagName = tags;
+            HashSet<String> hsTags = new HashSet<String>();
+            hsTags.add(tags);
+
+            HashSet<Integer> hs = hmTicketData.containsKey(tags) ? hmTicketData.get(tags) : new HashSet<Integer>();
+            hs.add(id);
+            hmTicketData.put(tags, hs);
+            assertTrue(ts.createTicket(id, subject, agent, tags));
+        }
+
+        List<TicketModel> ls = ts.getAllTicketsByTags(chkTagName);
+        HashSet<Integer> hashSetActual = new HashSet<Integer>();
+        if (Util.isCollectionValid(ls)) {
+            for (TicketModel tm : ls) {
+                int tid = tm.getId();
+                hashSetActual.add(tid);
+            }
+        }
+
+        HashSet<Integer> hashSetExpected = hmTicketData.get(chkTagName);
+        assertEquals(hashSetExpected, hashSetActual);
+    }
 }
