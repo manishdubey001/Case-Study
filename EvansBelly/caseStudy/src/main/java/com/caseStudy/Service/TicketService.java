@@ -4,6 +4,7 @@ import com.caseStudy.Model.Ticket;
 import com.caseStudy.Util.Util;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Created by root on 19/1/16.
@@ -61,6 +62,11 @@ public class TicketService {
 				ticketObjs.add(ticketData);
 			}
 		}
+		// Your code here is fine. It is a bit less efficient to sort first and then to find the agent
+		// (consider, for example, if the agent has not tickets or just one ticket--nothing to sort).
+		
+		// Can you see how to rewrite these methods with streams? This one would be
+		// ticketDetails.values().stream().filter(t->t.getAgent().equals(searchAgent)).sorted().collect(Collectors.toList());
 		return ticketObjs;
 	}
 

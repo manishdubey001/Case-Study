@@ -26,7 +26,7 @@ public class TicketOperations {
 				System.out.println("Do you wish to add more tickets? Y/N");
 				String answer = scanner.next();
 				if (answer.toLowerCase().equals("y")) {
-					id = this.dataInsertion();
+					id = this.dataInsertion(); // you don't use this value of 'id' for anything
 				}
 				else if (answer.toLowerCase().equals("n"))
 					createFlag = false;
@@ -38,6 +38,8 @@ public class TicketOperations {
 	}
 
 	// ticket data insertion
+	// CJM - note that the caller doesn't really use the id. I would probably return
+	// a boolean true/false depending on whether a valid ticket was created.
 	public int dataInsertion() {
 		System.out.println("Enter the ticket id");
 		int validId = 0;
