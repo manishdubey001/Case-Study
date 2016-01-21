@@ -5,6 +5,7 @@ import java.util.Set;
 /**
  * Created by root on 19/1/16.
  */
+// "Factory" is a more common name for this kind of thing
 public class TicketWareHouse {
     private static int counter;
 

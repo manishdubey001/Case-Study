@@ -149,6 +149,13 @@ public class Sout {
         ticketServiceComponent.getAllTicketsByTag(selT);
     }
 
+    // Here you create a new scanner every time this is called.
+    // Scanner is one case where you don't want more than one ever
+    // to be tied to System.in, so here it would be appropriate
+    // to make a static field and initialize it once.
+    // Something like:
+    // private static Scanner scanner = new Scanner(System.in);
+    // public Scanner getScanner() { return scanner; }
     public static Scanner scanWhat(){
         Scanner sc = new Scanner(System.in);
         return sc;
