@@ -8,6 +8,7 @@ import java.util.*;
  * Created by root on 14/1/16.
  */
 public class TicketServiceComponent {
+    public boolean print = true;
     public Map<Integer, Ticket> thm = new HashMap<>();
 
     public boolean createTicket(String sub, String agent, String tags){
@@ -21,8 +22,6 @@ public class TicketServiceComponent {
 
             thm.put(ticket.getId(),ticket);
             if (checkIfExists(ticket.getId())) {
-                System.out.println(Sout.ACT_TICKETS_IN_SYSTEM);
-                System.out.println(thm.get(ticket.getId()));
                 return true;
             }
         }
@@ -52,9 +51,6 @@ public class TicketServiceComponent {
                 updated = true;
             }
             if (updated){
-                System.out.println(Sout.ACT_TICKETS_IN_SYSTEM);
-                List<Ticket> listTickets2 = new ArrayList<>(thm.values());
-                this.display(listTickets2);
                 return true;
             }
         }catch(InputMismatchException Im){
@@ -70,13 +66,9 @@ public class TicketServiceComponent {
         if (id > 0){
             if (checkIfExists(id)){
                 thm.remove(id);
-                System.out.println(Sout.ACT_REMOVE_SUCCESS+id);
                 return true;
             }
         }
-        System.out.println(Sout.ACT_TICKETS_IN_SYSTEM);
-        List<Ticket> listTickets2 = new ArrayList<>(thm.values());
-        this.display(listTickets2);
         return false;
     }
 
@@ -85,9 +77,7 @@ public class TicketServiceComponent {
 
         boolean check = checkIfExists(id);
         if (check){
-            System.out.println(Sout.ACT_TABLE_HEADER);
             Ticket t3 = thm.get(id);
-            System.out.println(t3);
             return t3;
         }
         return null;
@@ -102,13 +92,6 @@ public class TicketServiceComponent {
                     l.add(c.get(index));
                 }
             }
-            if(!l.isEmpty()){
-                this.display(l);
-            }else {
-                System.out.println(Sout.ACT_NOT_FOUND);
-            }
-        }else{
-            System.out.println(Sout.ACT_NOT_FOUND);
         }
         return l;
     }
@@ -117,7 +100,9 @@ public class TicketServiceComponent {
         List<Ticket> t3 = new ArrayList<>();
         if (!thm.isEmpty()){
             t3 = new ArrayList<>(thm.values());
-            this.display(t3);
+            if (print){
+                this.display(t3);
+            }
             return t3;
         }else {
             System.out.println(Sout.ACT_NOT_FOUND);
@@ -129,22 +114,24 @@ public class TicketServiceComponent {
      * function to fetch count of ticket with respect to its agent.
      * Data is grouped by Agent name in ascending order.
      */
-    public void getTicketsGroupByAgent(){
+    public Map getTicketsGroupByAgent(){
+        Map<String, Integer> agentsTickets = new HashMap<>();
         if (!thm.isEmpty()){
 
             List<Ticket> l = new ArrayList<>(thm.values());
             Collections.sort(l,Ticket.ByAgentNameComparator);
-            Map<String,Integer> map = new HashMap<String, Integer>();
             for (int index = 0; index < l.size(); index++){
-                int countTicket = map.containsKey(l.get(index).agent_name) ? map.get(l.get(index).agent_name) : 0;
-                map.put(l.get(index).agent_name, countTicket+ 1);
+                int countTicket = agentsTickets.containsKey(l.get(index).agent_name) ? agentsTickets.get(l.get(index).agent_name) : 0;
+                agentsTickets.put(l.get(index).agent_name, countTicket+ 1);
             }
-
-            for (Map.Entry<String, Integer> entry : map.entrySet())
-                System.out.println(entry.getKey()+" : "+entry.getValue());
+            if (print){
+                for (Map.Entry<String, Integer> entry : agentsTickets.entrySet())
+                    System.out.println(entry.getKey()+" : "+entry.getValue());
+            }
         }else {
             System.out.println(Sout.ACT_NOT_FOUND);
         }
+        return agentsTickets;
     }
 
     /**
@@ -164,10 +151,11 @@ public class TicketServiceComponent {
             if(!set2.isEmpty()){
                 List<Ticket> t3 = new ArrayList<>(set2);
                 Collections.sort(t3);
-                System.out.println(Sout.ACT_TABLE_HEADER);
-
-                for (Ticket str: t3) {
-                    System.out.println(str);
+                if (print){
+                    System.out.println(Sout.ACT_TABLE_HEADER);
+                    for (Ticket str: t3) {
+                        System.out.println(str);
+                    }
                 }
             }else {
                 System.out.println(Sout.ACT_NOT_FOUND);

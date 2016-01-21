@@ -3,6 +3,7 @@ package com.Tickets;
 import sun.invoke.empty.Empty;
 
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -13,6 +14,7 @@ public class Sout {
     static final String ACT_CREATE_TICKET = "\n---------------------------------------\n 1 - Create Ticket initialized\n---------------------------------------";
     static final String ACT_NOT_FOUND = "Ticket/Tickets not found in the system";
     static final String ACT_THANKYOU = "THANK YOU..!!:";
+    static final String ACT_SUCCESS = "Success.!!";
     static final String ACT_INVALID = "Invalid Input: ";
     static final String ACT_ERROR = "IO Error: ";
     static final String ACT_TSUBJECT = "Enter a Subject: ";
@@ -59,8 +61,11 @@ public class Sout {
         System.out.println(ACT_TTAGS);
         String tags = scanWhat().next();
 
-        ticketServiceComponent.createTicket(sub, agent, tags);
-
+        boolean create = ticketServiceComponent.createTicket(sub, agent, tags);
+        if (create)
+            System.out.println(ACT_SUCCESS);
+        else
+            System.out.println(ACT_NOT_FOUND);
     }
 
     public void soutUpdate(){
@@ -86,8 +91,12 @@ public class Sout {
                     type = "tags";
                     value = selB;
                 }
-                ticketServiceComponent.updateTicket(tid, type, value);
-
+                boolean update = ticketServiceComponent.updateTicket(tid, type, value);
+                if (update){
+                    ticketServiceComponent.getAllTickets();
+                }else{
+                    System.out.println(ACT_NOT_FOUND);
+                }
             }else
                 System.out.println(ACT_NOT_FOUND);
          }catch(InputMismatchException Im){
@@ -103,7 +112,9 @@ public class Sout {
             System.out.println(Sout.ACT_ARE_YOU_SURE+selT);
             System.out.println(Sout.ACT_YES_OR_NO);
             int selA = scanWhat().nextInt();
-            ticketServiceComponent.removeTicketById(selT);
+            boolean remove = ticketServiceComponent.removeTicketById(selT);
+            if (remove)
+                System.out.println(Sout.ACT_REMOVE_SUCCESS);
         }else
             System.out.println(ACT_NOT_FOUND);
     }
@@ -111,13 +122,24 @@ public class Sout {
     public void soutGetTicketById(){
         System.out.println(Sout.ACT_TID);
         int selT = scanWhat().nextInt();
-        ticketServiceComponent.getTicketById(selT);
+        Object obj = ticketServiceComponent.getTicketById(selT);
+        if (obj != null){
+            System.out.println(Sout.ACT_TABLE_HEADER);
+            System.out.println(obj);
+        }else{
+            System.out.println(ACT_NOT_FOUND);
+        }
+
     }
 
     public void soutTicketsByAgent(){
         System.out.println(Sout.ACT_TAGENTNAME);
         String selA = scanWhat().next();
-        ticketServiceComponent.getTicketsByAgentName(selA);
+        List l = ticketServiceComponent.getTicketsByAgentName(selA);
+        if (!l.isEmpty())
+            ticketServiceComponent.display(l);
+        else
+            System.out.println(ACT_NOT_FOUND);
     }
 
     public void soutGetAllTicketsByTag(){

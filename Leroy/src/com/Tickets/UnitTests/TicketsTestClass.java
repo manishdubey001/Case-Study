@@ -4,13 +4,11 @@ import com.Tickets.Sout;
 import com.Tickets.Ticket;
 import com.Tickets.TicketServiceComponent;
 import com.Tickets.TicketWareHouse;
+import com.sun.org.apache.xml.internal.dtm.ref.DTMDefaultBaseIterators;
 import com.sun.org.apache.xpath.internal.NodeSetDTM;
 import org.junit.*;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by root on 18/1/16.
@@ -28,6 +26,7 @@ public class TicketsTestClass {
         this.subject = "Test Subject";
         this.agent = "agent1";
         this.tags = "great,good,awesome";
+        ticketServiceComponent.print = false;
     }
 
     @Test
@@ -268,7 +267,16 @@ public class TicketsTestClass {
 
     @Test
     public void testGetTicketsGroupByAgent() throws Exception {
+        Map<String, Integer> expected  = new HashMap<>();
+        ticketServiceComponent.createTicket(this.subject, this.agent, this.tags);
+        ticketServiceComponent.createTicket(this.subject, this.agent, this.tags);
 
+        this.agent = "agent2";
+        ticketServiceComponent.createTicket(this.subject, this.agent, this.tags);
+
+        expected.put("agent1", 2);
+        expected.put("agent2", 1);
+        Assert.assertEquals(expected, ticketServiceComponent.getTicketsGroupByAgent());
     }
 
     /**
