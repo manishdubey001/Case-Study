@@ -31,11 +31,14 @@ public class MyReader {
                 // Sentinel values like this can be convenient, but are you sure no one would ever want to use
                 // "0" as a subject or tag? If you can, you should try to choose an impossible value (for example
                 // a control character might be a better choice here).
-                str = "0";
+
+                // Update: I prefer to use Sentinel values specifically in the kind of application based on Console. I would have a different approach in other cases.
+                // Update: I do agree to use a impossible value rather than a common char/string. Changed to a control key
+                str = "\u0002";
             }
         }
         catch (Exception e){
-            str = "0";
+            str = "\u0002";
         }
         return str;
     }

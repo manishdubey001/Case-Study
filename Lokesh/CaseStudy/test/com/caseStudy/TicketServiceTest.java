@@ -1,7 +1,7 @@
 package com.caseStudy;
 
-import com.casestudy.Services;
-import com.casestudy.Tickets;
+import com.casestudy.Service;
+import com.casestudy.Ticket;
 import org.junit.Test;
 import org.junit.*;
 import org.junit.runners.MethodSorters;
@@ -23,7 +23,10 @@ public class TicketServiceTest {
 //    final List list = Arrays.asList(1,2);
     static ArrayList<List<Object>> createList = new ArrayList<>(); //Holds List of objects to create Ticket with different values of attributes for each Ticket
     static ArrayList<List<Object>> updateList = new ArrayList<>(); //Holds List of objects to update ticket with different values of attributes for each Ticket
-    Services s = new Services();
+    static ArrayList<Integer> deleteList = new ArrayList<>(); // Holds the Integer ID's of Ticket to be deleted
+    static ArrayList<Integer> getList = new ArrayList<>(); // Holds Integer ID's of Tickets to get Details Operation
+    static ArrayList<String> getAgentTickets = new ArrayList<>(); // Holds Strings for Agent Name for which Ticket List to be fetched
+    Service s = new Service();
     @BeforeClass
     public static void setData(){
 
@@ -65,8 +68,6 @@ public class TicketServiceTest {
         hs.add("a3");
         hs.add(new HashSet<String>());
         createList.add(hs);
-
-
 
         //Setting updateList Data
         //hs= Holds object for update ticket, object contains data in order: id,new agent,updateTag("A" for Add "R" for remove), tags(HashSet) for A/R tags
@@ -174,15 +175,27 @@ public class TicketServiceTest {
         hs.add(hh);
         updateList.add(hs);
 
-        //
+        // Data Set for delete operation
+        deleteList.add(1);
+        deleteList.add(999);
+
+        //Data for get ticket details
+        getList.add(1);
+        getList.add(2);
+        getList.add(999);
+
+        //Data for Agents Ticket
+        getAgentTickets.add("agent");
+        getAgentTickets.add("a3");
+//        getAgentTickets.add(null);
     }
 
 
     @Test
-    public void testCreateWithFullDataSet(){
+    public void test1CreateWithFullDataSet(){
         //This is single function to test against full data set; what values are passed and what would be expected result to get pass the test case.
         createList.forEach((obj)->{
-            Tickets t = s.createTicket((String) obj.get(0),(String)obj.get(1),(HashSet<String>)obj.get(2));
+            Ticket t = s.createTicket((String) obj.get(0),(String)obj.get(1),(HashSet<String>)obj.get(2));
             if(obj.get(0) == null || ((String)obj.get(0)).length() == 0 || obj.get(1) == null || ((String)obj.get(1)).length() == 0)
             {
                 assertNull(t);
@@ -193,7 +206,7 @@ public class TicketServiceTest {
                 assertEquals((String)obj.get(0),t.getSubject());
                 assertEquals((String)obj.get(1),t.getAgent());
 //                if(((HashSet<String>)obj.get(2)).size() > 0)
-                assertTrue(t.getTag().containsAll((HashSet<String>)obj.get(2)));
+                assertTrue(t.getTags().containsAll((HashSet<String>)obj.get(2)));
             }
         });
     }
@@ -226,9 +239,9 @@ public class TicketServiceTest {
 */
 
     @Test
-    public void testUpdateWithFullDataSet(){
+    public void test2UpdateWithFullDataSet(){
         updateList.forEach((obj)->{
-            Tickets t = s.updateTicket(Integer.parseInt((String)obj.get(0)),(String)obj.get(1),(String)obj.get(2),(HashSet<String>) obj.get(3));
+            Ticket t = s.updateTicket(Integer.parseInt((String)obj.get(0)),(String)obj.get(1),(String)obj.get(2),(HashSet<String>) obj.get(3));
             if(obj.get(0) == null || ((String)obj.get(0)).length() == 0 || obj.get(0).equals("1234"))
             {
                 assertNull(t);
@@ -243,14 +256,56 @@ public class TicketServiceTest {
                 if(obj.get(2) != null && ((String)obj.get(2)).length() > 0 /*&& obj.get(3) != null && ((HashSet<String>)obj.get(3)).size() > 0*/)
                 {
                     if(obj.get(2).equals("A"))
-                        assertTrue(t.getTag().containsAll((HashSet<String>)obj.get(3)));
+                        assertTrue(t.getTags().containsAll((HashSet<String>)obj.get(3)));
                     if(obj.get(2).equals("R"))
-                        ((HashSet<String>)obj.get(3)).forEach((oo)->assertFalse(t.getTag().contains(oo)));
+                        ((HashSet<String>)obj.get(3)).forEach((oo)->assertFalse(t.getTags().contains(oo)));
                 }
             }
         });
     }
 
+    @Test
+    public void test3DeleteWithFullDataSet(){
+        deleteList.forEach((id)->{
+            Ticket t = s.deleteTicket(id);
+            if(id.equals(999))
+                assertNull(t);
+            else
+                assertNotNull(t);
+        });
+    }
 
+    @Test
+    public void test4GetDetailWithFullDataSet(){
+        deleteList.forEach((id)->{
+            Ticket t = s.getTicketById(id);
+            if(id.equals(1) || id.equals(999))
+                assertNull(t);
+            else
+                assertNotNull(t);
+        });
+    }
+
+    @Test
+    public void test5GetAllTicketsWithFullDataSet(){
+        List<Ticket> list = s.getAllTickets();
+        assertEquals(1,list.size());
+        assertEquals(2,list.get(0).getId());
+    }
+
+    @Test
+    public void test6FindAssignedToAgentWithFullDataSet(){
+        getAgentTickets.forEach((agent)->{
+            List<Ticket> list = s.ticketsOfAgent(agent);
+            System.out.println(list);
+            if(agent.equals("a3"))
+            {
+                assertNotNull(list);
+                assertEquals(1,list.size());
+            }
+            else
+                assertEquals(0,list.size());
+        });
+    }
 
 }

@@ -6,10 +6,10 @@ package com.casestudy;
 
 public class Main {
 
-    final static String []menus = {"1) Create Ticket","2) Update Ticket","3) Delete Ticket","4) Get Ticket","5) Get all Tickets","6) Find Tickets assigned to Agent", "7) Get all Agent with Tickets Counts","8) Search Tickets By Tag","9) Exit"};
+    final static String []menus = {"1) Create Ticket","2) Update Ticket","3) Delete Ticket","4) Get Ticket","5) Get all Ticket","6) Find Ticket assigned to Agent", "7) Get all Agent with Ticket Counts","8) Search Ticket By Tag","9) Exit"};
 
     public static void main(String[] args) throws Exception {
-        Services s = new Services();
+        Service s = new Service();
         for(int i=1;i<=20;i++)
             s.createDummyTickets();
         int choice;
@@ -31,22 +31,22 @@ public class Main {
                     break;
                 case 4:
                     //Get Ticket By ID
-                    s.tickets();
+                    s.getTicket();
                     break;
                 case 5:
                     //Get All tickets sorted BY UPDATED TIME
                     s.getTickets();
                     break;
                 case 6:
-                    //Find Tickets assigned to Agent
+                    //Find Ticket assigned to Agent
                     s.ticketsOfAgent();
                     break;
                 case 7:
-                    //Get all Agent with Tickets Counts
+                    //Get all Agent with Ticket Counts
                     s.allAgentTicketCount();
                     break;
                 case 8:
-                    //Search Tickets By Tag
+                    //Search Ticket By Tag
                     s.ticketsByTag();
                     break;
                 case 9:

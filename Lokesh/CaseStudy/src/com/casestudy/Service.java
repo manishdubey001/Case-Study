@@ -4,31 +4,33 @@ package com.casestudy;
  * Created by root on 12/1/16.
  */
 
+import java.time.LocalDateTime;
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
-// Same comment as Tickets; just call this Service instead of Services
-public class Services {
+// Same comment as Ticket; just call this Service instead of Services
+// Update: Refactor to change Service from Services
+public class Service {
 
-//    final String []arry = {"1) Create Ticket","2) Update Ticket","3) Delete Ticket","4) Get Ticket","5) Get all Tickets","6) Find Tickets assigned to Agent", "7) Get all Agent with Tickets Counts","8) Search Tickets By Tag","9) Exit"};
+//    final String []arry = {"1) Create Ticket","2) Update Ticket","3) Delete Ticket","4) Get Ticket","5) Get all Ticket","6) Find Ticket assigned to Agent", "7) Get all Agent with Ticket Counts","8) Search Ticket By Tag","9) Exit"};
 
-    // No reason to make these static since you have an actual instance of Services to work with
-    static private int max_id = 0;
+    // No reason to make these static since you have an actual instance of Service to work with
+    // Update: Removed static from max_id since already have instance to access it within class
+    private int max_id = 0;
 
-    static HashMap<Integer, Tickets> tickets = new HashMap<>();
+    static HashMap<Integer, Ticket> tickets = new HashMap<>();
 
 
-    public void createTicket(){
+public void createTicket(){
         String subject,agent,tags;
         HashSet<String> tg = new HashSet<>();
         do{
             subject = MyReader.readInput("Enter Subject: ");
-        }while(subject.equals("0"));
+        }while(subject.equals("\u0002"));
 
         do{
             agent = MyReader.readInput("Enter Agent Name: ");
-        }while (agent.equals("0"));
+        }while (agent.equals("\u0002"));
 
         do{
             tags = MyReader.readInput("Assign tag?(Y/N)");
@@ -39,38 +41,38 @@ public class Services {
         System.out.println(this.createTicket(subject,agent,tg).toString());
     }
 
-    public Tickets createTicket(String subject, String agent, HashSet<String> tg){
+    public Ticket createTicket(String subject, String agent, HashSet<String> tg){
         // Java's original Date classes don't work very well. Java8 now has LocalDate/LocalDateTime
         // which fix a lot of problems. Using these or another implementation like JodaTime is recommended.
-        Date d = new Date();
+        // Update: Changed from Date to LocalDateTime
+        // Date d = new Date();
         if(subject == null || agent == null || subject.length() == 0 || agent.length() == 0)
             return null;
         // I think Ganesh's intention was to have the user provide the ticket ID, but this wasn't spelled out in the case study.
-        Tickets t = new Tickets(++max_id,subject,agent,tg,d.getTime(),d.getTime());
+        // Update: I don't think so because I was also involved with Ganesh to define case study and we left it how one wish to implement. Just specific mention was for not allowing Duplicate IDs for Tickets
+        Ticket t = new Ticket(++max_id,subject,agent,tg, LocalDateTime.now(),LocalDateTime.now());
         tickets.put(t.getId(),t);
         return t;
     }
 
     public void createDummyTickets(){
-        Tickets t = new Tickets(++max_id,"Subject"+max_id,"Agent" + max_id,new HashSet<>(),new Date().getTime(),new Date().getTime());
+        Ticket t = new Ticket(++max_id,"Subject"+max_id,"Agent" + max_id,new HashSet<>(),LocalDateTime.now(),LocalDateTime.now());
         tickets.put(t.getId(),t);
     }
 
     public void updateTicket(){
         int id = MyReader.readChoice("Enter Ticket ID to update: ");
-//        System.out.println("Update ID: " + id);
         if(tickets.keySet().contains(id)){
             String newAgent, updateTag;
             HashSet<String> newTags = new HashSet<>();
-            Tickets t ; // = tickets.get(id);
+            Ticket t ;
             do{
                 newAgent = MyReader.readInput("Update Agent Name?(Y/N)");
             } while (!(newAgent.equals("Y") || newAgent.equals("N")));
             if(newAgent.equals("Y")){
                 do{
                     newAgent = MyReader.readInput("Enter Agent Name: ");
-                } while(newAgent.equals("0"));
-//                t.setAgent(newAgent);
+                } while(newAgent.equals("\u0002"));
             }
             else
                 newAgent = "";
@@ -89,27 +91,38 @@ public class Services {
         }
     }
 
-    public Tickets updateTicket(int id,String agent,String updateTag, HashSet<String> hs){
-        Tickets t = tickets.get(id);
+    public Ticket updateTicket(int id, String agent, String updateTag, Set<String> hs){
+        Ticket t = tickets.get(id);
         // I strongly recommend against taking "null" as a valid input to your own methods.
         // The reality is that you force yourself to nest a bunch of null checks;
         // So, you might as well just make separate, simpler methods.
         // And rather than taking "updateTag" as an operator type with a string code, I would implement
         // Add/Remove tag separately.
+
+        // Update: I do not see any "null" value passed here. What check above is for checking if ticket with passed id exists or not.
+        // I have set the flow in case-study that way, so it needs to take input from user whether he wants to update tags or not. That's why the "updateTag" become an input here.
+        // Even if I separate the Add/Remove function, I will need some way to identify whether to perform remove or add operation.
+        // If "updateTag" is not having "A" or "R" that means an empty Set<String> will pe passed for tags (but not null)
+        // Correct me if I have wrongly taken the comment.
+
         if(t != null) {
             if(!(agent == null || agent.length() == 0))
                 t.setAgent(agent);
-            if(updateTag.equals("A"))
-                hs.forEach((obj)->{
-                    HashSet ta = t.getTag();
-                    ta.add(obj);
+            if(updateTag.equals("A")){
+                hs.addAll(t.getTags());
+
+                t.setTags(hs);
+            }
+            else if(updateTag.equals("R")){
+                Set s = new HashSet<>();
+                s.addAll(t.getTags());
+                t.getTags().forEach((tag)->{
+                    if(hs.contains(tag)){
+                        s.remove(tag);
+                    }
                 });
-            else if(updateTag.equals("R"))
-                hs.forEach((obj)->{
-                    HashSet ta = t.getTag();
-                    ta.remove(obj);
-                });
-            t.setUpdated(new Date().getTime());
+                t.setTags(s);
+            }
         }
         return t;
     }
@@ -117,50 +130,78 @@ public class Services {
     public void deleteTicket(){
         int id;
         id = MyReader.readChoice("Enter Ticket ID to delete: ");
-        Tickets t = tickets.remove(id);
+        Ticket t = this.deleteTicket(id);
         if(t == null)
             System.out.println("No ticket found with Given ID.");
         else
             System.out.println("Ticket has been deleted: " + t.toString());
     }
 
-    public void getTickets(){
-        // good use of streams. Two suggestions:
-        // 1. Inline the method reference to Tickets::getUpdated
-        // 2. No need to create a collection if all you want to do is print it; just use forEachOrdered(System.out::println)
-        Function<Tickets, Long> byUpdated = Tickets::getUpdated; //tm -> tm.getUpdated();
-        List<Tickets> list= tickets.values().stream().sorted(Comparator.comparing(byUpdated).reversed()).collect(Collectors.toList());
-
-        // Another Approach
-        /*List<Tickets> list= tickets.values().stream().collect(Collectors.toList());
-        Collections.sort(list, Tickets.updateComparator);*/
-
-        System.out.println(list);
+    public Ticket deleteTicket(int id){
+        return tickets.remove(id);
     }
 
-    public void tickets(){
+    public void getTickets(){
+        // good use of streams. Two suggestions:
+        // 1. Inline the method reference to Ticket::getUpdated
+        // 2. No need to create a collection if all you want to do is print it; just use forEachOrdered(System.out::println)
+
+        //Update: Got a single line for 3 line of code. I will need to explore more on stream api.
+//      tickets.values().stream().sorted(Comparator.comparing(Ticket::getUpdated).reversed()).forEachOrdered(System.out::print);
+        this.getAllTickets().forEach(System.out::print);
+        System.out.println();
+
+        /*Function<Ticket, LocalDateTime> byUpdated = Ticket::getUpdated; //tm -> tm.getUpdated();
+        List<Ticket> list= tickets.values().stream().sorted(Comparator.comparing(byUpdated).reversed()).collect(Collectors.toList());
+        System.out.println(list);*/
+
+        // Another Approach
+        /*List<Ticket> list= tickets.values().stream().collect(Collectors.toList());
+        Collections.sort(list, Ticket.updateComparator);*/
+
+
+    }
+
+    public List<Ticket> getAllTickets(){
+        return tickets.values().stream().sorted(Comparator.comparing(Ticket::getUpdated).reversed()).collect(Collectors.toList());
+    }
+
+    public void getTicket(){
         int id;
         id = MyReader.readChoice("Enter ticket id to get detail: ");
-        Tickets t = tickets.get(id);
+        Ticket t = this.getTicketById(id);
         if(t == null)
             System.out.println("No ticket found with given ID.");
         else
             System.out.println("Ticket Detail: " + t.toString());
+
+    }
+
+    public Ticket getTicketById(int id){
+        return tickets.get(id);
     }
 
     public void ticketsOfAgent(){
         String agent;
         agent = MyReader.readInput("Enter Agent Name: ");
-        TreeSet<Tickets> l = new TreeSet<>(Tickets.updateComparator);
+        List<Ticket> l = this.ticketsOfAgent(agent);
+        if(l.size()>0)
+            System.out.println("Ticket for given Agent are: " + l.toString());
+        else
+            System.out.println("Agent has no assigned any Ticket.");
+    }
+
+    public List<Ticket> ticketsOfAgent(String agent){
+
+        return tickets.values().stream().filter((Ticket t)->t.getAgent().equals(agent)).sorted(Comparator.comparing(Ticket::getUpdated)).collect(Collectors.toList());
+
+        /*TreeSet<Ticket> l = new TreeSet<>(Ticket.updateComparator);
         // see my comment below in ticketsByTag(); can you see how to do this with streams?
         tickets.forEach((k,v)->{
             if(v.getAgent().equals(agent))
                 l.add(v);
-        });
-        if(l.size()>0)
-            System.out.println("Tickets for given Agent are: " + l.toString());
-        else
-            System.out.println("Agent has no assigned any Ticket.");
+        });*/
+
     }
 
     public void allAgentTicketCount(){
@@ -178,29 +219,33 @@ public class Services {
             System.out.println();
         }
         else
-            System.out.println("No ticket in system or Tickets are not assigned to agent");
+            System.out.println("No ticket in system or Ticket are not assigned to agent");
     }
 
     public void ticketsByTag(){
         String tag = MyReader.readInput("Enter A Tag: ");
-        TreeSet<Tickets> hs = new TreeSet<>(Tickets.updateComparator);
-        // your code works here. For practice, t's good to get used to java 8's streams.
+        TreeSet<Ticket> hs = new TreeSet<>(Ticket.updateComparator);
+        // your code works here. For practice, it's good to get used to java 8's streams.
         // These can be more convenient and sometimes more efficient.
         // The following line of code would output a sorted list of
         // tickets with this tag, with no need to create an intermediate container.
-        // tickets.values().stream().filter(t->t.getTag().contains(tag)).sorted(Tickets.updateComparator).forEachOrdered(System.out::println);
+        // tickets.values().stream().filter(t->t.getTags().contains(tag)).sorted(Ticket.updateComparator).forEachOrdered(System.out::println);
         // or by using comparing() you can get rid of updateComparator.
 
-        tickets.forEach((k, v) -> {
-            if (v.getTag().contains(tag))
+        // Update: Updated for improvement, practice on stream api require.
+        tickets.values().stream().filter(t->t.getTags().contains(tag)).sorted(Comparator.comparing(Ticket::getUpdated)).forEachOrdered(System.out::print);
+        System.out.println();
+
+        /*tickets.forEach((k, v) -> {
+            if (v.getTags().contains(tag))
                 hs.add(v);
         });
         if(hs.size() > 0)
             System.out.println(hs);
         else
-            System.out.println("No Ticket found with given Tag.");
+            System.out.println("No Ticket found with given Tag.");*/
 
-/*        System.out.println(tickets.values().stream().filter((Tickets t)->t.getTag().contains(tag)));
+/*        System.out.println(tickets.values().stream().filter((Ticket t)->t.getTags().contains(tag)));
         System.out.println(tickets);*/
     }
 
@@ -209,7 +254,7 @@ public class Services {
         HashSet<String> tg = new HashSet<>();
             do{
                 temp = MyReader.readInput("Enter Tag: ");
-                if(!temp.equals("0"))
+                if(!temp.equals("\u0002"))
                     tg.add(temp);
                 tags = MyReader.readInput("More tag?(Y/N)");
             } while (tags.equals("Y"));
