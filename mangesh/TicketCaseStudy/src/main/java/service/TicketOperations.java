@@ -1,5 +1,8 @@
+package service;
+
+import model.Ticket;
+
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
 
@@ -7,11 +10,6 @@ import java.util.*;
  * Created by root on 15/1/16.
  */
 public class TicketOperations {
-
-    ArrayList<Ticket> masterTicketData = new ArrayList();
-    HashMap<String, Integer> agentTicketsTotalCounts = new HashMap<String, Integer>(); // Storing ticket counts against agents name
-    HashMap<String, HashSet> tagsWithTicketIds = new HashMap<String, HashSet>();  // storing ticket ids against tag name
-
     TicketService ticketService = new TicketService();
     InputData inputData = new InputData();
 
@@ -94,11 +92,10 @@ public class TicketOperations {
                      break;
             case 7 : this.ticketCountsByAgentName();
                      break;
-            case 8 : this.searchTicketsByTagName();  // In-progress
+            case 8 : this.searchTicketsByTagName();
                      break;
             case 9 :
                 System.out.println("End of operation");
-                //ticketService.closeAllServices();
                 this.loop = false;
         }
         return input;
@@ -109,6 +106,7 @@ public class TicketOperations {
      * Adding tags
      */
     public void createTicket(){
+        System.out.println("Enter Ticket Subject :: ");
         String subject = inputData.getString();
         String agentName = inputData.getAgentName();
         List<String> tagList = inputData.getTagsList();
@@ -143,10 +141,11 @@ public class TicketOperations {
         if(ticketService.isTicketExist(ticketId)) {
             //user choice
             int userChoice = inputData.getUserChoiceForUpdate();
+            boolean successResponse;
 
             if(userChoice == 1){
                 String agentName = inputData.getAgentName();
-                boolean successResponse = ticketService.updateTicketAgent(ticketId, agentName);  // chk return value then print msg
+                successResponse = ticketService.updateTicketAgent(ticketId, agentName);
                 if(successResponse)
                     System.out.println("Agent Name in ticket is updated Successfully!!!");
                 else
@@ -154,8 +153,11 @@ public class TicketOperations {
             }
             else if(userChoice == 2){
                 List<String> tags = inputData.getTagsList();
-                ticketService.updateTicketTags(ticketId, tags); // chk return value then print msg
-                System.out.println("Ticket Tags are Updated Successfully!!!");
+                successResponse = ticketService.updateTicketTags(ticketId, tags);
+                if(successResponse)
+                    System.out.println("Ticket Tags are Updated Successfully!!!");
+                else
+                    System.out.println("ERROR - Ticket is not updated");
             }
         }
         else
@@ -165,25 +167,30 @@ public class TicketOperations {
         this.menuList();
     }
 
+    /**
+     * deleting ticket by id
+     */
     public void deleteTicketById(){
         // get ticket id from user
         int ticketId = inputData.getTicketIdFromUser();
 
-        if(ticketService.isTicketExist(ticketId)) {
-            if(ticketService.deleteTicket(ticketId)){
-                System.out.println("Ticket Has been deleted Successfully");
+        if(ticketId !=0 ) {
+            if (ticketService.isTicketExist(ticketId)) {
+                if (ticketService.deleteTicket(ticketId)) {
+                    System.out.println("Ticket Has been deleted Successfully");
+                } else {
+                    System.out.println("ERROR - Ticket Not deleted");
+                }
+            } else {
+                System.out.println("Entered ticket " + ticketId + " is not present in the system.");
             }
-            else {
-                System.out.println("ERROR - Ticket Not deleted");
-            }
-        }
-        else
-        {
-            System.out.println("Entered ticket " + ticketId + " is not present in the system.");
         }
         this.menuList();
     }
 
+    /**
+     * Displaying the ticket details by id
+     */
     public void showTicketById() {
         // get ticket id from user
         int ticketId = inputData.getTicketIdFromUser();
@@ -207,7 +214,7 @@ public class TicketOperations {
     public void showTicketByAgentName() {
         //user agent name
         String agentName = inputData.getAgentName();
-        ticketService.showTickets(ticketService.showTicketByAgentName(agentName));
+        ticketService.showTickets(ticketService.getTicketByAgentName(agentName));
         this.menuList();
     }
 
@@ -223,13 +230,13 @@ public class TicketOperations {
      * Searching ticket by using tag name
      */
     public void searchTicketsByTagName() {
+        System.out.println("Enter Tag : ");
         String tag = inputData.getString();
-        ticketService.showTicketsByTagName(tag);
+        ticketService.showTicketsByTag(ticketService.searchTicketsByTagName(tag));
         this.menuList();
     }
 
    public static void main(String[] args) {
-        //TicketOperations ticketObj = new TicketOperations();
         new TicketOperations(100);
     }
 }

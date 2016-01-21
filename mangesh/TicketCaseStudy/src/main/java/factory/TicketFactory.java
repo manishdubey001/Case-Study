@@ -1,3 +1,7 @@
+package factory;
+
+import model.Ticket;
+
 import java.util.List;
 
 /**

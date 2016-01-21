@@ -1,12 +1,9 @@
-import com.sun.xml.internal.ws.policy.AssertionSet;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import service.TicketService;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by root on 18/1/16.
@@ -14,7 +11,7 @@ import java.util.List;
 public class TicketOperationsTestCases {
 
     int id = 100;
-    String subject = "First Ticket";
+    String subject = "First model.Ticket";
     String agent = "ININ";
     String tags = "mumbai,delhi,pune";
     List<String> tagList = Arrays.asList(tags.split(","));
@@ -62,7 +59,7 @@ public class TicketOperationsTestCases {
         int returnValue = ticketService.createTicket(this.id, this.subject,this.agent, this.tagList);
         HashMap ticketDetails = ticketService.getTicketDetailsById(returnValue);
         Assert.assertEquals(100, ticketDetails.get("id"));
-        Assert.assertEquals("First Ticket", ticketDetails.get("subject"));
+        Assert.assertEquals("First model.Ticket", ticketDetails.get("subject"));
         Assert.assertEquals("ININ", ticketDetails.get("agentName"));
         Assert.assertEquals(tagList, ticketDetails.get("tags"));
         // delete dummy ticket
@@ -95,7 +92,7 @@ public class TicketOperationsTestCases {
         Assert.assertEquals(true, response);
         HashMap ticketDetails = ticketService.getTicketDetailsById(ticketId);
         Assert.assertEquals(100, ticketDetails.get("id"));
-        Assert.assertEquals("First Ticket", ticketDetails.get("subject"));
+        Assert.assertEquals("First model.Ticket", ticketDetails.get("subject"));
         Assert.assertEquals("Admin", ticketDetails.get("agentName"));
         Assert.assertEquals(this.tagList, ticketDetails.get("tags"));
         // delete dummy ticket
@@ -153,7 +150,7 @@ public class TicketOperationsTestCases {
         Assert.assertEquals(100,ticketId);
         HashMap ticketDetails = ticketService.getTicketDetailsById(ticketId);
         Assert.assertEquals(100, ticketDetails.get("id"));
-        Assert.assertEquals("First Ticket", ticketDetails.get("subject"));
+        Assert.assertEquals("First model.Ticket", ticketDetails.get("subject"));
         Assert.assertEquals("ININ", ticketDetails.get("agentName"));
         Assert.assertEquals(this.tagList, ticketDetails.get("tags"));
         // delete dummy ticket
@@ -166,7 +163,7 @@ public class TicketOperationsTestCases {
         System.out.println("Start - testGetTicketDetailsByInvalidAgentName");
         int ticketId = ticketService.createTicket(this.id, this.subject,this.agent, this.tagList);
         Assert.assertEquals(100,ticketId);
-        ArrayList agentTickets = ticketService.showTicketByAgentName("154215");
+        ArrayList agentTickets = ticketService.getTicketByAgentName("154215");
         Assert.assertEquals(0,agentTickets.size());
         // delete dummy ticket
         ticketService.deleteTicket(100);
@@ -178,7 +175,7 @@ public class TicketOperationsTestCases {
         System.out.println("Start - testGetTicketDetailsByValidAgentName");
         int ticketId = ticketService.createTicket(this.id, this.subject,this.agent, this.tagList);
         Assert.assertEquals(100,ticketId);
-        ArrayList agentTickets = ticketService.showTicketByAgentName(this.agent);
+        ArrayList agentTickets = ticketService.getTicketByAgentName(this.agent);
         Assert.assertNotEquals(0, agentTickets.size());
         // delete dummy ticket
         ticketService.deleteTicket(100);
@@ -207,5 +204,31 @@ public class TicketOperationsTestCases {
         // delete dummy ticket
         ticketService.deleteTicket(100);
         System.out.println("End - testIsTicketExistByInvalidId");
+    }
+
+    @Test
+    public void testGetTicketDetailsByInvalidTagName(){
+        System.out.println("Start - testGetTicketDetailsByInvalidTagName");
+        int ticketId = ticketService.createTicket(this.id, this.subject, this.agent, this.tagList);
+        Assert.assertEquals(100, ticketId);
+        String tag = "12151";
+        HashSet tagTicketIds = ticketService.searchTicketsByTagName(tag);
+        Assert.assertEquals(0, tagTicketIds.size());
+        // delete dummy ticket
+        ticketService.deleteTicket(100);
+        System.out.println("End - testGetTicketDetailsByInvalidTagName");
+    }
+
+    @Test
+    public void testGetTicketDetailsByValidTagName(){
+        System.out.println("Start - testGetTicketDetailsByValidTagName");
+        int ticketId = ticketService.createTicket(this.id, this.subject, this.agent, this.tagList);
+        Assert.assertEquals(100, ticketId);
+        String tag = "delhi";
+        HashSet tagTicketIds = ticketService.searchTicketsByTagName(tag);
+        Assert.assertNotEquals(0, tagTicketIds.size());
+        // delete dummy ticket
+        ticketService.deleteTicket(100);
+        System.out.println("End - testGetTicketDetailsByValidTagName");
     }
 }

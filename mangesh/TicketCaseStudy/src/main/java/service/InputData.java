@@ -1,3 +1,5 @@
+package service;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -15,7 +17,6 @@ public class InputData {
 
     public String getString(){
         boolean subjLoop = true;
-        System.out.println("Enter Ticket Subject : ");
         String subject = null;
         while (subjLoop){
             subject = console.nextLine();
@@ -60,11 +61,12 @@ public class InputData {
         boolean updateLoop = true;
         while (updateLoop){
             try {
+                //id = Integer.valueOf(console.nextLine());
                 id = console.nextInt();
                 updateLoop = false;
             }
             catch (InputMismatchException ie){
-                System.out.println("Invalid Input !!! Please enter only Number :: ");
+                System.out.println("Invalid Input!!!");
                 updateLoop = false;
             }
         }

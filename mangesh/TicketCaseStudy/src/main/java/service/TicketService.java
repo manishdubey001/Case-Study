@@ -1,3 +1,9 @@
+package service;
+
+
+import factory.TicketFactory;
+import model.Ticket;
+
 import java.util.*;
 
 /**
@@ -36,13 +42,15 @@ public class TicketService {
         ticket.setModified(date);
 
         this.masterTicketData.add(ticket);
-
-        // System.out.println(" ticket Data : " + masterTicketData);
-
         this.updateAgentsTicketCount(agentName, 1); // increment ticket count against agent name
         return ticketId;
     }
 
+    /**
+     * Get the details of ticket by id
+     * @param id
+     * @return
+     */
     public HashMap getTicketDetailsById(int id) {
         if(!this.isTicketExist(id)){
             return  null;
@@ -81,7 +89,6 @@ public class TicketService {
                 this.tagsWithTicketIds.put(tag, idSet);
             }
         }
-        //System.out.println("updatetags func :: " + tagsWithTicketIds);
     }
 
     /**
@@ -111,6 +118,10 @@ public class TicketService {
         return masterTicketData;
     }
 
+    /**
+     * Displaying ticket details
+     * @param ticketList
+     */
     public void showTickets(List<Ticket> ticketList){
         if (ticketList.isEmpty()) {
             System.out.println("No Tickets Found!!!");
@@ -124,6 +135,12 @@ public class TicketService {
         }
     }
 
+    /**
+     * Updating agent name
+     * @param id
+     * @param agentName
+     * @return
+     */
     public boolean updateTicketAgent(int id, String agentName) {
         if(agentName.isEmpty() || agentName == null)
             return false;
@@ -140,6 +157,12 @@ public class TicketService {
         return true;
     }
 
+    /**
+     * Updating ticket tags
+     * @param id
+     * @param tags
+     * @return
+     */
     public boolean updateTicketTags(int id, List<String> tags) {
 
         Date date = new Date();
@@ -193,6 +216,11 @@ public class TicketService {
         return false;
     }
 
+    /**
+     * deleting a ticket by id
+     * @param id
+     * @return
+     */
     public boolean deleteTicket (int id) {
 
         boolean flag = false;
@@ -208,7 +236,12 @@ public class TicketService {
         return flag;
     }
 
-    public ArrayList<Ticket> showTicketByAgentName(String agentName){
+    /**
+     * getting tickets assigned to specific agent
+     * @param agentName
+     * @return
+     */
+    public ArrayList<Ticket> getTicketByAgentName(String agentName){
         ArrayList<Ticket> tempList = new ArrayList<Ticket>();
         agentName.trim();
 
@@ -220,6 +253,9 @@ public class TicketService {
         return tempList;
     }
 
+    /**
+     * Updating tickets count to maintain the ticket(assigned to agent) counts of agent
+     */
     public void ticketCountsByAgentName() {
         System.out.println("Agent Count  |   Total Count");
 
@@ -233,16 +269,29 @@ public class TicketService {
         }
     }
 
-    public void showTicketsByTagName(String tag) {
+    /**
+     * Serching tickets by tag name
+     * @param tag
+     * @return
+     */
+    public HashSet searchTicketsByTagName(String tag){
         HashSet ids = new HashSet();
         if(this.tagsWithTicketIds.containsKey(tag)) {
             ids = tagsWithTicketIds.get(tag);
         }
+        return ids;
+    }
 
-        if(masterTicketData.isEmpty()){
+    /**
+     * Showing all tickets by tag
+     * @param ids
+     */
+    public void showTicketsByTag(HashSet ids){
+
+        if(ids.isEmpty() ||  masterTicketData.isEmpty()){
             System.out.println("No ticket(s) found in the system");
         }
-        else{
+        else {
             System.out.println("Id | Subject | Agent Name | Tags | Created | Modified");
             for (Ticket ticket : masterTicketData){
                 if(ids.contains(ticket.getId())){

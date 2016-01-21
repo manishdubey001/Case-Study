@@ -1,3 +1,5 @@
+package model;
+
 import java.util.Date;
 import java.util.List;
 
@@ -9,7 +11,6 @@ public class Ticket implements Comparable<Ticket>{
     String subject;
     String agent_name;
     List<String> tags;
-    String tempTags;
     long timeStamp;
     Date created;
     Date modified;
@@ -54,14 +55,6 @@ public class Ticket implements Comparable<Ticket>{
 
     public void setTags(List<String> tags) {
         this.tags = tags;
-    }
-
-    public String getTempTags() {
-        return tempTags;
-    }
-
-    public void setTempTags(String tempTags) {
-        this.tempTags = tempTags;
     }
 
     public Date getCreated() {
