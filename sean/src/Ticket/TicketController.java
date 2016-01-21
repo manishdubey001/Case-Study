@@ -1,0 +1,58 @@
+package Ticket;
+
+import java.util.HashMap;
+
+public class TicketController {
+	private HashMap<Integer, Ticket> tickets = new HashMap<Integer, Ticket>();
+
+	public HashMap<Integer, Ticket> getTickets() {
+		return tickets;
+	}
+
+	public void setTickets(HashMap<Integer, Ticket> tickets) {
+		this.tickets = tickets;
+	}
+
+	public Ticket createTicket(HashMap<String, String> attributes) {
+		Logger.info("Create ticket operation started!");
+		TicketFactory ticketFactory = new TicketFactory();
+		Ticket ticket = ticketFactory.createTicket(attributes);
+		getTickets().put(ticket.getId(), ticket);
+		return ticket;
+	}
+
+	public Ticket updateTicket(HashMap<String, String> attributes, int id) {
+		Logger.info("Update ticket operation started!");
+		try {
+			Ticket ticket = getTickets().get(id);
+
+			if (ticket != null) {
+				TicketFactory ticketFactory = new TicketFactory();
+				return ticketFactory.updateTicket(attributes, ticket);
+			} else
+				Logger.info("Ticket with id " + id + " not found!");
+		} catch (Exception e) {
+			Logger.info("Exception occurred while updating ticket!");
+			return null;
+		}
+		return null;
+	}
+
+	public Ticket deleteTicket(int id) {
+		Logger.info("Delete ticket operation started!");
+		if (getTickets().get(id) != null) {
+			return getTickets().remove(id);
+		} else Logger.info("Delete ticket operation failed! Ticket not found!");
+		return null;
+	}
+
+	public Ticket getTicket(int id) {
+		Logger.info("Get ticket detail operation started!");
+		return getTickets().get(id);
+	}
+
+	public void printTicket(Ticket ticket) {
+		System.out.println("Ticket data id: " + ticket.getId() + " \n subject: " + ticket.getSubject() + " \n agent Name: "
+				+ ticket.getAgentName() + " \n Tags : " + ticket.getTags().toString());
+	}
+}
