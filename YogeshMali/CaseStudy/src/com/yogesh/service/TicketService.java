@@ -9,6 +9,9 @@ import com.yogesh.model.Ticket;
 import com.yogesh.pattern.TicketFactory;
 
 import java.util.*;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Created by root on 31/12/15.
@@ -22,12 +25,10 @@ public class TicketService {
      */
     public List<Ticket> searchTicketsUsingAgentnameService(String agentName) {
 
-        List<Ticket> list = new ArrayList<>();
-        for (Ticket ticket : this.arrTicketList) {
-            if (ticket.getAgentName().equals(agentName)) {
-                list.add(ticket);
-            }
-        }
+        List<Ticket> list = this.arrTicketList.stream()
+                .filter(t -> t.getAgentName().equals(agentName))
+                .collect(Collectors.toList());
+
         return list;
     }
 
@@ -37,12 +38,11 @@ public class TicketService {
      */
     public List<Ticket> searchTicketsUsingtagService(String tag) {
 
-        List<Ticket> list = new ArrayList<>();
-        for (Ticket ticket : this.arrTicketList) {
-            if (ticket.getTags().contains(tag)) {
-                list.add(ticket);
-            }
-        }
+
+        List<Ticket> list = arrTicketList.stream()
+                .filter(t -> t.getTags().contains(tag))
+                .collect(Collectors.toList());
+
         return list;
     }
 
@@ -68,8 +68,7 @@ public class TicketService {
     public TreeMap<String, Integer> showTicketcountAgentService() {
 
         TreeMap<String, Integer> tmCount = new TreeMap<>();
-
-
+        
         for (Ticket ticket : this.arrTicketList) {
 
             if (tmCount.containsKey(ticket.getAgentName())) {
