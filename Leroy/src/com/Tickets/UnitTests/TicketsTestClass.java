@@ -35,8 +35,8 @@ public class TicketsTestClass {
         boolean create = ticketServiceComponent.createTicket(subject,agent,tags);
         Assert.assertTrue(create);
         Assert.assertEquals(1, ticketServiceComponent.thm.get(1).getId());
-        Assert.assertEquals("Test Subject", ticketServiceComponent.thm.get(1).subject);
-        Assert.assertEquals("[awesome, great, good]",ticketServiceComponent.thm.get(1).tags.toString());
+        Assert.assertEquals("Test Subject", ticketServiceComponent.thm.get(1).getSubject());
+        Assert.assertEquals("[awesome, great, good]",ticketServiceComponent.thm.get(1).getTags().toString());
         Assert.assertTrue(ticketServiceComponent.checkIfExists(1));
     }
 
@@ -69,18 +69,18 @@ public class TicketsTestClass {
         if (check){
             update = ticketServiceComponent.updateTicket(2, "agent", "newAgent1");
             Assert.assertTrue(update);
-            Assert.assertEquals("newAgent1", ticketServiceComponent.thm.get(2).agent_name);
+            Assert.assertEquals("newAgent1", ticketServiceComponent.thm.get(2).getAgent_name());
             update =ticketServiceComponent.updateTicket(2, "tags", "tag4,tag3");
             Assert.assertTrue(update);
-            Assert.assertEquals("[tag4, tag3]", ticketServiceComponent.thm.get(2).tags.toString());
+            Assert.assertEquals("[tag4, tag3]", ticketServiceComponent.thm.get(2).getTags().toString());
         }else{
 
             update = ticketServiceComponent.updateTicket(1, "agent", "newAgent1");
             Assert.assertTrue(update);
-            Assert.assertEquals("newAgent1", ticketServiceComponent.thm.get(1).agent_name);
+            Assert.assertEquals("newAgent1", ticketServiceComponent.thm.get(1).getAgent_name());
             update =ticketServiceComponent.updateTicket(1, "tags", "tag4,tag3");
             Assert.assertTrue(update);
-            Assert.assertEquals("[tag4, tag3]", ticketServiceComponent.thm.get(1).tags.toString());
+            Assert.assertEquals("[tag4, tag3]", ticketServiceComponent.thm.get(1).getTags().toString());
         }
     }
 

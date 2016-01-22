@@ -8,30 +8,29 @@ import java.util.*;
  * Created by root on 13/1/16.
  */
 public class Ticket implements Comparable<Ticket>{
-    public int id;
-    public String subject;
-    public String agent_name;
-    public Long created;
-    public Set tags;
+    private int id;
+    private String subject;
+    private String agentName;
+    private long created;
+    public long modified;
+    private Set<String> tags;
 
 
     Ticket(int id, String subject, Set tags, String name){
         this.setId(id);
         this.setAgent_name(name);
-        this.setStr(subject);
+        this.setSubject(subject);
         this.setTags(tags);
         this.setCreated();
-        this.setModified(null);
     }
     public Set getTags() {
         return tags;
     }
 
     public void setTags(Set tags) {
+        this.setModified();
         this.tags = tags;
     }
-
-    public Long modified;
 
     public int getId() {
         return id;
@@ -41,44 +40,42 @@ public class Ticket implements Comparable<Ticket>{
         this.id = id;
     }
 
-    public String getStr() {
+    public String getSubject() {
         return subject;
     }
 
-    public void setStr(String str) {
+    public void setSubject(String str) {
         this.subject = str;
     }
 
     public String getAgent_name() {
-        return agent_name;
+        return agentName;
     }
 
     public void setAgent_name(String agent_name) {
-        this.agent_name = agent_name;
+        this.setModified();
+        this.agentName = agent_name;
     }
 
-    public Long getCreated() {
+    public long getCreated() {
         return created;
     }
 
-    public void setCreated() {
+    private void setCreated() {
         this.created = System.currentTimeMillis();
     }
 
-    public Long getModified() {
+    public long getModified() {
         return modified;
     }
 
-    public void setModified(Long modified) {
-        if(modified == null)
+    private void setModified() {
             this.modified = System.currentTimeMillis();
-        else
-            this.modified = modified;
     }
 
     @Override
     public int compareTo(Ticket compareTicket){
-        return compareTicket.getModified().compareTo(this.getModified());
+        return Long.compare(compareTicket.getModified(), this.getModified());
     }
     public static Comparator<Ticket> ByAgentNameComparator = new Comparator<Ticket>() {
         @Override
@@ -93,6 +90,6 @@ public class Ticket implements Comparable<Ticket>{
     public String toString(){
         Date dt  = new Date(this.created);
         Date dt2 = new Date(this.modified);
-        return "  "+this.id+"  |  "+this.agent_name+"  |  "+this.subject+"  |  "+this.tags+"  |  "+dt+"  |   "+dt2;
+        return "  "+this.id+"  |  "+this.agentName+"  |  "+this.subject+"  |  "+this.tags+"  |  "+dt+"  |   "+dt2;
     }
 }

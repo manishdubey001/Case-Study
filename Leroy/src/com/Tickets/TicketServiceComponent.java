@@ -1,8 +1,8 @@
 package com.Tickets;
 
-import sun.invoke.empty.Empty;
-
+import java.io.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Created by root on 14/1/16.
@@ -13,13 +13,28 @@ public class TicketServiceComponent {
 
     public boolean createTicket(String sub, String agent, String tags){
         if(!sub.isEmpty() && !agent.isEmpty() && !tags.isEmpty()){
-            String[] tag = tags.split(",");
-            Set set = new HashSet<>();
-            for (int index = 0; index<tag.length; index++)
-                set.add(tag[index]);
+            String[] parsedtags = tags.split(",");
+            Set<String> set = new HashSet<>(Arrays.asList(parsedtags));
 
             Ticket ticket = TicketWareHouse.getInstance(sub,set,agent);
+            /*try{
 
+                FileOutputStream fileOutputStream = new FileOutputStream("tickets.ser");
+                ObjectOutputStream outputStream = new ObjectOutputStream(fileOutputStream);
+                outputStream.writeObject(ticket);
+
+                FileInputStream fileInputStream = new FileInputStream("tickets.ser");
+                ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+                Ticket ticket1 = (Ticket) objectInputStream.readObject();
+                System.out.println(ticket1);
+            }catch (FileNotFoundException F){
+                System.out.println(Sout.ACT_NOT_FOUND+" "+F);
+            }catch (IOException Io){
+                System.out.println(Sout.ACT_NOT_FOUND);
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+            */
             thm.put(ticket.getId(),ticket);
             if (checkIfExists(ticket.getId())) {
                 return true;
@@ -32,22 +47,18 @@ public class TicketServiceComponent {
     public boolean updateTicket(int id, String type, String val){
         try{
             boolean updated = false;
-            Ticket t3 = thm.get(id);
+            Ticket ticket = thm.get(id);
             if (type.equals("agent") && !val.isEmpty()) {
-                t3.setAgent_name(val);
-                t3.setModified(System.currentTimeMillis());
-                thm.put(id, t3);
+                ticket.setAgent_name(val);
+                thm.put(id, ticket);
                 updated = true;
             } else if (type.equals("tags") && !val.isEmpty()) {
-                String [] tags1 = val.split(",");
-                Set set1 = new HashSet<>();
-                for (int index = 0; index <tags1.length; index++)
-                    set1.add(tags1[index]);
+                String [] parsedtags = val.split(",");
+                Set set1 = new HashSet<>(Arrays.asList(parsedtags));
 
-                t3.setTags(set1);
+                ticket.setTags(set1);
 
-                t3.setModified(System.currentTimeMillis());
-                thm.put(id,t3);
+                thm.put(id,ticket);
                 updated = true;
             }
             if (updated){
@@ -83,15 +94,12 @@ public class TicketServiceComponent {
         return null;
     }
 
-    public List getTicketsByAgentName(String name){
+    public List<Ticket> getTicketsByAgentName(String name){
         List<Ticket> l = new ArrayList<>();
         if (!name.isEmpty()){
-            List<Ticket> c = new ArrayList<>(thm.values());
-            for (int index = 0; index < c.size(); index++){
-                if((c.get(index).agent_name).equals(name)){
-                    l.add(c.get(index));
-                }
-            }
+            l = thm.values().stream()
+                    .filter(l2 -> l2.getAgent_name().equals(name))
+                    .collect(Collectors.toList());
         }
         return l;
     }
@@ -114,15 +122,15 @@ public class TicketServiceComponent {
      * function to fetch count of ticket with respect to its agent.
      * Data is grouped by Agent name in ascending order.
      */
-    public Map getTicketsGroupByAgent(){
-        Map<String, Integer> agentsTickets = new HashMap<>();
+    public Map<String,Integer> getTicketsGroupByAgent(){
+        Map<String, Integer> agentsTickets = new TreeMap<>();
         if (!thm.isEmpty()){
 
             List<Ticket> l = new ArrayList<>(thm.values());
             Collections.sort(l,Ticket.ByAgentNameComparator);
             for (int index = 0; index < l.size(); index++){
-                int countTicket = agentsTickets.containsKey(l.get(index).agent_name) ? agentsTickets.get(l.get(index).agent_name) : 0;
-                agentsTickets.put(l.get(index).agent_name, countTicket+ 1);
+                int countTicket = agentsTickets.containsKey(l.get(index).getAgent_name()) ? agentsTickets.get(l.get(index).getAgent_name()) : 0;
+                agentsTickets.put(l.get(index).getAgent_name(), countTicket+ 1);
             }
             if (print){
                 for (Map.Entry<String, Integer> entry : agentsTickets.entrySet())
@@ -137,17 +145,15 @@ public class TicketServiceComponent {
     /**
      * Function to fetch all ticket with respect to Tag.
      */
-    public Set getAllTicketsByTag(String tag){
-        Set set2 = new HashSet<>();
+    public Set<Ticket> getAllTicketsByTag(String tag){
+        Set<Ticket> set2 = new HashSet<>();
         if (!thm.isEmpty()){
 
             List<Ticket> l = new ArrayList<>(thm.values());
-            Map<String, Set> map = new HashMap<>();
-            set2 = new HashSet<>();
-            for (int index = 0; index<l.size(); index++){
-                if(l.get(index).getTags().contains(tag))
-                    set2.add(l.get(index));
-            }
+            set2 = l.stream()
+                    .filter(list -> list.getTags().contains(tag))
+                    .collect(Collectors.toSet());
+
             if(!set2.isEmpty()){
                 List<Ticket> t3 = new ArrayList<>(set2);
                 Collections.sort(t3);
@@ -164,11 +170,11 @@ public class TicketServiceComponent {
         return set2;
     }
 
-    public void display(List<Ticket> t3){
-        Collections.sort(t3);
+    public void display(List<Ticket> tickets){
+        Collections.sort(tickets);
         System.out.println(Sout.ACT_TABLE_HEADER);
 
-        for (Ticket str: t3) {
+        for (Ticket str: tickets) {
             System.out.println(str);
         }
     }

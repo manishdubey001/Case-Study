@@ -30,6 +30,8 @@ public class Sout {
     static final String ACT_TICKETS_IN_SYSTEM = "Following are the Tickets in the System";
     static final String ACT_REMOVE_SUCCESS = "Removed Successfully ";
 
+    private static Scanner scanner;
+
     static String getAllCommands(){
         System.out.println("Please choose an appropriate input.");
         System.out.println("1 - Create Ticket.");
@@ -48,18 +50,19 @@ public class Sout {
 
     Sout(){
         ticketServiceComponent = new TicketServiceComponent();
+        scanner = new Scanner(System.in);
     }
     public void soutCreate(){
         System.out.println(ACT_CREATE_TICKET);
 
         System.out.println(ACT_TSUBJECT);
-        String sub = scanWhat().next();
+        String sub = getScanner().next();
 
         System.out.println(ACT_TAGENTNAME);
-        String agent = scanWhat().next();
+        String agent = getScanner().next();
 
         System.out.println(ACT_TTAGS);
-        String tags = scanWhat().next();
+        String tags = getScanner().next();
 
         boolean create = ticketServiceComponent.createTicket(sub, agent, tags);
         if (create)
@@ -71,7 +74,7 @@ public class Sout {
     public void soutUpdate(){
         try {
             System.out.println(ACT_TIDUPDATE);
-            int tid = scanWhat().nextInt();
+            int tid = getScanner().nextInt();
             String type = null;
             String value = null;
             boolean check = ticketServiceComponent.checkIfExists(tid);
@@ -79,15 +82,15 @@ public class Sout {
 
                 System.out.println(ACT_CHOOSE_TAG_AGENT);
 
-                String sel = scanWhat().next();
+                String sel = getScanner().next();
                 if(sel.equals("a")){
                     System.out.println(Sout.ACT_TAGENTNAME);
-                    String selA = scanWhat().next();
+                    String selA = getScanner().next();
                     type = "agent";
                     value = selA;
                 }else if (sel.equals("b")){
                     System.out.println(Sout.ACT_TTAGS);
-                    String selB = scanWhat().next();
+                    String selB = getScanner().next();
                     type = "tags";
                     value = selB;
                 }
@@ -106,12 +109,12 @@ public class Sout {
 
     public void soutRemoveTicket(){
         System.out.println(Sout.ACT_TID);
-        int selT = scanWhat().nextInt();
+        int selT = getScanner().nextInt();
         boolean check = ticketServiceComponent.checkIfExists(selT);
         if (check){
             System.out.println(Sout.ACT_ARE_YOU_SURE+selT);
             System.out.println(Sout.ACT_YES_OR_NO);
-            int selA = scanWhat().nextInt();
+            int selA = getScanner().nextInt();
             boolean remove = ticketServiceComponent.removeTicketById(selT);
             if (remove)
                 System.out.println(Sout.ACT_REMOVE_SUCCESS);
@@ -121,7 +124,7 @@ public class Sout {
 
     public void soutGetTicketById(){
         System.out.println(Sout.ACT_TID);
-        int selT = scanWhat().nextInt();
+        int selT = getScanner().nextInt();
         Object obj = ticketServiceComponent.getTicketById(selT);
         if (obj != null){
             System.out.println(Sout.ACT_TABLE_HEADER);
@@ -134,7 +137,7 @@ public class Sout {
 
     public void soutTicketsByAgent(){
         System.out.println(Sout.ACT_TAGENTNAME);
-        String selA = scanWhat().next();
+        String selA = getScanner().next();
         List l = ticketServiceComponent.getTicketsByAgentName(selA);
         if (!l.isEmpty())
             ticketServiceComponent.display(l);
@@ -145,13 +148,12 @@ public class Sout {
     public void soutGetAllTicketsByTag(){
 
         System.out.println(Sout.ACT_TTAGS_SINGLE);
-        String selT = scanWhat().next();
+        String selT = getScanner().next();
         ticketServiceComponent.getAllTicketsByTag(selT);
     }
 
-    public static Scanner scanWhat(){
-        Scanner sc = new Scanner(System.in);
-        return sc;
+    public Scanner getScanner(){
+        return scanner;
     }
 
 }
