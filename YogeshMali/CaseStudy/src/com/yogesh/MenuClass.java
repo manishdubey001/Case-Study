@@ -146,7 +146,7 @@ public class MenuClass {
 
     private void showTicketcountAgent() {
         ConsolIO.showMsg("Agent Count  =>   Total Count");
-        TreeMap<String, Integer> tmCount =  ticketService.showTicketcountAgentService();
+        TreeMap<String, Integer> tmCount = ticketService.showTicketcountAgentService();
 
         for (Map.Entry<String, Integer> entry : tmCount.entrySet()) {
             String agentName = entry.getKey();
