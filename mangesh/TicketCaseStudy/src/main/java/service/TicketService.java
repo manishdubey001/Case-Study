@@ -5,6 +5,7 @@ import factory.TicketFactory;
 import model.Ticket;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Created by root on 18/1/16.
@@ -207,8 +208,6 @@ public class TicketService {
      * @return
      */
     public boolean isTicketExist(int ticketId) {
-        //System.out.println("ic check :: "  + masterTicketData.get(ticketId));
-
         for (Ticket ticket : masterTicketData){
             if(ticket.getId() == ticketId)
                 return true;
@@ -237,20 +236,13 @@ public class TicketService {
     }
 
     /**
-     * getting tickets assigned to specific agent
+     * getting ticket(s) assigned to specific agent using stream
      * @param agentName
      * @return
      */
-    public ArrayList<Ticket> getTicketByAgentName(String agentName){
-        ArrayList<Ticket> tempList = new ArrayList<Ticket>();
-        agentName.trim();
-
-        for (Ticket ticket : masterTicketData) {
-            if(ticket.getAgent_name().equals(agentName)){
-                tempList.add(ticket);
-            }
-        }
-        return tempList;
+    public List<Ticket> getTicketByAgentName(String agentName){
+        List<Ticket> ticketList = masterTicketData.stream().filter(ticket -> ticket.getAgent_name().toLowerCase().equals(agentName.toLowerCase())).collect(Collectors.toList());
+        return ticketList;
     }
 
     /**

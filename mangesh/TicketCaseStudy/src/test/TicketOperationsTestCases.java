@@ -163,7 +163,7 @@ public class TicketOperationsTestCases {
         System.out.println("Start - testGetTicketDetailsByInvalidAgentName");
         int ticketId = ticketService.createTicket(this.id, this.subject,this.agent, this.tagList);
         Assert.assertEquals(100,ticketId);
-        ArrayList agentTickets = ticketService.getTicketByAgentName("154215");
+        List agentTickets = ticketService.getTicketByAgentName("154215");
         Assert.assertEquals(0,agentTickets.size());
         // delete dummy ticket
         ticketService.deleteTicket(100);
@@ -175,7 +175,7 @@ public class TicketOperationsTestCases {
         System.out.println("Start - testGetTicketDetailsByValidAgentName");
         int ticketId = ticketService.createTicket(this.id, this.subject,this.agent, this.tagList);
         Assert.assertEquals(100,ticketId);
-        ArrayList agentTickets = ticketService.getTicketByAgentName(this.agent);
+        List agentTickets = ticketService.getTicketByAgentName(this.agent);
         Assert.assertNotEquals(0, agentTickets.size());
         // delete dummy ticket
         ticketService.deleteTicket(100);
