@@ -6,6 +6,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.List;
+import java.util.TreeMap;
 
 import static java.util.Arrays.asList;
 import static org.junit.Assert.*;
@@ -222,8 +223,123 @@ public class TicketServiceTest {
         Assert.assertEquals(2, ticket1.getId());
         Assert.assertEquals("Subject2", ticket1.getSubject());
         Assert.assertEquals(asList("one", "two", "three"), ticket1.getTags());
-        System.out.println(list);
 
     }
+
+    @Test
+    public void testSearchTicketsUsingAgentnameService() throws Exception {
+
+        int id = 1;
+        String subject = "Subject";
+        String agent = "James";
+        List<String> categories = asList("one", "two", "three");
+        assertTrue(ticketService.createTicketService(id, subject, agent, categories));
+
+        String agentName = "James";
+        List<Ticket> list = (ticketService.searchTicketsUsingAgentnameService(agentName));
+        Ticket ticket = list.get(0);
+        Assert.assertEquals("James", ticket.getAgentName());
+        Assert.assertEquals(1, ticket.getId());
+        Assert.assertEquals("Subject", ticket.getSubject());
+        Assert.assertEquals(asList("one", "two", "three"), ticket.getTags());
+
+    }
+
+
+    @Test
+    public void testSearchTicketsUsingAgentnameServicewithWrongAgentname() throws Exception {
+
+        int id = 1;
+        String subject = "Subject";
+        String agent = "James";
+        List<String> categories = asList("one", "two", "three");
+        assertTrue(ticketService.createTicketService(id, subject, agent, categories));
+
+        String agentName = "Yogesh";
+        List<Ticket> list = (ticketService.searchTicketsUsingAgentnameService(agentName));
+        Assert.assertEquals(0, list.size());
+
+    }
+
+    @Test
+    public void searchTicketsUsingtagService() throws Exception {
+
+        int id = 1;
+        String subject = "Subject";
+        String agent = "James";
+        List<String> categories = asList("one", "two", "three");
+        assertTrue(ticketService.createTicketService(id, subject, agent, categories));
+
+        id = 2;
+        subject = "Subject2";
+        agent = "James2";
+        categories = asList("one", "five", "four");
+        assertTrue(ticketService.createTicketService(id, subject, agent, categories));
+
+        String tag = "one";
+        List<Ticket> list = (ticketService.searchTicketsUsingtagService(tag));
+        Ticket ticket = list.get(0);
+        Assert.assertEquals("James", ticket.getAgentName());
+        Assert.assertEquals(1, ticket.getId());
+        Assert.assertEquals("Subject", ticket.getSubject());
+        Assert.assertEquals(asList("one", "two", "three"), ticket.getTags());
+
+        Ticket ticket1 = list.get(1);
+        Assert.assertEquals("James2", ticket1.getAgentName());
+        Assert.assertEquals(2, ticket1.getId());
+        Assert.assertEquals("Subject2", ticket1.getSubject());
+        Assert.assertEquals(asList("one", "five", "four"), ticket1.getTags());
+
+    }
+
+
+    @Test
+    public void searchTicketsUsingtagServiceWithNonExistingTag() throws Exception {
+
+        int id = 1;
+        String subject = "Subject";
+        String agent = "James";
+        List<String> categories = asList("one", "two", "three");
+        assertTrue(ticketService.createTicketService(id, subject, agent, categories));
+
+        id = 2;
+        subject = "Subject2";
+        agent = "James2";
+        categories = asList("one", "five", "four");
+        assertTrue(ticketService.createTicketService(id, subject, agent, categories));
+
+        String tag = "six";
+        List<Ticket> list = (ticketService.searchTicketsUsingtagService(tag));
+        Assert.assertEquals(0, list.size());
+
+    }
+
+    @Test
+    public void searchshowTicketcountAgentService() throws Exception {
+
+        int id = 1;
+        String subject = "Subject";
+        String agent = "James";
+        List<String> categories = asList("one", "two", "three");
+        assertTrue(ticketService.createTicketService(id, subject, agent, categories));
+
+        id = 2;
+        subject = "Subject2";
+        agent = "James";
+        categories = asList("one", "five", "four");
+        assertTrue(ticketService.createTicketService(id, subject, agent, categories));
+
+        id = 3;
+        subject = "Subject3";
+        agent = "Yogesh";
+        categories = asList("one", "five", "four");
+        assertTrue(ticketService.createTicketService(id, subject, agent, categories));
+
+        TreeMap<String, Integer> tmCount = ticketService.showTicketcountAgentService();
+        Assert.assertEquals(2, (int) tmCount.get("James"));
+        Assert.assertEquals(1, (int) tmCount.get("Yogesh"));
+
+    }
+
 
 }

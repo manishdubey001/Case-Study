@@ -20,21 +20,30 @@ public class TicketService {
     /**
      * this method for search ticket based on Agent name
      */
-    public void searchTicketsUsingAgentnameService(String agentName) {
-        boolean ticketFlag = false;
+    public List<Ticket> searchTicketsUsingAgentnameService(String agentName) {
 
-        ConsolIO.ticketListHeader();
+        List<Ticket> list = new ArrayList<>();
         for (Ticket ticket : this.arrTicketList) {
             if (ticket.getAgentName().equals(agentName)) {
-                ConsolIO.showTicket(ticket);
-                ticketFlag = true;
+                list.add(ticket);
             }
         }
+        return list;
+    }
 
-        if (ticketFlag == false) {
-            ConsolIO.showMsg("Ticket Not found");
+
+    /**
+     * Search all tickets by specific tag.
+     */
+    public List<Ticket> searchTicketsUsingtagService(String tag) {
+
+        List<Ticket> list = new ArrayList<>();
+        for (Ticket ticket : this.arrTicketList) {
+            if (ticket.getTags().contains(tag)) {
+                list.add(ticket);
+            }
         }
-
+        return list;
     }
 
     /**
@@ -50,53 +59,30 @@ public class TicketService {
                 }
             }
         }
-    return false;
+        return false;
     }
 
     /**
      * this method for Ticket count grouped by agent name(order by agent name).
      */
-    public void showTicketcountAgentService() {
-
-        ConsolIO.showMsg("Agent Count  =>   Total Count");
+    public TreeMap<String, Integer> showTicketcountAgentService() {
 
         TreeMap<String, Integer> tmCount = new TreeMap<>();
 
-        int ticketCount = 1;
+
         for (Ticket ticket : this.arrTicketList) {
 
             if (tmCount.containsKey(ticket.getAgentName())) {
-                ticketCount = tmCount.get(ticket.getAgentName());
-                ticketCount++;
+
+                int ticketCount = tmCount.get(ticket.getAgentName()) + 1;
+                tmCount.put(ticket.getAgentName(), ticketCount);
+            } else {
+                tmCount.put(ticket.getAgentName(), 1);
             }
-            tmCount.put(ticket.getAgentName(), ticketCount);
+
         }
 
-        for (Map.Entry<String, Integer> entry : tmCount.entrySet()) {
-            String agentName = entry.getKey();
-            Integer count = entry.getValue();
-            ConsolIO.showMsg(agentName + " => " + count);
-        }
-    }
-
-    /**
-     * Search all tickets by specific tag.
-     */
-    public void searchTicketsUsingtagService(String tag) {
-
-
-        if (this.arrTicketList.isEmpty()) {
-            ConsolIO.showMsg("No record Found");
-        } else {
-            ConsolIO.ticketListHeader();
-            System.out.println();
-            for (Ticket ticket : this.arrTicketList) {
-                if (ticket.getTags().contains(tag)) {
-                    ConsolIO.showTicket(ticket);
-                    break;
-                }
-            }
-        }
+        return tmCount;
     }
 
     /**
@@ -130,12 +116,12 @@ public class TicketService {
      */
     public boolean updateTags(int id, List<String> newlist) {
 
-            for (Ticket ticket : this.arrTicketList) {
-                if (ticket.getId() == id) {
-                    ticket.setTags(newlist);
-                    return true;
-                }
+        for (Ticket ticket : this.arrTicketList) {
+            if (ticket.getId() == id) {
+                ticket.setTags(newlist);
+                return true;
             }
+        }
 
         return false;
     }
@@ -166,8 +152,7 @@ public class TicketService {
      */
     public boolean createTicketService(int id, String subject, String agentName, List<String> list) {
 
-        if (id > 0 && !subject.equals("") && !agentName.equals(""))
-        {
+        if (id > 0 && !subject.equals("") && !agentName.equals("")) {
             Ticket ticket = TicketFactory.newInstance(id, subject, agentName, list);
             this.arrTicketList.add(ticket);
             return true;

@@ -4,6 +4,8 @@ import com.yogesh.model.Ticket;
 import com.yogesh.service.TicketService;
 
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * Created by root on 15/1/16.
@@ -129,12 +131,29 @@ public class MenuClass {
     private void searchTicketsUsingtag() {
         ConsolIO.showMsg("Enter the tag want to search");
         String tag = ConsolIO.getString();
-        ticketService.searchTicketsUsingtagService(tag);
-        msg();
+
+        ConsolIO.ticketListHeader();
+        List<Ticket> list =  ticketService.searchTicketsUsingtagService(tag);
+        if (list.isEmpty()) {
+            ConsolIO.showMsg("Ticket Not found");
+        } else {
+            for (Ticket ticket : list) {
+                ConsolIO.showTicket(ticket);
+            }
+        }
+
     }
 
     private void showTicketcountAgent() {
-        ticketService.showTicketcountAgentService();
+        ConsolIO.showMsg("Agent Count  =>   Total Count");
+        TreeMap<String, Integer> tmCount =  ticketService.showTicketcountAgentService();
+
+        for (Map.Entry<String, Integer> entry : tmCount.entrySet()) {
+            String agentName = entry.getKey();
+            Integer count = entry.getValue();
+            ConsolIO.showMsg(agentName + " => " + count);
+        }
+
     }
 
 
@@ -145,7 +164,16 @@ public class MenuClass {
     }
 
     private void searchTicketsUsingAgentname() {
-        ticketService.searchTicketsUsingAgentnameService(ConsolIO.getAgentNAme());
+
+        List<Ticket> list = ticketService.searchTicketsUsingAgentnameService(ConsolIO.getAgentNAme());
+        ConsolIO.ticketListHeader();
+        if (list.isEmpty()) {
+            ConsolIO.showMsg("Ticket Not found");
+        } else {
+            for (Ticket ticket : list) {
+                ConsolIO.showTicket(ticket);
+            }
+        }
     }
 
     private void exit() {
