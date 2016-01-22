@@ -1,0 +1,71 @@
+package com.ticket;
+
+import java.util.HashSet;
+
+/**
+ * Created by root on 18/1/16.
+ */
+public class TicketModel implements Comparable<TicketModel>{
+    private final int id;
+    private final String subject;
+    private String agentName;
+    private HashSet<String> tags;
+    private final long  created;
+    private long modified;
+
+    TicketModel(int ticketId, String subject, String agentName, HashSet<String> setOfTags){
+        this.id         = ticketId;
+        this.subject    = subject;
+        this.agentName  = agentName;
+        this.tags       = setOfTags;
+        this.created    = Util.Timestamp();
+    }
+
+    public HashSet<String> getTags() {
+        return tags;
+    }
+
+    public void setTags(HashSet<String> tags) {
+        this.setModified(Util.Timestamp());
+        this.tags = tags;
+    }
+
+    public long getCreated() {
+        return created;
+    }
+    public String getAgentName() {
+        return agentName;
+    }
+
+    public void setAgentName(String agentName) {
+        this.setModified(Util.Timestamp());
+        this.agentName = agentName;
+    }
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public long getModified() {
+        return modified;
+    }
+
+    private void setModified(long modified) {
+        this.modified = modified;
+    }
+
+    @Override
+    public String toString() {
+        return "Ticket id is: " + getId() +" subject is: "+ getSubject() + " agent is: "+ getAgentName() + " Tags: "+ getTags() + " Created: "+ Util.getDateFormat(getCreated())
+                +" Modified: " + Util.getDateFormat(getModified());
+    }
+
+    @Override
+    public int compareTo(TicketModel ticketModel) {
+        return (int) (ticketModel.getModified() - this.getModified());
+    }
+}
