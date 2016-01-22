@@ -195,4 +195,25 @@ public class TicketOperationsTest {
 		assertEquals("Hello", ticketObjs.get(0).getSubject());
 	}
 
+	@Test
+	public void agentWiseTicketCount() throws Exception {
+
+		int id1 = ticketOperations.setTicketData(this.id, this.subject, this.agent, this.tags);
+		int id2 = ticketOperations.setTicketData(1, "Hello", this.agent, this.tags);
+		int id3 = ticketOperations.setTicketData(2, "Hello", "Lee", this.tags);
+
+		Ticket ticket1 = ticketService.showTicket(ticketOperations.ticketDetails, id1);
+		Ticket ticket2 = ticketService.showTicket(ticketOperations.ticketDetails, id2);
+		Ticket ticket3 = ticketService.showTicket(ticketOperations.ticketDetails, id3);
+
+		ticketDetails.put(id1, ticket1);
+		ticketDetails.put(id2, ticket2);
+		ticketDetails.put(id3, ticket3);
+
+		Map agentTicketCount = ticketService.agentTicketCount(ticketDetails);
+
+		assertEquals(2, agentTicketCount.get(this.agent));
+		assertEquals(1, agentTicketCount.get("Lee"));
+	}
+
 }

@@ -5,7 +5,7 @@ import java.util.Set;
 /**
  * Created by root on 8/1/16.
  */
-public class Ticket implements Comparable<Ticket> {
+public class Ticket {
 
 	public Ticket(int id, String subject, String agent, Set tags) {
 
@@ -26,48 +26,35 @@ public class Ticket implements Comparable<Ticket> {
 	}
 
 	public String getAgent() {
-		return agent;
+		return this.agent;
 	}
 
 	public void setAgent(String agent) {
 		this.agent = agent;
-		this.setModified(System.currentTimeMillis() / 1000L);
+		this.modified = System.currentTimeMillis() / 1000L;
 	}
 
 	public long getCreated() {
 		return created;
 	}
 
-	private void setCreated(long created) {
-		this.created = System.currentTimeMillis() / 1000L;;
-	}
-
-	public Set getTags() {
+	public Set<String> getTags() {
 		return tags;
 	}
 
 	public void setTags(Set tags) {
 		this.tags = tags;
-		this.setModified(System.currentTimeMillis() / 1000L);
+		this.modified = System.currentTimeMillis() / 1000L;
 	}
 
 	public Long getModified() {
 		return modified;
 	}
 
-	private void setModified(long modified) {
-		this.modified = System.currentTimeMillis() / 1000L;
-	}
-
 	private int id;
-	private String agent;
-	private String subject;
-	private Set tags;
 	private long created;
 	private long modified;
-
-	@Override
-	public int compareTo(Ticket o) {
-		return o.getModified().compareTo(this.getModified());
-	}
+	private String agent;
+	private String subject;
+	private Set<String> tags;
 }

@@ -20,25 +20,39 @@ public class TicketOperations {
 
 	//create ticket
 	public void createTicket() {
-		int id = this.dataInsertion();
-		if (id != 0) {
-			do {
-				System.out.println("Do you wish to add more tickets? Y/N");
-				String answer = scanner.next();
-				if (answer.toLowerCase().equals("y")) {
-					id = this.dataInsertion();
+		try {
+			boolean status = this.dataInsertion();
+			if (status) {
+				do {
+					System.out.println("Do you wish to add more tickets? Y/N");
+					String answer = scanner.next();
+					if (answer.toLowerCase().equals("y")) {
+						status = this.dataInsertion();
+						if (!status) {
+							System.out.println("Please enter a valid Ticket Id");
+						}
+					}
+					else if (answer.toLowerCase().equals("n"))
+						createFlag = false;
 				}
-				else if (answer.toLowerCase().equals("n"))
-					createFlag = false;
+				while (createFlag);
+				System.out.println("Ticket(s) created successfully");
+				createFlag = true;
 			}
-			while (createFlag);
-			System.out.println("Ticket(s) created successfully");
-			createFlag = true;
+			else {
+				System.out.println("Please enter a valid Ticket Id");
+			}
+		}
+		catch (InputMismatchException e) {
+			System.out.println("Please enter a valid Ticket Id");
+		}
+		finally {
+			scanner.nextLine();
 		}
 	}
 
 	// ticket data insertion
-	public int dataInsertion() {
+	public boolean dataInsertion() {
 		System.out.println("Enter the ticket id");
 		int validId = 0;
 		int id = scanner.nextInt();
@@ -64,7 +78,9 @@ public class TicketOperations {
 		finally {
 			scanner.nextLine();
 		}
-		return validId;
+		if (validId != 0)
+			return true;
+		else return false;
 	}
 
 	// actual setting of data
@@ -129,7 +145,7 @@ public class TicketOperations {
 				System.out.println("Ticket " + id + " has deleted");
 			}
 			else {
-				System.out.println("No such ticket with id: "+id+" available to delete");
+				System.out.println("No such ticket with id: " + id + " available to delete");
 			}
 		}
 	}
@@ -141,24 +157,24 @@ public class TicketOperations {
 		}
 		else {
 			int id = readTicketId();
-			Ticket ticketInfo = ticketService.showTicket(ticketDetails,id);
+			Ticket ticketInfo = ticketService.showTicket(ticketDetails, id);
 			if (ticketInfo != null)
-			utilOps.printData(ticketInfo);
-			else System.out.println("Invalid ticket Id : "+ id +" given. No Content available.");
+				utilOps.printData(ticketInfo);
+			else System.out.println("Invalid ticket Id : " + id + " given. No Content available.");
 		}
 	}
 
 	// view all the ticket list
 	public void showTicketList() {
 		if (ticketDetails.isEmpty()) {
-			System.out.println("No tickets available to display.");
+			System.out.println("Errrrr.... No tickets in the house. Please create a new one.");
 		}
 		else {
-			List<Ticket> sortedList = utilOps.sortedList(valueSet);
-			sortedList.forEach(utilOps::printData);
+			valueSet.stream().sorted((Ticket obj1, Ticket obj2) -> -obj1.getModified().compareTo(obj2.getModified())).forEach(utilOps::printData);
 		}
 	}
 
+	// read tags form console input
 	public String readTags() {
 		Scanner scanner = new Scanner(System.in);
 		System.out.println("Enter the tags (comma separated)");
@@ -181,10 +197,10 @@ public class TicketOperations {
 			System.out.println("Enter the agent name");
 			String agent = scanner.next().trim();
 
-			List<Ticket> ticketObjs = ticketService.agentSearchTicket(agent,ticketDetails);
+			List<Ticket> ticketObjs = ticketService.agentSearchTicket(agent, ticketDetails);
 			if (!ticketObjs.isEmpty())
-			ticketObjs.forEach(utilOps ::printData);
-			else System.out.println("No Content available for agent : "+agent);
+				ticketObjs.forEach(utilOps::printData);
+			else System.out.println("No Content available for agent : " + agent);
 		}
 	}
 
@@ -194,24 +210,9 @@ public class TicketOperations {
 			System.out.println("No tickets available to display.");
 		}
 		else {
-			HashMap agTicketCount = new HashMap();
-			Set hmKeySet = ticketDetails.keySet();
-			for (Object key : hmKeySet) {
-				Ticket eachTicket = ticketDetails.get(key);
-				String ag = eachTicket.getAgent();
-				if (agTicketCount.containsKey(ag)) {
-					int value = (int) agTicketCount.get(ag);
-					value++;
-					agTicketCount.replace(ag, value);
-				}
-				else
-					agTicketCount.put(ag, 1);
-			}
-			TreeSet keys = new TreeSet(agTicketCount.keySet());
+			Map<String, List<Ticket>> agTicketCount = ticketService.agentTicketCount(ticketDetails);
 			System.out.println("Agent -> Count");
-			for (Object key : keys) {
-				System.out.println(key + " -> " + agTicketCount.get(key));
-			}
+			agTicketCount.keySet().forEach(key -> System.out.println(key + " -> " + agTicketCount.get(key).size()));
 		}
 	}
 
@@ -224,10 +225,10 @@ public class TicketOperations {
 			System.out.println("Enter the tag");
 			String tag = scanner.next();
 
-			List<Ticket> ticketObjs = ticketService.tagSearchTicket(tag,ticketDetails);
+			List<Ticket> ticketObjs = ticketService.tagSearchTicket(tag, ticketDetails);
 			if (!ticketObjs.isEmpty())
 				ticketObjs.forEach(utilOps::printData);
-			else System.out.println("No content available for tag : "+tag);
+			else System.out.println("No content available for tag : " + tag);
 		}
 	}
 }

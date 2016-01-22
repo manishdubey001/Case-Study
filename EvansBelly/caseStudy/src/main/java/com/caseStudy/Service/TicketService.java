@@ -1,16 +1,14 @@
 package com.caseStudy.Service;
 
 import com.caseStudy.Model.Ticket;
-import com.caseStudy.Util.Util;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Created by root on 19/1/16.
  */
 public class TicketService {
-
-	Util utilOps = new Util();
 
 	public Ticket updateAgent(Ticket ticketObj, String data) {
 		if (!data.isEmpty()) {
@@ -43,7 +41,6 @@ public class TicketService {
 		return false;
 	}
 
-
 	public Ticket showTicket(HashMap<Integer, Ticket> ticketDetails, int id) {
 		if (ticketDetails.containsKey(id)) {
 			Ticket ticketInfo = ticketDetails.get(id);
@@ -53,27 +50,21 @@ public class TicketService {
 	}
 
 	public List<Ticket> agentSearchTicket(String searchAgent, HashMap<Integer, Ticket> ticketDetails) {
-		List<Ticket> ticketObjs = new ArrayList<>();
-		List<Ticket> lt = utilOps.sortedList(ticketDetails.values());
-		for (Ticket ticketData : lt) {
-			String agent = ticketData.getAgent();
-			if (agent.equals(searchAgent)) {
-				ticketObjs.add(ticketData);
-			}
-		}
-		return ticketObjs;
+		return ticketDetails.values().stream()
+				.filter(ticket -> ticket.getAgent().toLowerCase().equals(searchAgent.toLowerCase()))
+				.sorted((Ticket obj1, Ticket obj2) -> obj2.getModified().compareTo(obj1.getModified()))
+				.collect(Collectors.toList());
 	}
 
 	public List<Ticket> tagSearchTicket(String tag, HashMap<Integer, Ticket> ticketDetails) {
-		List<Ticket> ticketObjs = new ArrayList<>();
-		List<Ticket> lt = utilOps.sortedList(ticketDetails.values());
-		for (Ticket ticketData : lt) {
-			Set tags = ticketData.getTags();
-			if (tags.contains(tag)) {
-				ticketObjs.add(ticketData);
-			}
-		}
-		return ticketObjs;
+		return ticketDetails.values().stream()
+				.filter(ticket -> ticket.getTags().contains(tag.toLowerCase()))
+				.sorted((Ticket obj1, Ticket obj2) -> obj2.getModified().compareTo(obj1.getModified()))
+				.collect(Collectors.toList());
 	}
 
+	public Map<String, List<Ticket>> agentTicketCount(HashMap<Integer, Ticket> ticketDetails) {
+		return new TreeMap<>(ticketDetails.values().stream()
+				.collect(Collectors.groupingBy(Ticket::getAgent)));
+	}
 }

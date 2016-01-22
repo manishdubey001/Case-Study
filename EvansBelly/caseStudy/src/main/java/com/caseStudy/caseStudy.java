@@ -68,6 +68,7 @@ public class caseStudy {
 			}
 		}
 		catch (Exception e) {
+			e.printStackTrace();
 			System.out.println("No input or wrong input selected");
 		}
 	}
