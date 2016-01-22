@@ -50,10 +50,27 @@ public class TicketService {
 	}
 
 	public List<Ticket> agentSearchTicket(String searchAgent, HashMap<Integer, Ticket> ticketDetails) {
+
 		return ticketDetails.values().stream()
 				.filter(ticket -> ticket.getAgent().toLowerCase().equals(searchAgent.toLowerCase()))
 				.sorted((Ticket obj1, Ticket obj2) -> obj2.getModified().compareTo(obj1.getModified()))
 				.collect(Collectors.toList());
+
+	/*	List<Ticket> ticketObjs = new ArrayList<>();
+		List<Ticket> lt = utilOps.sortedList(ticketDetails.values());
+		for (Ticket ticketData : lt) {
+			String agent = ticketData.getAgent();
+			if (agent.equals(searchAgent)) {
+				ticketObjs.add(ticketData);
+			}
+		}
+		// Your code here is fine. It is a bit less efficient to sort first and then to find the agent
+		// (consider, for example, if the agent has not tickets or just one ticket--nothing to sort).
+		
+		// Can you see how to rewrite these methods with streams? This one would be
+		// ticketDetails.values().stream().filter(t->t.getAgent().equals(searchAgent)).sorted().collect(Collectors.toList());
+		return ticketObjs;*/
+
 	}
 
 	public List<Ticket> tagSearchTicket(String tag, HashMap<Integer, Ticket> ticketDetails) {

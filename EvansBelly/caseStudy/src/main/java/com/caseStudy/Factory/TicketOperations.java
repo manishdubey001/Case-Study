@@ -53,6 +53,8 @@ public class TicketOperations {
 
 	// ticket data insertion
 	public boolean dataInsertion() {
+		// CJM - note that the caller doesn't really use the id. I would probably return
+		// a boolean true/false depending on whether a valid ticket was created.
 		System.out.println("Enter the ticket id");
 		int validId = 0;
 		int id = scanner.nextInt();
