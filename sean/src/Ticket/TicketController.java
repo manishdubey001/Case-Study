@@ -1,5 +1,6 @@
 package Ticket;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -50,12 +51,13 @@ public class TicketController {
 	}
 	
 	public List<Ticket> getList(String mode, String filter) {
+		List<Ticket> ticketList =  new ArrayList<Ticket>(getTickets().values());
 		if(mode.equals("agent"))
-			return getListByAgentName(filter);
+			return getListByAgentName(filter, ticketList);
 		else if(mode.equals("tag"))
-			return getListByTagName(filter);
+			return getListByTagName(filter, ticketList);
 		
-		return getListDescendingByModified(getTickets().values().stream().collect(Collectors.toList()));
+		return getListDescendingByModified(ticketList);
 	}
 	
 	public List<Ticket> getListDescendingByModified(List<Ticket> ticketList) {
@@ -65,15 +67,15 @@ public class TicketController {
                 .collect(Collectors.toList());
 	}
 	
-	public List<Ticket> getListByAgentName(String agentName) {
-		List<Ticket> ticketList = getTickets().values().stream().filter(
+	public List<Ticket> getListByAgentName(String agentName, List<Ticket> ticketList) {
+		ticketList = getTickets().values().stream().filter(
 				ticket -> ticket.getAgentName().toLowerCase().equals(agentName.toLowerCase())
 			).collect(Collectors.toList());
 		return getListDescendingByModified(ticketList);
 	}
 	
-	public List<Ticket> getListByTagName(String tagName) {
-		List<Ticket> ticketList = getTickets().values().stream().filter(
+	public List<Ticket> getListByTagName(String tagName, List<Ticket> ticketList) {
+		ticketList = getTickets().values().stream().filter(
 				ticket -> ticket.getTags().contains(tagName.toLowerCase())
 			).collect(Collectors.toList());
 		return getListDescendingByModified(ticketList);
