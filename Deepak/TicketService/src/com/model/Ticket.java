@@ -105,11 +105,16 @@ public class Ticket {
     }
 
     public Set<String> getTags2() {
-        return tags2;
+        //return tags2;
+        if(tags2 != null)
+            return new HashSet<>(tags2);
+        else
+            return null;
     }
 
     public void setTags2(Set<String> tags2) {
-        this.tags2 = tags2;
+        //this.tags2 = tags2;
+        this.tags2 = new HashSet<>(tags2);
     }
 
     public static long getCountId() {

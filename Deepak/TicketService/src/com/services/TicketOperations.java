@@ -5,6 +5,8 @@ import com.model.Ticket;
 import com.util.UserConsoleInput;
 
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Created by root on 15/1/16.
@@ -94,11 +96,9 @@ public class TicketOperations {
 
         tempTicketList = new ArrayList<>();
 
-        for (int i = 0; i<ticketArrayList.size(); i++){
-            if(ticketArrayList.get(i).getId() == id){
-                tempTicketList = ticketArrayList.subList(i, i+1);
-            }
-        }
+        // Stream and Lambda implementation.
+        Stream<Ticket> stream = ticketArrayList.stream();
+        tempTicketList = stream.filter(lst -> lst.getId() == id).collect(Collectors.toList());
 
         return tempTicketList;
 
@@ -113,15 +113,15 @@ public class TicketOperations {
             return;
         }
 
-        /* Modified as per modified date */
-        Collections.sort(ticketList, new ModifiedComparator());
+        /*
+        * Stream implementation of sorting and comparator */
+        Stream<Ticket> stream = ticketList.stream();
 
-        for (Ticket ticket : ticketList){
-            System.out.println(ticket.getId()+" | "+ticket.getSubject()+
-                    " | "+ticket.getAgent_name()+" | "+ticket.getTags2()+
-                    " | "+ticket.getStatus()+" | "+ticket.getModified()+" | "+ticket.getCreated());
-        }
-    }
+        stream.sorted((Ticket t1, Ticket t2) -> Long.valueOf(t2.getModified()).compareTo(Long.valueOf( t1.getModified())))
+              .forEach((Ticket ticket) -> System.out.println(
+                      ticket.getId()+" | "+ticket.getSubject()+" | "+ticket.getAgent_name()+
+                              " | "+ticket.getTags2()+" | "+ticket.getModified()));
+   }
 
 
     /*
@@ -147,6 +147,17 @@ public class TicketOperations {
             return;
         }
 
+        List<Ticket> ticketU = showTicketById(id);
+
+        if(ticketU == null || ticketU.isEmpty()){
+            System.out.println("Ticket with id: "+id+" is not available");
+            return;
+        }
+        else{
+            showTickets(ticketU);
+        }
+
+
         String agent_name = "";
         String[] tag_names;
         Set<String> tagHashSet = new HashSet<>();
@@ -154,9 +165,9 @@ public class TicketOperations {
         agent_name = UserConsoleInput.getAgentName();
         tagHashSet = UserConsoleInput.getTagNames();
 
-        int status = updateTicket(id, agent_name, tagHashSet);
+        Ticket ticket = updateTicket(id, agent_name, tagHashSet);
 
-        if(status == 0){
+        if(ticket == null){
             System.out.println("Ticket update failed!");
         }
         else{
@@ -166,54 +177,38 @@ public class TicketOperations {
     }
 
 
-    public int updateTicket(int id, String agent_name, Set<String> tagHashSet){
+    public Ticket updateTicket(int id, String agent_name, Set<String> tagHashSet){
+
         if(id <= 0 || agent_name == null|| agent_name.isEmpty()){
             System.out.println("Please provide proper Agent Name!");
-            return 0;
-        }
-
-        List<Ticket> tempTicketList = new ArrayList<>();
-        tempTicketList = showTicketById(id);
-        if(tempTicketList.size() == 0){
-            System.out.println("No ticket available to update!s");
-            return 0;
+            return null;
         }
 
         long unixTime = System.currentTimeMillis() / 1000L;
 
-        try {
-            tempTicketList.get(0).setAgent_name(agent_name);
-            tempTicketList.get(0).setTags2(tagHashSet);
-            tempTicketList.get(0).setModified(unixTime);
-        }
-        catch (Exception e){
-            System.out.println("Error in update ticket");
-            return 0;
+        Optional optional = ticketArrayList.stream().filter(lst -> lst.getId() == id).findFirst();
+        if(optional.isPresent()) {
+            Ticket ticket = (Ticket) optional.get();
+            ticket.setAgent_name(agent_name);
+            ticket.setTags2(tagHashSet);
+            ticket.setModified(unixTime);
+            return ticket;
         }
 
-        return id;
+        return null;
 
     }
 
 
     /*
     * Delete ticket by id*/
-    public void deleteTicketById(int id){
-        List<Ticket> tempTicketList = new ArrayList<>();
-        tempTicketList = showTicketById(id);
+    public boolean deleteTicketById(int id){
 
-        if(tempTicketList.size() == 0){
-            System.out.println("No ticket available to delete");
-            return;
-        }
+        Optional optional = ticketArrayList.stream().filter(lst -> lst.getId() == id).findFirst();
+        if(optional.isPresent())
+            return ticketArrayList.remove(optional.get());
 
-        if(tempTicketList.remove(0) != null){
-            Ticket.setCountId((Ticket.getCountId() - 1));
-            System.out.println("Ticket id: "+id +" remove successful ");
-        }
-        else {
-            System.out.println("There is some problem in deletion pls try later!");
-        }
+        return optional.isPresent();
     }
 
 
@@ -234,12 +229,11 @@ public class TicketOperations {
             return tempTicketList;
         }
 
-        for (int i = 0; i<ticketArrayList.size(); i++){
-            if(ticketArrayList.get(i).getAgent_name().toLowerCase().equals(agent_name.toLowerCase())){
-                tempTicketList.add(ticketArrayList.get(i));
-            }
-        }
+        Stream<Ticket> stream = ticketArrayList.stream();
+
+        tempTicketList = stream.filter(lst -> lst.getAgent_name().toLowerCase().equals(agent_name.toLowerCase())).collect(Collectors.toList());
         return tempTicketList;
+
     }
 
 
@@ -263,59 +257,54 @@ public class TicketOperations {
             return tempTicketList;
         }
 
-        for (int i= 0; i<ticketArrayList.size(); i++){
-            for(String tag_name : tagHashSet){
-                if(ticketArrayList.get(i).getTags2().contains(tag_name)){
-                    tempTicketSet.add(ticketArrayList.get(i));
-                }
-            }
-        }
+        // Above code using Stream and Lambda
 
-        tempTicketList.addAll(tempTicketSet);
+        Stream<Ticket> stream = ticketArrayList.stream();
+
+        tempTicketList = stream.filter(lst -> lst.getTags2().stream()
+                                    .filter(tag -> tagHashSet.contains(tag))
+                                    .collect(Collectors.toList()).size() > 0)
+                                    .collect(Collectors.toList());
+
         return tempTicketList;
+
     }
 
 
     /*
-    * Show ticket count by agent name */
-    public Map<String, Integer> calculateAgentTicketCount() {
-        Map<String, Integer> agentCountMap = new HashMap<String, Integer>();
-        Set<String> agentsSet = new HashSet<>();
-        int count = 0;
+    * NEW Search Ticket agent Count using lambda and stream
+    * */
+    public Map<String, List<Ticket>> calculateAgentTicketCount() {
+        return new TreeMap<>(ticketArrayList.stream().collect(Collectors.groupingBy(Ticket::getAgent_name)));
+    }
 
-        for (int i = 0; i < ticketArrayList.size(); i++) {
 
-            Integer temp = Integer.valueOf(count++);
-            String tempStr = ticketArrayList.get(i).getAgent_name();
-
-            if (agentsSet.add(tempStr)) {       // if agent name is new and added in agentsSet
-                agentCountMap.put(tempStr, 1);
-            }
-            else
-            {
-                if (agentCountMap.containsKey(tempStr)) {       // if agents name is already in countMap
-                    int te = (Integer)agentCountMap.get(tempStr);
-                    agentCountMap.put(tempStr, ++te);
-                }
-            }
-
-        }
-
-        return agentCountMap;
+    /*
+    * NEW Show agent and ticket count */
+    public void showAgentTicketCount(Map<String, List<Ticket>> agentCountMap){
+        agentCountMap.forEach((String agentName,List<Ticket> ticketList)-> System.out.println(agentName+"   :   "+ticketList.size()));
     }
 
 
 
-    /* To show agent and ticket count */
-    public void showAgentTicketCount(Map<String, Integer> agentCountMap){
+    public List<Ticket> autoLoadTickets(int noOfTickets){
 
-        Map<String, Integer> treeMap = new TreeMap<>();
-        treeMap.putAll(agentCountMap);
-        System.out.println("Agents  :  Ticket Count");
-        for(Map.Entry<String, Integer> entry : treeMap.entrySet()){
-            System.out.println(entry.getKey().toString()+"    :    "+entry.getValue());
+        Random rand = new Random();
+
+        for(int i=0; i<noOfTickets; i++){
+            //String agent = "Agent"+rand.nextInt(noOfTickets/10);
+
+            String agent = "Agent"+rand.nextInt(50);
+            String tag1 = "Tag"+rand.nextInt(10);
+            String tag2 = "Tag"+rand.nextInt(10);
+            Set<String> tagSet = new HashSet<>(Arrays.asList(tag1,tag2));
+
+            String subject = "Subject"+i;
+
+            Ticket ticket = TicketFactory.getTicketInstance(subject, agent, tagSet);
+            ticketArrayList.add(ticket);
         }
+
+        return ticketArrayList;
     }
-
-
 }

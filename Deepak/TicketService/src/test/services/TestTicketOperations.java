@@ -119,7 +119,7 @@ public class TestTicketOperations {
         assertNotNull(createdTicket);
         assertEquals(agent_name, createdTicket.get(0).getAgent_name());
         assertEquals(subject, createdTicket.get(0).getSubject());
-        assertEquals(hashTags, createdTicket.get(0).getTags2());
+        assertNull(createdTicket.get(0).getTags2());
 
         assertNull(createdTicket.get(0).getTags2());
     }
@@ -154,21 +154,17 @@ public class TestTicketOperations {
         // assertEquals(1, created);
         assertNotNull(created);
         assertNotEquals(0, created);
+
         String agent_name = "Updated Agent";
         hashTags.clear();
         hashTags.add("New_Tag1");
         hashTags.add("New_Tag2");
 
-        int updateId = objTicketOperation.updateTicket((int) created, agent_name, hashTags);
-        assertNotNull(updateId);
-        assertNotEquals(0, updateId);
+        Ticket ticket = objTicketOperation.updateTicket((int) created, agent_name, hashTags);
+        assertNotNull(ticket);
+        assertEquals(agent_name, ticket.getAgent_name());
+        assertEquals(hashTags, ticket.getTags2());
 
-        List<Ticket> createdTicket = objTicketOperation.showTicketById((int) updateId);
-        assertNotNull(createdTicket);
-        assertEquals(created, createdTicket.get(0).getId());
-        assertEquals(agent_name, createdTicket.get(0).getAgent_name());
-        assertEquals(subject, createdTicket.get(0).getSubject());
-        assertEquals(hashTags, createdTicket.get(0).getTags2());
     }
 
 
@@ -187,9 +183,8 @@ public class TestTicketOperations {
         hashTags.add("New_Tag1");
         hashTags.add("New_Tag2");
 
-        int updateId = objTicketOperation.updateTicket((int) created, agent_name, hashTags);
-        assertNotNull(updateId);
-        assertEquals(0, updateId);
+        Ticket ticket = objTicketOperation.updateTicket((int) created, agent_name, hashTags);
+        assertNull(ticket);
     }
 
 
@@ -208,9 +203,8 @@ public class TestTicketOperations {
         hashTags.add("New_Tag1");
         hashTags.add("New_Tag2");
 
-        int updateId = objTicketOperation.updateTicket((int) created, agent_name, hashTags);
-        assertNotNull(updateId);
-        assertEquals(0, updateId);
+        Ticket ticket = objTicketOperation.updateTicket((int) created, agent_name, hashTags);
+        assertNull(ticket);
     }
 
 
@@ -225,9 +219,26 @@ public class TestTicketOperations {
 
         hashTags.clear();   // empty the tags set
 
-        int updateId = objTicketOperation.updateTicket((int) created, agent_name, hashTags);
-        assertNotNull(updateId);
-        assertNotEquals(0, updateId);
+        Ticket ticket = objTicketOperation.updateTicket((int) created, agent_name, hashTags);
+        assertNotNull(ticket);
+        assertEquals(agent_name, ticket.getAgent_name());
+        assertEquals(hashTags, ticket.getTags2());
+    }
+
+
+    @Test
+    public void testTicketUpdateWithInvalidId(){
+        TicketOperations objTicketOperation = new TicketOperations();
+        long created = objTicketOperation.createTicket(subject,agent_name, hashTags);
+
+        // assertEquals(1, created);
+        assertNotNull(created);
+        assertNotEquals(0, created);
+
+        hashTags.clear();   // empty the tags set
+
+        Ticket ticket = objTicketOperation.updateTicket(0, agent_name, hashTags);
+        assertNull(ticket);
     }
 
 
@@ -273,6 +284,7 @@ public class TestTicketOperations {
         objTicketOperation.deleteTicketById((int) created);
 
         List<Ticket> createdTicket = objTicketOperation.showTicketById((int) created);
+
         assertTrue(createdTicket.isEmpty());
 
     }
@@ -286,6 +298,7 @@ public class TestTicketOperations {
         assertNotNull(created);
         assertNotEquals(0, created);
 
+        System.out.println(created);
         objTicketOperation.deleteTicketById((int) created +1);
 
         List<Ticket> createdTicket = objTicketOperation.showTicketById((int) created);
@@ -332,7 +345,7 @@ public class TestTicketOperations {
         assertNotNull(created);
         assertNotEquals(0, created);
 
-        Set<String> searchTag = new HashSet<>(Arrays.asList("Tag1"));
+        Set<String> searchTag = new HashSet<>(Arrays.asList("Tag1","Tag2"));
 
         List<Ticket> searchedTickets = objTicketOperation.searchTicketsWithTags(searchTag);
 
@@ -369,10 +382,25 @@ public class TestTicketOperations {
         assertNotNull(created);
         assertNotEquals(0, created);
 
-        Map<String, Integer> agentTicketsCount = objTicketOperation.calculateAgentTicketCount();
+        Map<String, List<Ticket>> agentTicketsCount = objTicketOperation.calculateAgentTicketCount();
 
         assertNotNull(agentTicketsCount);
         assertTrue(agentTicketsCount.containsKey("Agent1"));
-        assertEquals(Integer.valueOf(1), agentTicketsCount.get("Agent1"));
+        assertEquals(agentTicketsCount.values().size(), agentTicketsCount.get("Agent1").size());
+    }
+
+
+    @Test
+    public void testShowAllTickets(){
+        TicketOperations objTicketOperation = new TicketOperations();
+        long created = objTicketOperation.createTicket(subject,agent_name, hashTags);
+
+        assertNotNull(created);
+        assertNotEquals(0, created);
+
+        List<Ticket> tickets= objTicketOperation.showAllTicket();
+
+        assertNotNull(tickets);
+        assertTrue(tickets.get(0) instanceof Ticket);
     }
 }

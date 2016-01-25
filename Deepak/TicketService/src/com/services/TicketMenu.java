@@ -24,7 +24,6 @@ public class TicketMenu {
                 case 1:
                     System.out.println("Creating Ticket");
                     objTicktOperation.create();
-                    //objTicktOperation.showAllTicket();
                     objTicktOperation.showTickets(objTicktOperation.showAllTicket());
                     System.out.println("Ticket create successful");
                     break;
@@ -44,8 +43,10 @@ public class TicketMenu {
                 case 4:
                     System.out.println("Enter ticket Id");
                     int id3 = UserConsoleInput.acceptNumber();
-                    objTicktOperation.deleteTicketById(id3);
-                    System.out.println("Ticket update successful");
+                    if(objTicktOperation.deleteTicketById(id3))
+                        System.out.println("Ticket delete successful!");
+                    else
+                        System.out.println("Ticket not able to delete!");
                     break;
 
                 case 5:
@@ -61,12 +62,15 @@ public class TicketMenu {
                     break;
                 case 8:
                     System.out.println("Enter Agent Name");
-                    //Map<String, Integer> ticketContMap = objTicktOperation.calculateAgentTicketCount();
                     objTicktOperation.showAgentTicketCount(objTicktOperation.calculateAgentTicketCount());
                     break;
                 case 0:
                     System.exit(0);
                     break;
+                case 9:
+                    System.out.println("Enter no of tickets you want");
+                    int noOfTickets = UserConsoleInput.acceptNumber();
+                    objTicktOperation.showTickets(objTicktOperation.autoLoadTickets(noOfTickets));
 
                 default:
                     System.out.println("Wrong Input! please enter number between 1 to 9");
