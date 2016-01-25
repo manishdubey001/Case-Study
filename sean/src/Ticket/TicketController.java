@@ -11,10 +11,6 @@ public class TicketController {
 		return tickets;
 	}
 
-	public void setTickets(HashMap<Integer, Ticket> tickets) {
-		this.tickets = tickets;
-	}
-
 	public Ticket createTicket(HashMap<String, String> attributes) {
 		Logger.info("Create ticket operation started!");
 		TicketFactory ticketFactory = new TicketFactory();
@@ -54,35 +50,33 @@ public class TicketController {
 	}
 	
 	public List<Ticket> getList(String mode, String filter) {
-		if(mode.equals("all"))
-			return getListDescendingByModified();
-		else if(mode.equals("agent"))
+		if(mode.equals("agent"))
 			return getListByAgentName(filter);
 		else if(mode.equals("tag"))
 			return getListByTagName(filter);
 		
-		return getListDescendingByModified();
+		return getListDescendingByModified(getTickets().values().stream().collect(Collectors.toList()));
 	}
 	
-	public List<Ticket> getListDescendingByModified() {
-		return getTickets().values()
+	public List<Ticket> getListDescendingByModified(List<Ticket> ticketList) {
+		return ticketList
                 .stream()
                 .sorted((Ticket o1, Ticket o2) -> -o1.getModified().compareTo(o2.getModified()))
                 .collect(Collectors.toList());
 	}
 	
 	public List<Ticket> getListByAgentName(String agentName) {
-		List<Ticket> ticketList = getListDescendingByModified();
-		return ticketList.stream().filter(
+		List<Ticket> ticketList = getTickets().values().stream().filter(
 				ticket -> ticket.getAgentName().toLowerCase().equals(agentName.toLowerCase())
 			).collect(Collectors.toList());
+		return getListDescendingByModified(ticketList);
 	}
 	
 	public List<Ticket> getListByTagName(String tagName) {
-		List<Ticket> ticketList = getListDescendingByModified();
-		return ticketList.stream().filter(
+		List<Ticket> ticketList = getTickets().values().stream().filter(
 				ticket -> ticket.getTags().contains(tagName.toLowerCase())
 			).collect(Collectors.toList());
+		return getListDescendingByModified(ticketList);
 	}
 
 	public void printTicket(Ticket ticket) {
