@@ -9,9 +9,11 @@ public class TicketFactory{
 	
 	public Ticket createTicket(HashMap<String, String> attributes){
 		TicketFactory.id++;
+		// I like the use of Logger rather than just directly writing to the console
 		Logger.info("Setting up new id for ticket " + TicketFactory.id);
 		String tagStr = attributes.get("tags");
 		HashSet<String> tags = new HashSet<String> (Arrays.asList(tagStr.split(",")));
+		// See my other comment about hard-coding field names like "agentName".
 		Ticket ticket = new Ticket.TicketBuilder()
 				.withId(TicketFactory.id)
 				.withAgent(attributes.get("agentName"))
@@ -22,6 +24,9 @@ public class TicketFactory{
 		return ticket;
 	}
 
+	// I would implement separate methods rather than sending the update in a Map like this.
+	// If you do want a way to encapsulate ticket updates into one object, I would create
+	// a dedicated 'TicketUpdate' class to describe the update.
 	public Ticket updateTicket(HashMap<String, String> attributes, Ticket ticket) {
 		String s = null;
 		if ((s = attributes.get("agentName")) != null) {

@@ -14,12 +14,22 @@ public class TicketController {
 
 	public Ticket createTicket(HashMap<String, String> attributes) {
 		Logger.info("Create ticket operation started!");
+		// cjm - if you have a separate class to provide factory methods,
+		// it's most common to either
+		// 1) Create a persistent TicketFactory and re-use it, or
+		// 2) Use static methods in the TicketFactory class.
+
 		TicketFactory ticketFactory = new TicketFactory();
 		Ticket ticket = ticketFactory.createTicket(attributes);
 		getTickets().put(ticket.getId(), ticket);
 		return ticket;
 	}
 
+	// Providing string names to update properties can be problematic.
+	// Usually within Java code if you need to do something like this you
+	// would try to use an enum rather than just strings. If you do need
+	// to use strings, define common string constants in a class somehwere,
+	// and use them consistently.
 	public Ticket updateTicket(HashMap<String, String> attributes, int id) {
 		Logger.info("Update ticket operation started!");
 		try {
@@ -52,6 +62,9 @@ public class TicketController {
 	
 	public List<Ticket> getList(String mode, String filter) {
 		List<Ticket> ticketList =  new ArrayList<Ticket>(getTickets().values());
+		// having a "mode" like this is problematic for some of the reasons
+		// mentioned in the other comment. I strongly recommend just implementing
+		// separate methods for the various use cases.
 		if(mode.equals("agent"))
 			return getListByAgentName(filter, ticketList);
 		else if(mode.equals("tag"))
@@ -66,14 +79,19 @@ public class TicketController {
                 .sorted((Ticket o1, Ticket o2) -> -o1.getModified().compareTo(o2.getModified()))
                 .collect(Collectors.toList());
 	}
-	
+
+	// Note that you /assign/ to the method variable 'ticketList'; you never read from it
+	// So that parameter isn't needed at all.
+	// For this reason it's common to make method parameters final--the compiler would not allow this in that case.
+
 	public List<Ticket> getListByAgentName(String agentName, List<Ticket> ticketList) {
 		ticketList = getTickets().values().stream().filter(
 				ticket -> ticket.getAgentName().toLowerCase().equals(agentName.toLowerCase())
 			).collect(Collectors.toList());
 		return getListDescendingByModified(ticketList);
 	}
-	
+
+	// Same comment about ticketList
 	public List<Ticket> getListByTagName(String tagName, List<Ticket> ticketList) {
 		ticketList = getTickets().values().stream().filter(
 				ticket -> ticket.getTags().contains(tagName.toLowerCase())
