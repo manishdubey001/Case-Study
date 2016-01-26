@@ -3,6 +3,7 @@ package com.model;
 /**
  * Created by root on 14/1/16.
  */
+// How do you plan to use this class?
 public class Tag {
     private static long countId = 1;
     private long id;

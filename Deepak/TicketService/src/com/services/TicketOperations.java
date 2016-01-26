@@ -13,6 +13,9 @@ import java.util.stream.Stream;
  */
 public class TicketOperations {
 
+    // Consider whether this the best way to store the tickets? Every operation by ID
+    // requires scanning the entire array. If there are thousands or millions of tickets,
+    // this could be expensive.
     private ArrayList<Ticket> ticketArrayList = null;
     public Set<String> allTagHashSet = null;
 
@@ -25,8 +28,12 @@ public class TicketOperations {
     /*
     * To set parameters for Create ticket from console input */
     public void create(){
+        // Generally, try to define variables at the same time you
+        // assign them. I would combine these declarations and assignments.
         String subject = null, agent_name =  null;
         String[] tag_names;
+        // Note that you create a new HashSet here but never use it; it is thrown
+        // away when you assign it the result of getTagNames() below.
         Set<String> tagHashSet = new HashSet<>();
 
         subject = UserConsoleInput.getSubject();
@@ -47,6 +54,10 @@ public class TicketOperations {
 
     /*
     * Crating ticket using  */
+    // Returning error codes can be a confusing way to indicate success or failure.
+    // If it matters to the caller, I would return the Ticket object directly, or void
+    // if it doens't matter.
+    // If a Ticket can't be created in a method named 'createTicket', I would throw an exception.
     public long createTicket(String subject, String agent_name, Set<String> tagHashSet){
 
         Ticket ticket = null;
@@ -77,6 +88,7 @@ public class TicketOperations {
 
     /*
     * Show all the tickets in ArrayList */
+    // call this 'get' if you are just returning the list.
     public List<Ticket> showAllTicket(){
         return ticketArrayList;
         //showTickets(ticketArrayList);
@@ -85,6 +97,7 @@ public class TicketOperations {
 
     /*
     * Show Ticket By Id */
+    // Same comment about 'get' versus 'show'
     public List<Ticket> showTicketById(int id){
 
         /* if id beyond the limit */
@@ -97,6 +110,7 @@ public class TicketOperations {
         tempTicketList = new ArrayList<>();
 
         // Stream and Lambda implementation.
+        // usually you avoid storing intermediate results and just chain this together.
         Stream<Ticket> stream = ticketArrayList.stream();
         tempTicketList = stream.filter(lst -> lst.getId() == id).collect(Collectors.toList());
 
@@ -178,6 +192,8 @@ public class TicketOperations {
 
 
     public Ticket updateTicket(int id, String agent_name, Set<String> tagHashSet){
+        // A method that returns null can lead to problems for callers. In the case
+        // of invalid input, I prefer throwing exceptions to returning null.
 
         if(id <= 0 || agent_name == null|| agent_name.isEmpty()){
             System.out.println("Please provide proper Agent Name!");
@@ -186,6 +202,8 @@ public class TicketOperations {
 
         long unixTime = System.currentTimeMillis() / 1000L;
 
+        // Streams are kind of an awkward way to get at one element. I would expose a method
+        // to get the ticket by ID explicitly.
         Optional optional = ticketArrayList.stream().filter(lst -> lst.getId() == id).findFirst();
         if(optional.isPresent()) {
             Ticket ticket = (Ticket) optional.get();
@@ -204,6 +222,10 @@ public class TicketOperations {
     * Delete ticket by id*/
     public boolean deleteTicketById(int id){
 
+        // Delete is also pretty inefficient for the data structure. Consider a different structure to hold the tickets.
+        // To do this with streams, note you could use the opposite filter (not equal to this id) to construct a
+        // new list. Or you could define Ticket.equals() to use the ticket ID; then you could call remove
+        // on the arraylist directly (but that doesn't make it any more efficient).
         Optional optional = ticketArrayList.stream().filter(lst -> lst.getId() == id).findFirst();
         if(optional.isPresent())
             return ticketArrayList.remove(optional.get());
@@ -225,6 +247,9 @@ public class TicketOperations {
     public List<Ticket> searchTicketsWithAgent(String agent_name){
 
         List<Ticket> tempTicketList = new ArrayList<>();
+        // This is good. Returning an empty list (rather than null or throwing an
+        // exception is a good strategy when a collection is the return type.
+        // however, don't create the empty list unless you need to.
         if(agent_name == null || agent_name.isEmpty()){
             return tempTicketList;
         }
@@ -240,6 +265,7 @@ public class TicketOperations {
     /*
     * Search tickets by tag names*/
     public List<Ticket> searchTicketByTag(){
+        // No reason to create a new HashSet when you assign to something else on the next line.
         Set<String> tagHashSet = new HashSet<>();
         tagHashSet = UserConsoleInput.getTagNames();
 
@@ -251,6 +277,7 @@ public class TicketOperations {
     public List<Ticket> searchTicketsWithTags(Set<String> tagHashSet){
 
         List<Ticket> tempTicketList = new ArrayList<>();
+        // you never use tempTicketSet
         Set<Ticket> tempTicketSet = new HashSet<>();
 
         if(tagHashSet == null || tagHashSet.isEmpty()){
@@ -261,6 +288,13 @@ public class TicketOperations {
 
         Stream<Ticket> stream = ticketArrayList.stream();
 
+        // note that 'lst' here is a Ticket; give it a better name.
+        // I would recommend implementing a method like
+        // boolean hasTag(String tag)
+        // directly on the Ticket class. This code is somewhat
+        // inefficient in that it creates a new list of tags
+        // and sees if the size is zero, just to know if the tag
+        // is present.
         tempTicketList = stream.filter(lst -> lst.getTags2().stream()
                                     .filter(tag -> tagHashSet.contains(tag))
                                     .collect(Collectors.toList()).size() > 0)
