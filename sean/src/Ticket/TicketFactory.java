@@ -7,7 +7,7 @@ import java.util.HashSet;
 public class TicketFactory{
 	private static int id = 0;
 	
-	public Ticket createTicket(HashMap<String, String> attributes){
+	public static Ticket createTicket(HashMap<String, String> attributes){
 		TicketFactory.id++;
 		Logger.info("Setting up new id for ticket " + TicketFactory.id);
 		String tagStr = attributes.get("tags");
@@ -22,7 +22,7 @@ public class TicketFactory{
 		return ticket;
 	}
 
-	public Ticket updateTicket(HashMap<String, String> attributes, Ticket ticket) {
+	public static Ticket updateTicket(HashMap<String, String> attributes, Ticket ticket) {
 		String s = null;
 		if ((s = attributes.get("agentName")) != null) {
 			Logger.info("Updating agent name of ticket");

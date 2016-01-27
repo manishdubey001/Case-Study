@@ -14,8 +14,7 @@ public class TicketController {
 
 	public Ticket createTicket(HashMap<String, String> attributes) {
 		Logger.info("Create ticket operation started!");
-		TicketFactory ticketFactory = new TicketFactory();
-		Ticket ticket = ticketFactory.createTicket(attributes);
+		Ticket ticket = TicketFactory.createTicket(attributes);
 		getTickets().put(ticket.getId(), ticket);
 		return ticket;
 	}
@@ -26,8 +25,7 @@ public class TicketController {
 			Ticket ticket = getTickets().get(id);
 
 			if (ticket != null) {
-				TicketFactory ticketFactory = new TicketFactory();
-				return ticketFactory.updateTicket(attributes, ticket);
+				return TicketFactory.updateTicket(attributes, ticket);
 			} else
 				Logger.info("Ticket with id " + id + " not found!");
 		} catch (Exception e) {
@@ -50,13 +48,8 @@ public class TicketController {
 		return getTickets().get(id);
 	}
 	
-	public List<Ticket> getList(String mode, String filter) {
+	public List<Ticket> getList() {
 		List<Ticket> ticketList =  new ArrayList<Ticket>(getTickets().values());
-		if(mode.equals("agent"))
-			return getListByAgentName(filter, ticketList);
-		else if(mode.equals("tag"))
-			return getListByTagName(filter, ticketList);
-		
 		return getListDescendingByModified(ticketList);
 	}
 	
@@ -67,18 +60,18 @@ public class TicketController {
                 .collect(Collectors.toList());
 	}
 	
-	public List<Ticket> getListByAgentName(String agentName, List<Ticket> ticketList) {
-		ticketList = getTickets().values().stream().filter(
+	public List<Ticket> getListByAgentName(String agentName) {
+		List<Ticket> ticketList =  new ArrayList<Ticket>(getTickets().values());
+		return getListDescendingByModified(ticketList.stream().filter(
 				ticket -> ticket.getAgentName().toLowerCase().equals(agentName.toLowerCase())
-			).collect(Collectors.toList());
-		return getListDescendingByModified(ticketList);
+			).collect(Collectors.toList()));
 	}
 	
-	public List<Ticket> getListByTagName(String tagName, List<Ticket> ticketList) {
-		ticketList = getTickets().values().stream().filter(
+	public List<Ticket> getListByTagName(String tagName) {
+		List<Ticket> ticketList =  new ArrayList<Ticket>(getTickets().values());
+		return getListDescendingByModified(ticketList.stream().filter(
 				ticket -> ticket.getTags().contains(tagName.toLowerCase())
-			).collect(Collectors.toList());
-		return getListDescendingByModified(ticketList);
+			).collect(Collectors.toList()));
 	}
 
 	public void printTicket(Ticket ticket) {

@@ -148,7 +148,7 @@ public class TestTicket {
 		data2.put("tags", "foo,bar");
 		Ticket ticket2 = tController.createTicket(data2);
 		Thread.sleep(500); 
-		List<Ticket> ticketList = tController.getList("all", null);
+		List<Ticket> ticketList = tController.getList();
 		/*ticketList.forEach((temp) -> {
 			 tController.printTicket(temp);
 		});*/
@@ -163,7 +163,7 @@ public class TestTicket {
 		data4.put("tags", "max,min");
 		ticket1 = tController.updateTicket(data4, ticket1.getId());
 		
-		List<Ticket> newTicketList = tController.getList("all", null);
+		List<Ticket> newTicketList = tController.getList();
 		/*ticketList.forEach((temp) -> {
 			tController.printTicket(temp);
 		});*/
@@ -196,11 +196,11 @@ public class TestTicket {
 		data2.put("tags", "foo,bar");
 		Ticket ticket2 = tController.createTicket(data2);
 		
-		List<Ticket> newTicketList = tController.getList("agent", "ganesh");
+		List<Ticket> newTicketList = tController.getListByAgentName("ganesh");
 		Assert.assertEquals(1, newTicketList.size());
 		Assert.assertEquals("Test 3", newTicketList.get(0).getSubject());
 		
-		List<Ticket> newTicketList1 = tController.getList("agent", "GANESH");
+		List<Ticket> newTicketList1 = tController.getListByAgentName("GANESH");
 		Assert.assertEquals(1, newTicketList1.size());
 		Assert.assertEquals("Test 3", newTicketList1.get(0).getSubject());
 		
@@ -210,7 +210,7 @@ public class TestTicket {
 		data3.put("tags", "foo,bar");
 		Ticket ticket3 = tController.createTicket(data3);
 		Thread.sleep(500);
-		List<Ticket> newTicketList2 = tController.getList("agent", "GANESH");
+		List<Ticket> newTicketList2 = tController.getListByAgentName("GANESH");
 		Assert.assertEquals(2, newTicketList2.size());
 		Assert.assertEquals("Test 4", newTicketList2.get(0).getSubject());
 		Assert.assertEquals("Test 3", newTicketList2.get(1).getSubject());
@@ -241,12 +241,12 @@ public class TestTicket {
 		data2.put("tags", "foo,max");
 		Ticket ticket2 = tController.createTicket(data2);
 		
-		List<Ticket> newTicketList = tController.getList("tag", "BAR");
+		List<Ticket> newTicketList = tController.getListByTagName("BAR");
 		Assert.assertEquals(2, newTicketList.size());
 		Assert.assertEquals("Test 2", newTicketList.get(0).getSubject());
 		Assert.assertEquals("Test 1", newTicketList.get(1).getSubject());
 		
-		List<Ticket> newTicketList1 = tController.getList("tag", "Bar");
+		List<Ticket> newTicketList1 = tController.getListByTagName("Bar");
 		Assert.assertEquals(2, newTicketList1.size());
 		Assert.assertEquals("Test 2", newTicketList1.get(0).getSubject());
 		Assert.assertEquals("Test 1", newTicketList1.get(1).getSubject());
