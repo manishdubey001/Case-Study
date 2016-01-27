@@ -14,11 +14,21 @@ public class TicketController {
 
 	public Ticket createTicket(HashMap<String, String> attributes) {
 		Logger.info("Create ticket operation started!");
+		// cjm - if you have a separate class to provide factory methods,
+		// it's most common to either
+		// 1) Create a persistent TicketFactory and re-use it, or
+		// 2) Use static methods in the TicketFactory class.
+
 		Ticket ticket = TicketFactory.createTicket(attributes);
 		getTickets().put(ticket.getId(), ticket);
 		return ticket;
 	}
 
+	// Providing string names to update properties can be problematic.
+	// Usually within Java code if you need to do something like this you
+	// would try to use an enum rather than just strings. If you do need
+	// to use strings, define common string constants in a class somehwere,
+	// and use them consistently.
 	public Ticket updateTicket(HashMap<String, String> attributes, int id) {
 		Logger.info("Update ticket operation started!");
 		try {
@@ -50,6 +60,9 @@ public class TicketController {
 	
 	public List<Ticket> getList() {
 		List<Ticket> ticketList =  new ArrayList<Ticket>(getTickets().values());
+		// having a "mode" like this is problematic for some of the reasons
+		// mentioned in the other comment. I strongly recommend just implementing
+		// separate methods for the various use cases.
 		return getListDescendingByModified(ticketList);
 	}
 	
@@ -61,6 +74,9 @@ public class TicketController {
 	}
 	
 	public List<Ticket> getListByAgentName(String agentName) {
+		// Note that you /assign/ to the method variable 'ticketList'; you never read from it
+		// So that parameter isn't needed at all.
+		// For this reason it's common to make method parameters final--the compiler would not allow this in that case.
 		List<Ticket> ticketList =  new ArrayList<Ticket>(getTickets().values());
 		return getListDescendingByModified(ticketList.stream().filter(
 				ticket -> ticket.getAgentName().toLowerCase().equals(agentName.toLowerCase())
@@ -70,7 +86,7 @@ public class TicketController {
 	public List<Ticket> getListByTagName(String tagName) {
 		List<Ticket> ticketList =  new ArrayList<Ticket>(getTickets().values());
 		return getListDescendingByModified(ticketList.stream().filter(
-				ticket -> ticket.getTags().contains(tagName.toLowerCase())
+			ticket -> ticket.getTags().contains(tagName.toLowerCase())
 			).collect(Collectors.toList()));
 	}
 
