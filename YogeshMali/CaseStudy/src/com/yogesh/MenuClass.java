@@ -103,6 +103,7 @@ public class MenuClass {
         }
     }
 
+
     private void showAllTicket() {
 
         ConsolIO.ticketListHeader();
@@ -133,7 +134,7 @@ public class MenuClass {
         String tag = ConsolIO.getString();
 
         ConsolIO.ticketListHeader();
-        List<Ticket> list =  ticketService.searchTicketsUsingtagService(tag);
+        List<Ticket> list = ticketService.searchTicketsUsingtagService(tag);
         if (list.isEmpty()) {
             ConsolIO.showMsg("Ticket Not found");
         } else {

@@ -18,14 +18,14 @@ import java.util.stream.Stream;
  */
 public class TicketService {
 
-    public ArrayList<Ticket> arrTicketList = new ArrayList();
-
+    public HashMap<Integer, Ticket> hmTicketList = new HashMap();
     /**
      * this method for search ticket based on Agent name
      */
     public List<Ticket> searchTicketsUsingAgentnameService(String agentName) {
 
-        List<Ticket> list = this.arrTicketList.stream()
+        ArrayList<Ticket> arrTicketList =  new ArrayList<>(this.hmTicketList.values());
+        List<Ticket> list = arrTicketList.stream()
                 .filter(t -> t.getAgentName().equals(agentName))
                 .collect(Collectors.toList());
 
@@ -38,7 +38,7 @@ public class TicketService {
      */
     public List<Ticket> searchTicketsUsingtagService(String tag) {
 
-
+        ArrayList<Ticket> arrTicketList =  new ArrayList<>(this.hmTicketList.values());
         List<Ticket> list = arrTicketList.stream()
                 .filter(t -> t.getTags().contains(tag))
                 .collect(Collectors.toList());
@@ -52,12 +52,8 @@ public class TicketService {
     public boolean removeTicketService(int id) {
 
         if (isTicketIdExit(id)) {
-            for (Ticket ticket : this.arrTicketList) {
-                if (ticket.getId() == id) {
-                    this.arrTicketList.remove(ticket);
-                    return true;
-                }
-            }
+           this.hmTicketList.remove(id);
+            return true;
         }
         return false;
     }
@@ -68,8 +64,9 @@ public class TicketService {
     public TreeMap<String, Integer> showTicketcountAgentService() {
 
         TreeMap<String, Integer> tmCount = new TreeMap<>();
-        
-        for (Ticket ticket : this.arrTicketList) {
+        ArrayList<Ticket> arrTicketList =  new ArrayList<>(this.hmTicketList.values());
+
+        for (Ticket ticket : arrTicketList) {
 
             if (tmCount.containsKey(ticket.getAgentName())) {
 
@@ -80,7 +77,6 @@ public class TicketService {
             }
 
         }
-
         return tmCount;
     }
 
@@ -89,11 +85,8 @@ public class TicketService {
      */
     public Ticket showSingleTicketService(int id) {
 
-        for (Ticket ticket : this.arrTicketList) {
-
-            if (ticket.getId() == id) {
-                return ticket;
-            }
+        if (this.hmTicketList.containsKey(id)) {
+           return this.hmTicketList.get(id);
         }
         return null;
     }
@@ -104,9 +97,10 @@ public class TicketService {
      */
     public List showAllTicketService() {
 
+        ArrayList<Ticket> arrTicketList =  new ArrayList<>(this.hmTicketList.values());
         // sort is based on modified date field Descending Order
-        Collections.sort(this.arrTicketList, new DateComparator());
-        return this.arrTicketList;
+        Collections.sort(arrTicketList, new DateComparator());
+        return arrTicketList;
     }
 
 
@@ -115,9 +109,11 @@ public class TicketService {
      */
     public boolean updateTags(int id, List<String> newlist) {
 
-        for (Ticket ticket : this.arrTicketList) {
+        ArrayList<Ticket> arrTicketList =  new ArrayList<>(this.hmTicketList.values());
+        for (Ticket ticket : arrTicketList) {
             if (ticket.getId() == id) {
                 ticket.setTags(newlist);
+                this.hmTicketList.put(id,ticket);
                 return true;
             }
         }
@@ -134,11 +130,13 @@ public class TicketService {
 
     public boolean updateAgentName(int id, String newAgentName) {
 
+        ArrayList<Ticket> arrTicketList =  new ArrayList<>(this.hmTicketList.values());
         if (!newAgentName.equals("")) {
-            for (Ticket ticket : this.arrTicketList) {
+            for (Ticket ticket : arrTicketList) {
                 if (ticket.getId() == id) {
                     System.out.println(ticket.getId());
                     ticket.setAgentName(newAgentName);
+                    this.hmTicketList.put(id,ticket);
                     return true;
                 }
             }
@@ -153,7 +151,7 @@ public class TicketService {
 
         if (id > 0 && !subject.equals("") && !agentName.equals("")) {
             Ticket ticket = TicketFactory.newInstance(id, subject, agentName, list);
-            this.arrTicketList.add(ticket);
+            this.hmTicketList.put(id, ticket);
             return true;
         }
         return false;
@@ -168,15 +166,15 @@ public class TicketService {
      */
     public boolean isTicketIdExit(int id) {
 
-        for (Ticket ticket : this.arrTicketList) {
-            if (ticket.getId() == id)
-                return true;
+        if (this.hmTicketList.containsKey(id)) {
+            return true;
         }
+
         return false;
     }
 
     public void exitService() {
-        arrTicketList = null;
+        this.hmTicketList = null;
         System.exit(0);
     }
 
