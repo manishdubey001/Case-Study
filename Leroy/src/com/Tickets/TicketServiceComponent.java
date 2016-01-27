@@ -4,29 +4,31 @@ import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
+
 /**
  * Created by root on 14/1/16.
  */
-public class TicketServiceComponent {
+public class TicketServiceComponent{
     public boolean print = true;
-    public Map<Integer, Ticket> thm = new HashMap<>();
-
+    public HashMap<Integer, Ticket> thm = new HashMap<>();
     public boolean createTicket(String sub, String agent, String tags){
         if(!sub.isEmpty() && !agent.isEmpty() && !tags.isEmpty()){
             String[] parsedtags = tags.split(",");
             Set<String> set = new HashSet<>(Arrays.asList(parsedtags));
 
-            Ticket ticket = TicketWareHouse.getInstance(sub,set,agent);
-            /*try{
+            Ticket ticket = TicketFactoryClass.getInstance(sub,set,agent);
+            try{
 
                 FileOutputStream fileOutputStream = new FileOutputStream("tickets.ser");
                 ObjectOutputStream outputStream = new ObjectOutputStream(fileOutputStream);
                 outputStream.writeObject(ticket);
+                fileOutputStream.close();
 
                 FileInputStream fileInputStream = new FileInputStream("tickets.ser");
                 ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
                 Ticket ticket1 = (Ticket) objectInputStream.readObject();
                 System.out.println(ticket1);
+                fileInputStream.close();
             }catch (FileNotFoundException F){
                 System.out.println(Sout.ACT_NOT_FOUND+" "+F);
             }catch (IOException Io){
@@ -34,7 +36,6 @@ public class TicketServiceComponent {
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
-            */
             thm.put(ticket.getId(),ticket);
             if (checkIfExists(ticket.getId())) {
                 return true;
@@ -101,7 +102,7 @@ public class TicketServiceComponent {
                     .filter(l2 -> l2.getAgent_name().equals(name))
                     .collect(Collectors.toList());
         }
-        return l;
+        return l;// sorted by modified date
     }
 
     public List getAllTickets(){
@@ -153,7 +154,6 @@ public class TicketServiceComponent {
             set2 = l.stream()
                     .filter(list -> list.getTags().contains(tag))
                     .collect(Collectors.toSet());
-
             if(!set2.isEmpty()){
                 List<Ticket> t3 = new ArrayList<>(set2);
                 Collections.sort(t3);

@@ -1,13 +1,19 @@
 package com.Tickets;
 
+// Why this import?
 import sun.invoke.empty.Empty;
 
+
+// Best practice is to avoid wildcard imports;
+// it can cause confusion and conflicts. IntelliJ
+// has a setting to manage this automatically.
+import java.io.Serializable;
 import java.util.*;
 
 /**
  * Created by root on 13/1/16.
  */
-public class Ticket implements Comparable<Ticket>{
+public class Ticket implements Comparable<Ticket>,Serializable{
     private int id;
     private String subject;
     private String agentName;
@@ -23,6 +29,7 @@ public class Ticket implements Comparable<Ticket>{
         this.setTags(tags);
         this.setCreated();
     }
+
     public Set getTags() {
         return tags;
     }
@@ -88,6 +95,7 @@ public class Ticket implements Comparable<Ticket>{
 
     @Override
     public String toString(){
+        // Java's original Date class has a lot of problems. Usually it's better to use Java 8's LocalDate/Time classes.
         Date dt  = new Date(this.created);
         Date dt2 = new Date(this.modified);
         return "  "+this.id+"  |  "+this.agentName+"  |  "+this.subject+"  |  "+this.tags+"  |  "+dt+"  |   "+dt2;

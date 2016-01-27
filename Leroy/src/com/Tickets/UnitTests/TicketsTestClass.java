@@ -1,11 +1,7 @@
 package com.Tickets.UnitTests;
 
-import com.Tickets.Sout;
 import com.Tickets.Ticket;
 import com.Tickets.TicketServiceComponent;
-import com.Tickets.TicketWareHouse;
-import com.sun.org.apache.xml.internal.dtm.ref.DTMDefaultBaseIterators;
-import com.sun.org.apache.xpath.internal.NodeSetDTM;
 import org.junit.*;
 
 import java.util.*;
