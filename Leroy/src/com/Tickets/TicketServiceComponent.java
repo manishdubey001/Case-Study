@@ -17,25 +17,7 @@ public class TicketServiceComponent{
             Set<String> set = new HashSet<>(Arrays.asList(parsedtags));
 
             Ticket ticket = TicketFactoryClass.getInstance(sub,set,agent);
-            try{
 
-                FileOutputStream fileOutputStream = new FileOutputStream("tickets.ser");
-                ObjectOutputStream outputStream = new ObjectOutputStream(fileOutputStream);
-                outputStream.writeObject(ticket);
-                fileOutputStream.close();
-
-                FileInputStream fileInputStream = new FileInputStream("tickets.ser");
-                ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
-                Ticket ticket1 = (Ticket) objectInputStream.readObject();
-                System.out.println(ticket1);
-                fileInputStream.close();
-            }catch (FileNotFoundException F){
-                System.out.println(Sout.ACT_NOT_FOUND+" "+F);
-            }catch (IOException Io){
-                System.out.println(Sout.ACT_NOT_FOUND);
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            }
             thm.put(ticket.getId(),ticket);
             if (checkIfExists(ticket.getId())) {
                 return true;
