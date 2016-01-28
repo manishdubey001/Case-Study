@@ -4,7 +4,12 @@ import java.util.*;
 /**
  * Created by root on 18/1/16.
  */
+
+// "Base" usually means "Base Class". I would call this TicketService or TicketStore or something similar.
 public class TicketBase {
+    // Just store this as a List<TicketModel>
+    // Also, consider if List is the right structure at all--it means you always have to search (potentially)
+    // the whole list to find a ticket.
     ArrayList<TicketModel> ticketList = new ArrayList<TicketModel>();
     /**
      * Create ticket
@@ -26,6 +31,13 @@ public class TicketBase {
      * @return ticket object
      */
     public TicketModel detail(int ticketId){
+        // no reason for the if statement; the for loop
+        // will not execute if the condition fails.
+
+        //Also, the more modern way to iterate would be
+        // for(TicketModel t : ticketList) { if (t.getId() == ticketId) ...
+        // But see comments above about choosing a different
+        // collection for tickets.
         if(ticketList.size() > 0) {
             for (int i = 0; i < ticketList.size(); i++) {
                 if (ticketList.get(i).getId() == ticketId) {
@@ -81,6 +93,10 @@ public class TicketBase {
      * List all tickets, search by agent name, search by tag and sorted by modified date
      * @return list of tickets
      */
+    // Generally return interfaces rather than concrete collection types;
+    // in this case return a List<TicketModel>
+    // Also, I would not use a 'searchType' parameter. I would implement separate methods
+    // (you could implement a common method with a comparator or Predicate.
     public ArrayList<TicketModel> listTicket(int searchType, String ticketSearchType){
         if(ticketList.size() > 0){
             ArrayList<TicketModel> arrayListTickets =  new ArrayList<TicketModel>();
@@ -114,8 +130,11 @@ public class TicketBase {
     /**
      * Ticket count group by agent name order by agent name
      */
+    // return Map<String,Integer>
     public HashMap<String, Integer> ticketCountByAgent(){
         if(ticketList.size() > 0) {
+            // note that on the right-hand side you do not need to
+            // specify the parameter again; you can just say "new ArrayList<>();"
             ArrayList<String> arrListAgentName = new ArrayList<String>();
             for (int i=0; i< ticketList.size(); i++){
                 arrListAgentName.add(ticketList.get(i).getAgentName());
@@ -123,6 +142,7 @@ public class TicketBase {
             TreeSet<String> sortedAgentName = new TreeSet<String>(arrListAgentName);
             HashMap<String, Integer> agentTicketCount = new HashMap<String, Integer>();
             for (String key : sortedAgentName){
+                // good use of frequency()
                 agentTicketCount.put(key, Collections.frequency(arrListAgentName, key));
             }
             return agentTicketCount;
