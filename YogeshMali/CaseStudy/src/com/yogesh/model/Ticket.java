@@ -1,20 +1,17 @@
 package com.yogesh.model;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by root on 31/12/15.
  */
-public class Ticket  implements  Serializable{
+public class Ticket implements Serializable {
 
     int id;
-    public String subject;
+    String subject;
     String agentName;
-    List<String> tags;
+    Set<String> tags;
     Date created;
     Date modified;
 
@@ -22,7 +19,7 @@ public class Ticket  implements  Serializable{
 
     }
 
-    public Ticket(int id, String subject, String agentName, List tags) {
+    public Ticket(int id, String subject, String agentName, Set tags) {
         this.setId(id);
         this.setSubject(subject);
         this.setAgentName(agentName);
@@ -55,49 +52,48 @@ public class Ticket  implements  Serializable{
         this.modified = new Date();
     }
 
-    public List getTags() {
+    public Set getTags() {
         return tags;
     }
 
-    public void setTags(List tags) {
+    public void setTags(Set tags) {
         this.tags = tags;
         this.modified = new Date();
     }
 
+
     public Date getCreated() {
         return created;
-    }
-
-    public void setCreated(Date created) {
-        this.created = created;
     }
 
     public Date getModified() {
         return modified;
     }
 
-    private void setModified(Date modified) {
-        this.modified = modified;
-    }
 
     private void readObject(ObjectInputStream ois)
             throws IOException, ClassNotFoundException {
+
         this.id = ois.readInt();
         this.subject = ois.readUTF();
         this.agentName = ois.readUTF();
-        this.tags = (List)ois.readObject();
+        this.tags = (Set) ois.readObject();
+        this.created = (Date) ois.readObject();
+        this.modified = (Date) ois.readObject();
 
-    }  //  public void readObject()
+    }
+
+
     private void writeObject(ObjectOutputStream oos)
             throws IOException {
         oos.writeInt(id);
         oos.writeUTF(subject);
         oos.writeUTF(agentName);
         oos.writeObject(tags);
-        //	The above two lines are equivalent to adding:
-        //	oos.defaultWriteObject();
-    }  //  public void writeObject()
+        oos.writeObject(created);
+        oos.writeObject(modified);
 
+    }
 
 
 }

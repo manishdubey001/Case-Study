@@ -2,10 +2,7 @@ package com.yogesh;
 
 import com.yogesh.model.Ticket;
 
-import java.util.Arrays;
-import java.util.InputMismatchException;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * Created by root on 15/1/16.
@@ -25,11 +22,11 @@ public class ConsolIO {
         return agentName;
     }
 
-    public static List getTags() {
+    public static Set getTags() {
         Scanner scanIn = new Scanner(System.in);
         System.out.println("Enter tags (multiple tags separate by Comma) ");
         String tags = scanIn.next();
-        List<String> list = Arrays.asList(tags.split(","));
+        Set<String> list = new HashSet<String>(Arrays.asList(tags.split(",")));
         return list;
     }
 

@@ -32,7 +32,6 @@ public class TicketService {
         return list;
     }
 
-
     /**
      * Search all tickets by specific tag.
      */
@@ -107,7 +106,7 @@ public class TicketService {
     /**
      * @param id
      */
-    public boolean updateTags(int id, List<String> newlist) {
+    public boolean updateTags(int id, Set<String> newlist) {
 
         ArrayList<Ticket> arrTicketList =  new ArrayList<>(this.hmTicketList.values());
         for (Ticket ticket : arrTicketList) {
@@ -147,7 +146,7 @@ public class TicketService {
     /**
      * this method for create new ticket
      */
-    public boolean createTicketService(int id, String subject, String agentName, List<String> list) {
+    public boolean createTicketService(int id, String subject, String agentName, Set<String> list) {
 
         if (id > 0 && !subject.equals("") && !agentName.equals("")) {
             Ticket ticket = TicketFactory.newInstance(id, subject, agentName, list);
@@ -177,6 +176,8 @@ public class TicketService {
         this.hmTicketList = null;
         System.exit(0);
     }
+
+
 
 }
 

@@ -5,6 +5,7 @@ import com.yogesh.service.TicketService;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 /**
@@ -61,12 +62,12 @@ public class MenuClass {
     }
 
 
-    private void createTicket() {
+      private void createTicket() {
 
         int id = ConsolIO.getTicketId();
         String subject = ConsolIO.getSubject();
         String agentName = ConsolIO.getAgentNAme();
-        List<String> list = ConsolIO.getTags();
+        Set<String> list = ConsolIO.getTags();
 
         if (ticketService.isTicketIdExit(id)) {
             ConsolIO.showMsg("ticket Id is already Exist");
@@ -92,7 +93,7 @@ public class MenuClass {
             ConsolIO.showMsg("Press t to update Tags  ");
             String updatedTag = ConsolIO.getString();
             if (updatedTag.equals("t")) {
-                List<String> newlist = ConsolIO.getTags();
+                Set<String> newlist = ConsolIO.getTags();
                 if (ticketService.updateTags(id, newlist)) {
                     ConsolIO.showMsg("Ticket Tags has been updated");
                 }
@@ -146,7 +147,7 @@ public class MenuClass {
     }
 
     private void showTicketcountAgent() {
-        ConsolIO.showMsg("Agent Count  =>   Total Count");
+        ConsolIO.showMsg("Agent Name  =>   Total Count");
         TreeMap<String, Integer> tmCount = ticketService.showTicketcountAgentService();
 
         for (Map.Entry<String, Integer> entry : tmCount.entrySet()) {
