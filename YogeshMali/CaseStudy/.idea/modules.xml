@@ -2,7 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/../../../TestSQS/aws-java-sdk-1.10.48/samples/AmazonDynamoDBDocumentAPI/AmazonDynamoDBDocumentAPI.iml" filepath="$PROJECT_DIR$/../../../TestSQS/aws-java-sdk-1.10.48/samples/AmazonDynamoDBDocumentAPI/AmazonDynamoDBDocumentAPI.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../../TestSQS/aws-java-sdk-1.10.48/samples/AwsFlowFramework/AwsFlowFramework.iml" filepath="$PROJECT_DIR$/../../../TestSQS/aws-java-sdk-1.10.48/samples/AwsFlowFramework/AwsFlowFramework.iml" />
       <module fileurl="file://$PROJECT_DIR$/CaseStudy.iml" filepath="$PROJECT_DIR$/CaseStudy.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../../TestSQS/aws-java-sdk-1.10.48/samples/samples.iml" filepath="$PROJECT_DIR$/../../../TestSQS/aws-java-sdk-1.10.48/samples/samples.iml" />
     </modules>
   </component>
 </project>

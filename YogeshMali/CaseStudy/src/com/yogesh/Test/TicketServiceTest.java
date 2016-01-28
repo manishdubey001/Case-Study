@@ -22,7 +22,7 @@ public class TicketServiceTest {
         int id = 1;
         String subject = "Subject";
         String agent = "James";
-        Set<String>  categories = new HashSet<String>(Arrays.asList("a", "b"));
+        Set<String>  categories = new HashSet<String>(Arrays.asList("tag1", "tag2"));
         assertTrue(ticketService.createTicketService(id, subject, agent, categories));
         Ticket ticket = ticketService.showSingleTicketService(id);
         Assert.assertEquals("James", ticket.getAgentName());
@@ -37,7 +37,7 @@ public class TicketServiceTest {
         int id = -1;
         String subject = "Subject";
         String agent = "James";
-        Set<String>  categories = new HashSet<String>(Arrays.asList("a", "b"));
+        Set<String>  categories = new HashSet<String>(Arrays.asList("tag1", "tag2"));
         assertFalse(ticketService.createTicketService(id, subject, agent, categories));
     }
 
@@ -47,7 +47,7 @@ public class TicketServiceTest {
         int id = 1;
         String subject = "";
         String agent = "James";
-        Set<String>  categories = new HashSet<String>(Arrays.asList("a", "b"));
+        Set<String>  categories = new HashSet<String>(Arrays.asList("tag1", "tag2"));
         assertFalse(ticketService.createTicketService(id, subject, agent, categories));
     }
 
@@ -57,7 +57,7 @@ public class TicketServiceTest {
         int id = 0;
         String subject = "";
         String agent = "";
-        Set<String>  categories = new HashSet<String>(Arrays.asList("a", "b"));
+        Set<String>  categories = new HashSet<String>(Arrays.asList("tag1", "tag2"));
         assertFalse(ticketService.createTicketService(id, subject, agent, categories));
     }
 
@@ -67,7 +67,7 @@ public class TicketServiceTest {
         int id = 1;
         String subject = "Subject";
         String agent = "James";
-        Set<String>  categories = new HashSet<String>(Arrays.asList("a", "b"));
+        Set<String>  categories = new HashSet<String>(Arrays.asList("tag1", "tag2"));
         assertTrue(ticketService.createTicketService(id, subject, agent, categories));
 
         id = 1;
@@ -80,7 +80,7 @@ public class TicketServiceTest {
         int id = 1;
         String subject = "Subject";
         String agent = "James";
-        Set<String>  categories = new HashSet<String>(Arrays.asList("a", "b"));
+        Set<String>  categories = new HashSet<String>(Arrays.asList("tag1", "tag2"));
         assertTrue(ticketService.createTicketService(id, subject, agent, categories));
 
         id = 2;
@@ -94,7 +94,7 @@ public class TicketServiceTest {
         int id = 1;
         String subject = "Subject";
         String agent = "James";
-        Set<String>  categories = new HashSet<String>(Arrays.asList("a", "b"));
+        Set<String>  categories = new HashSet<String>(Arrays.asList("tag1", "tag2"));
         assertTrue(ticketService.createTicketService(id, subject, agent, categories));
 
         String newagent = "Yogesh";
@@ -110,7 +110,7 @@ public class TicketServiceTest {
         int id = 1;
         String subject = "Subject";
         String agent = "James";
-        Set<String>  categories = new HashSet<String>(Arrays.asList("a", "b"));
+        Set<String>  categories = new HashSet<String>(Arrays.asList("tag1", "tag2"));
         ticketService.createTicketService(id, subject, agent, categories);
         id = 1;
         String newAgent = "";
@@ -124,7 +124,7 @@ public class TicketServiceTest {
         int id = 1;
         String subject = "Subject";
         String agent = "James";
-        Set<String>  categories = new HashSet<String>(Arrays.asList("a", "b"));
+        Set<String>  categories = new HashSet<String>(Arrays.asList("tag1", "tag2"));
         assertTrue(ticketService.createTicketService(id, subject, agent, categories));
 
         Set<String>  newtags = new HashSet<String>(Arrays.asList());
@@ -139,7 +139,7 @@ public class TicketServiceTest {
         int id = 1;
         String subject = "Subject";
         String agent = "James";
-        Set<String>  categories = new HashSet<String>(Arrays.asList("a", "b"));
+        Set<String>  categories = new HashSet<String>(Arrays.asList("tag1", "tag2"));
         assertTrue(ticketService.createTicketService(id, subject, agent, categories));
 
         assertTrue(ticketService.removeTicketService(id));
@@ -153,7 +153,7 @@ public class TicketServiceTest {
         int id = 1;
         String subject = "Subject";
         String agent = "James";
-        Set<String>  categories = new HashSet<String>(Arrays.asList("a", "b"));
+        Set<String>  categories = new HashSet<String>(Arrays.asList("tag1", "tag2"));
         assertTrue(ticketService.createTicketService(id, subject, agent, categories));
 
         id = 2;
@@ -167,7 +167,7 @@ public class TicketServiceTest {
         int id = 1;
         String subject = "Subject";
         String agent = "James";
-        Set<String>  categories = new HashSet<String>(Arrays.asList("a", "b"));
+        Set<String>  categories = new HashSet<String>(Arrays.asList("tag1", "tag2"));
         assertTrue(ticketService.createTicketService(id, subject, agent, categories));
 
         id = 1;
@@ -184,7 +184,7 @@ public class TicketServiceTest {
         int id = 1;
         String subject = "Subject";
         String agent = "James";
-        Set<String>  categories = new HashSet<String>(Arrays.asList("a", "b"));
+        Set<String>  categories = new HashSet<String>(Arrays.asList("tag1", "tag2"));
         assertTrue(ticketService.createTicketService(id, subject, agent, categories));
 
         id = 2;
@@ -199,13 +199,13 @@ public class TicketServiceTest {
         int id = 1;
         String subject = "Subject";
         String agent = "James";
-        Set<String>  categories = new HashSet<String>(Arrays.asList("a", "b"));
+        Set<String>  categories = new HashSet<String>(Arrays.asList("tag1", "tag2"));
         assertTrue(ticketService.createTicketService(id, subject, agent, categories));
 
         id = 2;
         subject = "Subject2";
         agent = "James2";
-        categories = new HashSet<String>(Arrays.asList("a", "b"));
+        categories = new HashSet<String>(Arrays.asList("tag1", "tag2"));
         assertTrue(ticketService.createTicketService(id, subject, agent, categories));
 
 
@@ -231,7 +231,7 @@ public class TicketServiceTest {
         int id = 1;
         String subject = "Subject";
         String agent = "James";
-        Set<String>  categories = new HashSet<String>(Arrays.asList("a", "b"));
+        Set<String>  categories = new HashSet<String>(Arrays.asList("tag1", "tag2"));
         assertTrue(ticketService.createTicketService(id, subject, agent, categories));
 
         String agentName = "James";
@@ -251,7 +251,7 @@ public class TicketServiceTest {
         int id = 1;
         String subject = "Subject";
         String agent = "James";
-        Set<String>  categories = new HashSet<String>(Arrays.asList("a", "b"));
+        Set<String>  categories = new HashSet<String>(Arrays.asList("tag1", "tag2"));
         assertTrue(ticketService.createTicketService(id, subject, agent, categories));
 
         String agentName = "Yogesh";
@@ -266,16 +266,16 @@ public class TicketServiceTest {
         int id = 1;
         String subject = "Subject";
         String agent = "James";
-        Set<String>  categories = new HashSet<String>(Arrays.asList("a", "b"));
+        Set<String>  categories = new HashSet<String>(Arrays.asList("tag1", "tag2"));
         assertTrue(ticketService.createTicketService(id, subject, agent, categories));
 
         id = 2;
         subject = "Subject2";
         agent = "James2";
-         categories = new HashSet<String>(Arrays.asList("a", "b"));
+         categories = new HashSet<String>(Arrays.asList("tag1", "tag2"));
         assertTrue(ticketService.createTicketService(id, subject, agent, categories));
 
-        String tag = "a";
+        String tag = "tag1";
         List<Ticket> list = (ticketService.searchTicketsUsingtagService(tag));
         Ticket ticket = list.get(0);
         Assert.assertEquals("James", ticket.getAgentName());
@@ -298,7 +298,7 @@ public class TicketServiceTest {
         int id = 1;
         String subject = "Subject";
         String agent = "James";
-        Set<String>  categories = new HashSet<String>(Arrays.asList("a", "b"));
+        Set<String>  categories = new HashSet<String>(Arrays.asList("tag1", "tag2"));
         assertTrue(ticketService.createTicketService(id, subject, agent, categories));
 
         id = 2;
@@ -319,19 +319,19 @@ public class TicketServiceTest {
         int id = 1;
         String subject = "Subject";
         String agent = "James";
-        Set<String>  categories = new HashSet<String>(Arrays.asList("a", "b"));
+        Set<String>  categories = new HashSet<String>(Arrays.asList("tag1", "tag2"));
         assertTrue(ticketService.createTicketService(id, subject, agent, categories));
 
         id = 2;
         subject = "Subject2";
         agent = "James";
-        categories = new HashSet<String>(Arrays.asList("a", "b"));
+        categories = new HashSet<String>(Arrays.asList("tag1", "tag2"));
         assertTrue(ticketService.createTicketService(id, subject, agent, categories));
 
         id = 3;
         subject = "Subject3";
         agent = "Yogesh";
-         categories = new HashSet<String>(Arrays.asList("a", "b"));
+         categories = new HashSet<String>(Arrays.asList("tag1", "tag2"));
         assertTrue(ticketService.createTicketService(id, subject, agent, categories));
 
         TreeMap<String, Integer> tmCount = ticketService.showTicketcountAgentService();

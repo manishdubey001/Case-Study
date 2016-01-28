@@ -95,5 +95,19 @@ public class Ticket implements Serializable {
 
     }
 
+    public static void serialize(ArrayList obj) throws IOException {
+
+        ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream("SerTicket.ser"));
+
+        os.writeObject(obj);
+    }
+
+    public static ArrayList deserialize() throws IOException, ClassNotFoundException {
+
+        ObjectInputStream objIn = new ObjectInputStream(new FileInputStream("SerTicket.ser"));
+
+        return ((ArrayList) objIn.readObject());
+    }
+
 
 }
