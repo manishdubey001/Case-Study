@@ -1,15 +1,15 @@
 package com.inin.example.factory;
 
 import com.inin.example.model.Ticket;
+import com.inin.example.util.TicketSerializationUtil;
 
-import java.util.HashSet;
+import java.util.*;
 
 /**
  * Created by root on 31/12/15.
  */
 public class TicketFactory {
 
-    private static int currentTicketId = 0;
     /**
      * Create new Ticket object
      * @param subject
@@ -22,13 +22,21 @@ public class TicketFactory {
         int id = getNextTicketId();
         return new Ticket(id,subject,agentName,tags);
     }
-
     /**
      * Return the next ticket Id
      * @return int
      */
     public static int getNextTicketId()
     {
-        return ++currentTicketId;
+        Map<Integer,Ticket> ticketList = TicketSerializationUtil.deserializedTickets();
+        if(ticketList.size() > 0 ) {
+            int maxTicketId = ticketList.values()
+                    .parallelStream()
+                    .max((Ticket t1, Ticket t2) -> Integer.valueOf(t1.getId()).compareTo(Integer.valueOf(t2.getId())))
+                    .get()
+                    .getId();
+            return ++maxTicketId;
+        }else
+            return 1;
     }
 }

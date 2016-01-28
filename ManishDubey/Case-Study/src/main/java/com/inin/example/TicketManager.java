@@ -1,9 +1,11 @@
 package com.inin.example;
 
 import com.inin.example.model.Ticket;
+import com.inin.example.service.TicketReportService;
 import com.inin.example.service.TicketService;
 import com.inin.example.util.InputReader;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -11,10 +13,12 @@ import java.util.*;
  */
 public class TicketManager {
     private TicketService ticketService = null;
+    private TicketReportService ticketReportService = null;
 
     public TicketManager()
     {
         ticketService = new TicketService();
+        ticketReportService = new TicketReportService();
     }
     /**
      * Create new ticket by taking user input
@@ -91,7 +95,7 @@ public class TicketManager {
     {
         System.out.print("Please enter ticket id you want to ticket detail: ");
         int id = InputReader.readInt();
-        Ticket ticket = ticketService.getTicket(id);
+        Ticket ticket = ticketService.ticket(id);
         if(ticket != null)
         {
             System.out.println("Ticket detail with id "+id+" as:");
@@ -107,13 +111,11 @@ public class TicketManager {
      */
     public void displayAllTickets()
     {
-        HashMap<Integer,Ticket> tickets = ticketService.getTickets();
+        List<Ticket> tickets = ticketService.tickets();
         System.out.println("Ticket List ....");
         if(tickets.size() > 0)
         {
-            tickets.values()
-                    .stream()
-                    .sorted((Ticket o1, Ticket o2) -> -o1.getModified().compareTo(o2.getModified()))
+            tickets.stream()
                     .forEach(ticket -> System.out.println(ticket.getId() + "\t" + ticket.getSubject() + "\t" + ticket.getAgentName() + "\t" + ticket.getTags() + "\t" + ticket.getCreated() + "\t" + ticket.getModified() + "\t"));
         }else
             System.out.println("No Ticket found...");
@@ -128,7 +130,7 @@ public class TicketManager {
         String agentName = InputReader.readString();
         if (!agentName.isEmpty())
         {
-            List<Ticket> ticketList = ticketService.getTicketsByAgent(agentName);
+            List<Ticket> ticketList = ticketService.ticketsByAgent(agentName);
             if(ticketList.size()>0) {
                 System.out.println(" Following are the Tickets assigned to agent: " + agentName);
                 System.out.println("-----------------------------------------------------------------");
@@ -149,11 +151,11 @@ public class TicketManager {
         System.out.println("Enter tag name want to see all Tickets");
         String tag = InputReader.readString();
         if (!tag.isEmpty()) {
-            List<Ticket> ticketList = ticketService.getTicketsByTag(tag);
+            List<Ticket> ticketList = ticketService.ticketsByTag(tag);
             if(ticketList.size() > 0) {
                 System.out.println(" Following are the Tickets are tagged by tag " + tag);
                 System.out.println("---------------------------------------------");
-                ticketService.getTicketsByTag(tag)
+                ticketService.ticketsByTag(tag)
                         .forEach(ticket -> System.out.println(ticket.getId() + "\t" + ticket.getSubject() + "\t" + ticket.getAgentName() + "\t" + ticket.getTags() + "\t" + ticket.getCreated() + "\t" + ticket.getModified() + "\t"));
             }else
                 System.out.println("No  Record found ........");
@@ -170,7 +172,7 @@ public class TicketManager {
     {
         System.out.println(" Ticket count grouped by agent (ascending order). ");
         System.out.println("---------------------------------------------");
-        Map<String,List<Ticket>> ticketsGroupByAgent = ticketService.getTicketsGroupByAgent();
+        Map<String,List<Ticket>> ticketsGroupByAgent = ticketService.ticketsGroupByAgent();
         if(ticketsGroupByAgent.size() > 0)
             ticketsGroupByAgent.forEach((String agentName,List<Ticket> ticketsList)->System.out.println(agentName+"\t\t"+ticketsList.size()));
         else
@@ -184,5 +186,52 @@ public class TicketManager {
             ticketService.loadDummyTickets(noOfTickets);
         else
             System.out.println("Please enter valid integer value");
+    }
+
+    /**
+     * Display the total number of ticket
+     */
+    public void totalTicketCount(){
+        System.out.println("Total Tickets present in the system : "+ticketReportService.totalTicketCount());
+    }
+
+    /**
+     * Display oldest ticket in the system
+     */
+    public void oldestTicket(){
+        Ticket ticket = ticketReportService.oldestTicket();
+        if(ticket != null)
+            System.out.println("Oldest Ticket is system is as:\n"+ticket.getId()+"\t"+ticket.getSubject()+"\t"+ticket.getAgentName()+"\t\t"+ticket.getTags()+"\t"+ticket.getCreated());
+        else
+            System.out.println("No ticket found");
+    }
+    /**
+     * Display Ticket older than certain date
+     */
+    public void ticketOlderByDate(){
+        System.out.println("Please enter date in (dd/mm/yyyy) format");
+        String date = InputReader.readString();
+        String [] dateArr = date.split("/");
+        List<Ticket> tickets = ticketReportService.ticketOlderByDate(LocalDateTime.of(Integer.valueOf(dateArr[2]).intValue(),Integer.valueOf(dateArr[1]).intValue(),Integer.valueOf(dateArr[0]).intValue(),0,0));
+        System.out.println("Ticket List ....");
+        if(tickets.size() > 0)
+        {
+            tickets.stream()
+                    .forEach(ticket -> System.out.println(ticket.getId() + "\t" + ticket.getSubject() + "\t" + ticket.getAgentName() + "\t" + ticket.getTags() + "\t" + ticket.getCreated() + "\t" + ticket.getModified() + "\t"));
+        }else
+            System.out.println("No Ticket found...");
+    }
+
+    /**
+     * Display ticket count by tag
+     */
+    public void displayTicketCountByTags(){
+        System.out.println(" Ticket count grouped by tags (ascending order). ");
+        System.out.println("---------------------------------------------");
+        Map<String,List<Ticket>> ticketsGroupByTag = ticketReportService.ticketsGroupByTag();
+        if(ticketsGroupByTag.size() > 0)
+            ticketsGroupByTag.forEach((String tag,List<Ticket> ticketsList)->System.out.println(tag+"\t\t"+ticketsList.size()));
+        else
+            System.out.println("No ticket founds");
     }
 }

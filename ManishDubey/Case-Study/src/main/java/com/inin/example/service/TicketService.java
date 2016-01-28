@@ -2,7 +2,13 @@ package com.inin.example.service;
 
 import com.inin.example.factory.TicketFactory;
 import com.inin.example.model.Ticket;
+import com.inin.example.util.TicketSerializationUtil;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -11,10 +17,10 @@ import java.util.stream.Collectors;
  */
 public class TicketService {
 
-    private HashMap<Integer,Ticket> tickets = null;
+//    private Map<Integer,Ticket> tickets = null;
 
     public TicketService(){
-        tickets = new HashMap<>();
+//        tickets = new HashMap<>();
     }
     /**
      * Create new ticket by taking user input
@@ -24,8 +30,10 @@ public class TicketService {
         if(subject == null || subject.isEmpty() || agentName == null || agentName.isEmpty())
             return null;
         Ticket ticket = TicketFactory.newInstance(subject, agentName, tags);
+        Map<Integer,Ticket>  tickets = new HashMap<>();
         tickets.put(ticket.getId(),ticket );
-        return ticket;
+        TicketSerializationUtil.serializedTickets(tickets, true);
+        return ticket.copy(ticket);
     }
 
 
@@ -34,8 +42,14 @@ public class TicketService {
      * Delete Ticket by id
      */
     public boolean delete(int id){
+        Map<Integer,Ticket> tickets = TicketSerializationUtil.deserializedTickets();
         Ticket ticket = tickets.remove(id);
-        return ticket != null ? true : false;
+        if(ticket !=null)
+        {
+            TicketSerializationUtil.serializedTickets(tickets, false);
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -43,30 +57,47 @@ public class TicketService {
      */
     public Ticket update(int id,String agentName, HashSet<String> tags)
     {
+        Map<Integer,Ticket> tickets = TicketSerializationUtil.deserializedTickets();
         Ticket ticket = tickets.get(id);
+        boolean modified = false;
         if (ticket != null) {
-            if (agentName != null && !agentName.isEmpty())
+            if (agentName != null && !agentName.isEmpty()) {
                 ticket.setAgentName(agentName);
-            if (tags != null)
+                modified = true;
+            }
+            if (tags != null) {
                 ticket.setTags(tags);
+                modified = true;
+            }
+            if(modified)
+                TicketSerializationUtil.serializedTickets(tickets, false);
         }
-        return ticket;
+        return ticket.copy(ticket);
     }
 
     /**
      * Display single ticket by id
      */
-    public Ticket getTicket(int id)
+    public Ticket ticket(int id)
     {
-        return tickets.get(id);
+        Map<Integer,Ticket> tickets = TicketSerializationUtil.deserializedTickets();
+        System.out.println(tickets);
+        System.out.println(tickets.get(id));
+        if(tickets.get(id) != null)
+         return tickets.get(id).copy(tickets.get(id));
+        return null;
     }
 
     /**
      * Display all ticket on console
      */
-    public HashMap<Integer,Ticket> getTickets()
+    public List<Ticket> tickets()
     {
-        return tickets;
+        Map<Integer,Ticket> tickets = TicketSerializationUtil.deserializedTickets();
+        return Collections.unmodifiableList(tickets.values()
+                .stream()
+                .sorted((Ticket o1, Ticket o2) -> o2.getModified().compareTo(o1.getModified()))
+                .collect(Collectors.toList()));
     }
 
     /**
@@ -74,12 +105,13 @@ public class TicketService {
      * @param agentName
      * @return List<Ticket>
      */
-    public List<Ticket> getTicketsByAgent(String agentName){
-        return tickets.values()
+    public List<Ticket> ticketsByAgent(String agentName){
+        Map<Integer,Ticket> tickets = TicketSerializationUtil.deserializedTickets();
+        return Collections.unmodifiableList(tickets.values()
                 .stream()
                 .filter(ticket -> ticket.getAgentName().toLowerCase().equals(agentName.toLowerCase()))
-                .sorted((Ticket o1, Ticket o2) -> -o1.getModified().compareTo(o2.getModified()))
-                .collect(Collectors.toList());
+                .sorted((Ticket o1, Ticket o2) -> o2.getModified().compareTo(o1.getModified()))
+                .collect(Collectors.toList()));
     }
 
     /**
@@ -87,23 +119,26 @@ public class TicketService {
      * @param tag
      * @return List<Ticket>
      */
-    public List<Ticket> getTicketsByTag(String tag){
-        return tickets.values()
+    public List<Ticket> ticketsByTag(String tag){
+        Map<Integer,Ticket> tickets = TicketSerializationUtil.deserializedTickets();
+        return Collections.unmodifiableList(tickets.values()
                 .stream()
                 .filter(ticket -> ticket.getTags().contains(tag.toLowerCase()))
-                .sorted((Ticket o1, Ticket o2) -> -o1.getModified().compareTo(o2.getModified()))
-                .collect(Collectors.toList());
+                .sorted((Ticket o1, Ticket o2) -> o2.getModified().compareTo(o1.getModified()))
+                .collect(Collectors.toList()));
     }
 
     /**
      * Return Ticket group by Agent
      * @return
      */
-    public Map<String,List<Ticket>> getTicketsGroupByAgent()
+    public Map<String,List<Ticket>> ticketsGroupByAgent()
     {
-        return tickets.values()
+        Map<Integer,Ticket> tickets = TicketSerializationUtil.deserializedTickets();
+        return Collections.unmodifiableMap(new TreeMap<>(
+                    tickets.values()
                     .stream()
-                    .collect(Collectors.groupingBy(Ticket::getAgentName));
+                    .collect(Collectors.groupingBy(Ticket::getAgentName))));
     }
 
     /**
@@ -113,24 +148,16 @@ public class TicketService {
      */
     public boolean isTicketExist(int id)
     {
-
+        Map<Integer,Ticket> tickets = TicketSerializationUtil.deserializedTickets();
         return tickets.containsKey(id);
     }
+
 
     /**
      * Load dummy ticket
      * @param noOfTickets
      */
     public void loadDummyTickets(int noOfTickets){
-        Random rd = new Random();
-        for (int i = 0; i < noOfTickets; i++){
-            String agentName = "Agent"+rd.nextInt(1000);
-            HashSet<String> tagsSet = new HashSet<>();
-            tagsSet.add("tag"+rd.nextInt(1000));
-            tagsSet.add("tag"+rd.nextInt(1000));
-            Ticket ticket = TicketFactory.newInstance("Subject"+i, agentName , tagsSet);
-            tickets.put(ticket.getId(),ticket);
-        }
+        System.out.println("This feature is not implemented");
     }
-
 }

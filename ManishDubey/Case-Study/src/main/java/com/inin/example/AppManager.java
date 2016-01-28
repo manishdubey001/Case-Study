@@ -17,9 +17,9 @@ public class AppManager {
         do{
             TicketUtil.displayTicketMenu();
             userInput = TicketUtil.acceptUserInput();
-            if(userInput >=1 && userInput <=9)
+            if(userInput >=1 && userInput <=13)
                 processUserInput(userInput);
-        }while (userInput != 10);
+        }while (userInput != 14);
     }
 
     /**
@@ -53,6 +53,18 @@ public class AppManager {
                 ticketManager.displayTicketsByTag();
                 break;
             case 9:
+                ticketManager.totalTicketCount();
+                break;
+            case 10:
+                ticketManager.oldestTicket();
+                break;
+            case 11:
+                ticketManager.ticketOlderByDate();
+                break;
+            case 12:
+                ticketManager.displayTicketCountByTags();
+                break;
+            case 13:
                 ticketManager.loadDummyTickets();
                 break;
             default:
