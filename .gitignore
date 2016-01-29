@@ -1,6 +1,6 @@
 # Ignore everything in this directory
-virendra/TicketMaster/.idea/*
-virendra/TicketMaster/out/*
+EvansBelly/caseStudy/.idea/*
+EvansBelly/caseStudy/out/*
 *.class
 *.jar
 # Except this file
