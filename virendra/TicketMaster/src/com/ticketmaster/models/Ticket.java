@@ -5,6 +5,9 @@ import com.ticketmaster.exceptions.TicketNotFoundException;
 import com.ticketmaster.utils.SerializerUtil;
 
 import java.io.*;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.*;
 import java.util.stream.Stream;
 
@@ -175,48 +178,19 @@ public class Ticket implements Serializable{
      */
     protected boolean beforeSave(){
 
+        long time = LocalDateTime.now(ZoneId.of("UTC")).toInstant(ZoneOffset.UTC).toEpochMilli();
+
+        int rnd = (int)(Math.random() * 10);
+//        System.out.println(rnd);
+        time = LocalDateTime.now().minusDays(rnd).toInstant(ZoneOffset.UTC).toEpochMilli();
+
         if(created == 0){
-            setCreated(System.currentTimeMillis());
+            setCreated(time);
         }
-        setModified(System.currentTimeMillis());
+        setModified(time);
 
         return true;
-
     }
-
-    /**
-     * save method saves the details of ticket
-     * @return boolean
-     * @throws IOException
-     * @throws ClassNotFoundException
-     * @throws TicketNotFoundException
-     */
-    /*public boolean save() throws IOException, ClassNotFoundException, TicketNotFoundException {
-
-        beforeSave();
-        setId(k++);
-
-
-
-        // cjm - Can you explain how, in a single-threaded environment, we would ever fail the condition getId()==k?
-        // Also, look at what you are assigning to k. In the case 'getId()==k' is true, you assign
-        // k = k+=1;
-        // not k=k+1 (the effect is the same; do you see why?)
-
-        // cjm - In other words, can you explain how the above two lines of code are logically different from this line:
-        // setId(k++);
-
-
-        Ticket.ticketList.put(getId(), this);
-        Ticket.agentList.add(getAgent());
-
-        if (this.tags != null && !this.tags.isEmpty())
-            Ticket.tagList.addAll(this.tags);
-
-        return Ticket.ticketList.get(getId()) != null;
-    }*/
-
-    //updated code for save
 
     /**
      * Updated save code to handle serialization for tickets
@@ -264,13 +238,7 @@ public class Ticket implements Serializable{
      * @throws ClassNotFoundException
      * @throws TicketNotFoundException
      */
-    /*public boolean update()  throws IOException, ClassNotFoundException, TicketNotFoundException{
-        beforeSave();
-        Ticket.ticketList.put(this.getId(), this);
-        return true;
-    }*/
 
-    //updated code for update
     public boolean update()  throws IOException, ClassNotFoundException, TicketNotFoundException{
 
         beforeSave();

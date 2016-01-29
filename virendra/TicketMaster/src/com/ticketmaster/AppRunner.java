@@ -54,12 +54,12 @@ public class AppRunner {
             do{
                 ch = printMenu(); //print menu and ask for user selection
                 processChoice(ch);
-            }while (ch !=9);
+            }while (ch !=0);
 
         }catch (InputMismatchException | IOException  e){
 
 //            e.printStackTrace(); //check stack trace
-            System.out.println("Invalid Option Selection");
+            System.out.println(e.getMessage() != null ? e.getMessage() : "Invalid Option Selection");
 
         }catch (ClassNotFoundException e){
 //            e.printStackTrace(); // check stack trace
@@ -71,7 +71,7 @@ public class AppRunner {
 
         }finally {
 
-            if(ch!=9){
+            if(ch!=0){
                 System.out.println("Do You want to continue (y/n) ? ");
                 if(b == null)
                     b = new BufferedReader(new InputStreamReader(System.in));
@@ -233,9 +233,9 @@ public class AppRunner {
 
                 break;
 
-            case 5:
+            case 5:case 9:
                 tempList = helper.getTickets();
-                System.out.println("Total tickets: "+(tempList!= null ? tempList.size(): 0)+"\nResults:");
+                System.out.println("Total tickets: "+(tempList!= null ? tempList.size(): 0)+"\n\t=============== Results ===============");
                 if (tempList != null) {
                     tempList.forEach(System.out::println); //printing result by method referencing of lambda expressions
                 }
@@ -269,9 +269,11 @@ public class AppRunner {
                 tmpMap.forEach((k,e)-> System.out.println(k+"\t\t| \t\t"+e));
                 break;
 
-            case 8:
+            case 8: case 13:
                 System.out.println("Enter tag name: ");
-                String tag = b.readLine();
+
+                String tag = details.readStringInput();
+
                 if (! Ticket.hasTag(tag)){
                     System.out.println(String.format("Tag \"%s\" is not present in the system", tag ));
                 }else {
@@ -286,8 +288,46 @@ public class AppRunner {
 
                 break;
 
-            case 9: System.out.println("Thank you for using application"); break;
-            default: case 0: throw new IOException("option selected is out of bounds");
+            /*Reporting options in case study*/
+
+
+            case 10:
+                //get the oldest ticket in the system
+                tmpMap = helper.getOldestTicket();
+
+                if (tmpMap!= null){
+                    System.out.printf("==== Ticket #%010d ====\n",tmpMap.get("id"));
+                    tmpMap.forEach((k,v)->System.out.println(k+"\t:\t"+v));
+                }
+
+                break;
+            case 11:
+                //ticket older than number of days
+                System.out.println("Enter no. of days: ");
+                int days= details.readIntInput();
+                tempList = helper.getOlderTickets(days);
+
+                System.out.println("Total tickets: "+(tempList!= null ? tempList.size(): 0)+
+                        "\n\t=============== Results ===============");
+                if (tempList != null) {
+                    tempList.forEach(System.out::println); //printing result by method referencing of lambda expressions
+                }
+
+
+
+
+
+                break;
+            case 12:
+                //print all the tags present in the system
+                Set<String> obj = (Set<String>)helper.getTagsOfTicket();
+                System.out.println("Total Tags present in the System: ");
+                System.out.println(obj);
+
+                break;
+
+            case 0: System.out.println("Thank you for using application"); break;
+            default: throw new IOException("option selected is out of bounds");
 
         }
 

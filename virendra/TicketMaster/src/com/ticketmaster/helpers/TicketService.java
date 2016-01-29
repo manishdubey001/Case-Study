@@ -7,6 +7,9 @@ import com.ticketmaster.models.TicketRepository;
 import com.ticketmaster.utils.DetailProvider;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -121,6 +124,20 @@ public class TicketService /*implements Comparable<Ticket>*/ {
             throw new TicketNotFoundException("Record with id: "+id +" does not exists");
         }
 
+        return prepareTicketMap(ticket);
+
+    }
+
+    public Map getOldestTicket() throws IOException, ClassNotFoundException, TicketNotFoundException {
+        Ticket ticket = repository.getOldestObject();
+        return prepareTicketMap(ticket);
+    }
+
+    private Map<String, Object> prepareTicketMap(Ticket ticket){
+
+        if (ticket == null){
+            return null;
+        }
         Map tempMap = new LinkedHashMap<>();
         tempMap.put("id", ticket.getId());
         tempMap.put("subject", ticket.getSubject());
@@ -128,9 +145,7 @@ public class TicketService /*implements Comparable<Ticket>*/ {
         tempMap.put("tags", ticket.tags == null ? new HashSet(): ticket.tags.toString());
         tempMap.put("created", new Date(ticket.getCreated()));
         tempMap.put("updated", new Date(ticket.getModified()) );
-
         return tempMap;
-
     }
 
     /**
@@ -170,14 +185,14 @@ public class TicketService /*implements Comparable<Ticket>*/ {
     public List<Map<String,? super Object>> searchTicket(String key, String... values){
 
         String searchKey;
-        List a = null;
+        List list = null;
 
 
         if(values.length == 1){ //fetch first value
 
             searchKey = values[0];
 
-            a= (List) Ticket.getListStream().filter(
+            list = (List) Ticket.getListStream().filter(
                     (obj) ->{ Map.Entry me = (Map.Entry)obj;
                         if (key.equals("agent")){
                             return ( (Ticket)(me.getValue())).getAgent().toLowerCase().equals(searchKey.toLowerCase());
@@ -199,7 +214,7 @@ public class TicketService /*implements Comparable<Ticket>*/ {
         //adding sorted section in streams to further optimize
 
 
-        return formatPrintData(a);
+        return formatPrintData(list);
 
     }
 
@@ -283,7 +298,44 @@ public class TicketService /*implements Comparable<Ticket>*/ {
         Ticket.clearList();
     }
 
-    public static void setTicketList(Map<Integer, Ticket> values){
+    public void setTicketList(Map<Integer, Ticket> values){
         TicketRepository.init().updateList(values);
+    }
+
+    public void initTags(){
+        repository.initTagList();
+    }
+    public void initAgents(){
+        repository.initAgentList();
+    }
+
+    public Set<?> getTagsOfTicket(){
+        return repository.getTagList();
+    }
+
+    public List<Map<String,? super Object>> getOlderTickets(int days){
+
+        if (repository.getTicketListSize() <= 0){
+            return null;
+        }
+
+        long time = LocalDateTime.now(ZoneId.of("UTC")).minusDays(days).toInstant(ZoneOffset.UTC).toEpochMilli();
+        List list = new LinkedList(repository.getList().entrySet());
+
+        List lst = new ArrayList<>();
+
+        lst = (ArrayList) list.stream()
+                .filter((e)->((Ticket) ((Map.Entry) e).getValue()).getCreated() <= time )
+                .sorted((o1, o2) ->{
+                    if ( ( (Ticket)(((Map.Entry) o1).getValue()) ).getModified() <=
+                            ( (Ticket)(((Map.Entry) o2).getValue()) ).getModified() ) {
+                        return 1;
+                    }
+                    else return -1;
+                })
+                .collect(Collectors.toList());
+
+        return formatPrintData(lst);
+
     }
 }

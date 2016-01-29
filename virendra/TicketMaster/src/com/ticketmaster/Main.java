@@ -24,27 +24,26 @@ public class Main {
 
     public static void main(String[] args) throws ClassNotFoundException,TicketNotFoundException, IOException {
 
-        System.out.println("Initializing program...");
-
-
         /*System.out.println("Enter initial ticket list size (integer) : ");
         size = Integer.parseInt(b.readLine()); //this takes value from user to add initial tickets
 
         System.out.println("Enter agent size (integer) : ");
         agents = Integer.parseInt(b.readLine()); //this takes the size to agents to start application
-*/
+
         BufferedReader b = new BufferedReader(new InputStreamReader(System.in));
 
         System.out.println("Select Collection for storage of ticket (1:HashMap 2:TreeMap 3:LinkedHashMap) : ");
         collectionChoice = Integer.parseInt(b.readLine()); //this takes the size to agents to start application
 
+        System.out.println("Initialized application with "+size+" values...");
+*/
 
+        System.out.println("Initializing program...");
         long s = AppUtil.logTime("start",true, 0);
 
         //initialization of program
         AppUtil.initializeApp();
 
-//        System.out.println("Initialized application with "+size+" values...");
         AppUtil.logTime("end",false, s);
 
         try{
@@ -53,9 +52,7 @@ public class Main {
             System.out.println("Exception occurred in application.");
             System.out.println(e.getMessage());
             System.out.println("Closing Application. Thank you.");
-
-            if (b!=null) b.close();
-
+//            if (b!=null) b.close();
         }
 
     }

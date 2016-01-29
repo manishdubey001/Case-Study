@@ -46,7 +46,7 @@ public class DetailProvider {
      * @return
      */
     public String readStringInput(){
-        return scanner.next();
+        return scanner.nextLine();
     }
 
     /**

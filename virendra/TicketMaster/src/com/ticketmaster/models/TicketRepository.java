@@ -58,7 +58,7 @@ public class TicketRepository {
     }
 
     public Map<Integer, Ticket> getList(){
-        return ticketList;
+        return Collections.unmodifiableMap(ticketList);
     }
 
     public Ticket deleteTicket(int id){
@@ -99,7 +99,7 @@ public class TicketRepository {
 
 
     public Set<String> getTagList(){
-        return tagList;
+        return Collections.unmodifiableSet(tagList);
     }
 
     public void updateTagList(Set<String> object){
@@ -112,7 +112,7 @@ public class TicketRepository {
     }
 
     public Set<String> getAgentList(){
-        return tagList;
+        return Collections.unmodifiableSet(agentList);
     }
 
     public void updateAgentList(Set<String> object){
@@ -125,18 +125,31 @@ public class TicketRepository {
     }
 
 
-    private void initTagList(){
+    public void initTagList(){
 
         if (ticketList != null){
             ticketList.values().stream().forEach(e-> tagList.addAll( e.tags ) );
         }
     }
 
-    private void initAgentList(){
+    public void initAgentList(){
 
         if (ticketList != null){
-            ticketList.values().stream().forEach(e-> tagList.add(e.getAgent()) );
+            ticketList.values().stream().forEach(e-> agentList.add(e.getAgent()) );
         }
+
+    }
+
+    public Ticket getOldestObject(){
+
+        return  ticketList.values().stream().min( (obj1,obj2)->{
+            if(   obj1.getCreated() < obj2.getCreated()) {
+                return -1;
+            }else {
+                return 1;
+            }
+        }).get();
+
 
     }
 
