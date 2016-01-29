@@ -1,10 +1,12 @@
 package com.services;
 
+import com.customexceptions.UserInputException;
 import com.factory.TicketFactory;
 import com.model.Ticket;
 import com.util.UserConsoleInput;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -17,10 +19,12 @@ public class TicketOperations {
     // requires scanning the entire array. If there are thousands or millions of tickets,
     // this could be expensive.
     private ArrayList<Ticket> ticketArrayList = null;
+    private Map<Long, Ticket> ticketHashMap = null;
     public Set<String> allTagHashSet = null;
 
     public TicketOperations(){
         ticketArrayList = new ArrayList<>();
+        ticketHashMap = new HashMap<>();
         allTagHashSet = new HashSet<>();
     }
 
@@ -30,26 +34,22 @@ public class TicketOperations {
     public void create(){
         // Generally, try to define variables at the same time you
         // assign them. I would combine these declarations and assignments.
-        String subject = null, agent_name =  null;
-        String[] tag_names;
+
+
         // Note that you create a new HashSet here but never use it; it is thrown
         // away when you assign it the result of getTagNames() below.
-        Set<String> tagHashSet = new HashSet<>();
 
-        subject = UserConsoleInput.getSubject();
+        String subject = UserConsoleInput.getSubject();
+        String agentName = UserConsoleInput.getAgentName();
 
-        agent_name = UserConsoleInput.getAgentName();
+        Set<String> tagHashSet = UserConsoleInput.getTagNames();
 
-        tagHashSet = UserConsoleInput.getTagNames();
+        Ticket ticket = createTicket(subject, agentName, tagHashSet);
 
-        long status = createTicket(subject, agent_name, tagHashSet);
-        if(status == 0){
-            System.out.println("Sorry your ticket has not been created!");
-        }
-        else
-        {
+        if(ticket instanceof Ticket)
             System.out.println("Ticket create successful!");
-        }
+        else
+            System.out.println("Sorry your ticket has not been created!");
     }
 
     /*
@@ -58,30 +58,41 @@ public class TicketOperations {
     // If it matters to the caller, I would return the Ticket object directly, or void
     // if it doens't matter.
     // If a Ticket can't be created in a method named 'createTicket', I would throw an exception.
-    public long createTicket(String subject, String agent_name, Set<String> tagHashSet){
+    public Ticket createTicket(String subject, String agentName, Set<String> tagHashSet){
 
         Ticket ticket = null;
-        if(subject == null || subject.isEmpty()){
-            System.out.println("Please enter proper subject!");
-        }
-        else if(agent_name == null || agent_name.isEmpty()){
-            System.out.println("Please enter proper Agent Name!");
-        }
-        else
-        {
-            ticket = TicketFactory.getTicketInstance(subject, agent_name, tagHashSet);
+        try {
+
+            if (subject == null || subject.isEmpty())
+                throw new UserInputException("Please enter proper subject!");
+            else if (agentName == null || agentName.isEmpty())
+                throw new UserInputException("Please enter proper agent name!");
+            else
+                ticket = TicketFactory.createTicketInstance(subject, agentName, tagHashSet);
+
+        }catch (UserInputException e) {
+            System.out.println(e.getMessage());
         }
 
+
         if(ticket != null) {
-            if (ticketArrayList.add(ticket)) {
-                return ticket.getId();
-            } else {
-                return 0;
-            }
+            boolean append = true;
+            if(ticketHashMap.isEmpty())
+                append = false;
+
+            ticketHashMap.put(ticket.getId(), ticket);
+
+            if(ticketHashMap.containsKey(ticket.getId()))
+                if (TicketSerializedClass.saveTicketsInFile(ticketHashMap, append))
+                    return ticket;
+                else
+                    return null;
+            else
+                return null;
+
         }
-        else
-        {
-            return 0;
+        else{
+            return null;
         }
     }
 
@@ -89,52 +100,49 @@ public class TicketOperations {
     /*
     * Show all the tickets in ArrayList */
     // call this 'get' if you are just returning the list.
-    public List<Ticket> showAllTicket(){
-        return ticketArrayList;
-        //showTickets(ticketArrayList);
+    public Map<Long, Ticket> getAllTicket(){
+        Map<Long, Ticket> tempMap = TicketSerializedClass.readTicketsFromFile();
+        return tempMap;
     }
 
 
     /*
     * Show Ticket By Id */
     // Same comment about 'get' versus 'show'
-    public List<Ticket> showTicketById(int id){
+    public Map<Long, Ticket> getTicketById(int id){
 
         /* if id beyond the limit */
-        List<Ticket> tempTicketList = null;
+        Map<Long, Ticket> tempTicketMap;
         if(id <= 0 || id > Ticket.getCountId()){
-            System.out.println("No ticket available for Ticket Id: "+id);
-            return tempTicketList;
+            return new HashMap<>();
         }
 
-        tempTicketList = new ArrayList<>();
-
+        Map<Long, Ticket> tempMap = TicketSerializedClass.readTicketsFromFile();
         // Stream and Lambda implementation.
         // usually you avoid storing intermediate results and just chain this together.
-        Stream<Ticket> stream = ticketArrayList.stream();
-        tempTicketList = stream.filter(lst -> lst.getId() == id).collect(Collectors.toList());
+        tempTicketMap = tempMap.values().stream().filter(ticket -> ticket.getId() == id)
+                                        .collect(Collectors.toMap(Ticket::getId, Function.identity()));
 
-        return tempTicketList;
-
+        return tempTicketMap;
     }
 
 
     /*
     * Show the selected list of tickets */
-    public void showTickets(List<Ticket> ticketList){
-        if(ticketList == null || ticketList.size() == 0){
+    public void getTickets(Map<Long, Ticket> ticketMap){
+        if(ticketMap == null || ticketMap.size() == 0 || ticketMap.isEmpty()){
             System.out.println("No Ticket available!");
             return;
         }
 
         /*
         * Stream implementation of sorting and comparator */
-        Stream<Ticket> stream = ticketList.stream();
+        Stream<Ticket> stream = ticketMap.values().stream();
 
         stream.sorted((Ticket t1, Ticket t2) -> Long.valueOf(t2.getModified()).compareTo(Long.valueOf( t1.getModified())))
               .forEach((Ticket ticket) -> System.out.println(
-                      ticket.getId()+" | "+ticket.getSubject()+" | "+ticket.getAgent_name()+
-                              " | "+ticket.getTags2()+" | "+ticket.getModified()));
+                      ticket.getId()+" | "+ticket.getSubject()+" | "+ticket.getAgentName()+
+                              " | "+ticket.getTags()+" | "+ticket.getModified()));
    }
 
 
@@ -161,25 +169,20 @@ public class TicketOperations {
             return;
         }
 
-        List<Ticket> ticketU = showTicketById(id);
+        Map<Long, Ticket> ticketU = getTicketById(id);
 
         if(ticketU == null || ticketU.isEmpty()){
             System.out.println("Ticket with id: "+id+" is not available");
             return;
         }
         else{
-            showTickets(ticketU);
+            getTickets(ticketU);
         }
 
+        String agentName = UserConsoleInput.getAgentName();
+        Set<String> tagHashSet = UserConsoleInput.getTagNames();
 
-        String agent_name = "";
-        String[] tag_names;
-        Set<String> tagHashSet = new HashSet<>();
-
-        agent_name = UserConsoleInput.getAgentName();
-        tagHashSet = UserConsoleInput.getTagNames();
-
-        Ticket ticket = updateTicket(id, agent_name, tagHashSet);
+        Ticket ticket = updateTicket(id, agentName, tagHashSet);
 
         if(ticket == null){
             System.out.println("Ticket update failed!");
@@ -191,12 +194,16 @@ public class TicketOperations {
     }
 
 
-    public Ticket updateTicket(int id, String agent_name, Set<String> tagHashSet){
+    public Ticket updateTicket(int id, String agentName, Set<String> tagHashSet){
         // A method that returns null can lead to problems for callers. In the case
         // of invalid input, I prefer throwing exceptions to returning null.
-
-        if(id <= 0 || agent_name == null|| agent_name.isEmpty()){
-            System.out.println("Please provide proper Agent Name!");
+        try {
+            if (id <= 0 || agentName == null || agentName.isEmpty()) {
+               throw new UserInputException("Please give proper agent name!");
+            }
+        }
+        catch (UserInputException ue){
+            System.out.println(ue.getMessage());
             return null;
         }
 
@@ -204,11 +211,11 @@ public class TicketOperations {
 
         // Streams are kind of an awkward way to get at one element. I would expose a method
         // to get the ticket by ID explicitly.
-        Optional optional = ticketArrayList.stream().filter(lst -> lst.getId() == id).findFirst();
-        if(optional.isPresent()) {
-            Ticket ticket = (Ticket) optional.get();
-            ticket.setAgent_name(agent_name);
-            ticket.setTags2(tagHashSet);
+        Ticket ticket = ticketHashMap.get(Long.valueOf(id));
+
+        if(ticket != null){
+            ticket.setAgentName(agentName);
+            ticket.setTags(tagHashSet);
             ticket.setModified(unixTime);
             return ticket;
         }
@@ -226,67 +233,69 @@ public class TicketOperations {
         // To do this with streams, note you could use the opposite filter (not equal to this id) to construct a
         // new list. Or you could define Ticket.equals() to use the ticket ID; then you could call remove
         // on the arraylist directly (but that doesn't make it any more efficient).
-        Optional optional = ticketArrayList.stream().filter(lst -> lst.getId() == id).findFirst();
-        if(optional.isPresent())
-            return ticketArrayList.remove(optional.get());
-
-        return optional.isPresent();
+        try{
+            if(ticketHashMap.containsKey(Long.valueOf(id))) {
+                ticketHashMap.remove(Long.valueOf(id));
+                return true;
+            }
+            else
+                throw new UserInputException("Ticket with id is not available!");
+        }
+        catch (UserInputException ue){
+            System.out.println(ue.getMessage());
+        }
+        return false;
     }
 
 
     /*
     * Search tickets assign to specific agent */
-    public List<Ticket> searchTicketByAgent(){
-        String agent_name = "";
-        agent_name = UserConsoleInput.getAgentName();
+    public Map<Long, Ticket> searchTicketByAgent(){
+        String agentName = UserConsoleInput.getAgentName();
 
-        return searchTicketsWithAgent(agent_name);
+        return searchTicketsWithAgent(agentName);
     }
 
 
-    public List<Ticket> searchTicketsWithAgent(String agent_name){
+    public Map<Long, Ticket> searchTicketsWithAgent(String agentName){
 
-        List<Ticket> tempTicketList = new ArrayList<>();
+        Map<Long,Ticket> tempTicketHashMap;
         // This is good. Returning an empty list (rather than null or throwing an
         // exception is a good strategy when a collection is the return type.
         // however, don't create the empty list unless you need to.
-        if(agent_name == null || agent_name.isEmpty()){
-            return tempTicketList;
+        if(agentName == null || agentName.isEmpty()){
+            return new HashMap<>();
         }
 
-        Stream<Ticket> stream = ticketArrayList.stream();
-
-        tempTicketList = stream.filter(lst -> lst.getAgent_name().toLowerCase().equals(agent_name.toLowerCase())).collect(Collectors.toList());
-        return tempTicketList;
+        tempTicketHashMap = ticketHashMap.values().stream().filter(ticket -> ticket.getAgentName().toLowerCase().equals(agentName.toLowerCase()))
+                                                .collect(Collectors.toMap(Ticket::getId, Function.identity()));
+        return tempTicketHashMap;
 
     }
 
 
     /*
     * Search tickets by tag names*/
-    public List<Ticket> searchTicketByTag(){
+    public Map<Long, Ticket> searchTicketByTag(){
         // No reason to create a new HashSet when you assign to something else on the next line.
-        Set<String> tagHashSet = new HashSet<>();
-        tagHashSet = UserConsoleInput.getTagNames();
+        Set<String> tagHashSet = UserConsoleInput.getTagNames();
 
         return searchTicketsWithTags(tagHashSet);
 
     }
 
 
-    public List<Ticket> searchTicketsWithTags(Set<String> tagHashSet){
+    public Map<Long, Ticket> searchTicketsWithTags(Set<String> tagHashSet){
 
-        List<Ticket> tempTicketList = new ArrayList<>();
+        Map<Long, Ticket> tempTicketHashMap;
         // you never use tempTicketSet
-        Set<Ticket> tempTicketSet = new HashSet<>();
 
         if(tagHashSet == null || tagHashSet.isEmpty()){
-            return tempTicketList;
+            return new HashMap<>();
         }
 
         // Above code using Stream and Lambda
 
-        Stream<Ticket> stream = ticketArrayList.stream();
 
         // note that 'lst' here is a Ticket; give it a better name.
         // I would recommend implementing a method like
@@ -295,12 +304,13 @@ public class TicketOperations {
         // inefficient in that it creates a new list of tags
         // and sees if the size is zero, just to know if the tag
         // is present.
-        tempTicketList = stream.filter(lst -> lst.getTags2().stream()
-                                    .filter(tag -> tagHashSet.contains(tag))
-                                    .collect(Collectors.toList()).size() > 0)
-                                    .collect(Collectors.toList());
+        tempTicketHashMap = ticketHashMap.values().stream().
+                filter(ticket -> ticket.getTags()
+                        .stream()
+                        .anyMatch(tag -> tagHashSet.contains(tag)))
+                .collect(Collectors.toMap(Ticket::getId, Function.identity()));
 
-        return tempTicketList;
+        return tempTicketHashMap;
 
     }
 
@@ -309,7 +319,7 @@ public class TicketOperations {
     * NEW Search Ticket agent Count using lambda and stream
     * */
     public Map<String, List<Ticket>> calculateAgentTicketCount() {
-        return new TreeMap<>(ticketArrayList.stream().collect(Collectors.groupingBy(Ticket::getAgent_name)));
+        return new TreeMap<>(ticketHashMap.values().stream().collect(Collectors.groupingBy(Ticket::getAgentName)));
     }
 
 
@@ -320,8 +330,7 @@ public class TicketOperations {
     }
 
 
-
-    public List<Ticket> autoLoadTickets(int noOfTickets){
+    public Map<Long, Ticket> autoLoadTickets(int noOfTickets){
 
         Random rand = new Random();
 
@@ -335,10 +344,25 @@ public class TicketOperations {
 
             String subject = "Subject"+i;
 
-            Ticket ticket = TicketFactory.getTicketInstance(subject, agent, tagSet);
-            ticketArrayList.add(ticket);
+            Ticket ticket = null;
+            try {
+                ticket = TicketFactory.createTicketInstance(subject, agent, tagSet);
+            } catch (UserInputException e) {
+                e.printStackTrace();
+            }
+
+            boolean append = true;
+            if(ticketHashMap.isEmpty())
+                append = false;
+
+            ticketHashMap.put(ticket.getId(), ticket);
+
+            if(ticketHashMap.containsKey(ticket.getId()))
+                TicketSerializedClass.saveTicketsInFile(ticketHashMap, append);
+
         }
 
-        return ticketArrayList;
+        return ticketHashMap;
     }
+
 }

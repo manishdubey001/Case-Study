@@ -1,20 +1,21 @@
 package com.model;
 
+import java.io.*;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Function;
 
 /**
  * Created by root on 13/1/16.
  */
-public class Ticket {
+public class Ticket implements Serializable, Function<Object, Object> {
 
     private static long countId = 1;
     private long id;
     private String subject;
     // generally Java avoids underscores in names, and uses 'camel case' like agentName
-    private String agent_name;
-    private String tags;
-    private Set<String> tags2;
+    private String agentName;
+    private Set<String> tags;
     private short status = 1;
     private long modified;
     private long created;
@@ -22,13 +23,8 @@ public class Ticket {
 
     // Note that you don't use many of these accessors; if you don't know a need
     // for an accessor, don't write it. Expose as little of your class as possible.
-    public short getStatus() {
-        return status;
-    }
 
-    public void setStatus(short status) {
-        this.status = status;
-    }
+
     public String getSubject() {
         return subject;
     }
@@ -38,30 +34,22 @@ public class Ticket {
     }
 
     // since you are controlling ID's by an auto-increment, I wouldn't allow this.
-    public void setId(long id) {
-        this.id = id;
-    }
 
+
+    // It may be allowed, to update the subject of Ticket.
+    // As ticket has been created with inappropriate subject.
+    // Or in case of transfer ticket to agent with proper subject.
     public void setSubject(String subject) {
         this.subject = subject;
     }
 
 
-    public String getAgent_name() {
-        return agent_name;
+    public String getAgentName() {
+        return agentName;
     }
 
-    public void setAgent_name(String agent_name) {
-        this.agent_name = agent_name;
-    }
-
-
-    public String getTags() {
-        return tags;
-    }
-
-    public void setTags(String tags) {
-        this.tags = tags;
+    public void setAgentName(String agentName) {
+        this.agentName = agentName;
     }
 
 
@@ -91,24 +79,19 @@ public class Ticket {
     // Note that you don't use this constructor. Can you see how to
     // combine the code so you don't have all the same code duplicated
     // between the two constructors?
-    public Ticket(String subject, String agent_name){
-        this.id = countId;
-        this.subject = subject;
-        this.agent_name = agent_name;
-        this.modified = unixTime;
-        this.created = unixTime;
-        countId++;
-    }
 
 
-    public Ticket(String subject, String agent_name, Set<String> tags2){
+    public Ticket(String subject, String agentName, Set<String> tags){
 
         this.id = countId;
         this.subject = subject;
-        this.agent_name = agent_name;
+        this.agentName = agentName;
         // See the email I sent the API team about potential dangers of
         // just storing a reference to this set.
-        this.tags2 = tags2;
+        if(tags == null)
+            this.tags = new HashSet<>();
+        else
+            this.tags = new HashSet<>(tags);
         this.modified = unixTime;
         this.created = unixTime;
         countId++;
@@ -116,25 +99,52 @@ public class Ticket {
 
     // why 2?
 
-    public Set<String> getTags2() {
-        //return tags2;
-        if(tags2 != null)
-            return new HashSet<>(tags2);
+    public Set<String> getTags() {
+        if(tags != null)
+            return new HashSet<>(tags);
         else
             return null;
     }
 
-    public void setTags2(Set<String> tags2) {
-        //this.tags2 = tags2;
-        this.tags2 = new HashSet<>(tags2);
+    public void setTags(Set<String> tags) {
+        this.tags = new HashSet<>(tags);
     }
 
     public static long getCountId() {
         return countId;
     }
 
-    public static void setCountId(long countId) {
-        Ticket.countId = countId;
+
+    private void writeObject(ObjectOutputStream o) throws IOException{
+            o.writeLong(this.id);
+            o.writeUTF(this.subject);
+            o.writeUTF(this.agentName);
+            o.writeObject(this.tags);
+            o.writeLong(this.modified);
+            o.writeLong(this.created);
     }
 
+    private void readObject(ObjectInputStream i) throws IOException{
+        try {
+            this.id = i.readLong();
+            this.subject = i.readUTF();
+            this.agentName = i.readUTF();
+            this.tags = (Set<String>) i.readObject();
+            this.modified = i.readLong();
+            this.created = i.readLong();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public boolean hasTag(String tag){
+        return this.getTags().contains(tag);
+    }
+
+    @Override
+    public Object apply(Object o) {
+        return null;
+    }
 }

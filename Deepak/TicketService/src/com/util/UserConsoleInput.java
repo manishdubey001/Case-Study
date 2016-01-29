@@ -3,6 +3,8 @@ package com.util;
 import com.customexceptions.UserInputException;
 import com.services.TicketOperations;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
@@ -37,8 +39,7 @@ public class UserConsoleInput {
     /*
     * To get the String from user from console */
     public static String acceptString() throws UserInputException {
-        String inputString = null;
-        inputString = scanner.nextLine();
+        String inputString = scanner.nextLine();
         inputString = inputString.trim();
         if(inputString == null || inputString.equals("")){
             throw new UserInputException("Please give some proper input");
@@ -71,11 +72,11 @@ public class UserConsoleInput {
     * To get name of agent*/
     public static String getAgentName(){
         boolean agentLoop = true;
-        String agent_name = "";
+        String agentName = "";
         while (agentLoop) {
             System.out.println("Please Enter Agent Name");
             try {
-                agent_name = UserConsoleInput.acceptString();
+                agentName = UserConsoleInput.acceptString();
                 agentLoop = false;
             } catch (UserInputException e) {
                 //e.printStackTrace();
@@ -83,7 +84,7 @@ public class UserConsoleInput {
             }
         }
 
-        return agent_name;
+        return agentName;
     }
 
 
@@ -91,13 +92,12 @@ public class UserConsoleInput {
     * To get multiple tag names, separated by Comma*/
     public static Set<String> getTagNames(){
         System.out.println("Please Enter tags separated by Comma");
-        String[] tag_names;
         Set<String> tagHashSet = new HashSet<>();
         try {
-            tag_names = UserConsoleInput.acceptString().split(",");
+            String[] tagNames = UserConsoleInput.acceptString().split(",");
 
             TicketOperations ticketOperations = new TicketOperations();
-            for(String tag : tag_names){
+            for(String tag : tagNames){
                 tag = tag.trim();
                 if(!(tag.equals(""))){
                     ticketOperations.allTagHashSet.add(tag);
@@ -110,5 +110,17 @@ public class UserConsoleInput {
         }
 
         return tagHashSet;
+    }
+
+    public static File createFile(){
+        File file = null;
+        try {
+            file = new File("src/com/resources/tickets.ser");
+            if(!file.exists())
+                file.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return file;
     }
 }

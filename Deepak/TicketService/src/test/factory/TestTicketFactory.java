@@ -1,5 +1,6 @@
 package test.factory;
 
+import com.customexceptions.UserInputException;
 import com.factory.TicketFactory;
 import com.model.Ticket;
 import org.junit.Test;
@@ -18,12 +19,17 @@ public class TestTicketFactory {
     @Test
     public void testgetTickretInstance(){
         Set<String> tagsSet = new HashSet<>(Arrays.asList("Tag1", "Tag2"));
-        Ticket ticket = TicketFactory.getTicketInstance("Subject1", "Agent1", tagsSet);
+        Ticket ticket = null;
+        try {
+            ticket = TicketFactory.createTicketInstance("Subject1", "Agent1", tagsSet);
+        } catch (UserInputException e) {
+            e.printStackTrace();
+        }
 
         assertNotNull(ticket);
         assertTrue(ticket instanceof Ticket);
-        assertEquals("Agent1", ticket.getAgent_name());
+        assertEquals("Agent1", ticket.getAgentName());
         assertEquals("Subject1", ticket.getSubject());
-        assertEquals(tagsSet, ticket.getTags2());
+        assertEquals(tagsSet, ticket.getTags());
     }
 }
