@@ -17,6 +17,8 @@ public class InputReader {
      */
     public static BufferedReader getReader()
     {
+        // note that this initialization pattern will not work in a multi-threaded environment
+        // Prefer built-in initialiations
         if(reader == null)
             reader = new BufferedReader(new InputStreamReader(System.in));
         return reader;

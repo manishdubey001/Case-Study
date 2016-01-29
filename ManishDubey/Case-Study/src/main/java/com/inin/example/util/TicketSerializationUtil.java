@@ -15,6 +15,7 @@ public class TicketSerializationUtil {
      * @param tickets
      * @param append
      */
+    // generally, make method names verbs/verb phrases (actiosn). So this would be "serializeTickets"
     public static synchronized void serializedTickets(Map<Integer,Ticket> tickets, boolean append)
     {
         ObjectOutputStream oos = null;
@@ -22,6 +23,7 @@ public class TicketSerializationUtil {
             File file = createFile();
             if(append && file.length() != 0)
             {
+                // I would not hard-code the file; pass this as a parameter
                 oos = new ObjectOutputStream(new FileOutputStream("src/main/resources/ticket.ser", true)) {
                     protected void writeStreamHeader() throws IOException {
                         reset();
@@ -39,6 +41,8 @@ public class TicketSerializationUtil {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        // note that ObjectOutputStream is AutoCloseable so you
+        // can use Try-With-Resources here. I'll send a message about this pattern.
         finally {
             try {
                 if(oos != null)

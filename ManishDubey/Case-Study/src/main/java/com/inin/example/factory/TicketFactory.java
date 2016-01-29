@@ -26,6 +26,8 @@ public class TicketFactory {
      * Return the next ticket Id
      * @return int
      */
+    // this is an interesting problem to solve. One way to approach is: Any time a ticket is deserialzed,
+    // set the next counter to (max known ticket ID) + 1
     public static int getNextTicketId()
     {
         Map<Integer,Ticket> ticketList = TicketSerializationUtil.deserializedTickets();
