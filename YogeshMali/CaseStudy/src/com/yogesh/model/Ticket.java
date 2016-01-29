@@ -1,6 +1,10 @@
 package com.yogesh.model;
 
 import java.io.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.Month;
 import java.util.*;
 
 /**
@@ -12,18 +16,18 @@ public class Ticket implements Serializable {
     String subject;
     String agentName;
     Set<String> tags;
-    Date created;
-    Date modified;
+    LocalDateTime created;
+    LocalDateTime modified;
 
     public Ticket() {
-
     }
 
     public Ticket(int id, String subject, String agentName, Set tags) {
-        this.setId(id);
-        this.setSubject(subject);
-        this.setAgentName(agentName);
-        this.setTags(tags);
+        this.id = id;
+        this.subject = subject;
+        this.agentName = agentName;
+        this.tags = tags;
+        this.modified = this.created = LocalDateTime.now().minusDays(new Random().nextInt(20));
     }
 
     public int getId() {
@@ -32,7 +36,7 @@ public class Ticket implements Serializable {
 
     public void setId(int id) {
         this.id = id;
-        this.created = new Date();
+
     }
 
     public String getSubject() {
@@ -49,24 +53,24 @@ public class Ticket implements Serializable {
 
     public void setAgentName(String agentName) {
         this.agentName = agentName;
-        this.modified = new Date();
+        this.modified = LocalDateTime.now();
     }
 
-    public Set getTags() {
+    public Set<String> getTags() {
         return tags;
     }
 
     public void setTags(Set tags) {
         this.tags = tags;
-        this.modified = new Date();
+        this.modified = LocalDateTime.now();
     }
 
 
-    public Date getCreated() {
+    public LocalDateTime getCreated() {
         return created;
     }
 
-    public Date getModified() {
+    public LocalDateTime getModified() {
         return modified;
     }
 
@@ -78,8 +82,8 @@ public class Ticket implements Serializable {
         this.subject = ois.readUTF();
         this.agentName = ois.readUTF();
         this.tags = (Set) ois.readObject();
-        this.created = (Date) ois.readObject();
-        this.modified = (Date) ois.readObject();
+        this.created = (LocalDateTime) ois.readObject();
+        this.modified = (LocalDateTime) ois.readObject();
 
     }
 

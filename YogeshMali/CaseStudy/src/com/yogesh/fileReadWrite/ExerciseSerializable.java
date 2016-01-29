@@ -3,6 +3,7 @@ package com.yogesh.fileReadWrite;
 /**
  * Created by root on 22/1/16.
  */
+import com.yogesh.ConsolIO;
 import com.yogesh.model.Ticket;
 import java.io.*;
 import java.util.*;
@@ -13,8 +14,9 @@ import java.util.*;
 
 public class ExerciseSerializable {
 
+    public static String filepath =  "SerTicket.ser";
 
-    public static void main(String... tag1rguments) {
+    public static void main(String... arguments) {
         singleTicketReadWriteOperation();
         listOfTicketReadWriteOperation();
     }
@@ -24,16 +26,16 @@ public class ExerciseSerializable {
         Ticket ticket = new Ticket(1, "Subject", "Yogesh", new HashSet<>(Arrays.asList("tag1")));
 
         try {
-            ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream("SerTicket.ser"));
+
+            ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(filepath));
             os.writeObject(ticket);
-            ObjectInputStream objIn = new ObjectInputStream(new FileInputStream("SerTicket.ser"));
+
+            ObjectInputStream objIn = new ObjectInputStream(new FileInputStream(filepath));
             Ticket objTicket = (Ticket) objIn.readObject();
-            System.out.println(objTicket.getId());
-            System.out.println(objTicket.getSubject());
-            System.out.println(objTicket.getAgentName());
-            System.out.println(objTicket.getTags());
-            System.out.println(objTicket.getCreated());
-            System.out.println(objTicket.getModified());
+
+            ConsolIO.ticketListHeader();
+            ConsolIO.showTicket(ticket);
+
 
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -44,9 +46,12 @@ public class ExerciseSerializable {
         Ticket ticket = new Ticket(1, "Subject", "Yogesh", new HashSet<>(Arrays.asList("tag1")));
         Ticket tic = new Ticket(2, "Subject1", "Ganesh", new HashSet<>(Arrays.asList("tag1")));
 
+
+
         ArrayList<Ticket> arr = new ArrayList<>();
-        arr.add(tic);
         arr.add(ticket);
+        arr.add(tic);
+
         ArrayList<Ticket> arrlist = null;
         try {
             Ticket.serialize(arr);
@@ -57,14 +62,10 @@ public class ExerciseSerializable {
             cnfe.printStackTrace();
         }
 
-
+        ConsolIO.ticketListHeader();
         for (Ticket objTicket : arrlist) {
 
-            System.out.println(objTicket.getSubject());
-            System.out.println(objTicket.getAgentName());
-            System.out.println(objTicket.getTags());
-            System.out.println(objTicket.getCreated());
-            System.out.println(objTicket.getModified());
+            ConsolIO.showTicket(objTicket);
         }
     }
 

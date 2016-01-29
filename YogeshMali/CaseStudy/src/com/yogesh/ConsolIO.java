@@ -91,4 +91,14 @@ public class ConsolIO {
         System.out.println(msg);
     }
 
+
+    public static void showReportingMenu() {
+        System.out.println(" ***************Select Operation******************");
+        System.out.println("1. showAllTicket");
+        System.out.println("2. How many tickets are in the system");
+        System.out.println("3. The oldest ticket in the system");
+        System.out.println("4. Tickets older than a certain number of days");
+        System.out.println("5. Tags in use/ No of tickets with a tag");
+
+    }
 }
