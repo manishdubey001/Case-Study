@@ -48,6 +48,10 @@ public class Serialization {
 
 		// Serialize
 		multiSerialize(listOfTickets);
+		//virendra: make a practice that once resources work is finished,
+		// you are closing the resource.
+		//if I close a connection and after again open connection to write new tickets.
+		// What would be effect of that ? please check that as well.
 
 		// De-Serialize
 		System.out.println("_____________________________________________");

@@ -94,6 +94,7 @@ public class Ticket implements Serializable {
 		catch (IOException e) {
 			e.printStackTrace();
 		}
+		//virendra: below is same as return this since you have setup all the value
 		return new Ticket(id, subject, agent, tags);
 	}
 	// Remove the 'modified' parameter since you don't use it.
