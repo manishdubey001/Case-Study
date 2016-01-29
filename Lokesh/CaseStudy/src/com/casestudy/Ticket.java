@@ -5,18 +5,23 @@ package com.casestudy;
  * Ticket Model Class
  */
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.time.temporal.TemporalAccessor;
 import java.util.*;
 
 // Generally use singular name for classes (Ticket instead of Ticket) unless the class stores more than one per instance.
 //Update: Changed class name to singular
-public class Ticket implements Comparable<Ticket>{
+public class Ticket implements Comparable<Ticket>, Serializable{
     private int id;
     private String subject;
     private String agent;
     private HashSet<String> tags;
     //Update: Use of LocalDateTime in place of long (from Date class)
-    final private LocalDateTime created;
+    private LocalDateTime created;
     private LocalDateTime updated;
 
     public Ticket(int id, String subject, String agent, HashSet<String> tags, LocalDateTime created, LocalDateTime updated) {
@@ -28,6 +33,27 @@ public class Ticket implements Comparable<Ticket>{
         this.updated = updated;
     }
 
+    private void writeObject(ObjectOutputStream oos) throws IOException {
+        oos.writeInt(id);
+        oos.writeUTF(subject);
+        oos.writeUTF(agent);
+        oos.writeObject(tags);
+        /*oos.writeUTF(created.toString());
+        oos.writeUTF(updated.toString());*/
+        oos.writeObject(created);
+        oos.writeObject(updated);
+    }
+
+    private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException{
+        id = ois.readInt();
+        subject = ois.readUTF();
+        agent = ois.readUTF();
+        tags = (HashSet<String>) ois.readObject();
+        /*created = LocalDateTime.parse(ois.readUTF());
+        updated = LocalDateTime.parse(ois.readUTF());*/
+        created = (LocalDateTime) ois.readObject();
+        updated = (LocalDateTime) ois.readObject();
+    }
 
     // rather than create Longs here you can instead use Long.compare() on the primitive types
     // Update: Used Long.compare in place of long primitives

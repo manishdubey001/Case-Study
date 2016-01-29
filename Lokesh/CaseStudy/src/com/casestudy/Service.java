@@ -4,22 +4,22 @@ package com.casestudy;
  * Created by root on 12/1/16.
  */
 
+import java.io.*;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 // Same comment as Ticket; just call this Service instead of Services
 // Update: Refactor to change Service from Services
 public class Service {
 
-//    final String []arry = {"1) Create Ticket","2) Update Ticket","3) Delete Ticket","4) Get Ticket","5) Get all Ticket","6) Find Ticket assigned to Agent", "7) Get all Agent with Ticket Counts","8) Search Ticket By Tag","9) Exit"};
-
     // No reason to make these static since you have an actual instance of Service to work with
     // Update: Removed static from max_id since already have instance to access it within class
     private int max_id = 0;
 
-    static HashMap<Integer, Ticket> tickets = new HashMap<>();
-
+    HashMap<Integer, Ticket> tickets = new HashMap<>();
+    FileHelper fh = new FileHelper("resources/","data.txt");
 
 public void createTicket(){
         String subject,agent,tags;
@@ -52,12 +52,25 @@ public void createTicket(){
         // Update: I don't think so because I was also involved with Ganesh to define case study and we left it how one wish to implement. Just specific mention was for not allowing Duplicate IDs for Tickets
         Ticket t = new Ticket(++max_id,subject,agent,tg, LocalDateTime.now(),LocalDateTime.now());
         tickets.put(t.getId(),t);
+//        System.out.println(t.toString());
+        fh.write(t);
         return t;
     }
 
+    public void readAllTicketsFromFile(){
+        tickets.putAll(fh.readAll());
+        if(tickets.size() > 0)
+            max_id = tickets.get(tickets.size()).getId();
+//        System.out.println(max_id);
+    }
+
     public void createDummyTickets(){
-        Ticket t = new Ticket(++max_id,"Subject"+max_id,"Agent" + max_id,new HashSet<>(),LocalDateTime.now(),LocalDateTime.now());
-        tickets.put(t.getId(),t);
+        if(!fh.checkFile())
+            for(int i = 1;i <= 100; i++){
+                HashSet<String > hs = new HashSet<>();
+                hs.add("tag"+i);
+                this.createTicket("Subject" + i , "agent" + i, hs);
+            }
     }
 
     public void updateTicket(){
@@ -124,6 +137,7 @@ public void createTicket(){
                 t.setTags(s);
             }
         }
+        fh.write(t);
         return t;
     }
 
@@ -148,7 +162,7 @@ public void createTicket(){
 
         //Update: Got a single line for 3 line of code. I will need to explore more on stream api.
 //      tickets.values().stream().sorted(Comparator.comparing(Ticket::getUpdated).reversed()).forEachOrdered(System.out::print);
-        this.getAllTickets().forEach(System.out::print);
+        this.getAllTickets().forEach(System.out::println);
         System.out.println();
 
         /*Function<Ticket, LocalDateTime> byUpdated = Ticket::getUpdated; //tm -> tm.getUpdated();
@@ -273,4 +287,42 @@ public void createTicket(){
         } while (temp.equals("Y"));
         return tg;
     }*/
+
+    public void ticketCountReport(){
+        System.out.println("Total Tickets in System: " + this.countReport());
+    }
+
+    public int countReport(){
+        return tickets.size();
+    }
+
+    public void oldestTicket(){
+        System.out.println("Oldest tickets in System: ");
+        System.out.println(this.oldestTicketsReport());
+    }
+
+    public List<Ticket> oldestTicketsReport(){
+        LocalDateTime oldestDate = tickets.values().stream().sorted(Comparator.comparing(Ticket::getCreated)).findFirst().get().getCreated();
+        return tickets.values().stream().filter(ticket -> ticket.getCreated().equals(oldestDate)).collect(Collectors.toList());
+    }
+
+    public void olderThanDaysTickets(){
+        int days = MyReader.readChoice("Enter the number of days");
+        System.out.println("Tickets older than " + days + " days are: ");
+        System.out.println(this.olderThanDaysReport(days));
+    }
+
+    public List<Ticket> olderThanDaysReport(int days){
+        LocalDateTime l = LocalDateTime.now().minusDays(days);
+        return tickets.values().stream().filter(ticket -> ticket.getCreated().compareTo(l) < 0).sorted(Comparator.comparing(Ticket::getCreated)).collect(Collectors.toList());
+    }
+
+    public void ticketsReportForTag(){
+        String tag = MyReader.readInput("Enter A Tag: ");
+        System.out.println("Number of Tickets with tag \'" + tag + "\': " + this.ticketsCountForTag(tag));
+    }
+    public int ticketsCountForTag(String tag){
+        int size = tickets.values().stream().filter(t->t.getTags().contains(tag)).collect(Collectors.toList()).size();
+        return size;
+    }
 }
