@@ -10,6 +10,7 @@ import java.io.InputStreamReader;
 public class InputReader {
 
     public static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+
     /**
      * Used for read int from console
      * @return int

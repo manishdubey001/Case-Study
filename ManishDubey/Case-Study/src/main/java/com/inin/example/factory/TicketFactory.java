@@ -22,7 +22,10 @@ public class TicketFactory {
         int id = getNextId();
         return new Ticket(id,subject,agentName,tags);
     }
-
+    /**
+     * Return the next ticket Id
+     * @return int
+     */
     public static int getNextId()
     {
         int currentTicketId = Integer.valueOf(TicketUtil.getProperty("ticketId"));
