@@ -4,11 +4,6 @@ import com.inin.example.factory.TicketFactory;
 import com.inin.example.model.Ticket;
 import com.inin.example.util.TicketSerializationUtil;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -32,21 +27,18 @@ public class TicketService {
         Ticket ticket = TicketFactory.newInstance(subject, agentName, tags);
         Map<Integer,Ticket>  tickets = new HashMap<>();
         tickets.put(ticket.getId(),ticket );
-        TicketSerializationUtil.serializedTickets(tickets, true);
+        TicketSerializationUtil.serializeTickets(tickets, true);
         return ticket.copy(ticket);
     }
-
-
-
     /**
      * Delete Ticket by id
      */
     public boolean delete(int id){
-        Map<Integer,Ticket> tickets = TicketSerializationUtil.deserializedTickets();
+        Map<Integer,Ticket> tickets = TicketSerializationUtil.deserializeTickets();
         Ticket ticket = tickets.remove(id);
         if(ticket !=null)
         {
-            TicketSerializationUtil.serializedTickets(tickets, false);
+            TicketSerializationUtil.serializeTickets(tickets, false);
             return true;
         }
         return false;
@@ -57,7 +49,7 @@ public class TicketService {
      */
     public Ticket update(int id,String agentName, HashSet<String> tags)
     {
-        Map<Integer,Ticket> tickets = TicketSerializationUtil.deserializedTickets();
+        Map<Integer,Ticket> tickets = TicketSerializationUtil.deserializeTickets();
         Ticket ticket = tickets.get(id);
         boolean modified = false;
         if (ticket != null) {
@@ -70,7 +62,7 @@ public class TicketService {
                 modified = true;
             }
             if(modified)
-                TicketSerializationUtil.serializedTickets(tickets, false);
+                TicketSerializationUtil.serializeTickets(tickets, false);
         }
         return ticket.copy(ticket);
     }
@@ -80,9 +72,7 @@ public class TicketService {
      */
     public Ticket ticket(int id)
     {
-        Map<Integer,Ticket> tickets = TicketSerializationUtil.deserializedTickets();
-        System.out.println(tickets);
-        System.out.println(tickets.get(id));
+        Map<Integer,Ticket> tickets = TicketSerializationUtil.deserializeTickets();
         if(tickets.get(id) != null)
          return tickets.get(id).copy(tickets.get(id));
         return null;
@@ -93,7 +83,7 @@ public class TicketService {
      */
     public List<Ticket> tickets()
     {
-        Map<Integer,Ticket> tickets = TicketSerializationUtil.deserializedTickets();
+        Map<Integer,Ticket> tickets = TicketSerializationUtil.deserializeTickets();
         return Collections.unmodifiableList(tickets.values()
                 .stream()
                 .sorted((Ticket o1, Ticket o2) -> o2.getModified().compareTo(o1.getModified()))
@@ -106,7 +96,7 @@ public class TicketService {
      * @return List<Ticket>
      */
     public List<Ticket> ticketsByAgent(String agentName){
-        Map<Integer,Ticket> tickets = TicketSerializationUtil.deserializedTickets();
+        Map<Integer,Ticket> tickets = TicketSerializationUtil.deserializeTickets();
         return Collections.unmodifiableList(tickets.values()
                 .stream()
                 .filter(ticket -> ticket.getAgentName().toLowerCase().equals(agentName.toLowerCase()))
@@ -120,7 +110,7 @@ public class TicketService {
      * @return List<Ticket>
      */
     public List<Ticket> ticketsByTag(String tag){
-        Map<Integer,Ticket> tickets = TicketSerializationUtil.deserializedTickets();
+        Map<Integer,Ticket> tickets = TicketSerializationUtil.deserializeTickets();
         return Collections.unmodifiableList(tickets.values()
                 .stream()
                 .filter(ticket -> ticket.getTags().contains(tag.toLowerCase()))
@@ -134,7 +124,7 @@ public class TicketService {
      */
     public Map<String,List<Ticket>> ticketsGroupByAgent()
     {
-        Map<Integer,Ticket> tickets = TicketSerializationUtil.deserializedTickets();
+        Map<Integer,Ticket> tickets = TicketSerializationUtil.deserializeTickets();
         return Collections.unmodifiableMap(new TreeMap<>(
                     tickets.values()
                     .stream()
@@ -148,10 +138,9 @@ public class TicketService {
      */
     public boolean isTicketExist(int id)
     {
-        Map<Integer,Ticket> tickets = TicketSerializationUtil.deserializedTickets();
+        Map<Integer,Ticket> tickets = TicketSerializationUtil.deserializeTickets();
         return tickets.containsKey(id);
     }
-
 
     /**
      * Load dummy ticket

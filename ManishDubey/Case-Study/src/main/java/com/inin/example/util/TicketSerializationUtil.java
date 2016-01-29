@@ -15,14 +15,14 @@ public class TicketSerializationUtil {
      * @param tickets
      * @param append
      */
-    public static synchronized void serializedTickets(Map<Integer,Ticket> tickets, boolean append)
+    public static synchronized void serializeTickets(Map<Integer, Ticket> tickets, boolean append)
     {
         ObjectOutputStream oos = null;
         try {
-            File file = createFile();
+            File file = TicketUtil.createFile(TicketUtil.getProperty("serializeTicketFile"));
             if(append && file.length() != 0)
             {
-                oos = new ObjectOutputStream(new FileOutputStream("src/main/resources/ticket.ser", true)) {
+                oos = new ObjectOutputStream(new FileOutputStream(file, true)) {
                     protected void writeStreamHeader() throws IOException {
                         reset();
                     }
@@ -40,12 +40,12 @@ public class TicketSerializationUtil {
             e.printStackTrace();
         }
         finally {
-            try {
-                if(oos != null)
+            if (oos != null)
+                try {
                     oos.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
         }
     }
 
@@ -53,14 +53,11 @@ public class TicketSerializationUtil {
      * Deserialized  all Ticket from file and return Map of Ticket
      * @return Map<Integer,Ticket>
      */
-    public static Map<Integer,Ticket> deserializedTickets()
+    public static Map<Integer,Ticket> deserializeTickets()
     {
         Map<Integer,Ticket> tickets = new HashMap<>();
-        ObjectInputStream ois = null;
-        try {
-            File file = createFile();
-            ois = new ObjectInputStream(new FileInputStream(file));
-            int i = 0;
+        File file = TicketUtil.createFile(TicketUtil.getProperty("serializeTicketFile"));
+        try(ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
             while (true) {
                 Ticket ticket = (Ticket)ois.readObject();
                 tickets.put(ticket.getId(),ticket);
@@ -72,34 +69,17 @@ public class TicketSerializationUtil {
         }catch (ClassNotFoundException e){
             e.printStackTrace();
         }
-        finally {
-            try {
-                if(ois != null)
-                    ois.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
         return tickets;
     }
 
-    /**
-     * Create file if not present and return File object
-     * @return File
-     * @throws IOException
-     */
-    private static File createFile() throws IOException{
-        File file = new File("src/main/resources/ticket.ser");
-        file.createNewFile();
-        return file;
-    }
+
 
     /**
      * Delete all ticket from file
      */
     public static void clearTicket(){
         try {
-            new FileOutputStream(createFile()).close();
+            new FileOutputStream(TicketUtil.createFile(TicketUtil.getProperty("serializeTicketFile"))).close();
         } catch (IOException e) {
             e.printStackTrace();
         }

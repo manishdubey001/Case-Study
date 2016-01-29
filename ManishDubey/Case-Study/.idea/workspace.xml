@@ -2,40 +2,37 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8be7870e-b596-4297-a7fb-b5e61d79c1e0" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/dictionaries/root.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/inin/example/service/TicketReportService.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/test/java/com/inin/example/service/ReportServiceTest.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../TestJavaProgram/src/main/java/com/inin/example/file_i_o/DataOutputStreamExample.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../TestJavaProgram/src/main/java/com/inin/example/serialization/serial_version_uid_ex/Dog.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../TestJavaProgram/src/main/java/com/inin/example/serialization/serial_version_uid_ex/Receiver.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../TestJavaProgram/src/main/java/com/inin/example/serialization/serial_version_uid_ex/Sernder.java" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/resources/ticketlist.ser" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/Case-Study-1.0-SNAPSHOT.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/ticketlist.ser" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/maven-archiver/pom.properties" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/inin/example/AppManager.class" afterPath="$PROJECT_DIR$/target/classes/com/inin/example/AppManager.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/resources/config.properties" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/resources/ticket.properties" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/resources/ticket.ser" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/inin/example/TicketManager.class" afterPath="$PROJECT_DIR$/target/classes/com/inin/example/TicketManager.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/inin/example/factory/TicketFactory.class" afterPath="$PROJECT_DIR$/target/classes/com/inin/example/factory/TicketFactory.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/inin/example/model/Ticket.class" afterPath="$PROJECT_DIR$/target/classes/com/inin/example/model/Ticket.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/inin/example/service/TicketReportService.class" afterPath="$PROJECT_DIR$/target/classes/com/inin/example/service/TicketReportService.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/inin/example/service/TicketService.class" afterPath="$PROJECT_DIR$/target/classes/com/inin/example/service/TicketService.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/inin/example/util/InputReader.class" afterPath="$PROJECT_DIR$/target/classes/com/inin/example/util/InputReader.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/inin/example/util/TicketSerializationUtil$1.class" afterPath="$PROJECT_DIR$/target/classes/com/inin/example/util/TicketSerializationUtil$1.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/inin/example/util/TicketSerializationUtil.class" afterPath="$PROJECT_DIR$/target/classes/com/inin/example/util/TicketSerializationUtil.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/test-classes/com/inin/example/service/TicketServiceTest.class" afterPath="$PROJECT_DIR$/target/test-classes/com/inin/example/service/TicketServiceTest.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/inin/example/util/TicketUtil.class" afterPath="$PROJECT_DIR$/target/classes/com/inin/example/util/TicketUtil.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/test-classes/com/inin/example/service/ReportServiceTest.class" afterPath="$PROJECT_DIR$/target/test-classes/com/inin/example/service/ReportServiceTest.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/inin/example/AppManager.java" afterPath="$PROJECT_DIR$/src/main/java/com/inin/example/AppManager.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Case-Study.iml" afterPath="$PROJECT_DIR$/Case-Study.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pom.xml" afterPath="$PROJECT_DIR$/pom.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/inin/example/TicketManager.java" afterPath="$PROJECT_DIR$/src/main/java/com/inin/example/TicketManager.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/inin/example/factory/TicketFactory.java" afterPath="$PROJECT_DIR$/src/main/java/com/inin/example/factory/TicketFactory.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/inin/example/model/Ticket.java" afterPath="$PROJECT_DIR$/src/main/java/com/inin/example/model/Ticket.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/inin/example/service/TicketReportService.java" afterPath="$PROJECT_DIR$/src/main/java/com/inin/example/service/TicketReportService.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/inin/example/service/TicketService.java" afterPath="$PROJECT_DIR$/src/main/java/com/inin/example/service/TicketService.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/inin/example/util/InputReader.java" afterPath="$PROJECT_DIR$/src/main/java/com/inin/example/util/InputReader.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/inin/example/util/TicketSerializationUtil.java" afterPath="$PROJECT_DIR$/src/main/java/com/inin/example/util/TicketSerializationUtil.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/java/com/inin/example/service/TicketServiceTest.java" afterPath="$PROJECT_DIR$/src/test/java/com/inin/example/service/TicketServiceTest.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/inin/example/util/TicketUtil.java" afterPath="$PROJECT_DIR$/src/main/java/com/inin/example/util/TicketUtil.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/java/com/inin/example/service/ReportServiceTest.java" afterPath="$PROJECT_DIR$/src/test/java/com/inin/example/service/ReportServiceTest.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/ticket.ser" afterPath="$PROJECT_DIR$/target/classes/ticket.ser" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.inin.example.AppTest.xml" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.inin.example.AppTest.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.inin.example.factory.TicketFactoryTest.xml" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.inin.example.factory.TicketFactoryTest.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.inin.example.service.ReportServiceTest.xml" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.inin.example.service.ReportServiceTest.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.inin.example.service.TicketServiceTest.xml" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.inin.example.service.TicketServiceTest.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/surefire-reports/com.inin.example.AppTest.txt" afterPath="$PROJECT_DIR$/target/surefire-reports/com.inin.example.AppTest.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/surefire-reports/com.inin.example.factory.TicketFactoryTest.txt" afterPath="$PROJECT_DIR$/target/surefire-reports/com.inin.example.factory.TicketFactoryTest.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/surefire-reports/com.inin.example.service.ReportServiceTest.txt" afterPath="$PROJECT_DIR$/target/surefire-reports/com.inin.example.service.ReportServiceTest.txt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/surefire-reports/com.inin.example.service.TicketServiceTest.txt" afterPath="$PROJECT_DIR$/target/surefire-reports/com.inin.example.service.TicketServiceTest.txt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../TestJavaProgram/.idea/workspace.xml" afterPath="$PROJECT_DIR$/../TestJavaProgram/.idea/workspace.xml" />
     </list>
@@ -66,37 +63,25 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="TicketServiceTest.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/test/java/com/inin/example/service/TicketServiceTest.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="177" column="76" selection-start-line="169" selection-start-column="8" selection-end-line="177" selection-end-column="76" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ReportServiceTest.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/test/java/com/inin/example/service/ReportServiceTest.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.43149605">
-              <caret line="89" column="52" selection-start-line="89" selection-start-column="52" selection-end-line="89" selection-end-column="52" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="TicketService.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/inin/example/service/TicketService.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="31" column="0" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
+              <caret line="85" column="80" selection-start-line="85" selection-start-column="62" selection-end-line="85" selection-end-column="80" />
               <folding>
-                <element signature="e#4985#4986#0" expanded="true" />
-                <element signature="e#5054#5055#0" expanded="true" />
+                <element signature="e#4739#4740#0" expanded="true" />
+                <element signature="e#4808#4809#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ReportServiceTest.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/test/java/com/inin/example/service/ReportServiceTest.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="90" column="55" selection-start-line="90" selection-start-column="55" selection-end-line="90" selection-end-column="55" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -105,7 +90,7 @@
         <entry file="file://$PROJECT_DIR$/src/main/java/com/inin/example/service/TicketReportService.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="76" column="54" selection-start-line="76" selection-start-column="54" selection-end-line="76" selection-end-column="54" />
+              <caret line="49" column="81" selection-start-line="49" selection-start-column="81" selection-end-line="49" selection-end-column="81" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -113,12 +98,14 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="TicketManager.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/inin/example/TicketManager.java">
+      <file leaf-file-name="TicketUtil.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/inin/example/util/TicketUtil.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="230" column="90" selection-start-line="230" selection-start-column="90" selection-end-line="230" selection-end-column="90" />
-              <folding />
+              <caret line="119" column="33" selection-start-line="119" selection-start-column="33" selection-end-line="119" selection-end-column="33" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -127,33 +114,17 @@
         <entry file="file://$PROJECT_DIR$/src/main/java/com/inin/example/factory/TicketFactory.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="22" column="51" selection-start-line="22" selection-start-column="51" selection-end-line="22" selection-end-column="51" />
+              <caret line="32" column="0" selection-start-line="32" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Ticket.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/inin/example/model/Ticket.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="50" column="37" selection-start-line="50" selection-start-column="37" selection-end-line="50" selection-end-column="37" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#901#902#0" expanded="true" />
-                <element signature="e#926#927#0" expanded="true" />
-                <element signature="e#1233#1234#0" expanded="true" />
-                <element signature="e#1311#1312#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="TicketSerializationUtil.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="TicketSerializationUtil.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/inin/example/util/TicketSerializationUtil.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="103" column="32" selection-start-line="103" selection-start-column="32" selection-end-line="103" selection-end-column="32" />
+            <state vertical-scroll-proportion="0.5232975">
+              <caret line="79" column="26" selection-start-line="79" selection-start-column="26" selection-end-line="79" selection-end-column="26" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -184,23 +155,26 @@
         <option value="$PROJECT_DIR$/src/main/java/com/inin/example/App.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/inin/example/model.java" />
         <option value="$PROJECT_DIR$/src/test/java/com/inin/example/AppTest.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/inin/example/util/InputReader.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/inin/example/util/TicketManager.java" />
         <option value="$PROJECT_DIR$/src/test/java/com/inin/example/util/InputReaderTest.java" />
         <option value="$PROJECT_DIR$/src/test/java/com/inin/example/factory/TicketFactoryTest.java" />
-        <option value="$PROJECT_DIR$/pom.xml" />
-        <option value="$PROJECT_DIR$/src/main/java/com/inin/example/util/TicketUtil.java" />
         <option value="$PROJECT_DIR$/src/main/resources/ticketlist.ser" />
         <option value="$PROJECT_DIR$/src/main/java/com/inin/example/AppManager.java" />
         <option value="$PROJECT_DIR$/src/main/resources/ticket.ser" />
-        <option value="$PROJECT_DIR$/src/main/java/com/inin/example/TicketManager.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/inin/example/util/TicketSerializationUtil.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/inin/example/service/TicketReportService.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/inin/example/factory/TicketFactory.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/inin/example/service/TicketService.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/inin/example/model/Ticket.java" />
         <option value="$PROJECT_DIR$/src/test/java/com/inin/example/service/TicketServiceTest.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/inin/example/model/Ticket.java" />
+        <option value="$PROJECT_DIR$/src/main/resources/config.properties" />
+        <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/src/main/java/com/inin/example/util/InputReader.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/inin/example/TicketManager.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/inin/example/service/TicketReportService.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/inin/example/service/TicketService.java" />
         <option value="$PROJECT_DIR$/src/test/java/com/inin/example/service/ReportServiceTest.java" />
+        <option value="$PROJECT_DIR$/src/resources/ticket.properties" />
+        <option value="$PROJECT_DIR$/src/resources/config.properties" />
+        <option value="$PROJECT_DIR$/src/main/java/com/inin/example/util/TicketUtil.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/inin/example/util/TicketSerializationUtil.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/inin/example/factory/TicketFactory.java" />
       </list>
     </option>
   </component>
@@ -272,10 +246,10 @@
     </treeState>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="65" />
-    <option name="y" value="24" />
+    <option name="x" value="1985" />
+    <option name="y" value="-4" />
     <option name="width" value="1855" />
-    <option name="height" value="1056" />
+    <option name="height" value="1084" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <OptionsSetting value="true" id="Add" />
@@ -303,7 +277,6 @@
     </navigator>
     <panes>
       <pane id="Scope" />
-      <pane id="PackagesPane" />
       <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
@@ -324,6 +297,38 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="Case-Study" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Case-Study" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Case-Study" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="target" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Case-Study" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Case-Study" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="target" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="classes" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -397,37 +402,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="test" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="example" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="factory" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Case-Study" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Case-Study" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
+              <option name="myItemId" value="resources" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -517,8 +492,69 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Case-Study" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Case-Study" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="example" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="model" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Case-Study" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Case-Study" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="example" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="factory" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -533,60 +569,11 @@
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
       <recent name="com.inin.example" />
     </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src" />
+    </key>
   </component>
-  <component name="RunManager" selected="JUnit.ReportServiceTest.testTicketsGroupByTag">
-    <configuration default="false" name="ReportServiceTest.testTotalTicketCount" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
-        <pattern>
-          <option name="PATTERN" value="com.inin.example.service.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <module name="Case-Study" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" value="com.inin.example.service" />
-      <option name="MAIN_CLASS_NAME" value="com.inin.example.service.ReportServiceTest" />
-      <option name="METHOD_NAME" value="testTotalTicketCount" />
-      <option name="TEST_OBJECT" value="method" />
-      <option name="VM_PARAMETERS" value="-ea" />
-      <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="singleModule" />
-      </option>
-      <envs />
-      <patterns />
-      <method />
-    </configuration>
-    <configuration default="false" name="TicketServiceTest.testTicketsGroupByAgent" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
-        <pattern>
-          <option name="PATTERN" value="com.inin.example.service.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <module name="Case-Study" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" value="com.inin.example.service" />
-      <option name="MAIN_CLASS_NAME" value="com.inin.example.service.TicketServiceTest" />
-      <option name="METHOD_NAME" value="testTicketsGroupByAgent" />
-      <option name="TEST_OBJECT" value="method" />
-      <option name="VM_PARAMETERS" value="-ea" />
-      <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="singleModule" />
-      </option>
-      <envs />
-      <patterns />
-      <method />
-    </configuration>
+  <component name="RunManager" selected="Application.App">
     <configuration default="false" name="TicketServiceTest.testGetTicket" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
@@ -652,6 +639,52 @@
       <option name="PACKAGE_NAME" value="com.inin.example.service" />
       <option name="MAIN_CLASS_NAME" value="com.inin.example.service.ReportServiceTest" />
       <option name="METHOD_NAME" value="testTicketsGroupByTag" />
+      <option name="TEST_OBJECT" value="method" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <envs />
+      <patterns />
+      <method />
+    </configuration>
+    <configuration default="false" name="App" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="com.inin.example.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="MAIN_CLASS_NAME" value="com.inin.example.App" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="Case-Study" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="false" name="ReportServiceTest.testTotalTicketCount" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="com.inin.example.service.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <module name="Case-Study" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="com.inin.example.service" />
+      <option name="MAIN_CLASS_NAME" value="com.inin.example.service.ReportServiceTest" />
+      <option name="METHOD_NAME" value="testTotalTicketCount" />
       <option name="TEST_OBJECT" value="method" />
       <option name="VM_PARAMETERS" value="-ea" />
       <option name="PARAMETERS" />
@@ -1098,19 +1131,19 @@
       <method />
     </configuration>
     <list size="5">
-      <item index="0" class="java.lang.String" itemvalue="JUnit.ReportServiceTest.testTotalTicketCount" />
-      <item index="1" class="java.lang.String" itemvalue="JUnit.TicketServiceTest.testTicketsGroupByAgent" />
-      <item index="2" class="java.lang.String" itemvalue="JUnit.TicketServiceTest.testGetTicket" />
-      <item index="3" class="java.lang.String" itemvalue="JUnit.TicketServiceTest.testCreateTicketWithNullTags" />
-      <item index="4" class="java.lang.String" itemvalue="JUnit.ReportServiceTest.testTicketsGroupByTag" />
+      <item index="0" class="java.lang.String" itemvalue="JUnit.TicketServiceTest.testGetTicket" />
+      <item index="1" class="java.lang.String" itemvalue="JUnit.TicketServiceTest.testCreateTicketWithNullTags" />
+      <item index="2" class="java.lang.String" itemvalue="JUnit.ReportServiceTest.testTicketsGroupByTag" />
+      <item index="3" class="java.lang.String" itemvalue="Application.App" />
+      <item index="4" class="java.lang.String" itemvalue="JUnit.ReportServiceTest.testTotalTicketCount" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="JUnit.ReportServiceTest.testTicketsGroupByTag" />
-        <item index="1" class="java.lang.String" itemvalue="JUnit.TicketServiceTest.testCreateTicketWithNullTags" />
-        <item index="2" class="java.lang.String" itemvalue="JUnit.TicketServiceTest.testGetTicket" />
-        <item index="3" class="java.lang.String" itemvalue="JUnit.TicketServiceTest.testTicketsGroupByAgent" />
-        <item index="4" class="java.lang.String" itemvalue="JUnit.ReportServiceTest.testTotalTicketCount" />
+        <item index="0" class="java.lang.String" itemvalue="Application.App" />
+        <item index="1" class="java.lang.String" itemvalue="JUnit.ReportServiceTest.testTotalTicketCount" />
+        <item index="2" class="java.lang.String" itemvalue="JUnit.ReportServiceTest.testTicketsGroupByTag" />
+        <item index="3" class="java.lang.String" itemvalue="JUnit.TicketServiceTest.testCreateTicketWithNullTags" />
+        <item index="4" class="java.lang.String" itemvalue="JUnit.TicketServiceTest.testGetTicket" />
       </list>
     </recent_temporary>
   </component>
@@ -1133,19 +1166,20 @@
       <workItem from="1453532864724" duration="1430000" />
       <workItem from="1453700967434" duration="18015000" />
       <workItem from="1453874893461" duration="23806000" />
-      <workItem from="1453970455861" duration="12913000" />
+      <workItem from="1453970455861" duration="15427000" />
+      <workItem from="1454047250297" duration="16718000" />
     </task>
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="ReportServiceTest_testTicketsGroupByTag - 2016.01.28 at 17h 36m 53s.xml">
+    <history-entry file="ReportServiceTest_testTicketsGroupByTag - 2016.01.29 at 13h 34m 36s.xml">
       <configuration name="ReportServiceTest.testTicketsGroupByTag" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="ReportServiceTest_testTicketsGroupByTag - 2016.01.28 at 17h 49m 33s.xml">
-      <configuration name="ReportServiceTest.testTicketsGroupByTag" configurationId="JUnit" />
+    <history-entry file="ReportServiceTest_testTotalTicketCount - 2016.01.29 at 15h 45m 45s.xml">
+      <configuration name="ReportServiceTest.testTotalTicketCount" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="TicketServiceTest_testCreateTicketWithNullTags - 2016.01.28 at 17h 30m 10s.xml">
-      <configuration name="TicketServiceTest.testCreateTicketWithNullTags" configurationId="JUnit" />
+    <history-entry file="ReportServiceTest_testTotalTicketCount - 2016.01.29 at 15h 47m 00s.xml">
+      <configuration name="ReportServiceTest.testTotalTicketCount" configurationId="JUnit" />
     </history-entry>
     <history-entry file="TicketServiceTest_testCreateTicketWithNullTags - 2016.01.28 at 17h 33m 22s.xml">
       <configuration name="TicketServiceTest.testCreateTicketWithNullTags" configurationId="JUnit" />
@@ -1170,10 +1204,10 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="117931000" />
+    <option name="totallyTimeSpent" value="137163000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="65" y="24" width="1855" height="1056" extended-state="6" />
+    <frame x="1985" y="-4" width="1855" height="1084" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1181,9 +1215,9 @@
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33713692" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32928064" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.07666851" sideWeight="0.493994" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.077220075" sideWeight="0.493994" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.31327802" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.39315352" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32883817" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18643133" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -1222,67 +1256,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/inin/example/util/TicketSerializationUtil.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/inin/example/util/TicketUtil.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="33" column="22" selection-start-line="33" selection-start-column="22" selection-end-line="33" selection-end-column="22" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="20" column="29" selection-start-line="20" selection-start-column="29" selection-end-line="20" selection-end-column="29" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/inin/example/AppManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="18" column="46" selection-start-line="18" selection-start-column="46" selection-end-line="18" selection-end-column="46" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/inin/example/TicketManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="60" column="75" selection-start-line="60" selection-start-column="75" selection-end-line="60" selection-end-column="75" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/inin/example/service/TicketService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="50" column="37" selection-start-line="50" selection-start-column="37" selection-end-line="50" selection-end-column="37" />
-          <folding>
-            <element signature="e#4985#4986#0" expanded="true" />
-            <element signature="e#5054#5055#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/com/inin/example/service/TicketServiceTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/inin/example/factory/TicketFactory.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1351,8 +1324,8 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="73" column="41" selection-start-line="73" selection-start-column="24" selection-end-line="73" selection-end-column="41" />
           <folding>
-            <element signature="e#4985#4986#0" expanded="true" />
-            <element signature="e#5054#5055#0" expanded="true" />
+            <element signature="e#4739#4740#0" expanded="true" />
+            <element signature="e#4808#4809#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1462,22 +1435,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/inin/example/util/InputReader.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="28" column="32" selection-start-line="28" selection-start-column="32" selection-end-line="28" selection-end-column="32" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="1.0">
-          <caret line="38" column="0" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar:///usr/lib/jvm/java-8-oracle/src.zip!/java/io/ObjectInputStream.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="1.403315">
@@ -1550,18 +1507,18 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/inin/example/util/TicketUtil.java">
+    <entry file="file://$PROJECT_DIR$/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.40673575">
-          <caret line="42" column="54" selection-start-line="42" selection-start-column="54" selection-end-line="42" selection-end-column="54" />
+        <state vertical-scroll-proportion="1.7966903">
+          <caret line="40" column="32" selection-start-line="40" selection-start-column="32" selection-end-line="40" selection-end-column="32" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/inin/example/App.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/inin/example/util/InputReader.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33268481">
-          <caret line="9" column="7" selection-start-line="9" selection-start-column="7" selection-end-line="9" selection-end-column="7" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="12" column="0" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -1569,25 +1526,65 @@
     <entry file="file://$PROJECT_DIR$/src/main/java/com/inin/example/TicketManager.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="230" column="90" selection-start-line="230" selection-start-column="90" selection-end-line="230" selection-end-column="90" />
+          <caret line="23" column="0" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/inin/example/util/TicketSerializationUtil.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/inin/example/model/Ticket.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="103" column="32" selection-start-line="103" selection-start-column="32" selection-end-line="103" selection-end-column="32" />
+          <caret line="95" column="25" selection-start-line="95" selection-start-column="25" selection-end-line="95" selection-end-column="25" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/inin/example/factory/TicketFactory.java">
+    <entry file="jar:///usr/lib/jvm/java-8-oracle/src.zip!/java/io/InputStream.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.43247345">
+          <caret line="44" column="54" selection-start-line="44" selection-start-column="45" selection-end-line="44" selection-end-column="54" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar:///usr/lib/jvm/java-8-oracle/src.zip!/java/io/File.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.75501114">
+          <caret line="413" column="28" selection-start-line="413" selection-start-column="28" selection-end-line="413" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/inin/example/App.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="22" column="51" selection-start-line="22" selection-start-column="51" selection-end-line="22" selection-end-column="51" />
+          <caret line="7" column="26" selection-start-line="7" selection-start-column="26" selection-end-line="7" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/inin/example/service/TicketServiceTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-4.6545453">
+          <caret line="190" column="80" selection-start-line="190" selection-start-column="79" selection-end-line="190" selection-end-column="80" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/inin/example/service/ReportServiceTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="90" column="55" selection-start-line="90" selection-start-column="55" selection-end-line="90" selection-end-column="55" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/resources/ticket.ser">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -1595,23 +1592,9 @@
     <entry file="file://$PROJECT_DIR$/src/main/java/com/inin/example/service/TicketReportService.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="76" column="54" selection-start-line="76" selection-start-column="54" selection-end-line="76" selection-end-column="54" />
+          <caret line="49" column="81" selection-start-line="49" selection-start-column="81" selection-end-line="49" selection-end-column="81" />
           <folding>
             <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/inin/example/model/Ticket.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="50" column="37" selection-start-line="50" selection-start-column="37" selection-end-line="50" selection-end-column="37" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#901#902#0" expanded="true" />
-            <element signature="e#926#927#0" expanded="true" />
-            <element signature="e#1233#1234#0" expanded="true" />
-            <element signature="e#1311#1312#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1619,26 +1602,68 @@
     <entry file="file://$PROJECT_DIR$/src/main/java/com/inin/example/service/TicketService.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="31" column="0" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
+          <caret line="85" column="80" selection-start-line="85" selection-start-column="62" selection-end-line="85" selection-end-column="80" />
           <folding>
-            <element signature="e#4985#4986#0" expanded="true" />
-            <element signature="e#5054#5055#0" expanded="true" />
+            <element signature="e#4739#4740#0" expanded="true" />
+            <element signature="e#4808#4809#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/com/inin/example/service/TicketServiceTest.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/inin/example/factory/TicketFactory.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="177" column="76" selection-start-line="169" selection-start-column="8" selection-end-line="177" selection-end-column="76" />
+          <caret line="32" column="0" selection-start-line="32" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/com/inin/example/service/ReportServiceTest.java">
+    <entry file="file://$PROJECT_DIR$/src/resources/ticket.properties">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.43149605">
-          <caret line="89" column="52" selection-start-line="89" selection-start-column="52" selection-end-line="89" selection-end-column="52" />
+        <state vertical-scroll-proportion="0.10215054">
+          <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/target/classes/ticket.properties">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/target/classes/config.properties">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/inin/example/util/TicketUtil.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="119" column="33" selection-start-line="119" selection-start-column="33" selection-end-line="119" selection-end-column="33" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/resources/config.properties">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.068100356">
+          <caret line="2" column="19" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/inin/example/util/TicketSerializationUtil.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.5232975">
+          <caret line="79" column="26" selection-start-line="79" selection-start-column="26" selection-end-line="79" selection-end-column="26" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

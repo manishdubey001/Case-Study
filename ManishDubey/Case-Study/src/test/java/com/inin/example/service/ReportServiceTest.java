@@ -1,6 +1,7 @@
 package com.inin.example.service;
 
 import com.inin.example.model.Ticket;
+import com.inin.example.util.TicketSerializationUtil;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -18,7 +19,6 @@ public class ReportServiceTest {
         TicketReportService ticketReportService = new TicketReportService();
         int oldTicketCount = ticketReportService.totalTicketCount();
         TicketService ticketService = new TicketService();
-
         List<Ticket> dummyTicketTicketList = generateDummyTicket(ticketService);
         Assert.assertEquals(oldTicketCount+4,ticketReportService.totalTicketCount());
         deleteDummyTicket(dummyTicketTicketList,ticketService);
@@ -79,7 +79,7 @@ public class ReportServiceTest {
         if(oldTicketGroupByTag.containsKey("tag5"))
             Assert.assertEquals(oldTicketGroupByTag.get("tag5").size()+1,ticketGroupByTag.get("tag5").size());
         else
-            Assert.assertEquals(3,ticketGroupByTag.get("tag5").size());
+            Assert.assertEquals(1,ticketGroupByTag.get("tag5").size());
         deleteDummyTicket(dummyTicketTicketList,ticketService);
 
     }

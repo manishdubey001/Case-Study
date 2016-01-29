@@ -1,7 +1,7 @@
 package com.inin.example.factory;
 
 import com.inin.example.model.Ticket;
-import com.inin.example.util.TicketSerializationUtil;
+import com.inin.example.util.TicketUtil;
 
 import java.util.*;
 
@@ -19,24 +19,15 @@ public class TicketFactory {
      */
     public static Ticket newInstance(String subject, String agentName, HashSet<String> tags)
     {
-        int id = getNextTicketId();
+        int id = getNextId();
         return new Ticket(id,subject,agentName,tags);
     }
-    /**
-     * Return the next ticket Id
-     * @return int
-     */
-    public static int getNextTicketId()
+
+    public static int getNextId()
     {
-        Map<Integer,Ticket> ticketList = TicketSerializationUtil.deserializedTickets();
-        if(ticketList.size() > 0 ) {
-            int maxTicketId = ticketList.values()
-                    .parallelStream()
-                    .max((Ticket t1, Ticket t2) -> Integer.valueOf(t1.getId()).compareTo(Integer.valueOf(t2.getId())))
-                    .get()
-                    .getId();
-            return ++maxTicketId;
-        }else
-            return 1;
+        int currentTicketId = Integer.valueOf(TicketUtil.getProperty("ticketId"));
+        TicketUtil.setProperty("ticketId",String.valueOf(++currentTicketId));
+        return currentTicketId;
+
     }
 }

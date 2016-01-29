@@ -1,6 +1,8 @@
 package com.inin.example.util;
 
+import java.io.*;
 import java.security.InvalidParameterException;
+import java.util.Properties;
 
 /**
  * Created by root on 30/12/15.
@@ -58,4 +60,78 @@ public class TicketUtil {
         }
         return userInput;
     }
+
+    /**
+     * Return the configure ticket serialization file name
+     * @return
+     * @param property
+     */
+    public static String getProperty(String property)
+    {
+        Properties prop = new Properties();
+        String propFileName = getPropertyFileName(property);
+        String propertyValue="";
+        File file  = createFile(propFileName);
+        try(FileInputStream fis =  new FileInputStream(file)) {
+            if (fis != null)
+                prop.load(fis);
+            else
+                throw new FileNotFoundException("property file '" + propFileName + "' not found in the classpath");
+            propertyValue = prop.getProperty(property);
+        }catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        return propertyValue;
+    }
+    /**
+     * Return the configure ticket serialization file name
+     * @return
+     * @param property
+     */
+    public static void setProperty(String property, String value)
+    {
+        Properties prop = new Properties();
+        String propFileName = getPropertyFileName(property);
+        File file  = createFile(propFileName);
+        try(FileInputStream fis =  new FileInputStream(file);FileOutputStream fos=new FileOutputStream(file)) {
+            if (fis != null)
+                prop.load(fis);
+            else
+                throw new FileNotFoundException("property file '" + propFileName + "' not found in the classpath");
+            prop.setProperty(property,value);
+            prop.store(fos, "Properties");
+
+    }catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Create file if not present and return File object
+     * @return File
+     * @throws IOException
+     */
+    public static File createFile(String fileName) {
+        File file = null;
+        try {
+            file = new File("src/resources/"+fileName);
+            file.createNewFile();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+        return file;
+    }
+
+    private static String getPropertyFileName(String property){
+        switch (property)
+        {
+            case "ticketId":
+                return "ticket.properties";
+            default:
+                return "config.properties";
+        }
+    }
+
 }

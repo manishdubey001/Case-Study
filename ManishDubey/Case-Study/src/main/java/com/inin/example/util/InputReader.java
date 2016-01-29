@@ -9,19 +9,7 @@ import java.io.InputStreamReader;
  */
 public class InputReader {
 
-    public static BufferedReader reader = null;
-
-    /**
-     * Return the reader to read data from command line
-     * @return BufferedReader
-     */
-    public static BufferedReader getReader()
-    {
-        if(reader == null)
-            reader = new BufferedReader(new InputStreamReader(System.in));
-        return reader;
-    }
-
+    public static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
     /**
      * Used for read int from console
      * @return int
@@ -29,7 +17,6 @@ public class InputReader {
     public static int readInt(){
         int userInput = -1;
         try {
-            BufferedReader reader = InputReader.getReader();
             userInput = Integer.parseInt(reader.readLine());
         } catch (NumberFormatException e) {
             System.out.println("Only integer value is allowed");
@@ -46,7 +33,6 @@ public class InputReader {
     public static String readString(){
         String userInput = null;
         try {
-            BufferedReader reader = InputReader.getReader();
             userInput = reader.readLine();
         } catch (IOException ioe){
             ioe.printStackTrace();

@@ -19,7 +19,7 @@ public class TicketReportService {
      */
     public int totalTicketCount()
     {
-        Map<Integer,Ticket> tickets = TicketSerializationUtil.deserializedTickets();
+        Map<Integer,Ticket> tickets = TicketSerializationUtil.deserializeTickets();
         return tickets.size();
     }
 
@@ -29,7 +29,7 @@ public class TicketReportService {
      */
     public Ticket oldestTicket()
     {
-        Map<Integer,Ticket> tickets = TicketSerializationUtil.deserializedTickets();
+        Map<Integer,Ticket> tickets = TicketSerializationUtil.deserializeTickets();
         if(tickets.size() > 0) {
            Ticket ticket= tickets.values()
                     .stream()
@@ -47,7 +47,7 @@ public class TicketReportService {
      * @return List<Ticket>
      */
     public List<Ticket> ticketOlderByDate(LocalDateTime date){
-        Map<Integer,Ticket> tickets = TicketSerializationUtil.deserializedTickets();
+        Map<Integer,Ticket> tickets = TicketSerializationUtil.deserializeTickets();
         return Collections.unmodifiableList(tickets.values()
                 .stream()
                 .filter(ticket -> date.compareTo(ticket.getCreated()) >= 0 )
@@ -59,7 +59,7 @@ public class TicketReportService {
      * @return Map<String, List<Ticket>>
      */
     public Map<String, List<Ticket>> ticketsGroupByTag(){
-        Map<Integer,Ticket> tickets = TicketSerializationUtil.deserializedTickets();
+        Map<Integer,Ticket> tickets = TicketSerializationUtil.deserializeTickets();
         Map<String,List<Ticket>> ticketByTag = new HashMap<>();
         tickets.values()
                 .stream()
