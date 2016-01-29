@@ -2,19 +2,18 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6f6b7fd1-b5f4-4cb2-b131-d7a9d64c4d64" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/InputData.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/Ticket.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/TicketFactory.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/TicketOperations.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/TicketService.class" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/InputData.java" afterPath="$PROJECT_DIR$/src/main/java/service/InputData.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/Ticket.java" afterPath="$PROJECT_DIR$/src/main/java/model/Ticket.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/TicketFactory.java" afterPath="$PROJECT_DIR$/src/main/java/factory/TicketFactory.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/TicketOperations.java" afterPath="$PROJECT_DIR$/src/main/java/service/TicketOperations.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/TicketService.java" afterPath="$PROJECT_DIR$/src/main/java/service/TicketService.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/test-classes/TicketOperationsTestCases.class" afterPath="$PROJECT_DIR$/target/test-classes/TicketOperationsTestCases.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/model/Ticket.class" afterPath="$PROJECT_DIR$/target/classes/model/Ticket.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/service/InputData.class" afterPath="$PROJECT_DIR$/target/classes/service/InputData.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/service/TicketOperations.class" afterPath="$PROJECT_DIR$/target/classes/service/TicketOperations.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/service/TicketService.class" afterPath="$PROJECT_DIR$/target/classes/service/TicketService.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/compiler.xml" afterPath="$PROJECT_DIR$/.idea/compiler.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/TicketOperationsTestCases.java" afterPath="$PROJECT_DIR$/src/test/TicketOperationsTestCases.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/TicketCaseStudy.iml" afterPath="$PROJECT_DIR$/TicketCaseStudy.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/model/Ticket.java" afterPath="$PROJECT_DIR$/src/main/java/model/Ticket.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/service/InputData.java" afterPath="$PROJECT_DIR$/src/main/java/service/InputData.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/service/TicketOperations.java" afterPath="$PROJECT_DIR$/src/main/java/service/TicketOperations.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/service/TicketService.java" afterPath="$PROJECT_DIR$/src/main/java/service/TicketService.java" />
     </list>
     <ignored path="TicketCaseStudy.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -32,6 +31,13 @@
   <component name="CreatePatchCommitExecutor">
     <option name="PATCH_PATH" value="" />
   </component>
+  <component name="DatabaseView">
+    <option name="GROUP_SCHEMA" value="true" />
+    <option name="GROUP_CONTENTS" value="false" />
+    <option name="SORT_POSITIONED" value="false" />
+    <option name="SHOW_TABLE_DETAILS" value="true" />
+    <option name="SHOW_EMPTY_GROUPS" value="false" />
+  </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FavoritesManager">
     <favorites_list name="TicketCaseStudy" />
@@ -42,9 +48,10 @@
         <entry file="file://$PROJECT_DIR$/src/main/java/model/Ticket.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="8" column="50" selection-start-line="8" selection-start-column="50" selection-end-line="8" selection-end-column="50" />
+              <caret line="36" column="0" selection-start-line="36" selection-start-column="0" selection-end-line="36" selection-end-column="0" />
               <folding>
-                <element signature="imports" expanded="true" />
+                <element signature="e#726#727#0" expanded="true" />
+                <element signature="e#759#760#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -53,63 +60,58 @@
       <file leaf-file-name="TicketOperations.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/service/TicketOperations.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-5.7818184">
-              <caret line="174" column="41" selection-start-line="174" selection-start-column="41" selection-end-line="174" selection-end-column="41" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="274" column="32" selection-start-line="274" selection-start-column="32" selection-end-line="274" selection-end-column="32" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#7572#7573#0" expanded="true" />
-                <element signature="e#7613#7614#0" expanded="true" />
+                <element signature="e#9480#9481#0" expanded="true" />
+                <element signature="e#9521#9522#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="InputData.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="InputData.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/service/InputData.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.33293977">
-              <caret line="57" column="15" selection-start-line="57" selection-start-column="15" selection-end-line="57" selection-end-column="15" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="104" column="52" selection-start-line="104" selection-start-column="52" selection-end-line="104" selection-end-column="52" />
               <folding>
-                <element signature="imports" expanded="true" />
+                <element signature="method#getUserChoiceForUpdate#0;class#InputData#0" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="TicketService.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="TicketService.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/service/TicketService.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="23" column="0" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.32345015">
+              <caret line="340" column="16" selection-start-line="340" selection-start-column="16" selection-end-line="340" selection-end-column="16" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#411#428#0" expanded="true" />
-                <element signature="e#3733#3734#0" expanded="true" />
-                <element signature="e#3772#3773#0" expanded="true" />
-                <element signature="e#7266#7274#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="TicketFactory.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/factory/TicketFactory.java">
+      <file leaf-file-name="TicketOperationSerialization.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/Serialization/TicketOperationSerialization.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="2" column="20" selection-start-line="2" selection-start-column="20" selection-end-line="2" selection-end-column="20" />
+              <caret line="60" column="14" selection-start-line="60" selection-start-column="14" selection-end-line="60" selection-end-column="14" />
               <folding>
-                <element signature="e#171#172#0" expanded="true" />
-                <element signature="e#206#207#0" expanded="true" />
+                <element signature="imports" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="TicketOperationsTestCases.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/test/TicketOperationsTestCases.java">
+      <file leaf-file-name="TestSerialization.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/TestSerialization.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="166" column="51" selection-start-line="166" selection-start-column="51" selection-end-line="166" selection-end-column="51" />
+              <caret line="43" column="42" selection-start-line="43" selection-start-column="42" selection-end-line="43" selection-end-column="42" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -122,8 +124,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Class" />
         <option value="JUnit4 Test Class" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -149,11 +151,20 @@
         <option value="$PROJECT_DIR$/src/main/java/Ticket.java" />
         <option value="$PROJECT_DIR$/src/main/java/TicketService.java" />
         <option value="$PROJECT_DIR$/src/main/java/TicketOperations.java" />
+        <option value="$PROJECT_DIR$/src/main/java/LambdaSample.java" />
+        <option value="/usr/lib/jvm/java-1.8.0-openjdk-amd64/jre/lib/rt.jar!/java/util/function/Predicate.class" />
+        <option value="$PROJECT_DIR$/src/test/TicketOperationsTestCases.java" />
+        <option value="$PROJECT_DIR$/input1.ser" />
+        <option value="/usr/lib/jvm/java-1.8.0-openjdk-amd64/jre/lib/rt.jar!/java/lang/Comparable.class" />
+        <option value="$PROJECT_DIR$/src/main/java/service/InputData.java" />
+        <option value="/usr/lib/jvm/java-1.8.0-openjdk-amd64/jre/lib/rt.jar!/java/io/ObjectInputStream.class" />
+        <option value="$PROJECT_DIR$/testSer1.ser" />
+        <option value="$PROJECT_DIR$/src/main/java/TestSerialization.java" />
+        <option value="$PROJECT_DIR$/src/main/data/tickets.ser" />
+        <option value="$PROJECT_DIR$/src/main/java/service/TicketOperations.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Serialization/TicketOperationSerialization.java" />
         <option value="$PROJECT_DIR$/src/main/java/model/Ticket.java" />
         <option value="$PROJECT_DIR$/src/main/java/service/TicketService.java" />
-        <option value="$PROJECT_DIR$/src/test/TicketOperationsTestCases.java" />
-        <option value="$PROJECT_DIR$/src/main/java/service/InputData.java" />
-        <option value="$PROJECT_DIR$/src/main/java/service/TicketOperations.java" />
       </list>
     </option>
   </component>
@@ -189,10 +200,10 @@
     </treeState>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="65" />
-    <option name="y" value="24" />
-    <option name="width" value="1855" />
-    <option name="height" value="1056" />
+    <option name="x" value="73" />
+    <option name="y" value="27" />
+    <option name="width" value="1847" />
+    <option name="height" value="1053" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <OptionsSetting value="true" id="Add" />
@@ -223,8 +234,39 @@
     </navigator>
     <panes>
       <pane id="PackagesPane" />
-      <pane id="Scope" />
       <pane id="Scratches" />
+      <pane id="Scope">
+        <subPane subId="Default">
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="TicketCaseStudy">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="src/main/java">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="service">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="TicketCaseStudy">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -260,10 +302,6 @@
               <option name="myItemId" value="src" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="test" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
@@ -282,10 +320,6 @@
               <option name="myItemId" value="main" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
@@ -295,11 +329,13 @@
     <property name="aspect.path.notification.shown" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="SearchEverywhereHistoryKey" value="getti&#9;PSI&#9;JAVA://TicketService#getTicketDetailsById" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary" value="JUnit4" />
+    <property name="settings.editor.selected.configurable" value="reference.projectsettings.compiler.javacompiler" />
+    <property name="settings.editor.splitter.proportion" value="0.2" />
   </component>
   <component name="RecentsManager">
     <key name="CreateTestDialog.RecentsKey">
@@ -352,48 +388,6 @@
       <patterns />
       <method />
     </configuration>
-    <configuration default="false" name="TicketOperationsTestCases.createTicketWithNullSubject" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <module name="TicketCaseStudy" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" value="" />
-      <option name="MAIN_CLASS_NAME" value="TicketOperationsTestCases" />
-      <option name="METHOD_NAME" value="createTicketWithNullSubject" />
-      <option name="TEST_OBJECT" value="method" />
-      <option name="VM_PARAMETERS" value="-ea" />
-      <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="singleModule" />
-      </option>
-      <envs />
-      <patterns />
-      <method />
-    </configuration>
-    <configuration default="false" name="All in TicketCaseStudy" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <module name="TicketCaseStudy" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" value="" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="METHOD_NAME" />
-      <option name="TEST_OBJECT" value="package" />
-      <option name="VM_PARAMETERS" value="-ea" />
-      <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="singleModule" />
-      </option>
-      <envs />
-      <patterns />
-      <method />
-    </configuration>
     <configuration default="false" name="TicketOperationsTestCases.testGetTicketDetailsById" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <module name="TicketCaseStudy" />
@@ -413,6 +407,41 @@
       </option>
       <envs />
       <patterns />
+      <method />
+    </configuration>
+    <configuration default="false" name="TicketOperationSerialization" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="Serialization.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="MAIN_CLASS_NAME" value="Serialization.TicketOperationSerialization" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="TicketCaseStudy" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="false" name="TestSerialization" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <option name="MAIN_CLASS_NAME" value="TestSerialization" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="TicketCaseStudy" />
+      <envs />
       <method />
     </configuration>
     <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin">
@@ -828,17 +857,17 @@
     <list size="5">
       <item index="0" class="java.lang.String" itemvalue="Application.TicketOperations" />
       <item index="1" class="java.lang.String" itemvalue="JUnit.TicketOperationsTestCases" />
-      <item index="2" class="java.lang.String" itemvalue="JUnit.TicketOperationsTestCases.createTicketWithNullSubject" />
-      <item index="3" class="java.lang.String" itemvalue="JUnit.All in TicketCaseStudy" />
-      <item index="4" class="java.lang.String" itemvalue="JUnit.TicketOperationsTestCases.testGetTicketDetailsById" />
+      <item index="2" class="java.lang.String" itemvalue="JUnit.TicketOperationsTestCases.testGetTicketDetailsById" />
+      <item index="3" class="java.lang.String" itemvalue="Application.TicketOperationSerialization" />
+      <item index="4" class="java.lang.String" itemvalue="Application.TestSerialization" />
     </list>
     <recent_temporary>
       <list size="5">
         <item index="0" class="java.lang.String" itemvalue="Application.TicketOperations" />
-        <item index="1" class="java.lang.String" itemvalue="JUnit.TicketOperationsTestCases" />
-        <item index="2" class="java.lang.String" itemvalue="JUnit.TicketOperationsTestCases.testGetTicketDetailsById" />
-        <item index="3" class="java.lang.String" itemvalue="JUnit.All in TicketCaseStudy" />
-        <item index="4" class="java.lang.String" itemvalue="JUnit.TicketOperationsTestCases.createTicketWithNullSubject" />
+        <item index="1" class="java.lang.String" itemvalue="Application.TestSerialization" />
+        <item index="2" class="java.lang.String" itemvalue="Application.TicketOperationSerialization" />
+        <item index="3" class="java.lang.String" itemvalue="JUnit.TicketOperationsTestCases" />
+        <item index="4" class="java.lang.String" itemvalue="JUnit.TicketOperationsTestCases.testGetTicketDetailsById" />
       </list>
     </recent_temporary>
   </component>
@@ -863,14 +892,18 @@
       <workItem from="1453199746115" duration="354000" />
       <workItem from="1453200114129" duration="4290000" />
       <workItem from="1453263325699" duration="16087000" />
-      <workItem from="1453351596495" duration="7323000" />
+      <workItem from="1453351596495" duration="14710000" />
+      <workItem from="1453380401196" duration="543000" />
+      <workItem from="1453434637205" duration="7404000" />
+      <workItem from="1453460575641" duration="3792000" />
+      <workItem from="1453713635274" duration="2213000" />
+      <workItem from="1453876717443" duration="9618000" />
+      <workItem from="1453956578290" duration="25075000" />
+      <workItem from="1454044151767" duration="13744000" />
     </task>
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="TicketOperationsTestCases - 2016.01.20 at 12h 50m 10s.xml">
-      <configuration name="TicketOperationsTestCases" configurationId="JUnit" />
-    </history-entry>
     <history-entry file="TicketOperationsTestCases - 2016.01.20 at 12h 51m 58s.xml">
       <configuration name="TicketOperationsTestCases" configurationId="JUnit" />
     </history-entry>
@@ -895,41 +928,78 @@
     <history-entry file="TicketOperationsTestCases - 2016.01.21 at 12h 08m 42s.xml">
       <configuration name="TicketOperationsTestCases" configurationId="JUnit" />
     </history-entry>
+    <history-entry file="TicketOperationsTestCases - 2016.01.22 at 11h 27m 09s.xml">
+      <configuration name="TicketOperationsTestCases" configurationId="JUnit" />
+    </history-entry>
     <history-entry file="TicketOperationsTestCases_testGetTicketDetailsById - 2016.01.20 at 17h 26m 33s.xml">
       <configuration name="TicketOperationsTestCases.testGetTicketDetailsById" configurationId="JUnit" />
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="78979000" />
+    <option name="totallyTimeSpent" value="148755000" />
+  </component>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="65" y="24" width="1855" height="1056" extended-state="6" />
-    <editor active="true" />
+    <frame x="73" y="27" width="1847" height="1053" extended-state="6" />
+    <editor active="false" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.22095436" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32987553" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25078043" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32984003" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.036307056" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32963988" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32987553" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19979188" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32987553" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17484832" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32919255" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.17562327" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32963988" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2498621" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2498615" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3526971" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.289282" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32882413" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
+    <layout-to-restore>
+      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32987553" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25078043" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32963988" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32987553" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3673257" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32987553" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17562327" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32963988" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32882413" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2498621" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2498615" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19458897" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+    </layout-to-restore>
   </component>
   <component name="Vcs.Log.UiProperties">
     <option name="RECENTLY_FILTERED_USER_GROUPS">
@@ -944,7 +1014,7 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="1" />
+      <option name="time" value="7" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -953,106 +1023,11 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/service/TicketService.java">
+    <entry file="jar:///usr/lib/jvm/java-1.8.0-openjdk-amd64/jre/lib/rt.jar!/java/io/ObjectInputStream.class">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="212" column="7" selection-start-line="212" selection-start-column="7" selection-end-line="212" selection-end-column="7" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#411#428#0" expanded="true" />
-            <element signature="e#3733#3734#0" expanded="true" />
-            <element signature="e#3772#3773#0" expanded="true" />
-            <element signature="e#7266#7274#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/factory/TicketFactory.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="7" column="26" selection-start-line="7" selection-start-column="26" selection-end-line="7" selection-end-column="26" />
-          <folding>
-            <element signature="e#171#172#0" expanded="true" />
-            <element signature="e#206#207#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/TicketOperationsTestCases.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/model/Ticket.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/service/TicketOperations.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="100" column="18" selection-start-line="100" selection-start-column="18" selection-end-line="100" selection-end-column="18" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#7572#7573#0" expanded="true" />
-            <element signature="e#7613#7614#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/service/InputData.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="71" column="5" selection-start-line="71" selection-start-column="5" selection-end-line="71" selection-end-column="5" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/service/TicketService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="45" column="19" selection-start-line="45" selection-start-column="19" selection-end-line="45" selection-end-column="19" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#411#428#0" expanded="true" />
-            <element signature="e#3733#3734#0" expanded="true" />
-            <element signature="e#3772#3773#0" expanded="true" />
-            <element signature="e#7266#7274#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/model/Ticket.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="40" column="30" selection-start-line="40" selection-start-column="30" selection-end-line="40" selection-end-column="30" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/service/TicketOperations.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="155" column="9" selection-start-line="163" selection-start-column="16" selection-end-line="163" selection-end-column="32" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#7572#7573#0" expanded="true" />
-            <element signature="e#7613#7614#0" expanded="true" />
-          </folding>
+          <caret line="83" column="0" selection-start-line="83" selection-start-column="0" selection-end-line="83" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1061,7 +1036,7 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="53" column="23" selection-start-line="53" selection-start-column="15" selection-end-line="53" selection-end-column="23" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="method#getUserChoiceForUpdate#0;class#InputData#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1072,10 +1047,6 @@
           <caret line="245" column="35" selection-start-line="245" selection-start-column="34" selection-end-line="245" selection-end-column="35" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#411#428#0" expanded="true" />
-            <element signature="e#3733#3734#0" expanded="true" />
-            <element signature="e#3772#3773#0" expanded="true" />
-            <element signature="e#7266#7274#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1084,9 +1055,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1103,7 +1072,8 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="40" column="30" selection-start-line="40" selection-start-column="30" selection-end-line="40" selection-end-column="30" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="e#726#727#0" expanded="true" />
+            <element signature="e#759#760#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1114,8 +1084,8 @@
           <caret line="155" column="9" selection-start-line="163" selection-start-column="16" selection-end-line="163" selection-end-column="32" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#7572#7573#0" expanded="true" />
-            <element signature="e#7613#7614#0" expanded="true" />
+            <element signature="e#9480#9481#0" expanded="true" />
+            <element signature="e#9521#9522#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1125,7 +1095,7 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="53" column="23" selection-start-line="53" selection-start-column="15" selection-end-line="53" selection-end-column="23" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="method#getUserChoiceForUpdate#0;class#InputData#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1136,10 +1106,6 @@
           <caret line="245" column="35" selection-start-line="245" selection-start-column="34" selection-end-line="245" selection-end-column="35" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#411#428#0" expanded="true" />
-            <element signature="e#3733#3734#0" expanded="true" />
-            <element signature="e#3772#3773#0" expanded="true" />
-            <element signature="e#7266#7274#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1148,9 +1114,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1167,7 +1131,8 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="40" column="30" selection-start-line="40" selection-start-column="30" selection-end-line="40" selection-end-column="30" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="e#726#727#0" expanded="true" />
+            <element signature="e#759#760#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1178,8 +1143,8 @@
           <caret line="155" column="9" selection-start-line="163" selection-start-column="16" selection-end-line="163" selection-end-column="32" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#7572#7573#0" expanded="true" />
-            <element signature="e#7613#7614#0" expanded="true" />
+            <element signature="e#9480#9481#0" expanded="true" />
+            <element signature="e#9521#9522#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1189,7 +1154,7 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="53" column="23" selection-start-line="53" selection-start-column="15" selection-end-line="53" selection-end-column="23" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="method#getUserChoiceForUpdate#0;class#InputData#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1200,10 +1165,6 @@
           <caret line="245" column="35" selection-start-line="245" selection-start-column="34" selection-end-line="245" selection-end-column="35" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#411#428#0" expanded="true" />
-            <element signature="e#3733#3734#0" expanded="true" />
-            <element signature="e#3772#3773#0" expanded="true" />
-            <element signature="e#7266#7274#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1212,9 +1173,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1223,7 +1182,8 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="81" column="42" selection-start-line="81" selection-start-column="33" selection-end-line="81" selection-end-column="42" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="e#726#727#0" expanded="true" />
+            <element signature="e#759#760#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1234,8 +1194,8 @@
           <caret line="140" column="62" selection-start-line="140" selection-start-column="8" selection-end-line="140" selection-end-column="62" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#7572#7573#0" expanded="true" />
-            <element signature="e#7613#7614#0" expanded="true" />
+            <element signature="e#9480#9481#0" expanded="true" />
+            <element signature="e#9521#9522#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1246,10 +1206,6 @@
           <caret line="47" column="9" selection-start-line="47" selection-start-column="9" selection-end-line="47" selection-end-column="9" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#411#428#0" expanded="true" />
-            <element signature="e#3733#3734#0" expanded="true" />
-            <element signature="e#3772#3773#0" expanded="true" />
-            <element signature="e#7266#7274#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1258,9 +1214,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1276,7 +1230,8 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="e#726#727#0" expanded="true" />
+            <element signature="e#759#760#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1286,7 +1241,8 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="81" column="42" selection-start-line="81" selection-start-column="33" selection-end-line="81" selection-end-column="42" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="e#726#727#0" expanded="true" />
+            <element signature="e#759#760#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1297,8 +1253,8 @@
           <caret line="186" column="33" selection-start-line="186" selection-start-column="33" selection-end-line="186" selection-end-column="33" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#7572#7573#0" expanded="true" />
-            <element signature="e#7613#7614#0" expanded="true" />
+            <element signature="e#9480#9481#0" expanded="true" />
+            <element signature="e#9521#9522#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1315,7 +1271,8 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="81" column="42" selection-start-line="81" selection-start-column="33" selection-end-line="81" selection-end-column="42" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="e#726#727#0" expanded="true" />
+            <element signature="e#759#760#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1326,8 +1283,8 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#7572#7573#0" expanded="true" />
-            <element signature="e#7613#7614#0" expanded="true" />
+            <element signature="e#9480#9481#0" expanded="true" />
+            <element signature="e#9521#9522#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1337,7 +1294,8 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="81" column="42" selection-start-line="81" selection-start-column="33" selection-end-line="81" selection-end-column="42" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="e#726#727#0" expanded="true" />
+            <element signature="e#759#760#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1348,8 +1306,8 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#7572#7573#0" expanded="true" />
-            <element signature="e#7613#7614#0" expanded="true" />
+            <element signature="e#9480#9481#0" expanded="true" />
+            <element signature="e#9521#9522#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1359,7 +1317,8 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="e#726#727#0" expanded="true" />
+            <element signature="e#759#760#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1370,8 +1329,8 @@
           <caret line="237" column="63" selection-start-line="237" selection-start-column="63" selection-end-line="237" selection-end-column="63" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#7572#7573#0" expanded="true" />
-            <element signature="e#7613#7614#0" expanded="true" />
+            <element signature="e#9480#9481#0" expanded="true" />
+            <element signature="e#9521#9522#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1412,31 +1371,77 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/TicketServiceTest.java">
+    <entry file="jar:///usr/lib/jvm/java-1.8.0-openjdk-amd64/jre/lib/rt.jar!/java/util/function/Predicate.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.125">
-          <caret line="5" column="31" selection-start-line="5" selection-start-column="31" selection-end-line="5" selection-end-column="31" />
-          <folding />
+        <state vertical-scroll-proportion="0.1577218">
+          <caret line="11" column="12" selection-start-line="11" selection-start-column="12" selection-end-line="11" selection-end-column="12" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/test/TicketOperationsTestCases.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="166" column="51" selection-start-line="166" selection-start-column="51" selection-end-line="166" selection-end-column="51" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+          <caret line="16" column="58" selection-start-line="15" selection-start-column="4" selection-end-line="16" selection-end-column="58" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/TicketServiceTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="5" column="31" selection-start-line="5" selection-start-column="31" selection-end-line="5" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar:///usr/lib/jvm/java-1.8.0-openjdk-amd64/jre/lib/rt.jar!/java/lang/Comparable.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.15789473">
+          <caret line="8" column="8" selection-start-line="8" selection-start-column="8" selection-end-line="8" selection-end-column="8" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/factory/TicketFactory.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="2" column="20" selection-start-line="2" selection-start-column="20" selection-end-line="2" selection-end-column="20" />
+          <caret line="4" column="22" selection-start-line="4" selection-start-column="22" selection-end-line="4" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar:///usr/lib/jvm/java-1.8.0-openjdk-amd64/jre/lib/rt.jar!/java/io/ObjectInputStream.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="83" column="0" selection-start-line="83" selection-start-column="0" selection-end-line="83" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/TestSerialization.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="43" column="42" selection-start-line="43" selection-start-column="42" selection-end-line="43" selection-end-column="42" />
           <folding>
-            <element signature="e#171#172#0" expanded="true" />
-            <element signature="e#206#207#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/service/InputData.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="104" column="52" selection-start-line="104" selection-start-column="52" selection-end-line="104" selection-end-column="52" />
+          <folding>
+            <element signature="method#getUserChoiceForUpdate#0;class#InputData#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Serialization/TicketOperationSerialization.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="60" column="14" selection-start-line="60" selection-start-column="14" selection-end-line="60" selection-end-column="14" />
+          <folding>
+            <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1444,43 +1449,30 @@
     <entry file="file://$PROJECT_DIR$/src/main/java/model/Ticket.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="8" column="50" selection-start-line="8" selection-start-column="50" selection-end-line="8" selection-end-column="50" />
+          <caret line="36" column="0" selection-start-line="36" selection-start-column="0" selection-end-line="36" selection-end-column="0" />
           <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/service/TicketService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="23" column="0" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#411#428#0" expanded="true" />
-            <element signature="e#3733#3734#0" expanded="true" />
-            <element signature="e#3772#3773#0" expanded="true" />
-            <element signature="e#7266#7274#0" expanded="true" />
+            <element signature="e#726#727#0" expanded="true" />
+            <element signature="e#759#760#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/service/TicketOperations.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-5.7818184">
-          <caret line="174" column="41" selection-start-line="174" selection-start-column="41" selection-end-line="174" selection-end-column="41" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="274" column="32" selection-start-line="274" selection-start-column="32" selection-end-line="274" selection-end-column="32" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#7572#7573#0" expanded="true" />
-            <element signature="e#7613#7614#0" expanded="true" />
+            <element signature="e#9480#9481#0" expanded="true" />
+            <element signature="e#9521#9522#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/service/InputData.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/service/TicketService.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33293977">
-          <caret line="57" column="15" selection-start-line="57" selection-start-column="15" selection-end-line="57" selection-end-column="15" />
+        <state vertical-scroll-proportion="0.32345015">
+          <caret line="340" column="16" selection-start-line="340" selection-start-column="16" selection-end-line="340" selection-end-column="16" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

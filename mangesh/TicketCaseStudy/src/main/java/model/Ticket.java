@@ -1,17 +1,18 @@
 package model;
 
+import java.io.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 /**
  * Created by root on 15/1/16.
  */
-public class Ticket implements Comparable<Ticket>{
+public class Ticket implements Comparable<Ticket>, Serializable {
     int id;
     String subject;
     String agent_name;
     List<String> tags;
-    long timeStamp;
     Date created;
     Date modified;
 
@@ -65,14 +66,6 @@ public class Ticket implements Comparable<Ticket>{
         this.created = created;
     }
 
-    public long getTimeStamp() {
-        return timeStamp;
-    }
-
-    public void setTimeStamp(long timeStamp) {
-        this.timeStamp = timeStamp;
-    }
-
     public Date getModified() {
         return modified;
     }
@@ -84,4 +77,26 @@ public class Ticket implements Comparable<Ticket>{
     public int compareTo(Ticket obj) {
         return obj.getModified().compareTo(getModified());
     }
+
+    private void writeObject(ObjectOutputStream os) throws IOException{
+        os.writeInt(getId());
+        os.writeUTF(getSubject());
+        os.writeUTF(getAgent_name());
+        os.writeObject(getTags());
+        os.writeObject(getCreated());
+        os.writeObject(getModified());
+    }
+
+    private void  readObject(ObjectInputStream oi) throws IOException {
+        this.id = oi.readInt();
+        this.subject = oi.readUTF();
+        this.agent_name = oi.readUTF();
+        try {
+            this.tags = (List) oi.readObject();
+            this.created = (Date) oi.readObject();
+            this.modified = (Date) oi.readObject();
+        }
+        catch(ClassNotFoundException e){e.printStackTrace();}
+    }
+
 }

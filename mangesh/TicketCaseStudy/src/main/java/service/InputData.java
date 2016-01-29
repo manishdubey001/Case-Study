@@ -89,4 +89,23 @@ public class InputData {
 
         return userChoice;
     }
+
+
+    public int getDays() {
+        int userDays = 0;
+        System.out.println("Enter Days to get tickets older than a certain number of days");
+        boolean daysLoop = true;
+        while (daysLoop) {
+            try {
+                userDays = console.nextInt();
+                daysLoop = false;
+            }
+            catch ( InputMismatchException i) {
+                daysLoop = false;
+                System.out.println("Invalid input");
+            }
+
+        }
+        return userDays;
+    }
 }

@@ -1,9 +1,14 @@
 package service;
 
 
+import Serialization.TicketOperationSerialization;
 import factory.TicketFactory;
 import model.Ticket;
 
+import java.io.*;
+import java.lang.reflect.Array;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -16,24 +21,25 @@ public class TicketService {
     HashMap<String, Integer> agentTicketsTotalCounts = new HashMap<String, Integer>(); // Storing ticket counts against agents name
     HashMap<String, HashSet> tagsWithTicketIds = new HashMap<String, HashSet>();  // storing ticket ids against tag name
 
+
+    // initialize the input stream
     /**
      * Creating a new ticket
      * Adding tags
      * Updating ticket count against agent
      */
+
     public int createTicket(int ticketId, String subject, String agentName, List<String> tagsList) {
 
         if (subject.isEmpty() || agentName.isEmpty()) {
             return 0;
         }
-      //  System.out.println("tag list in create ticket service function  :: " + tagsList);
-        if (!tagsList.isEmpty()) {
+       if (!tagsList.isEmpty()) {
             this.updateTags(tagsList, ticketId);
         }
 
         Date date = new Date();
         Ticket ticket = TicketFactory.newInstance(ticketId, subject, agentName, tagsList);
-        //Ticket ticket = new Ticket();
 
         ticket.setId(ticketId);
         ticket.setSubject(subject);
@@ -44,6 +50,7 @@ public class TicketService {
 
         this.masterTicketData.add(ticket);
         this.updateAgentsTicketCount(agentName, 1); // increment ticket count against agent name
+        TicketOperationSerialization.serialize(ticket, masterTicketData, true);
         return ticketId;
     }
 
@@ -56,6 +63,7 @@ public class TicketService {
         if(!this.isTicketExist(id)){
             return  null;
         }
+        ArrayList ticketLsit = TicketOperationSerialization.deserialize();
         HashMap TicketDetails = new HashMap();
         for (Ticket ticket : masterTicketData) {
             if (ticket.getId() == id) {
@@ -116,7 +124,8 @@ public class TicketService {
      * showing all ticket details
      */
     public List<Ticket> showAllTickets() {
-        return masterTicketData;
+        ArrayList<Ticket> ticketLsit = TicketOperationSerialization.deserialize();
+        return ticketLsit;
     }
 
     /**
@@ -146,15 +155,22 @@ public class TicketService {
         if(agentName.isEmpty() || agentName == null)
             return false;
 
+        masterTicketData = TicketOperationSerialization.deserialize();
+
         Date date = new Date();
+        boolean updateFlag = false;
         for (Ticket ticket : masterTicketData) {
             if (ticket.getId() == id) {
+                updateFlag = true;
                 ticket.setAgent_name(agentName);
                 ticket.setModified(date);
                 break;
             }
         }
-
+        if(masterTicketData !=null && updateFlag)
+        {
+            TicketOperationSerialization.serialize(null, masterTicketData, false);
+        }
         return true;
     }
 
@@ -167,8 +183,12 @@ public class TicketService {
     public boolean updateTicketTags(int id, List<String> tags) {
 
         Date date = new Date();
+        boolean updateFlag = false;
+        masterTicketData = TicketOperationSerialization.deserialize();
+
         for (Ticket ticket : masterTicketData) {
             if (ticket.getId() == id) {
+                updateFlag = true;
                 // update tags
                 if (!tags.isEmpty()) {
                     this.updateTags(tags, id);
@@ -182,6 +202,10 @@ public class TicketService {
                 ticket.setModified(date);
                 break;
             }
+        }
+        if(masterTicketData !=null && updateFlag)
+        {
+            TicketOperationSerialization.serialize(null, masterTicketData, false);
         }
         return true;
     }
@@ -199,7 +223,6 @@ public class TicketService {
                 allTags.remove(ticketId);
             }
         }
-
     }
 
     /**
@@ -208,6 +231,7 @@ public class TicketService {
      * @return
      */
     public boolean isTicketExist(int ticketId) {
+        masterTicketData = TicketOperationSerialization.deserialize();
         for (Ticket ticket : masterTicketData){
             if(ticket.getId() == ticketId)
                 return true;
@@ -222,17 +246,22 @@ public class TicketService {
      */
     public boolean deleteTicket (int id) {
 
-        boolean flag = false;
+        boolean deleteFlag = false;
 
+        masterTicketData = TicketOperationSerialization.deserialize();
         for(Ticket ticket : masterTicketData) {
             if (ticket.getId() == id) {
                 masterTicketData.remove(ticket);
-                flag = true;
+                deleteFlag = true;
                 this.updateAgentsTicketCount(ticket.getAgent_name(), 0); // decrement ticket count against agent name
                 break;
             }
         }
-        return flag;
+        if(masterTicketData !=null && deleteFlag)
+        {
+            TicketOperationSerialization.serialize(null, masterTicketData, false);
+        }
+        return deleteFlag;
     }
 
     /**
@@ -241,6 +270,7 @@ public class TicketService {
      * @return
      */
     public List<Ticket> getTicketByAgentName(String agentName){
+        masterTicketData = TicketOperationSerialization.deserialize();
         List<Ticket> ticketList = masterTicketData.stream().filter(ticket -> ticket.getAgent_name().toLowerCase().equals(agentName.toLowerCase())).collect(Collectors.toList());
         return ticketList;
     }
@@ -279,7 +309,7 @@ public class TicketService {
      * @param ids
      */
     public void showTicketsByTag(HashSet ids){
-
+        masterTicketData = TicketOperationSerialization.deserialize();
         if(ids.isEmpty() ||  masterTicketData.isEmpty()){
             System.out.println("No ticket(s) found in the system");
         }
@@ -293,7 +323,113 @@ public class TicketService {
             }
         }
     }
+
+    public void exitSystem(){
+        //Ticket.writeFile(masterTicketData);
+        System.out.println("End of operation");
+    }
+
+    public int numberOfTickets() {
+        int count = 0;
+        masterTicketData = TicketOperationSerialization.deserialize();
+        if(!masterTicketData.isEmpty())
+            count = masterTicketData.size();
+
+        return count;
+    }
+
+    public void showUsedTagsWithTicketId()
+    {
+        for(Map.Entry m:tagsWithTicketIds.entrySet()){
+            System.out.println(m.getKey()+"     "+m.getValue());
+        }
+    }
+
+    public void showOldestTicket() {
+        masterTicketData = TicketOperationSerialization.deserialize();
+        if (masterTicketData.isEmpty()) {
+            System.out.println("No Tickets Found!!!");
+        } else {
+            Ticket ticket= masterTicketData
+                    .stream()
+                    .sorted((Ticket t1, Ticket t2) -> t1.getCreated().compareTo(t2.getCreated()))
+                    .findFirst()
+                    .get();
+
+            System.out.println("Id | Subject | Agent Name | Tags | Created | Modified");
+            System.out.println(ticket.getId() + " | " + ticket.getSubject() + " | " + ticket.getAgent_name()+ " | " + ticket.getTags() + " | " + ticket.getCreated() + " | " + ticket.getModified());
+        }
+
+
+    }
+
+    public void showTicketsOlderThanCertainDays(int userDays){
+        masterTicketData = TicketOperationSerialization.deserialize();
+        if(masterTicketData.isEmpty()){
+            System.out.println("No records Found!!!");
+        }
+        else {
+            System.out.println("Id | Subject | Agent Name | Tags | Created | Modified");
+            for (Ticket ticket : masterTicketData){
+                long datDiffInDays = this.getDateDiff(ticket.getCreated());
+
+                if(datDiffInDays>userDays){
+                    System.out.println(ticket.getId() + " | " + ticket.getSubject() + " | " + ticket.getAgent_name() + " | " + ticket.getTags() + " | " +
+                            ticket.getCreated() + " | " + ticket.getModified());
+                }
+            }
+        }
+    }
+
+    public void createDummyTickets(int ticketId) {
+        String tags = "mumbai,delhi,pune";
+        List<String> tagList = Arrays.asList(tags.split(","));
+
+        Date date = null;
+        for(int i=1; i<=10; i++) {
+            Ticket ticket = TicketFactory.newInstance();
+            Calendar cal = Calendar.getInstance();
+            cal.add(Calendar.DATE, -i);
+
+            date = cal.getTime();
+
+            ticketId = ticketId + i;
+
+            ticket.setId(ticketId);
+            ticket.setSubject("Dummy++" + ticketId);
+            ticket.setAgent_name("agentName++" + ticketId);
+            ticket.setTags(tagList);
+            ticket.setCreated(date);
+            ticket.setModified(date);
+
+            this.masterTicketData.add(ticket);
+            this.updateAgentsTicketCount("agentName++"+ticketId, 1); // increment ticket count against agent name
+        }
+        ticketId++;
+    }
+
+    public long getDateDiff(Date d1){
+        long dateDiff = 0;
+        Date date = new Date();
+
+        SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+        String currentDate = format.format(date);
+
+        String ticketDate = format.format(d1);
+        Date tempD1 = null;
+        Date tempD2 = null;
+
+        try{
+            tempD1 = format.parse(currentDate);
+            tempD2 = format.parse(ticketDate);
+
+            long diff = tempD1.getTime() - tempD2.getTime();
+            dateDiff = diff / (24 * 60 * 60 * 1000);
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        return  dateDiff;
+    }
+
 }
-
-
-

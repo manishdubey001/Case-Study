@@ -1,7 +1,9 @@
 package service;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import com.sun.org.apache.xpath.internal.SourceTree;
+import model.Ticket;
+
+import java.io.*;
 import java.util.*;
 
 /**
@@ -10,6 +12,7 @@ import java.util.*;
 public class TicketOperations {
     TicketService ticketService = new TicketService();
     InputData inputData = new InputData();
+    ArrayList<Ticket> fileData = new ArrayList<Ticket>();
 
     Scanner console;
     public boolean loop;
@@ -21,6 +24,7 @@ public class TicketOperations {
     public long timeStamp = date.getTime();
 
     public TicketOperations(int id){
+        //System.out.println("data :: " + ticketService.readFile());
         ticketId = id;
         console = new Scanner(System.in);
         br = new BufferedReader(new InputStreamReader(System.in));
@@ -43,7 +47,11 @@ public class TicketOperations {
         System.out.println("6. Select Tickets assigned to specific agent.");
         System.out.println("7. Ticket count grouped by agent name(order by agent name).");
         System.out.println("8. Search all tickets by specific tag.");
-        System.out.println("9. Exit");
+        System.out.println("9. Total number tickets in the system.");
+        System.out.println("10. Oldest ticket in the system.");
+        System.out.println("11. Tickets older than a certain number of days");
+        System.out.println("12. Tags in use/# of tickets with a tag");
+        System.out.println("13. Exit");
         System.out.println("");
         System.out.println("What do you want to perform? Please enter your choice :: ");
         System.out.println("");
@@ -92,9 +100,27 @@ public class TicketOperations {
                      break;
             case 8 : this.searchTicketsByTagName();
                      break;
-            case 9 :
-                System.out.println("End of operation");
-                this.loop = false;
+
+            case 9 : this.numberOfTickets();
+                     break;
+
+            case 10 : this.getOldestTicket();
+                      break;
+
+            case 11 : this.getTicketsOlderThan();
+                     break;
+
+            case 12 : this.showTagsInUse();
+                     break;
+
+            case 13 :
+                    ticketService.exitSystem();
+                    this.loop = false;
+                    break;
+
+            case 25 : this.createDummyTickets();
+                      break;
+
         }
         return input;
     }
@@ -231,6 +257,40 @@ public class TicketOperations {
         System.out.println("Enter Tag : ");
         String tag = inputData.getString();
         ticketService.showTicketsByTag(ticketService.searchTicketsByTagName(tag));
+        this.menuList();
+    }
+    public void createDummyTickets(){
+        ticketService.createDummyTickets(ticketId);
+        this.menuList();
+    }
+    public void numberOfTickets() {
+        System.out.println("Total number Of tickets in the system : " + ticketService.numberOfTickets());
+        this.menuList();
+    }
+
+    public void showTagsInUse()
+    {
+        System.out.println("Tags used in tickets with ticket id :: ");
+        System.out.println("Tags     Ticket Id(s)");
+        ticketService.showUsedTagsWithTicketId();
+        this.menuList();
+    }
+
+    public void getOldestTicket() {
+        System.out.println("The oldest ticket in the system : ");
+        ticketService.showOldestTicket();
+        this.menuList();
+    }
+
+    public void getTicketsOlderThan(){
+        System.out.println("Show all tickets older than a certain number of days : ");
+        int userDays = inputData.getDays();
+        if (userDays == 0 ){
+            this.showAllTickets();
+        }
+        else{
+            ticketService.showTicketsOlderThanCertainDays(userDays);
+        }
         this.menuList();
     }
 
