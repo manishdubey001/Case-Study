@@ -191,12 +191,7 @@ public class TicketServiceComponent{
                 else
                     set.add("Tag");
 
-            listTickets.add(new Ticket(i,sub,set,agent));
-            try{
-                Thread.sleep(500);
-            }catch (InterruptedException Ie){
-                Ie.printStackTrace();
-            }
+            listTickets.add(new Ticket(i,sub,set,agent,true));
         }
         return listTickets;
     }
