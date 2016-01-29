@@ -117,7 +117,7 @@ public class TicketOperations {
 				if (selection.toLowerCase().equals("y")) {
 					System.out.println("Enter the agent name");
 					String data = scanner.next();
-					ticketObj = ticketService.updateAgent(ticketObj, data);
+					ticketService.updateAgent(ticketObj, data);
 				}
 
 				//change tags
@@ -134,6 +134,7 @@ public class TicketOperations {
 		}
 		return ticketObj;
 	}
+
 
 	// delete ticket
 	public void deleteTicketOps() {
@@ -176,7 +177,6 @@ public class TicketOperations {
 		}
 	}
 
-	// read tags form console input
 	public String readTags() {
 		Scanner scanner = new Scanner(System.in);
 		System.out.println("Enter the tags (comma separated)");

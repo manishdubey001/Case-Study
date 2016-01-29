@@ -12,7 +12,6 @@ import java.util.Set;
 public class Ticket implements Serializable {
 
 	public Ticket(int id, String subject, String agent, Set tags) {
-
 		this.id = id;
 		this.subject = subject;
 		this.agent = agent;
