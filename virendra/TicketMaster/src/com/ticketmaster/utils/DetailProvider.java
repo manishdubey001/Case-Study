@@ -1,7 +1,5 @@
 package com.ticketmaster.utils;
 
-import com.ticketmaster.models.Tag;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -64,7 +62,7 @@ public class DetailProvider {
      */
     public Set readTagsInput(){
 
-        Set<Tag> tagSet = new HashSet<>();
+        Set<String> tagSet = new HashSet<>();
         System.out.println("Enter tags (y/n): ");
         if (this.readStringInput().equals("y")){
             System.out.println("Enter tags separated by colon (:) : ");
@@ -72,15 +70,8 @@ public class DetailProvider {
             String[] tmp1 = tmp.split(":");
 
             for (int i=0;i<tmp1.length;i++){
-                Tag temp = new Tag.TagBuilder().withName(tmp1[i]).build();
-                try{
-                    temp.save();
-                    tagSet.add(temp);
-                }catch(IOException e){
-
-                }
+                tagSet.add(tmp1[i]);
             }
-
         }
         return tagSet;
     }

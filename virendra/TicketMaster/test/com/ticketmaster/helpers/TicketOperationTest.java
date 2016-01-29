@@ -32,7 +32,7 @@ public class TicketOperationTest {
     public static void setUp(){
 
         try{
-            AppUtil.initializeApp(size, agents);
+            AppUtil.initializeApp();
             service = new TicketService();
         } catch (TicketNotFoundException | IOException | ClassNotFoundException e) {
             e.printStackTrace();

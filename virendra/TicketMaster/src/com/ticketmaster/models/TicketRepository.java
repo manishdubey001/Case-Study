@@ -2,10 +2,7 @@ package com.ticketmaster.models;
 
 import com.ticketmaster.Main;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 /**
  * Created by root on 29/1/16.
@@ -14,9 +11,11 @@ public class TicketRepository {
 
     private static TicketRepository _instance;
     private Map<Integer, Ticket> ticketList ;
+    private Set<String> agentList;
+    private Set<String> tagList;
 
     private TicketRepository(){
-        if (Ticket.ticketList == null){
+        if (ticketList == null){
             switch(Main.collectionChoice) {
                 case 1:
                 default:
@@ -29,6 +28,15 @@ public class TicketRepository {
                     ticketList = new LinkedHashMap<>();
                     break;
             }
+        }
+
+        if (agentList == null || ! (agentList instanceof HashSet)){
+            agentList = new HashSet<>();
+        }
+
+        if (tagList == null || ! (tagList instanceof HashSet)){
+            tagList = new HashSet<>();
+
         }
     }
 
@@ -49,11 +57,11 @@ public class TicketRepository {
 
     }
 
-    public Map<?,?> getList(){
+    public Map<Integer, Ticket> getList(){
         return ticketList;
     }
 
-    public Ticket deleteTicket(Integer id){
+    public Ticket deleteTicket(int id){
 
         if (!ticketList.containsKey(id)){
             return null;
@@ -62,7 +70,23 @@ public class TicketRepository {
 
     }
 
-    public Ticket update (Integer id, Ticket ticket){
+    public int getTicketListSize(){
+        if (ticketList.isEmpty()){
+            return -1;
+        }
+        return ticketList.size();
+
+    }
+
+
+    public void updateList(Map<Integer, Ticket> object) {
+        ticketList.putAll(object);
+
+    }
+
+
+    public Ticket update (int id, Ticket ticket){
+
         if (!ticketList.containsKey(id)){
             return null;
         }
@@ -70,5 +94,52 @@ public class TicketRepository {
         return ticketList.get(id);
 
     }
+
+
+
+
+    public Set<String> getTagList(){
+        return tagList;
+    }
+
+    public void updateTagList(Set<String> object){
+        tagList.addAll(object);
+
+    }
+
+    public void addTags(Set<String> tag){
+        agentList.addAll(tag);
+    }
+
+    public Set<String> getAgentList(){
+        return tagList;
+    }
+
+    public void updateAgentList(Set<String> object){
+        tagList.addAll(object);
+
+    }
+
+    public void addAgent(String agent){
+        agentList.add(agent);
+    }
+
+
+    private void initTagList(){
+
+        if (ticketList != null){
+            ticketList.values().stream().forEach(e-> tagList.addAll( e.tags ) );
+        }
+    }
+
+    private void initAgentList(){
+
+        if (ticketList != null){
+            ticketList.values().stream().forEach(e-> tagList.add(e.getAgent()) );
+        }
+
+    }
+
+
 
 }

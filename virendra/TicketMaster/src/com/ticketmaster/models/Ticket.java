@@ -21,24 +21,26 @@ public class Ticket implements Serializable{
     long created;
     long modified;
     static private int k = 1;
-    public Set<Tag> tags;
+    public Set<String> tags;
+
+    public static final long serialVersionUID = 881811645564116084L;
 
     // cjm - Rather than make these static in the Tickets class, I would put them somewhere else.
     // Also don't expose them as public...maybe have a TicketService class with members to provide searches, etc. and these as private members
-    static public Map<Integer,? super Ticket> ticketList; //contains all tickets
+//    static public Map<Integer,? super Ticket> ticketList; //contains all tickets
 
-    TicketRepository repository ;
+    public TicketRepository repository ;
 
     // Using '? super Tickets' doesn't hurt anything here (you know the container can hold Tickets() but it doesn't really help either, and just adds complexity
-    static public Set<String> agentList;
-    public static Set<String> tagList;
+//    static public Set<String> agentList;
+//    public static Set<String> tagList;
     // cjm - Maintaining associated collections like agentList and tagList can be useful; however it can also be
     // hard to keep things in sync. For example when you delete a ticket, stale entries are left behind.
 
     //creating inner class to setup details in the in ticket
     public static class TicketBuilder{
         private String subject = "";
-        private Set<Tag> tags = new HashSet<>();
+        private Set<String> tags = new HashSet<>();
         private String agent = "";
 
         public TicketBuilder withSubject(String subject){
@@ -53,7 +55,7 @@ public class Ticket implements Serializable{
 
         public TicketBuilder withTags(Set tags){
             if (tags != null){
-                this.tags = (Set<Tag>)tags;
+                this.tags = (Set<String>)tags;
             }
             return this;
         }
@@ -64,7 +66,7 @@ public class Ticket implements Serializable{
         public String getAgent(){
             return agent;
         }
-        public Set<Tag> getTags(){
+        public Set<String> getTags(){
             return tags;
         }
 
@@ -79,12 +81,6 @@ public class Ticket implements Serializable{
      */
     public Ticket(){
         repository = TicketRepository.init();
-        if (Ticket.agentList == null)
-            Ticket.agentList = new HashSet<>();
-        if (Ticket.tagList == null)
-            Ticket.tagList = new HashSet<>();
-
-
     }
 
     /**
@@ -98,6 +94,10 @@ public class Ticket implements Serializable{
         this.agent = obj.getAgent();
         this.tags = obj.tags;
 
+    }
+
+    public static void initRepository(){
+        new Ticket();
     }
 
     //setter methods
@@ -144,14 +144,30 @@ public class Ticket implements Serializable{
      * delete method to delete the ticket entry from the list
      * @return delete ticket details
      */
-    public Ticket delete(){
-        int id = this.getId();
-        Ticket temp = null;
-        if (Ticket.ticketList.containsKey(id)){
-            temp = (Ticket) Ticket.ticketList.remove(id);
-        }
-        return temp == null ? null : temp;
+    public Ticket delete()
+            throws IOException, ClassNotFoundException {
 
+
+        if(! (repository instanceof TicketRepository )){
+            repository = TicketRepository.init();
+        }
+        //before delete update local data set
+
+        SerializerUtil util = new SerializerUtil();
+        System.out.println(repository);
+        repository.updateList((Map<Integer, Ticket>)util.readFromFile());
+
+        //delete ticket from the local data set
+        Ticket ticket = repository.deleteTicket(this.getId());
+
+        if (ticket != null){
+            //clean file contents
+            util.emptyObjectFile();
+            //write complete data again to file
+            util.writeToFile(repository.getList());
+        }
+
+        return ticket;
     }
     /**
      *
@@ -229,18 +245,16 @@ public class Ticket implements Serializable{
         util.writeToFile(tempMap);
 
         //read new entries
-        Ticket.ticketList = (Map<Integer,Ticket>) util.readFromFile();
+        Map<Integer,Ticket> temp = (Map<Integer,Ticket>) util.readFromFile();
 
-        Ticket.ticketList.put(getId(), this);
-        Ticket.agentList.add(getAgent());
-
-//        if (this.tags != null && !this.tags.isEmpty())
-//            Ticket.tagList.addAll(this.tags);
+        repository.updateList(temp);
+        repository.addAgent(getAgent());
+        repository.addTags(this.tags);
 
         //update id in file
         util.writeProperty("id",new Integer(Ticket.k).toString());
 
-        return Ticket.ticketList.get(getId()) != null;
+        return repository.getTicket(this.getId()) != null;
     }
 
     /**
@@ -269,7 +283,11 @@ public class Ticket implements Serializable{
         //add ticket in file
         util.writeToFile(tempMap);
 
-        Ticket.ticketList.put(this.getId(), this);
+        if(! (repository instanceof TicketRepository )){
+            repository = TicketRepository.init();
+        }
+        repository.update(this.getId(),this);
+
         return true;
     }
 
@@ -281,7 +299,7 @@ public class Ticket implements Serializable{
      */
     public static Stream getListStream(){
 
-        return Ticket.ticketList.entrySet().stream();
+        return TicketRepository.init().getList().entrySet().stream();
 
     }
 
@@ -290,7 +308,7 @@ public class Ticket implements Serializable{
      * @return integer count of tickets
      */
     public static int getSize(){
-        return Ticket.ticketList.size();
+        return TicketRepository.init().getList().size();
     }
 
     /**
@@ -299,7 +317,7 @@ public class Ticket implements Serializable{
      * @return boolean
      */
     public static boolean hasAgent(String name) {
-        return Ticket.agentList.contains(name);
+        return TicketRepository.init().getAgentList().contains(name);
     }
 
     /**
@@ -308,11 +326,11 @@ public class Ticket implements Serializable{
      * @return boolean
      */
     public static boolean hasTag(String name) {
-        return Ticket.tagList.contains(name);
+        return TicketRepository.init().getTagList().contains(name);
     }
 
     public static void clearList(){
-        Ticket.ticketList.clear();
+//        TicketRepository.init().getList().clear();
     }
 
     /**
@@ -333,6 +351,7 @@ public class Ticket implements Serializable{
         out.writeInt(getId());
         out.writeUTF(getSubject());
         out.writeUTF(getAgent());
+        out.writeObject(this.tags);
         out.writeLong(getCreated());
         out.writeLong(getModified());
 
@@ -345,6 +364,7 @@ public class Ticket implements Serializable{
         setId(in.readInt());
         setSubject(in.readUTF());
         setAgent(in.readUTF());
+        this.tags = (HashSet) (in.readObject());
         setCreated(in.readLong());
         setModified(in.readLong());
 

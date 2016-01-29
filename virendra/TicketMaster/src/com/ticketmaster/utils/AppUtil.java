@@ -76,7 +76,7 @@ public class AppUtil {
 
     }
 
-    public static void initializeApp(final int size, final int agents)
+    /*public static void initializeApp(final int size, final int agents)
             throws ClassNotFoundException,TicketNotFoundException, IOException{
 
         Set<String> tags = new HashSet<>();
@@ -104,7 +104,7 @@ public class AppUtil {
                     .build().save();
 
         }
-    }
+    }*/
 
 
 }

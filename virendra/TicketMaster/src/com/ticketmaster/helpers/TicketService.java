@@ -3,6 +3,7 @@ package com.ticketmaster.helpers;
 import com.ticketmaster.Main;
 import com.ticketmaster.exceptions.TicketNotFoundException;
 import com.ticketmaster.models.Ticket;
+import com.ticketmaster.models.TicketRepository;
 import com.ticketmaster.utils.DetailProvider;
 
 import java.io.IOException;
@@ -16,12 +17,14 @@ import java.util.stream.Collectors;
  */
 public class TicketService /*implements Comparable<Ticket>*/ {
     private Ticket ticket;
+    TicketRepository repository;
 
     /**
      * Default constructor
      */
 
     public TicketService(){
+        repository = TicketRepository.init();
 
     }
 
@@ -139,19 +142,20 @@ public class TicketService /*implements Comparable<Ticket>*/ {
      */
     public List<Map<String,? super Object>> getTickets() {
 
-        if (Ticket.ticketList == null){
-            return null;//(List<Map<String, ? super Object>>) Ticket.ticketList;
-//            throw new TicketNotFoundException("No Records Found");
+        if (repository.getTicketListSize() <= 0){
+            return null;
         }
 
-        List l = new LinkedList<>(Ticket.ticketList.entrySet());
+        List l = new LinkedList(repository.getList().entrySet());
 
+        Collections.sort(l, (obj1, obj2) ->{
+            if ( ( (Ticket) ((Map.Entry) obj1).getValue()).getModified() <
+                    ( (Ticket) ((Map.Entry) obj2).getValue()).getModified() ){
+                return 1;
+            }else {
+                return -1;
+            }
 
-        Collections.sort(l, (o1, o2) ->{
-            if ( ( (Ticket)(((Map.Entry) o1).getValue()) ).getModified() <
-                    ( (Ticket)(((Map.Entry) o2).getValue()) ).getModified() )
-                    return 1;
-            else return -1;
             });
 
         return formatPrintData(l);
@@ -207,7 +211,7 @@ public class TicketService /*implements Comparable<Ticket>*/ {
     public Map<String,Integer> getTicketCount(){
         Map<String,Integer> m = new LinkedHashMap<>();
 
-        Set s= Ticket.ticketList.entrySet();
+        Set s= repository.getList().entrySet();
         Iterator it = s.iterator();
         Ticket tmp;
         while (it.hasNext()){
@@ -265,21 +269,12 @@ public class TicketService /*implements Comparable<Ticket>*/ {
         return l1;
     }
 
-/*
-    @Override
-    public int compareTo(Ticket obj) {
-
-        return  obj.getAgent().toLowerCase().compareTo(obj.getAgent().toLowerCase());
-    }*/
-
-
-
     public Ticket getTicketDetail(int id){
 
         if (id == 0 ) {
             return null;
         }else {
-            return  (Ticket) Ticket.ticketList.get(id);
+            return  repository.getTicket(id);
         }
 
     }
@@ -289,6 +284,6 @@ public class TicketService /*implements Comparable<Ticket>*/ {
     }
 
     public static void setTicketList(Map<Integer, Ticket> values){
-        Ticket.ticketList = values;
+        TicketRepository.init().updateList(values);
     }
 }

@@ -73,6 +73,12 @@ public class SerializerUtil {
         fIn.close();
     }
 
+    public void emptyObjectFile()
+            throws IOException{
+        new ObjectOutputStream(new FileOutputStream(file)).close();
+        new ObjectOutputStream(new FileOutputStream(file)).close();
+    }
+
     /**
      *
      * @param objects
