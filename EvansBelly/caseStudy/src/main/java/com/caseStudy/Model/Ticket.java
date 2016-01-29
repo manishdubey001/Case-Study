@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.Random;
 import java.util.Set;
 
 /**
@@ -20,7 +22,9 @@ public class Ticket implements Serializable {
 		// This can result in a slightly strange situation for a new
 		// ticket here created != modified. I would initialize
 		// them both to the same value.
-		this.created = this.modified = System.currentTimeMillis() / 1000L;
+//		LocalDateTime localDateTime = LocalDateTime.now();
+//		this.created = this.modified = System.currentTimeMillis() / 1000L;
+		this.created = this.modified = LocalDateTime.now().minusDays(new Random().nextInt(20));
 //		this.modified = System.currentTimeMillis() / 1000L;
 	}
 
@@ -38,10 +42,10 @@ public class Ticket implements Serializable {
 
 	public void setAgent(String agent) {
 		this.agent = agent;
-		this.modified = System.currentTimeMillis() / 1000L;
+		this.modified = LocalDateTime.now();
 	}
 
-	public long getCreated() {
+	public LocalDateTime getCreated() {
 		return created;
 	}
 
@@ -56,10 +60,10 @@ public class Ticket implements Serializable {
 
 	public void setTags(Set tags) {
 		this.tags = tags;
-		this.modified = System.currentTimeMillis() / 1000L;
+		this.modified = LocalDateTime.now();
 	}
 
-	public Long getModified() {
+	public LocalDateTime getModified() {
 		return modified;
 	}
 
@@ -67,8 +71,8 @@ public class Ticket implements Serializable {
 
 		try {
 			objOutStream.writeInt(id);
-			objOutStream.writeLong(created);
-			objOutStream.writeLong(modified);
+			objOutStream.writeObject(created);
+			objOutStream.writeObject(modified);
 			objOutStream.writeUTF(agent);
 			objOutStream.writeUTF(subject);
 			objOutStream.writeObject(tags);
@@ -81,8 +85,8 @@ public class Ticket implements Serializable {
 	public Ticket readObject(ObjectInputStream objInStream) {
 		try {
 			this.id = objInStream.readInt();
-			this.created = objInStream.readLong();
-			this.modified = objInStream.readLong();
+			this.created = (LocalDateTime) objInStream.readObject();
+			this.modified = (LocalDateTime) objInStream.readObject();
 			this.agent = objInStream.readUTF();
 			this.subject = objInStream.readUTF();
 			this.tags = (Set) objInStream.readObject();
@@ -100,8 +104,8 @@ public class Ticket implements Serializable {
 
 	// Small issue of style: it is most common to list fields first in a class definition.
 	private int id;
-	private long created;
-	private long modified;
+	private LocalDateTime created;
+	private LocalDateTime modified;
 	private String agent;
 	private String subject;
 	private Set<String> tags;
