@@ -1,24 +1,25 @@
 package com.Tickets;
 
 // Why this import?
-import sun.invoke.empty.Empty;
+
 
 
 // Best practice is to avoid wildcard imports;
 // it can cause confusion and conflicts. IntelliJ
 // has a setting to manage this automatically.
-import java.io.Serializable;
+import java.io.*;
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
  * Created by root on 13/1/16.
  */
-public class Ticket implements Comparable<Ticket>,Serializable{
+public class Ticket implements Comparable<Ticket>, Serializable{
     private int id;
     private String subject;
     private String agentName;
-    private long created;
-    public long modified;
+    private LocalDateTime created;
+    private LocalDateTime modified;
     private Set<String> tags;
 
 
@@ -64,25 +65,54 @@ public class Ticket implements Comparable<Ticket>,Serializable{
         this.agentName = agent_name;
     }
 
-    public long getCreated() {
+    public LocalDateTime getCreated() {
         return created;
     }
 
     private void setCreated() {
-        this.created = System.currentTimeMillis();
+        this.created = LocalDateTime.now();
     }
 
-    public long getModified() {
+    public LocalDateTime getModified() {
         return modified;
     }
 
     private void setModified() {
-            this.modified = System.currentTimeMillis();
+            this.modified = LocalDateTime.now();
+    }
+
+
+    /**
+     Overriding Read / Write for Serialization
+     */
+    public void writeSingleObject(ObjectOutputStream oos) throws IOException{
+        oos.writeInt(getId());
+        oos.writeUTF(getSubject());
+        oos.writeUTF(getAgent_name());
+        oos.writeObject(getTags());
+        oos.writeObject(getCreated());
+        oos.writeObject(getModified());
+    }
+
+    public void writeMultipleListOfObjects(List<Ticket> tickets, ObjectOutputStream oos) throws IOException{
+        oos.writeObject(tickets);
+    }
+
+    public List<Ticket> readMultipleListOfObjects(ObjectInputStream ois) throws IOException, ClassNotFoundException{
+        return (List) ois.readObject();
+    }
+
+    public Ticket readSingleObject(ObjectInputStream ois) throws IOException,ClassNotFoundException{
+        this.setId(ois.readInt());
+        this.setSubject(ois.readUTF());
+        this.setAgent_name(ois.readUTF());
+        this.setTags((Set<String>) ois.readObject());
+        return new Ticket(this.id, this.subject, this.tags, agentName);
     }
 
     @Override
     public int compareTo(Ticket compareTicket){
-        return Long.compare(compareTicket.getModified(), this.getModified());
+        return compareTicket.getModified().compareTo(this.getModified());
     }
     public static Comparator<Ticket> ByAgentNameComparator = new Comparator<Ticket>() {
         @Override
@@ -96,8 +126,8 @@ public class Ticket implements Comparable<Ticket>,Serializable{
     @Override
     public String toString(){
         // Java's original Date class has a lot of problems. Usually it's better to use Java 8's LocalDate/Time classes.
-        Date dt  = new Date(this.created);
-        Date dt2 = new Date(this.modified);
+        LocalDateTime dt  = this.created;
+        LocalDateTime dt2 = this.modified;
         return "  "+this.id+"  |  "+this.agentName+"  |  "+this.subject+"  |  "+this.tags+"  |  "+dt+"  |   "+dt2;
     }
 }

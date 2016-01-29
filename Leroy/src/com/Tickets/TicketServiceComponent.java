@@ -1,7 +1,7 @@
 package com.Tickets;
 
-import java.io.*;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 
@@ -19,6 +19,7 @@ public class TicketServiceComponent{
             Ticket ticket = TicketFactoryClass.getInstance(sub,set,agent);
 
             thm.put(ticket.getId(),ticket);
+
             if (checkIfExists(ticket.getId())) {
                 return true;
             }
@@ -31,21 +32,23 @@ public class TicketServiceComponent{
         try{
             boolean updated = false;
             Ticket ticket = thm.get(id);
-            if (type.equals("agent") && !val.isEmpty()) {
-                ticket.setAgent_name(val);
-                thm.put(id, ticket);
-                updated = true;
-            } else if (type.equals("tags") && !val.isEmpty()) {
-                String [] parsedtags = val.split(",");
-                Set set1 = new HashSet<>(Arrays.asList(parsedtags));
+            if (ticket != null){
+                if (type.equals("agent") && !val.isEmpty()) {
+                    ticket.setAgent_name(val);
+                    thm.put(id, ticket);
+                    updated = true;
+                } else if (type.equals("tags") && !val.isEmpty()) {
+                    String [] parsedtags = val.split(",");
+                    Set set1 = new HashSet<>(Arrays.asList(parsedtags));
 
-                ticket.setTags(set1);
+                    ticket.setTags(set1);
 
-                thm.put(id,ticket);
-                updated = true;
-            }
-            if (updated){
-                return true;
+                    thm.put(id,ticket);
+                    updated = true;
+                }
+                if (updated){
+                    return true;
+                }
             }
         }catch(InputMismatchException Im){
             System.out.println(Sout.ACT_INVALID+Im);
@@ -163,5 +166,76 @@ public class TicketServiceComponent{
 
     public boolean checkIfExists(int id){
         return (thm.containsKey(id)) ? true : false;
+    }
+
+    public Ticket prepareTicketDataForFile(){
+        String sub = "Test Subject";
+        String agent = "agent1";
+        Set<String> set = new HashSet<String>();
+        set.add("Tag1");
+        set.add("Tag2");
+
+        Ticket ticket = TicketFactoryClass.getInstance(sub,set,agent);
+        return ticket;
+    }
+
+    public List<Ticket> prepareMultipleTicketDataForFile(){
+        List<Ticket> listTickets = new ArrayList<>();
+        for (int i = 1; i <=5; i++){
+            Set<String> set = new HashSet<String>();
+            String sub = "Test Subject"+i;
+            String agent = "agent"+i;
+
+                if (i > 3)
+                    set.add("Tag"+i);
+                else
+                    set.add("Tag");
+
+            listTickets.add(new Ticket(i,sub,set,agent));
+            try{
+                Thread.sleep(500);
+            }catch (InterruptedException Ie){
+                Ie.printStackTrace();
+            }
+        }
+        return listTickets;
+    }
+
+    public void getNumberOfTicketsInSystem(List<Ticket> list){
+        System.out.println("Total Tickets present are :"+list.size());
+    }
+
+    public void getOldestTicketInSystem(List<Ticket> list){
+        Comparator<Ticket> sortByAscTickets = (e1, e2) -> e1.getModified().compareTo(e2.getModified());
+        java.util.Optional<Ticket> ticket = list.stream()
+            .sorted(sortByAscTickets).findFirst();
+
+        System.out.println("\nOldest Ticket in the System:");
+        System.out.println(ticket.get());
+    }
+
+    public void getCountOfTags(List<Ticket> list){
+        Map<String, Integer> map = new TreeMap<>();
+        int i = 1;
+        for (Ticket t: list) {
+            Set<String> tags = t.getTags();
+            for (String s : tags) {
+                if (map.containsKey(s)) {
+                    i = map.get(s)+1;
+                    map.put(s, i);
+                } else {
+                    map.put(s, 1);
+                }
+            }
+        }
+        System.out.println("\nTotal count of Tags used in tickets:");
+        for (Map.Entry<String, Integer> entry : map.entrySet())
+            System.out.println(entry.getKey()+" : "+entry.getValue());
+
+    }
+
+
+    public void getDateDiff(){
+
     }
 }
