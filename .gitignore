@@ -1,0 +1,7 @@
+# Ignore everything in this directory
+EvansBelly/caseStudy/.idea/*
+EvansBelly/caseStudy/out/*
+*.class
+*.jar
+# Except this file
+!.gitignore
