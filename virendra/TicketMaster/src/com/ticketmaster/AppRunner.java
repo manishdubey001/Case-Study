@@ -66,7 +66,7 @@ public class AppRunner {
             System.out.println("Ops! class you are looking does not exist");
 
         }catch (Exception e){
-//            e.printStackTrace();
+            e.printStackTrace();
             System.out.println("Application halted due to exception: "+e.getMessage());
 
         }finally {
@@ -187,14 +187,7 @@ public class AppRunner {
                 }
 
 
-                System.out.println("Enter tags (y/n): ");
-
-                if (details.readStringInput().equals("y")) {
-                    tagsSet = new HashSet<>();
-                    details.readTagsInput();
-                }else {
-                    tagsSet = null;
-                }
+                tagsSet = details.readTagsInput();
 
                 ticket = helper.updateTicket(ticket, txtAgent, tagsSet);
 

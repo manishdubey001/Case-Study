@@ -1,8 +1,13 @@
 package com.ticketmaster.utils;
 
+import com.ticketmaster.Main;
 import com.ticketmaster.exceptions.TicketNotFoundException;
+import com.ticketmaster.helpers.TicketService;
 import com.ticketmaster.models.Ticket;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.*;
 
@@ -10,6 +15,9 @@ import java.util.*;
  * Created by root on 31/12/15.
  */
 public class AppUtil {
+
+    public static String baseFolder = "files";
+    public static String propertyFile = "conf.properties";
 
     /**
      * getMenu method contains the list of methods which will be displayed in the console.
@@ -54,6 +62,20 @@ public class AppUtil {
         return hasReturn ? s : 0;
     }
 
+    public static void initializeApp()
+            throws ClassNotFoundException,TicketNotFoundException, IOException{
+
+        SerializerUtil util = new SerializerUtil();
+        Ticket.setMasterId(Integer.parseInt(util.readProperty("id")));
+        TicketService.setTicketList((Map<Integer, Ticket>) util.readFromFile());
+
+
+        //set ticket List
+        TicketService service = new TicketService();
+
+
+    }
+
     public static void initializeApp(final int size, final int agents)
             throws ClassNotFoundException,TicketNotFoundException, IOException{
 
@@ -83,4 +105,6 @@ public class AppUtil {
 
         }
     }
+
+
 }

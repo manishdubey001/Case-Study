@@ -5,7 +5,7 @@ package com.ticketmaster.exceptions;
  */
 public class TicketNotFoundException extends Exception {
 
-    TicketNotFoundException(final String message){
+    public TicketNotFoundException(final String message){
         super(message);
     }
 }

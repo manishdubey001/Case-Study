@@ -2,6 +2,7 @@ package com.ticketmaster.models;
 
 import com.ticketmaster.Main;
 import com.ticketmaster.exceptions.TicketNotFoundException;
+import com.ticketmaster.utils.SerializerUtil;
 
 import java.io.*;
 import java.util.*;
@@ -11,7 +12,7 @@ import java.util.stream.Stream;
  * Ticket Model class
  * Created by Virendra on 31/12/15.
  */
-public class Ticket /*implements Serializable*/{
+public class Ticket implements Serializable{
     // cjm - Use a singular name like Tickets if this represents
     // cjm - Why Serializable?
     int id;
@@ -20,11 +21,14 @@ public class Ticket /*implements Serializable*/{
     long created;
     long modified;
     static private int k = 1;
-    public Set<String> tags;
+    public Set<Tag> tags;
 
     // cjm - Rather than make these static in the Tickets class, I would put them somewhere else.
     // Also don't expose them as public...maybe have a TicketService class with members to provide searches, etc. and these as private members
     static public Map<Integer,? super Ticket> ticketList; //contains all tickets
+
+    TicketRepository repository ;
+
     // Using '? super Tickets' doesn't hurt anything here (you know the container can hold Tickets() but it doesn't really help either, and just adds complexity
     static public Set<String> agentList;
     public static Set<String> tagList;
@@ -34,7 +38,7 @@ public class Ticket /*implements Serializable*/{
     //creating inner class to setup details in the in ticket
     public static class TicketBuilder{
         private String subject = "";
-        private Set<String> tags = new HashSet<>();
+        private Set<Tag> tags = new HashSet<>();
         private String agent = "";
 
         public TicketBuilder withSubject(String subject){
@@ -49,7 +53,7 @@ public class Ticket /*implements Serializable*/{
 
         public TicketBuilder withTags(Set tags){
             if (tags != null){
-                this.tags = (Set<String>)tags;
+                this.tags = (Set<Tag>)tags;
             }
             return this;
         }
@@ -60,7 +64,7 @@ public class Ticket /*implements Serializable*/{
         public String getAgent(){
             return agent;
         }
-        public Set<String> getTags(){
+        public Set<Tag> getTags(){
             return tags;
         }
 
@@ -74,24 +78,12 @@ public class Ticket /*implements Serializable*/{
      * Default constructor
      */
     public Ticket(){
-        if (Ticket.ticketList == null){
-            switch(Main.collectionChoice) {
-                case 1:
-                default:
-                    Ticket.ticketList = new HashMap<>();
-                    break;
-                case 2:
-                    Ticket.ticketList = new TreeMap<>();
-                    break;
-                case 3:
-                    Ticket.ticketList = new LinkedHashMap<>();
-                    break;
-            }
-        }
+        repository = TicketRepository.init();
         if (Ticket.agentList == null)
             Ticket.agentList = new HashSet<>();
         if (Ticket.tagList == null)
             Ticket.tagList = new HashSet<>();
+
 
     }
 
@@ -109,7 +101,7 @@ public class Ticket /*implements Serializable*/{
     }
 
     //setter methods
-    public void setId(int id){
+    private void setId(int id){
         this.id = id;
     }
 
@@ -121,10 +113,10 @@ public class Ticket /*implements Serializable*/{
         this.agent = agent;
     }
 
-    public void setCreated(long created){
+    private void setCreated(long created){
         this.created = created;
     }
-    public void setModified(long modified){
+    private void setModified(long modified){
         this.modified = modified;
     }
 
@@ -161,41 +153,6 @@ public class Ticket /*implements Serializable*/{
         return temp == null ? null : temp;
 
     }
-
-
-    /**
-     * method to set values of Ticket object
-     * This method is redundant and is removed because of concept of Builder pattern
-     *
-     * @param values
-     */
-    /*
-    public void setValues(Map<String,? extends Object> values){
-        // cjm - In general I would avoid trying to represent an object this way. It can be very error prone.
-        // Instead rely on serialization frameworks when you need them. (But doing it this way is probably going
-        // to be part of the next case study).
-        Set s = values.entrySet();
-        s.forEach((e)->{ Map.Entry me = (Map.Entry)e;
-            switch(me.getKey().toString()) {
-                case "id":
-                    setId( (Integer)me.getValue());
-                    break;
-                case "subject":
-                    setSubject((String)me.getValue());
-                    break;
-                case "agent":
-                    setAgent((String)me.getValue());
-                    break;
-                case "tags":
-                    this.tags = (Set<String>) me.getValue();
-                    break;
-
-            }
-        });
-
-    }
-    */
-
     /**
      *
      * @return boolean
@@ -218,7 +175,7 @@ public class Ticket /*implements Serializable*/{
      * @throws ClassNotFoundException
      * @throws TicketNotFoundException
      */
-    public boolean save() throws IOException, ClassNotFoundException, TicketNotFoundException {
+    /*public boolean save() throws IOException, ClassNotFoundException, TicketNotFoundException {
 
         beforeSave();
         setId(k++);
@@ -237,8 +194,51 @@ public class Ticket /*implements Serializable*/{
         Ticket.ticketList.put(getId(), this);
         Ticket.agentList.add(getAgent());
 
-        if (this.tags != null)
+        if (this.tags != null && !this.tags.isEmpty())
             Ticket.tagList.addAll(this.tags);
+
+        return Ticket.ticketList.get(getId()) != null;
+    }*/
+
+    //updated code for save
+
+    /**
+     * Updated save code to handle serialization for tickets
+     * @return
+     * @throws IOException
+     * @throws ClassNotFoundException
+     * @throws TicketNotFoundException
+     */
+
+    public boolean save() throws IOException, ClassNotFoundException, TicketNotFoundException {
+
+        beforeSave();
+
+        //fetch id from properties file
+        SerializerUtil util = new SerializerUtil();
+        String masterId = util.readProperty("id");
+
+        Ticket.k = Integer.parseInt(masterId);
+
+        setId(Ticket.k++);
+
+        Map<Integer, Ticket> tempMap = new HashMap<>();
+        tempMap.put(getId(), this);
+
+        //add ticket in file
+        util.writeToFile(tempMap);
+
+        //read new entries
+        Ticket.ticketList = (Map<Integer,Ticket>) util.readFromFile();
+
+        Ticket.ticketList.put(getId(), this);
+        Ticket.agentList.add(getAgent());
+
+//        if (this.tags != null && !this.tags.isEmpty())
+//            Ticket.tagList.addAll(this.tags);
+
+        //update id in file
+        util.writeProperty("id",new Integer(Ticket.k).toString());
 
         return Ticket.ticketList.get(getId()) != null;
     }
@@ -250,11 +250,29 @@ public class Ticket /*implements Serializable*/{
      * @throws ClassNotFoundException
      * @throws TicketNotFoundException
      */
-    public boolean update()  throws IOException, ClassNotFoundException, TicketNotFoundException{
+    /*public boolean update()  throws IOException, ClassNotFoundException, TicketNotFoundException{
         beforeSave();
         Ticket.ticketList.put(this.getId(), this);
         return true;
+    }*/
+
+    //updated code for update
+    public boolean update()  throws IOException, ClassNotFoundException, TicketNotFoundException{
+
+        beforeSave();
+
+        SerializerUtil util = new SerializerUtil();
+
+        Map<Integer, Ticket> tempMap = new HashMap<>();
+        tempMap.put(getId(), this);
+
+        //add ticket in file
+        util.writeToFile(tempMap);
+
+        Ticket.ticketList.put(this.getId(), this);
+        return true;
     }
+
 
 
     /**
@@ -306,32 +324,36 @@ public class Ticket /*implements Serializable*/{
         return getId()+getSubject().hashCode();
     }
 
+    public static void setMasterId(int val){
+        k = val;
+    }
 
-    /*private Map<Integer, ? super Ticket> deserializeTickets() throws IOException, ClassNotFoundException, TicketNotFoundException {
-
-        //save the ticket in TreeMap
-
-        ObjectInputStream in=new ObjectInputStream(new FileInputStream("tickets.ser"));
-
-        ticketList = (TreeMap<Integer, Ticket>) in.readObject();
-
-        if (ticketList.isEmpty()) {
-            ticketList = new TreeMap<>();
-        }
-
-        return ticketList;
+    private void writeObject(ObjectOutputStream out)
+            throws IOException{
+        out.writeInt(getId());
+        out.writeUTF(getSubject());
+        out.writeUTF(getAgent());
+        out.writeLong(getCreated());
+        out.writeLong(getModified());
 
     }
 
-    private void  serializeTickets() throws IOException, ClassNotFoundException, TicketNotFoundException {
 
-        ObjectOutputStream fOut = new ObjectOutputStream(new FileOutputStream("tickets.ser"));
+    private void readObject(ObjectInputStream in)
+            throws IOException, ClassNotFoundException {
 
-        fOut.writeObject(ticketList);
+        setId(in.readInt());
+        setSubject(in.readUTF());
+        setAgent(in.readUTF());
+        setCreated(in.readLong());
+        setModified(in.readLong());
 
-    }*/
+    }
 
-
+    @Override
+    public String toString(){
+        return "Ticket: id"+getId()+"|subject:"+getSubject();
+    }
 
 
 }

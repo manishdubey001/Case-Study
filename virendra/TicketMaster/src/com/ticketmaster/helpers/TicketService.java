@@ -1,5 +1,6 @@
 package com.ticketmaster.helpers;
 
+import com.ticketmaster.Main;
 import com.ticketmaster.exceptions.TicketNotFoundException;
 import com.ticketmaster.models.Ticket;
 import com.ticketmaster.utils.DetailProvider;
@@ -15,14 +16,12 @@ import java.util.stream.Collectors;
  */
 public class TicketService /*implements Comparable<Ticket>*/ {
     private Ticket ticket;
-    public Map<String, ? super Object> map;
 
     /**
      * Default constructor
      */
 
     public TicketService(){
-        map = new TreeMap<>();
 
     }
 
@@ -68,7 +67,10 @@ public class TicketService /*implements Comparable<Ticket>*/ {
             flag  =true;
         }
 
-        if (tags != null){
+        if (!tags.isEmpty()){
+            if (ticketObj.tags == null){
+                ticketObj.tags = new HashSet<>();
+            }
             ticketObj.tags.addAll(tags);
             flag = true;
         }
@@ -284,5 +286,9 @@ public class TicketService /*implements Comparable<Ticket>*/ {
 
     public void clearList(){
         Ticket.clearList();
+    }
+
+    public static void setTicketList(Map<Integer, Ticket> values){
+        Ticket.ticketList = values;
     }
 }
