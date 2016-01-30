@@ -50,10 +50,20 @@ public class DetailProvider {
     }
 
     /**
+     * readStringInput Method is used to read the string input from the user from console
+     * @return
+     */
+    public String readCharInput(){
+        return scanner.next();
+    }
+
+    /**
      * readIntInput Method is used to read the integer input from the user from console
      */
     public int readIntInput() {
-        return scanner.nextInt(); //Integer.parseInt(reader.readLine());
+        int value = scanner.nextInt();
+        this.readStringInput();
+        return value;
     }
 
     /**
@@ -64,7 +74,8 @@ public class DetailProvider {
 
         Set<String> tagSet = new HashSet<>();
         System.out.println("Enter tags (y/n): ");
-        if (this.readStringInput().equals("y")){
+        String t = this.readStringInput();
+        if (t.equals("y")){
             System.out.println("Enter tags separated by colon (:) : ");
             String tmp = this.readStringInput();
             String[] tmp1 = tmp.split(":");

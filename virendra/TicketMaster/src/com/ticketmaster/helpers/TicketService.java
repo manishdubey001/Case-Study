@@ -119,6 +119,8 @@ public class TicketService /*implements Comparable<Ticket>*/ {
      */
     public Map getTicket(int id) throws IOException, ClassNotFoundException, TicketNotFoundException {
 
+        repository.updatePool();
+
         Ticket ticket = getTicketDetail(id);
         if (ticket ==null){
             throw new TicketNotFoundException("Record with id: "+id +" does not exists");
@@ -155,7 +157,9 @@ public class TicketService /*implements Comparable<Ticket>*/ {
      * @throws ClassNotFoundException
      * @throws TicketNotFoundException
      */
-    public List<Map<String,? super Object>> getTickets() {
+    public List<Map<String,? super Object>> getTickets() throws ClassNotFoundException, IOException{
+
+        repository.updatePool();
 
         if (repository.getTicketListSize() <= 0){
             return null;
@@ -182,10 +186,13 @@ public class TicketService /*implements Comparable<Ticket>*/ {
      * @param values
      * @return
      */
-    public List<Map<String,? super Object>> searchTicket(String key, String... values){
+    public List<Map<String,? super Object>> searchTicket(String key, String... values)
+            throws IOException, ClassNotFoundException{
 
         String searchKey;
         List list = null;
+
+        repository.updatePool();
 
 
         if(values.length == 1){ //fetch first value
@@ -223,8 +230,11 @@ public class TicketService /*implements Comparable<Ticket>*/ {
      * @return Map of agent and count of tickets for each agent
      */
 
-    public Map<String,Integer> getTicketCount(){
+    public Map<String,Integer> getTicketCount()
+            throws IOException, ClassNotFoundException{
         Map<String,Integer> m = new LinkedHashMap<>();
+
+        repository.updatePool();
 
         Set s= repository.getList().entrySet();
         Iterator it = s.iterator();

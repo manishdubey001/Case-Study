@@ -186,7 +186,6 @@ public class AppRunner {
                     txtAgent = null;
                 }
 
-
                 tagsSet = details.readTagsInput();
 
                 ticket = helper.updateTicket(ticket, txtAgent, tagsSet);
@@ -194,13 +193,15 @@ public class AppRunner {
                 if (ticket == null){
                     System.out.println("Nothing to update");
                 }else {
-                    System.out.println("Ticket (id: "+String.format("%010d", ticket.getId())+") updated successfully");
+                    System.out.println("Ticket (id: #"+String.format("%010d", ticket.getId())+") updated successfully");
                 }
 
                 break;
             case 3:
                 System.out.println("Enter Ticket id:");
                 id = details.readIntInput();
+
+
                 ticket = null;
 
 
@@ -244,8 +245,7 @@ public class AppRunner {
 
             case 6:
                 System.out.println("Enter name of agent: ");
-                String name = b.readLine();
-
+                String name = details.readStringInput();
 
                 // cjm - here let Tickets or another class manage this search. Don't expose the collection directly
                 // (so implement something like Tickets.hasAgent())

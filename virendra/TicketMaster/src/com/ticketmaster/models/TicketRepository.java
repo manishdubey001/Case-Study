@@ -1,7 +1,9 @@
 package com.ticketmaster.models;
 
 import com.ticketmaster.Main;
+import com.ticketmaster.utils.SerializerUtil;
 
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -93,6 +95,16 @@ public class TicketRepository {
         ticketList.put(id,ticket);
         return ticketList.get(id);
 
+    }
+
+    public void updatePool()
+            throws ClassNotFoundException, IOException{
+
+        SerializerUtil util = new SerializerUtil();
+
+        Map<Integer,Ticket> temp = (Map<Integer,Ticket>) util.readFromFile();
+
+        this.updateList(temp);
     }
 
 

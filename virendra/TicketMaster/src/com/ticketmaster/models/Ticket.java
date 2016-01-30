@@ -180,9 +180,9 @@ public class Ticket implements Serializable{
 
         long time = LocalDateTime.now(ZoneId.of("UTC")).toInstant(ZoneOffset.UTC).toEpochMilli();
 
-        int rnd = (int)(Math.random() * 10);
+//        int rnd = (int)(Math.random() * 10);
 //        System.out.println(rnd);
-        time = LocalDateTime.now().minusDays(rnd).toInstant(ZoneOffset.UTC).toEpochMilli();
+//        time = LocalDateTime.now().minusDays(rnd).toInstant(ZoneOffset.UTC).toEpochMilli();
 
         if(created == 0){
             setCreated(time);
@@ -219,9 +219,8 @@ public class Ticket implements Serializable{
         util.writeToFile(tempMap);
 
         //read new entries
-        Map<Integer,Ticket> temp = (Map<Integer,Ticket>) util.readFromFile();
+        repository.updatePool();
 
-        repository.updateList(temp);
         repository.addAgent(getAgent());
         repository.addTags(this.tags);
 

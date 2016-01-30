@@ -77,7 +77,7 @@ public class TicketOperationTest {
      * testInvalidAgentSearch test method to test the agent in the ticket list
      */
     @Test
-    public void testInvalidAgentSearch(){
+    public void testInvalidAgentSearch() throws IOException, ClassNotFoundException{
 
         String invalidAgent = "testAgentName";
         List tempList = service.searchTicket("agent", invalidAgent);
@@ -99,7 +99,7 @@ public class TicketOperationTest {
      * testValidAgentSearch method to find the agent in the list
      */
     @Test
-    public void testValidAgentSearch(){
+    public void testValidAgentSearch() throws IOException, ClassNotFoundException{
 
         List tempList = service.searchTicket("agent", agent);
         //received result, get all agents from the list
@@ -112,7 +112,7 @@ public class TicketOperationTest {
      * testInvalidTagSearch test method to test the agent in the ticket list
      */
     @Test
-    public void testInvalidTagSearch(){
+    public void testInvalidTagSearch() throws IOException, ClassNotFoundException{
 
         String invalidTag = "testTagName";
 
@@ -134,7 +134,7 @@ public class TicketOperationTest {
      * testValidAgentSearch method to find the agent in the list
      */
     @Test
-    public void testValidTagSearch(){
+    public void testValidTagSearch() throws IOException, ClassNotFoundException{
 
         List tempList = service.searchTicket("tags", tagName);
 
@@ -147,7 +147,7 @@ public class TicketOperationTest {
      * testTicketCountByAgents test method
      */
     @Test
-    public void testTicketCountByAgents(){
+    public void testTicketCountByAgents() throws IOException, ClassNotFoundException{
 
         Map tempList = service.getTicketCount();
 
@@ -167,7 +167,7 @@ public class TicketOperationTest {
      * testTicketCountAll test method
      */
     @Test
-    public void testTicketCountAll(){
+    public void testTicketCountAll() throws IOException, ClassNotFoundException{
 
         List tempList = service.getTickets();
 
