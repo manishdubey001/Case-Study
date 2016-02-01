@@ -24,19 +24,18 @@ public class Ticket implements Comparable<Ticket>, Serializable{
 
 
     Ticket(int id, String subject, Set tags, String name){
-        this.setId(id);
-        this.setAgent_name(name);
-        this.setSubject(subject);
-        this.setTags(tags);
-        this.setCreated();
+        this.id = id;
+        this.agentName = name;
+        this.subject = subject;
+        this.tags = tags;
+        this.created = LocalDateTime.now();
     }
 
     Ticket(int id, String subject, Set tags, String name, boolean  b){
-
-        this.setId(id);
-        this.setAgent_name(name);
-        this.setSubject(subject);
-        this.setTags(tags);
+        this.id = id;
+        this.agentName = name;
+        this.subject = subject;
+        this.tags = tags;
         if (b)
             this.created = this.modified = LocalDateTime.now().minusDays(new Random().nextInt(10));
     }
