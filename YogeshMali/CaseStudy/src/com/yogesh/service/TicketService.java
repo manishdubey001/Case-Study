@@ -20,7 +20,7 @@ public class TicketService {
 
     public HashMap<Integer, Ticket> hmTicketList = new HashMap();
     /**
-     * this method for search ticket based on Agent name
+     * this method for search ticket based on Agent name using Stream
      */
     public List<Ticket> searchTicketsUsingAgentnameService(String agentName) {
 
@@ -33,11 +33,12 @@ public class TicketService {
     }
 
     /**
-     * Search all tickets by specific tag.
+     * Search all tickets by specific tag Agent name using Stream
      */
     public List<Ticket> searchTicketsUsingtagService(String tag) {
 
         ArrayList<Ticket> arrTicketList =  new ArrayList<>(this.hmTicketList.values());
+
         List<Ticket> list = arrTicketList.stream()
                 .filter(t -> t.getTags().contains(tag))
                 .collect(Collectors.toList());
@@ -49,7 +50,6 @@ public class TicketService {
      * this method for remove specific Ticket by id
      */
     public boolean removeTicketService(int id) {
-
         if (isTicketIdExit(id)) {
            this.hmTicketList.remove(id);
             return true;
@@ -68,7 +68,6 @@ public class TicketService {
         for (Ticket ticket : arrTicketList) {
 
             if (tmCount.containsKey(ticket.getAgentName())) {
-
                 int ticketCount = tmCount.get(ticket.getAgentName()) + 1;
                 tmCount.put(ticket.getAgentName(), ticketCount);
             } else {

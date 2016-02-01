@@ -38,6 +38,7 @@ public class ReportingService {
         int minid = 0;
         LocalDateTime minDate = LocalDateTime.now().minusDays(1);
         ArrayList<Ticket> arrTicketList = new ArrayList<>(this.hmTicketList.values());
+
         for (Ticket ticket : arrTicketList) {
             if (ticket.getCreated().isBefore(minDate)) {
                 minid = ticket.getId();
