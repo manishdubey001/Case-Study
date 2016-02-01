@@ -54,12 +54,12 @@ public class AppRunner {
             do{
                 ch = printMenu(); //print menu and ask for user selection
                 processChoice(ch);
-            }while (ch !=9);
+            }while (ch !=0);
 
         }catch (InputMismatchException | IOException  e){
 
 //            e.printStackTrace(); //check stack trace
-            System.out.println("Invalid Option Selection");
+            System.out.println(e.getMessage() != null ? e.getMessage() : "Invalid Option Selection");
 
         }catch (ClassNotFoundException e){
 //            e.printStackTrace(); // check stack trace
@@ -71,7 +71,7 @@ public class AppRunner {
 
         }finally {
 
-            if(ch!=9){
+            if(ch!=0){
                 System.out.println("Do You want to continue (y/n) ? ");
                 if(b == null)
                     b = new BufferedReader(new InputStreamReader(System.in));
@@ -131,6 +131,7 @@ public class AppRunner {
      */
     protected void processChoice(int ch)
             throws IOException, ClassNotFoundException, TicketNotFoundException {
+        // EB: Small issue of style. List fields according to class definition. Use generics for type safety.
         TicketService helper= new TicketService();
         Map tmpMap;
 
@@ -178,14 +179,13 @@ public class AppRunner {
 
                 System.out.println("Update Agent?(y/n)");
 
-                if(details.readStringInput().equals("y")){
+                if(details.readStringInput().toLowerCase().equals("y")){ // EB : use .toLowerCase()
                     System.out.println("Enter Agent Name: ");
                     txtAgent = details.readStringInput();
                     ticket.setAgent(txtAgent);
                 }else{
                     txtAgent = null;
                 }
-
 
                 tagsSet = details.readTagsInput();
 
@@ -194,18 +194,16 @@ public class AppRunner {
                 if (ticket == null){
                     System.out.println("Nothing to update");
                 }else {
-                    System.out.println("Ticket (id: "+String.format("%010d", ticket.getId())+") updated successfully");
+                    System.out.println("Ticket (id: #"+String.format("%010d", ticket.getId())+") updated successfully");
                 }
 
                 break;
             case 3:
                 System.out.println("Enter Ticket id:");
                 id = details.readIntInput();
-                ticket = null;
-
 
                 System.out.printf("Are you sure you want to delete ticket #%010d ? (y/n)\n", id);
-                if(details.readStringInput().equals("y")){
+                if(details.readStringInput().toLowerCase().equals("y")){
 
                     ticket = helper.deleteTicket(id);
 
@@ -226,17 +224,17 @@ public class AppRunner {
 
                 tmpMap = helper.getTicket(id);
 
-                if (tmpMap!= null){
+                if (!tmpMap.isEmpty()) {
                     System.out.printf("==== Ticket #%010d ====\n",tmpMap.get("id"));
                     tmpMap.forEach((k,v)->System.out.println(k+"\t:\t"+v));
                 }
 
                 break;
 
-            case 5:
+            case 5:case 9:
                 tempList = helper.getTickets();
-                System.out.println("Total tickets: "+(tempList!= null ? tempList.size(): 0)+"\nResults:");
-                if (tempList != null) {
+                System.out.println("Total tickets: "+(!tempList.isEmpty() ? tempList.size(): 0)+"\n\t=============== Results ===============");
+                if (!tempList.isEmpty()) {
                     tempList.forEach(System.out::println); //printing result by method referencing of lambda expressions
                 }
 
@@ -244,8 +242,7 @@ public class AppRunner {
 
             case 6:
                 System.out.println("Enter name of agent: ");
-                String name = b.readLine();
-
+                String name = details.readStringInput();
 
                 // cjm - here let Tickets or another class manage this search. Don't expose the collection directly
                 // (so implement something like Tickets.hasAgent())
@@ -253,7 +250,7 @@ public class AppRunner {
                     System.out.println(String.format("Agent \"%s\" is not present in the system", name ));
                 }else {
                     tempList = helper.searchTicket("agent", name);
-                    if (tempList != null) {
+                    if (!tempList.isEmpty()) {
                         System.out.println("Total tickets: "+tempList.size()+"\nResults:");
                         tempList.forEach(System.out::println);
                     }else {
@@ -269,14 +266,17 @@ public class AppRunner {
                 tmpMap.forEach((k,e)-> System.out.println(k+"\t\t| \t\t"+e));
                 break;
 
-            case 8:
+            case 8: // EB : Case 13 only. Misunderstood the requirement (Expected tag wise ticket count)
+                //update: updated the code with new case below
                 System.out.println("Enter tag name: ");
-                String tag = b.readLine();
+
+                String tag = details.readStringInput();
+
                 if (! Ticket.hasTag(tag)){
                     System.out.println(String.format("Tag \"%s\" is not present in the system", tag ));
                 }else {
                     tempList=  helper.searchTicket("tags", tag);
-                    if (tempList!=null){
+                    if (!tempList.isEmpty()){
                         System.out.println("Total tickets: "+tempList.size()+"\nResults:");
                         tempList.forEach(System.out::println);  //printing result by method referencing of lambda expressions
                     }else {
@@ -286,8 +286,49 @@ public class AppRunner {
 
                 break;
 
-            case 9: System.out.println("Thank you for using application"); break;
-            default: case 0: throw new IOException("option selected is out of bounds");
+            /*Reporting options in case study*/
+
+            case 10:
+                //get the oldest ticket in the system
+                tmpMap = helper.getOldestTicket();
+
+                // EB : Use of isEmpty check could be done.
+                //update: Noted and Done.
+                if (!tmpMap.isEmpty()){
+                    System.out.printf("==== Ticket #%010d ====\n",tmpMap.get("id"));
+                    tmpMap.forEach((k,v)->System.out.println(k+"\t:\t"+v));
+                }
+
+                break;
+            case 11:
+                //ticket older than number of days
+                System.out.println("Enter no. of days: ");
+                int days= details.readIntInput();
+                tempList = helper.getOlderTickets(days);
+
+                System.out.println("Total tickets: "+(tempList!= null ? tempList.size(): 0)+
+                        "\n\t=============== Results ===============");
+                if (!tempList.isEmpty()){
+                    tempList.forEach(System.out::println); //printing result by method referencing of lambda expressions
+                }
+                break;
+
+            case 12:
+                //print all the tags present in the system
+                Set<String> obj = (Set<String>)helper.getTagsOfTicket();
+                System.out.println("Total Tags present in the System: ");
+                System.out.println(obj);
+
+                break;
+
+            case 13:
+                tmpMap = helper.getTagsTicketCount();
+                System.out.println("Tag Name\t|\tNo. of Ticket(s)");
+                tmpMap.forEach((k,e)-> System.out.println(k+"\t| \t"+e));
+                break;
+
+            case 0: System.out.println("Thank you for using application"); break;
+            default: throw new IOException("option selected is out of bounds");
 
         }
 

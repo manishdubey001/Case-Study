@@ -1,12 +1,13 @@
 package com.ticketmaster.helpers;
 
-import com.ticketmaster.Main;
 import com.ticketmaster.exceptions.TicketNotFoundException;
 import com.ticketmaster.models.Ticket;
 import com.ticketmaster.models.TicketRepository;
-import com.ticketmaster.utils.DetailProvider;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -100,7 +101,7 @@ public class TicketService /*implements Comparable<Ticket>*/ {
 
         Ticket ticket = this.getTicketDetail(id);
 
-        if (ticket ==null){
+        if (ticket == null){
             throw new TicketNotFoundException("Record with id: "+id +" does not exists");
         }
 
@@ -116,21 +117,35 @@ public class TicketService /*implements Comparable<Ticket>*/ {
      */
     public Map getTicket(int id) throws IOException, ClassNotFoundException, TicketNotFoundException {
 
+        repository.updatePool();
+
         Ticket ticket = getTicketDetail(id);
         if (ticket ==null){
             throw new TicketNotFoundException("Record with id: "+id +" does not exists");
         }
 
+        return prepareTicketMap(ticket);
+
+    }
+
+    public Map getOldestTicket() throws IOException, ClassNotFoundException, TicketNotFoundException {
+        Ticket ticket = repository.getOldestObject();
+        return prepareTicketMap(ticket);
+    }
+
+    private Map<String, Object> prepareTicketMap(Ticket ticket){
+        // EB : Return an empty collection instead of returning a null. As per suggestion from Chad/ Best Practice.
         Map tempMap = new LinkedHashMap<>();
+        if (ticket == null){
+            return tempMap;
+        }
         tempMap.put("id", ticket.getId());
         tempMap.put("subject", ticket.getSubject());
         tempMap.put("agent", ticket.getAgent());
         tempMap.put("tags", ticket.tags == null ? new HashSet(): ticket.tags.toString());
         tempMap.put("created", new Date(ticket.getCreated()));
         tempMap.put("updated", new Date(ticket.getModified()) );
-
         return tempMap;
-
     }
 
     /**
@@ -140,7 +155,9 @@ public class TicketService /*implements Comparable<Ticket>*/ {
      * @throws ClassNotFoundException
      * @throws TicketNotFoundException
      */
-    public List<Map<String,? super Object>> getTickets() {
+    public List<Map<String,? super Object>> getTickets() throws ClassNotFoundException, IOException{
+
+        repository.updatePool();
 
         if (repository.getTicketListSize() <= 0){
             return null;
@@ -167,17 +184,20 @@ public class TicketService /*implements Comparable<Ticket>*/ {
      * @param values
      * @return
      */
-    public List<Map<String,? super Object>> searchTicket(String key, String... values){
+    public List<Map<String,? super Object>> searchTicket(String key, String... values)
+            throws IOException, ClassNotFoundException{
 
         String searchKey;
-        List a = null;
+        List list = null;
+
+        repository.updatePool();
 
 
         if(values.length == 1){ //fetch first value
 
             searchKey = values[0];
 
-            a= (List) Ticket.getListStream().filter(
+            list = (List) Ticket.getListStream().filter(
                     (obj) ->{ Map.Entry me = (Map.Entry)obj;
                         if (key.equals("agent")){
                             return ( (Ticket)(me.getValue())).getAgent().toLowerCase().equals(searchKey.toLowerCase());
@@ -199,7 +219,7 @@ public class TicketService /*implements Comparable<Ticket>*/ {
         //adding sorted section in streams to further optimize
 
 
-        return formatPrintData(a);
+        return formatPrintData(list);
 
     }
 
@@ -208,8 +228,11 @@ public class TicketService /*implements Comparable<Ticket>*/ {
      * @return Map of agent and count of tickets for each agent
      */
 
-    public Map<String,Integer> getTicketCount(){
+    public Map<String,Integer> getTicketCount()
+            throws IOException, ClassNotFoundException{
         Map<String,Integer> m = new LinkedHashMap<>();
+
+        repository.updatePool();
 
         Set s= repository.getList().entrySet();
         Iterator it = s.iterator();
@@ -233,20 +256,59 @@ public class TicketService /*implements Comparable<Ticket>*/ {
         return m;
     }
 
+    public Map<String,Integer> getTagsTicketCount()
+            throws IOException, ClassNotFoundException {
+
+        Map<String,Integer> m = new TreeMap<>();
+
+        repository.updatePool();
+
+        //get entrySet from the map
+        Set tmpSet = repository.getList().entrySet();
+
+        //get list of tags from the set
+        Set<String> tagList = repository.getTagList();
+
+        Ticket tmp;
+
+        for (String tagName: tagList ) {
+
+            Iterator itr = tmpSet.iterator();
+            while (itr.hasNext()){
+                int count = 0;
+
+                Map.Entry me = (Map.Entry)itr.next();
+                tmp = (Ticket) me.getValue();
+                if(tmp.tags.contains(tagName)){
+                    if(m.containsKey(tagName)){
+                        count = m.get(tagName);
+                        m.put(tagName, count+1);
+                    }else {
+                        m.put(tagName,1);
+                    }
+                }
+            }
+
+        }
+
+        return m;
+
+    }
+
     /**
      * getTicketObject method
-     * used to get the cusrrent object of Ticket class
+     * used to get the current object of Ticket class
      * @return
      */
     public Ticket getTicketObject(){
         return this.ticket;
-    }
+    } // EB : Unused code
 
     protected List<Map<String,? super Object>> formatPrintData(List l){
         List<Map<String,? super Object>> l1 = new ArrayList<>();
 
         if (l == null){
-            return null;
+            return l1;
         }
 
         l.forEach( (e)-> {
@@ -283,7 +345,44 @@ public class TicketService /*implements Comparable<Ticket>*/ {
         Ticket.clearList();
     }
 
-    public static void setTicketList(Map<Integer, Ticket> values){
+    public void setTicketList(Map<Integer, Ticket> values){
         TicketRepository.init().updateList(values);
+    }
+
+    public void initTags(){
+        repository.initTagList();
+    }
+    public void initAgents(){
+        repository.initAgentList();
+    }
+
+    public Set<?> getTagsOfTicket(){
+        return repository.getTagList();
+    }
+
+    public List<Map<String,? super Object>> getOlderTickets(int days){
+
+        if (repository.getTicketListSize() <= 0){
+            return null;
+        }
+
+        long time = LocalDateTime.now(ZoneId.of("UTC")).minusDays(days).toInstant(ZoneOffset.UTC).toEpochMilli();
+        List list = new LinkedList(repository.getList().entrySet());
+
+        List lst = new ArrayList<>();
+
+        lst = (ArrayList) list.stream()
+                .filter((e)->((Ticket) ((Map.Entry) e).getValue()).getCreated() <= time )
+                .sorted((o1, o2) ->{
+                    if ( ( (Ticket)(((Map.Entry) o1).getValue()) ).getModified() <=
+                            ( (Ticket)(((Map.Entry) o2).getValue()) ).getModified() ) {
+                        return 1;
+                    }
+                    else return -1;
+                })
+                .collect(Collectors.toList());
+
+        return formatPrintData(lst);
+
     }
 }

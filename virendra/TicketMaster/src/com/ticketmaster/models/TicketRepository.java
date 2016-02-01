@@ -1,7 +1,9 @@
 package com.ticketmaster.models;
 
 import com.ticketmaster.Main;
+import com.ticketmaster.utils.SerializerUtil;
 
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -40,6 +42,10 @@ public class TicketRepository {
         }
     }
 
+    // EB : Avoid using static methods. It will create issues when running multiple threads.
+    //update: for time being I know this approach to have data in the application.
+    // I am looking for the workaround for this. I want to discuss this approach with Chad as well.
+    
     public static TicketRepository init(){
         if(! (_instance instanceof TicketRepository)){
             _instance = new TicketRepository();
@@ -58,7 +64,7 @@ public class TicketRepository {
     }
 
     public Map<Integer, Ticket> getList(){
-        return ticketList;
+        return Collections.unmodifiableMap(ticketList);
     }
 
     public Ticket deleteTicket(int id){
@@ -95,48 +101,70 @@ public class TicketRepository {
 
     }
 
+    public void updatePool()
+            throws ClassNotFoundException, IOException{
+
+        SerializerUtil util = new SerializerUtil();
+
+        Map<Integer,Ticket> temp = (Map<Integer,Ticket>) util.readFromFile();
+
+        this.updateList(temp);
+    }
+
 
 
 
     public Set<String> getTagList(){
-        return tagList;
+        return Collections.unmodifiableSet(tagList);
     }
 
-    public void updateTagList(Set<String> object){
+    // EB : Unused code
+    //update: Done
+    /*public void updateTagList(Set<String> object){
         tagList.addAll(object);
 
-    }
+    }*/
 
     public void addTags(Set<String> tag){
         agentList.addAll(tag);
     }
 
     public Set<String> getAgentList(){
-        return tagList;
+        return Collections.unmodifiableSet(agentList);
     }
 
-    public void updateAgentList(Set<String> object){
+    // EB : Unused code
+    //update: Done
+    /*public void updateAgentList(Set<String> object){
         tagList.addAll(object);
 
-    }
+    }*/
 
     public void addAgent(String agent){
         agentList.add(agent);
     }
 
 
-    private void initTagList(){
+    public void initTagList(){
 
         if (ticketList != null){
             ticketList.values().stream().forEach(e-> tagList.addAll( e.tags ) );
         }
     }
 
-    private void initAgentList(){
+    public void initAgentList(){
 
         if (ticketList != null){
-            ticketList.values().stream().forEach(e-> tagList.add(e.getAgent()) );
+            ticketList.values().stream().forEach(e-> agentList.add(e.getAgent()) );
         }
+
+    }
+
+    public Ticket getOldestObject(){
+        // EB : Use ternary operator or compareTo method.
+        //update: done
+        return  ticketList.values().stream().min( (obj1,obj2)-> obj1.getCreated() < obj2.getCreated() ?  -1 : 1)
+                .get();
 
     }
 
