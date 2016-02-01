@@ -1,5 +1,5 @@
-/GaneshDeshvini/CaseStudy/out/production/HelpdeskSystem/SerializationExample.class
-/GaneshDeshvini/CaseStudy/out/production/HelpdeskSystem/helpers/DateTimeUtil.class
-/GaneshDeshvini/CaseStudy/out/production/HelpdeskSystem/helpers/FileIOUtil.class
-/GaneshDeshvini/CaseStudy/out/production/HelpdeskSystem/operations/TicketOperations.class
-/GaneshDeshvini/CaseStudy/out/production/HelpdeskSystem/service/ReportService.class
+GaneshDeshvini/CaseStudy/.idea/
+GaneshDeshvini/CaseStudy/out/
+.class
+.jar
+!.gitignore
