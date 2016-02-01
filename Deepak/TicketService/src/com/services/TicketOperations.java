@@ -144,6 +144,8 @@ public class TicketOperations {
 
         /*
         * Stream implementation of sorting and comparator */
+
+/*
         // Lokesh: No lesson leaned from Chad's comment: usually you avoid storing intermediate results and just chain this together.
         // Redundant "stream" in below line can be avoided.
         Stream<Ticket> stream = ticketMap.values().stream();
@@ -152,6 +154,10 @@ public class TicketOperations {
         // ticketMap.values().stream().sorted((t1,t2) -> Long.compare(t2.getModified(),t1.getModified())).forEach((t)-> System.out.println("YOUR TICKET OBJECT"));
 
         stream.sorted((Ticket t1, Ticket t2) -> Long.valueOf(t2.getModified()).compareTo(Long.valueOf( t1.getModified())))
+*/
+
+        ticketMap.values().stream().sorted((Ticket t1, Ticket t2) -> Long.valueOf(t2.getModified()).compareTo(Long.valueOf( t1.getModified())))
+
               .forEach((Ticket ticket) -> System.out.println(
                       ticket.getId()+" | "+ticket.getSubject()+" | "+ticket.getAgentName()+
                               " | "+ticket.getTags()+" | "+ticket.getModified()));
