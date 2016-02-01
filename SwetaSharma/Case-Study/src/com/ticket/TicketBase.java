@@ -108,6 +108,7 @@ public class TicketBase {
                     break;
                 case 2:
                     for(int i=0; i < ticketList.size(); i++){
+                        //Ganesh D, here equals method will not check for case-insensitive
                         if(ticketList.get(i).getAgentName().equals(ticketSearchType)){
                             arrayListTickets.add(ticketList.get(i));
                         }

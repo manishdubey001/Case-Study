@@ -1,5 +1,7 @@
 package com.ticket;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 
 /**
@@ -25,6 +27,7 @@ public class TicketModel implements Comparable<TicketModel>{
     }
 
     // return Set<String>
+    //Ganesh D, can use Collections.unmodifiableSet
     public HashSet<String> getTags() {
         return tags;
     }
@@ -40,6 +43,7 @@ public class TicketModel implements Comparable<TicketModel>{
         this.tags = tags;
     }
 
+    //Ganesh D, can use Collections.unmodifiableSet
     public long getCreated() {
         return created;
     }
@@ -68,6 +72,7 @@ public class TicketModel implements Comparable<TicketModel>{
         this.modified = modified;
     }
 
+    //Ganesh D: no need of using getters & setters when you can actually access directly by attributes
     @Override
     public String toString() {
         return "Ticket id is: " + getId() +" subject is: "+ getSubject() + " agent is: "+ getAgentName() + " Tags: "+ getTags() + " Created: "+ Util.getDateFormat(getCreated())

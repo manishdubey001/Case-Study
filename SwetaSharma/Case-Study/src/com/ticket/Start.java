@@ -31,6 +31,7 @@ public class Start {
 
             choice = read.nextInt();
 
+            //Ganesh D: segregate logic for each case by dividing them into functions
             switch (choice){
                 case 1:
                     System.out.println("Enter the number of tickets you want to create");
@@ -127,6 +128,7 @@ public class Start {
                     }
                     break;
                 case 5:
+                    //Ganesh D, here you have logic for printing list
                     list = ticketBase.listTicket(1, null);
                     if(list == null){
                         System.out.println("List is empty");
