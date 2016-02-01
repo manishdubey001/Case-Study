@@ -131,6 +131,7 @@ public class AppRunner {
      */
     protected void processChoice(int ch)
             throws IOException, ClassNotFoundException, TicketNotFoundException {
+        // EB: Small issue of style. List fields according to class definition. Use generics for type safety.
         TicketService helper= new TicketService();
         Map tmpMap;
 
@@ -178,7 +179,7 @@ public class AppRunner {
 
                 System.out.println("Update Agent?(y/n)");
 
-                if(details.readStringInput().equals("y")){
+                if(details.readStringInput().toLowerCase().equals("y")){ // EB : use .toLowerCase()
                     System.out.println("Enter Agent Name: ");
                     txtAgent = details.readStringInput();
                     ticket.setAgent(txtAgent);
@@ -201,12 +202,8 @@ public class AppRunner {
                 System.out.println("Enter Ticket id:");
                 id = details.readIntInput();
 
-
-                ticket = null;
-
-
                 System.out.printf("Are you sure you want to delete ticket #%010d ? (y/n)\n", id);
-                if(details.readStringInput().equals("y")){
+                if(details.readStringInput().toLowerCase().equals("y")){
 
                     ticket = helper.deleteTicket(id);
 
@@ -227,7 +224,7 @@ public class AppRunner {
 
                 tmpMap = helper.getTicket(id);
 
-                if (tmpMap!= null){
+                if (!tmpMap.isEmpty()) {
                     System.out.printf("==== Ticket #%010d ====\n",tmpMap.get("id"));
                     tmpMap.forEach((k,v)->System.out.println(k+"\t:\t"+v));
                 }
@@ -236,8 +233,8 @@ public class AppRunner {
 
             case 5:case 9:
                 tempList = helper.getTickets();
-                System.out.println("Total tickets: "+(tempList!= null ? tempList.size(): 0)+"\n\t=============== Results ===============");
-                if (tempList != null) {
+                System.out.println("Total tickets: "+(!tempList.isEmpty() ? tempList.size(): 0)+"\n\t=============== Results ===============");
+                if (!tempList.isEmpty()) {
                     tempList.forEach(System.out::println); //printing result by method referencing of lambda expressions
                 }
 
@@ -253,7 +250,7 @@ public class AppRunner {
                     System.out.println(String.format("Agent \"%s\" is not present in the system", name ));
                 }else {
                     tempList = helper.searchTicket("agent", name);
-                    if (tempList != null) {
+                    if (!tempList.isEmpty()) {
                         System.out.println("Total tickets: "+tempList.size()+"\nResults:");
                         tempList.forEach(System.out::println);
                     }else {
@@ -269,7 +266,8 @@ public class AppRunner {
                 tmpMap.forEach((k,e)-> System.out.println(k+"\t\t| \t\t"+e));
                 break;
 
-            case 8:
+            case 8: // EB : Case 13 only. Misunderstood the requirement (Expected tag wise ticket count)
+                //update: updated the code with new case below
                 System.out.println("Enter tag name: ");
 
                 String tag = details.readStringInput();
@@ -278,7 +276,7 @@ public class AppRunner {
                     System.out.println(String.format("Tag \"%s\" is not present in the system", tag ));
                 }else {
                     tempList=  helper.searchTicket("tags", tag);
-                    if (tempList!=null){
+                    if (!tempList.isEmpty()){
                         System.out.println("Total tickets: "+tempList.size()+"\nResults:");
                         tempList.forEach(System.out::println);  //printing result by method referencing of lambda expressions
                     }else {
@@ -290,12 +288,13 @@ public class AppRunner {
 
             /*Reporting options in case study*/
 
-
             case 10:
                 //get the oldest ticket in the system
                 tmpMap = helper.getOldestTicket();
 
-                if (tmpMap != null){
+                // EB : Use of isEmpty check could be done.
+                //update: Noted and Done.
+                if (!tmpMap.isEmpty()){
                     System.out.printf("==== Ticket #%010d ====\n",tmpMap.get("id"));
                     tmpMap.forEach((k,v)->System.out.println(k+"\t:\t"+v));
                 }
@@ -309,7 +308,7 @@ public class AppRunner {
 
                 System.out.println("Total tickets: "+(tempList!= null ? tempList.size(): 0)+
                         "\n\t=============== Results ===============");
-                if (tempList != null) {
+                if (!tempList.isEmpty()){
                     tempList.forEach(System.out::println); //printing result by method referencing of lambda expressions
                 }
                 break;

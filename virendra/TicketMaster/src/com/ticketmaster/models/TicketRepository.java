@@ -42,6 +42,10 @@ public class TicketRepository {
         }
     }
 
+    // EB : Avoid using static methods. It will create issues when running multiple threads.
+    //update: for time being I know this approach to have data in the application.
+    // I am looking for the workaround for this. I want to discuss this approach with Chad as well.
+    
     public static TicketRepository init(){
         if(! (_instance instanceof TicketRepository)){
             _instance = new TicketRepository();
@@ -114,10 +118,12 @@ public class TicketRepository {
         return Collections.unmodifiableSet(tagList);
     }
 
-    public void updateTagList(Set<String> object){
+    // EB : Unused code
+    //update: Done
+    /*public void updateTagList(Set<String> object){
         tagList.addAll(object);
 
-    }
+    }*/
 
     public void addTags(Set<String> tag){
         agentList.addAll(tag);
@@ -127,10 +133,12 @@ public class TicketRepository {
         return Collections.unmodifiableSet(agentList);
     }
 
-    public void updateAgentList(Set<String> object){
+    // EB : Unused code
+    //update: Done
+    /*public void updateAgentList(Set<String> object){
         tagList.addAll(object);
 
-    }
+    }*/
 
     public void addAgent(String agent){
         agentList.add(agent);
@@ -153,14 +161,10 @@ public class TicketRepository {
     }
 
     public Ticket getOldestObject(){
-
-        return  ticketList.values().stream().min( (obj1,obj2)->{
-            if(   obj1.getCreated() < obj2.getCreated()) {
-                return -1;
-            }else {
-                return 1;
-            }
-        }).get();
+        // EB : Use ternary operator or compareTo method.
+        //update: done
+        return  ticketList.values().stream().min( (obj1,obj2)-> obj1.getCreated() < obj2.getCreated() ?  -1 : 1)
+                .get();
 
     }
 

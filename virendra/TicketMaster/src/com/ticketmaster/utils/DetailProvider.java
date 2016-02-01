@@ -1,7 +1,6 @@
 package com.ticketmaster.utils;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashSet;
 import java.util.Scanner;
@@ -12,8 +11,9 @@ import java.util.Set;
  */
 public class DetailProvider {
 
+    // EB : Scanner and BufferedReader both read data from console. Why are both of them used? Why not any one?
+    //update: BufferedReader is redundant code. Removed it from code base.
     Scanner scanner;
-    BufferedReader reader;
     private static DetailProvider _instance;
 
     /**
@@ -23,10 +23,6 @@ public class DetailProvider {
         if(scanner == null){
             scanner = new Scanner(System.in);
         }
-        if (reader == null){
-            reader = new BufferedReader(new InputStreamReader(System.in));
-        }
-
     }
 
     /**
@@ -75,7 +71,7 @@ public class DetailProvider {
         Set<String> tagSet = new HashSet<>();
         System.out.println("Enter tags (y/n): ");
         String t = this.readStringInput();
-        if (t.equals("y")){
+        if (t.toLowerCase().equals("y")){
             System.out.println("Enter tags separated by colon (:) : ");
             String tmp = this.readStringInput();
             String[] tmp1 = tmp.split(":");

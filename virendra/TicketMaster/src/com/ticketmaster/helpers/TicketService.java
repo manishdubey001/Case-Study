@@ -1,10 +1,8 @@
 package com.ticketmaster.helpers;
 
-import com.ticketmaster.Main;
 import com.ticketmaster.exceptions.TicketNotFoundException;
 import com.ticketmaster.models.Ticket;
 import com.ticketmaster.models.TicketRepository;
-import com.ticketmaster.utils.DetailProvider;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -103,7 +101,7 @@ public class TicketService /*implements Comparable<Ticket>*/ {
 
         Ticket ticket = this.getTicketDetail(id);
 
-        if (ticket ==null){
+        if (ticket == null){
             throw new TicketNotFoundException("Record with id: "+id +" does not exists");
         }
 
@@ -136,11 +134,11 @@ public class TicketService /*implements Comparable<Ticket>*/ {
     }
 
     private Map<String, Object> prepareTicketMap(Ticket ticket){
-
-        if (ticket == null){
-            return null;
-        }
+        // EB : Return an empty collection instead of returning a null. As per suggestion from Chad/ Best Practice.
         Map tempMap = new LinkedHashMap<>();
+        if (ticket == null){
+            return tempMap;
+        }
         tempMap.put("id", ticket.getId());
         tempMap.put("subject", ticket.getSubject());
         tempMap.put("agent", ticket.getAgent());
@@ -304,13 +302,13 @@ public class TicketService /*implements Comparable<Ticket>*/ {
      */
     public Ticket getTicketObject(){
         return this.ticket;
-    }
+    } // EB : Unused code
 
     protected List<Map<String,? super Object>> formatPrintData(List l){
         List<Map<String,? super Object>> l1 = new ArrayList<>();
 
         if (l == null){
-            return null;
+            return l1;
         }
 
         l.forEach( (e)-> {

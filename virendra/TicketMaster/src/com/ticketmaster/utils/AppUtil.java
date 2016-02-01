@@ -19,9 +19,6 @@ import java.util.*;
  */
 public class AppUtil {
 
-    public static String baseFolder = "files";
-    public static String propertyFile = "conf.properties";
-
     /**
      * getMenu method contains the list of methods which will be displayed in the console.
      * @return Map
