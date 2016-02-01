@@ -11,12 +11,16 @@ import java.util.function.Function;
 public class Ticket implements Serializable, Function<Object, Object> {
 
     private static long countId = 1;
+    // Lokesh: With each new Run of this application, your tickets are always starting from ID 1, even though they are already created and serialized in file.
+    // They should start after max_id present in file.
     private long id;
     private String subject;
     // generally Java avoids underscores in names, and uses 'camel case' like agentName
     private String agentName;
     private Set<String> tags;
     private short status = 1;
+
+    // Lokesh: Use LocalDateTime or Joda Time for Date-Time purpose. gives more controlled operations on different time zones and other stuffs.
     private long modified;
     private long created;
     private long unixTime = System.currentTimeMillis() / 1000L;
@@ -39,6 +43,7 @@ public class Ticket implements Serializable, Function<Object, Object> {
     // It may be allowed, to update the subject of Ticket.
     // As ticket has been created with inappropriate subject.
     // Or in case of transfer ticket to agent with proper subject.
+    // Lokesh: not in use till now, then there is no sense of defining it.
     public void setSubject(String subject) {
         this.subject = subject;
     }
@@ -58,6 +63,8 @@ public class Ticket implements Serializable, Function<Object, Object> {
     }
 
     // Have the ticket class manage its own created and modified timestamps
+
+    // Lokesh: no lesson learned from Chad's above comment.
     public void setCreated(long created) {
         this.created = created;
     }
@@ -71,7 +78,7 @@ public class Ticket implements Serializable, Function<Object, Object> {
         this.modified = modified;
     }
 
-
+    // Lokesh: no use of this constructor.
     public Ticket(){
 
     }
@@ -139,6 +146,7 @@ public class Ticket implements Serializable, Function<Object, Object> {
         }
     }
 
+    //Lokesh: just because Chad written somewhere in comment, you created this function, but not in use at all?
     public boolean hasTag(String tag){
         return this.getTags().contains(tag);
     }

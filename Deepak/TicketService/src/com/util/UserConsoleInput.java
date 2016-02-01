@@ -13,7 +13,7 @@ import java.util.Set;
  * Created by root on 15/1/16.
  */
 public class UserConsoleInput {
-
+// Lokesh: There can be single function for All string value read from Console. I don't see any difference in function for reading agent name, subject and even tag(other than converting to HashSet).
     public static Scanner scanner = new Scanner(System.in);
 
     /*
@@ -111,7 +111,7 @@ public class UserConsoleInput {
 
         return tagHashSet;
     }
-
+// Lokesh: File create/check in UserConsoleInput?
     public static File createFile(){
         File file = null;
         try {

@@ -20,6 +20,7 @@ public class TicketSerializedClass {
 
         ObjectOutputStream oos = null;
         try {
+            // Lokesh: Why do you need to create/check file for every ticket? Can't it be done one time when application starts?
             File file = UserConsoleInput.createFile();
             if(append){
                 // append to the file.

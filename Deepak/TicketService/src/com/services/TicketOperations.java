@@ -18,10 +18,13 @@ public class TicketOperations {
     // Consider whether this the best way to store the tickets? Every operation by ID
     // requires scanning the entire array. If there are thousands or millions of tickets,
     // this could be expensive.
+    // Lokesh: When not required(or changed), why it is left declared at all? When making modification, don't forget to remove/comment redundant code.
     private ArrayList<Ticket> ticketArrayList = null;
     private Map<Long, Ticket> ticketHashMap = null;
     public Set<String> allTagHashSet = null;
 
+    // Lokesh: When no inheritance in picture, no need to define a constructor just to initialize instance variables.
+    // This can be done at the time of declaration itself or when they are actually used.
     public TicketOperations(){
         ticketArrayList = new ArrayList<>();
         ticketHashMap = new HashMap<>();
@@ -46,6 +49,7 @@ public class TicketOperations {
 
         Ticket ticket = createTicket(subject, agentName, tagHashSet);
 
+        // Lokesh: Why do you really need this check? Do you really suspect that call to createTicket can return any object other than Ticket?
         if(ticket instanceof Ticket)
             System.out.println("Ticket create successful!");
         else
@@ -56,13 +60,16 @@ public class TicketOperations {
     * Crating ticket using  */
     // Returning error codes can be a confusing way to indicate success or failure.
     // If it matters to the caller, I would return the Ticket object directly, or void
-    // if it doens't matter.
+    // if it does't matter.
     // If a Ticket can't be created in a method named 'createTicket', I would throw an exception.
+
+    // Lokesh: Seems like Chad's comment not interpreted completely.
+    // Lokesh: By returning null values, you force caller to check for null returns, this should not be a practical case.
     public Ticket createTicket(String subject, String agentName, Set<String> tagHashSet){
 
         Ticket ticket = null;
         try {
-
+            // Avoid accepting Null Values to your own functions. By accepting null as valid input, you force yourself to series of null checks.
             if (subject == null || subject.isEmpty())
                 throw new UserInputException("Please enter proper subject!");
             else if (agentName == null || agentName.isEmpty())
@@ -116,7 +123,7 @@ public class TicketOperations {
         if(id <= 0 || id > Ticket.getCountId()){
             return new HashMap<>();
         }
-
+        // Lokesh: Rather than de-serializing for every ticket, you can use your "ticketHashMap" for this purpose, and keep serialized file and "ticketHashMap" in sync.
         Map<Long, Ticket> tempMap = TicketSerializedClass.readTicketsFromFile();
         // Stream and Lambda implementation.
         // usually you avoid storing intermediate results and just chain this together.
@@ -137,7 +144,12 @@ public class TicketOperations {
 
         /*
         * Stream implementation of sorting and comparator */
+        // Lokesh: No lesson leaned from Chad's comment: usually you avoid storing intermediate results and just chain this together.
+        // Redundant "stream" in below line can be avoided.
         Stream<Ticket> stream = ticketMap.values().stream();
+        // Lokesh: Generating Long is not required for Comparator.
+        // Lokesh: More effective ways to use stream API available: This simple line would have done for below:
+        // ticketMap.values().stream().sorted((t1,t2) -> Long.compare(t2.getModified(),t1.getModified())).forEach((t)-> System.out.println("YOUR TICKET OBJECT"));
 
         stream.sorted((Ticket t1, Ticket t2) -> Long.valueOf(t2.getModified()).compareTo(Long.valueOf( t1.getModified())))
               .forEach((Ticket ticket) -> System.out.println(
@@ -148,6 +160,8 @@ public class TicketOperations {
 
     /*
     * Inner class for sorting using comparator on modified date */
+    // Lokesh: We can avoid Comparator for primitives types. Find ways to use: Comparator.comparing. There may be some more.
+    // Lokesh: Why custom comparator, when not used?
     class ModifiedComparator implements Comparator<Ticket>{
 
         @Override
@@ -163,6 +177,12 @@ public class TicketOperations {
 
     /*
     * To update ticket's agent name and tags by ticket id */
+
+    // Lokesh: You are forcing to update Agent and Tags. Consider below cases:
+    // What if I don't want to update Agent and just want to update Tag? In your case I need to enter same agent name again :D
+    // What if I want to update only agent and expect to tags unchanged? In your case I need to enter same tags string :D
+    // What if I just want to add one tag only existing ones? In your case I have to enter string of tags including tags which are already there.
+    // What if I want to remove one tag only? In  your case I have to enter string of tags skipping the one that I don't want.
     public void updateTicketById(int id){
         if(id <= 0){
             System.out.println("Ticket id is not valid");
@@ -197,7 +217,9 @@ public class TicketOperations {
     public Ticket updateTicket(int id, String agentName, Set<String> tagHashSet){
         // A method that returns null can lead to problems for callers. In the case
         // of invalid input, I prefer throwing exceptions to returning null.
+        // Lokesh: No-lesson learned from Chad's above comment, still returning null?
         try {
+            // Lokesh: avoid accepting null in your function and avoid null checks.
             if (id <= 0 || agentName == null || agentName.isEmpty()) {
                throw new UserInputException("Please give proper agent name!");
             }
@@ -207,6 +229,7 @@ public class TicketOperations {
             return null;
         }
 
+        // Lokesh: Use LocalDateTime or Joda DateTime. Gives you control for timezones etc.
         long unixTime = System.currentTimeMillis() / 1000L;
 
         // Streams are kind of an awkward way to get at one element. I would expose a method

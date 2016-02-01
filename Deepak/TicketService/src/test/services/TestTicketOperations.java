@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import java.util.*;
 
-import static org.junit.Assert.*;       // This is static import, thus we can use all the static members and method directly without Name of Class.
+import static org.junit.Assert.*;
 
 /**
  * Created by root on 18/1/16.
