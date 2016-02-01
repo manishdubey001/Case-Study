@@ -1,5 +1,7 @@
 package com.Tickets;
 
+import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -230,7 +232,16 @@ public class TicketServiceComponent{
     }
 
 
-    public void getDateDiff(){
-
+    public void getDateDiff(int noOfDays, List<Ticket> ticketList){
+            LocalDateTime l2 = LocalDateTime.now().minusDays(noOfDays);
+            List<Ticket> newList = new ArrayList();
+            for (Ticket ticket : ticketList){
+                if (ticket.getCreated().isBefore(l2)){
+                    newList.add(ticket);
+                }
+            }
+                if (!newList.isEmpty()){
+                    this.display(newList);
+                }
     }
 }

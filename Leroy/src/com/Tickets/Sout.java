@@ -29,6 +29,7 @@ public class Sout {
     static final String ACT_YES_OR_NO = "1 - Yes\n0 - No";
     static final String ACT_TICKETS_IN_SYSTEM = "Following are the Tickets in the System";
     static final String ACT_REMOVE_SUCCESS = "Removed Successfully ";
+    static final String ACT_GET_TICKETS_OLD  = "Enter the number to fetch ticket older than that number of Days..:";
 
     private static Scanner scanner;
 
@@ -154,6 +155,16 @@ public class Sout {
 
     public Scanner getScanner(){
         return scanner;
+    }
+    public void soutActGetTicketsOld(List<Ticket> list) {
+        try {
+
+            System.out.println(Sout.ACT_GET_TICKETS_OLD);
+            int sel = getScanner().nextInt();
+            ticketServiceComponent.getDateDiff(sel, list);
+        }catch (InputMismatchException Im){
+            Im.printStackTrace();
+        }
     }
 
 }

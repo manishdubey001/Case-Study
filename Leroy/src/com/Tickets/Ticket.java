@@ -28,7 +28,7 @@ public class Ticket implements Comparable<Ticket>, Serializable{
         this.agentName = name;
         this.subject = subject;
         this.tags = tags;
-        this.created = LocalDateTime.now();
+        this.created = this.modified = LocalDateTime.now();
     }
 
     Ticket(int id, String subject, Set tags, String name, boolean  b){
@@ -76,10 +76,6 @@ public class Ticket implements Comparable<Ticket>, Serializable{
 
     public LocalDateTime getCreated() {
         return created;
-    }
-
-    private void setCreated() {
-        this.created = LocalDateTime.now();
     }
 
     public LocalDateTime getModified() {

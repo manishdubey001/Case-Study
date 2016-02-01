@@ -30,5 +30,6 @@ public class SerializationExampleClass {
         ticketServiceComponent.getNumberOfTicketsInSystem(ticketsList);
         ticketServiceComponent.getOldestTicketInSystem(ticketsList);
         ticketServiceComponent.getCountOfTags(ticketsList);
+        sout.soutActGetTicketsOld(ticketsList);
     }
 }
