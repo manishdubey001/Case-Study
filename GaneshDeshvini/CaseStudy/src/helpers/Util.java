@@ -1,5 +1,8 @@
 package helpers;
 
+import model.TicketModel;
+
+import java.io.*;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
@@ -8,7 +11,6 @@ import java.util.Set;
  * Created by root on 7/1/16.
  */
 public class Util {
-
     /**
      * convert Set to string
      *

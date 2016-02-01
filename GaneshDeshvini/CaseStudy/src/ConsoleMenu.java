@@ -1,5 +1,5 @@
-import factory.TicketServiceFactory;
 import helpers.ConsoleReader;
+import service.ReportService;
 import service.TicketService;
 
 import java.util.*;
@@ -9,9 +9,10 @@ import java.util.*;
  */
 public class ConsoleMenu {
     public void start() {
-        Scanner scanner = ConsoleReader.getInstance();
+        Scanner scanner = ConsoleReader.newInstance();
         boolean flag = true;
-        TicketService ticketService = TicketServiceFactory.getInstance();
+        TicketService ticketService = TicketService.newInstance();
+        ReportService reportService = ReportService.newInstance();
         do {
             printStartMenu();
             try {
@@ -50,6 +51,21 @@ public class ConsoleMenu {
                         break;
 
                     case 9:
+                        reportService.totalNumberOfTickets();
+                        break;
+
+                    case 10:
+                        reportService.oldestTicket();
+                        break;
+                    case 11:
+                        reportService.ticketsOlderThanCertainDays();
+                        break;
+
+                    case 12:
+                        reportService.tagInUsedWithTicketCount();
+                        break;
+
+                    case 13:
                         System.out.println("Quitting....");
                         flag = false;
                         break;
@@ -82,7 +98,7 @@ public class ConsoleMenu {
         System.out.println("\n\nDo you want to continue(Y/N)");
         int i;
         for (i = 0; i <= 5; i++) {
-            String s = ConsoleReader.getInstance().next();
+            String s = ConsoleReader.newInstance().next();
             if (s.equalsIgnoreCase("Y")) {
                 return true;
             } else if (s.equalsIgnoreCase("N")) {
@@ -110,6 +126,10 @@ public class ConsoleMenu {
         System.out.println("6 - Select tickets assigned to specific agent");
         System.out.println("7 - View ticket count grouped by agent name");
         System.out.println("8 - View all tickets by tag");
-        System.out.println("9 - Quit");
+        System.out.println("9 - Total number of tickets");
+        System.out.println("10 - Oldest ticket in system");
+        System.out.println("11 - Tickets olders than certain days");
+        System.out.println("12 - Tags in use");
+        System.out.println("13 - Quit");
     }
 }

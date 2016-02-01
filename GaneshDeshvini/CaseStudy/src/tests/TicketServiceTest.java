@@ -1,7 +1,6 @@
 package tests;
 
 import data.Repository;
-import factory.TicketServiceFactory;
 import helpers.Util;
 import model.TicketModel;
 import org.junit.runners.MethodSorters;
@@ -19,7 +18,7 @@ import static org.junit.Assert.*;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TicketServiceTest {
 
-    TicketService ts = TicketServiceFactory.getInstance();
+    TicketService ts = TicketService.newInstance();
     int id;
     String subject;
     String agent;
@@ -99,7 +98,7 @@ public class TicketServiceTest {
         assertTrue(ts.createTicket(id, subject, agent, tags));
 
         ticketModel = ts.getTicketDetail(id);
-        assertNull(ticketModel.getTags());
+        assertTrue(ticketModel.getTags().isEmpty());
 
         //cleanup
 //        ts.deleteTicket(id);
