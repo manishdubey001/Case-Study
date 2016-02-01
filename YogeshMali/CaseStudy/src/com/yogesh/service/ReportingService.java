@@ -39,6 +39,7 @@ public class ReportingService {
         LocalDateTime minDate = LocalDateTime.now().minusDays(1);
         ArrayList<Ticket> arrTicketList = new ArrayList<>(this.hmTicketList.values());
 
+        //Ganesh D: logic is good, you can also see how to do with streams, it has inbuild functions to check minimum, maximum, etc.,
         for (Ticket ticket : arrTicketList) {
             if (ticket.getCreated().isBefore(minDate)) {
                 minid = ticket.getId();

@@ -22,6 +22,8 @@ public class TicketManager {
         String agentName = ConsolIO.getAgentNAme();
         Set<String> list = ConsolIO.getTags();
 
+        //Ganesh D: I think isTicketIDExit logic should be implemented in createTicketService functions,
+        // coz when we expose createTicketService to outside world then the duplicate ticket id validation will fail/skip
         if (ticketService.isTicketIdExit(id)) {
             ConsolIO.showMsg("ticket Id is already Exist");
         } else {
@@ -66,6 +68,7 @@ public class TicketManager {
             ConsolIO.showMsg("No record Found");
 
         } else {
+            //Ganesh D: Suggestions used of foreach loop is good, but you can check forEach + lambda expression
             for (Ticket ticket : list) {
                 ConsolIO.showTicket(ticket);
             }

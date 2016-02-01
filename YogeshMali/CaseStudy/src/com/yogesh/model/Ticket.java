@@ -30,6 +30,7 @@ public class Ticket implements Serializable {
         this.modified = this.created = LocalDateTime.now().minusDays(new Random().nextInt(20));
     }
 
+    //Ganesh D : check Chad's email, you don't have to expose each & every getters & setters
     public int getId() {
         return id;
     }

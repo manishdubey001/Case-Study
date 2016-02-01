@@ -24,6 +24,7 @@ public class TicketService {
      */
     public List<Ticket> searchTicketsUsingAgentnameService(String agentName) {
 
+        //Ganesh D: good use of streams, just try to check case-insensitive way
         ArrayList<Ticket> arrTicketList =  new ArrayList<>(this.hmTicketList.values());
         List<Ticket> list = arrTicketList.stream()
                 .filter(t -> t.getAgentName().equals(agentName))
@@ -39,6 +40,7 @@ public class TicketService {
 
         ArrayList<Ticket> arrTicketList =  new ArrayList<>(this.hmTicketList.values());
 
+        //Ganesh D: good use of lambda
         List<Ticket> list = arrTicketList.stream()
                 .filter(t -> t.getTags().contains(tag))
                 .collect(Collectors.toList());
@@ -81,6 +83,7 @@ public class TicketService {
     /**
      * Select single Ticket by id
      */
+    //Ganesh D: Returning an empty collection might be better idea, so as to avoid NullPointerException
     public Ticket showSingleTicketService(int id) {
 
         if (this.hmTicketList.containsKey(id)) {
@@ -106,7 +109,7 @@ public class TicketService {
      * @param id
      */
     public boolean updateTags(int id, Set<String> newlist) {
-
+        //Ganesh D: same thing as said with updateAgentName function
         ArrayList<Ticket> arrTicketList =  new ArrayList<>(this.hmTicketList.values());
         for (Ticket ticket : arrTicketList) {
             if (ticket.getId() == id) {
@@ -128,6 +131,9 @@ public class TicketService {
 
     public boolean updateAgentName(int id, String newAgentName) {
 
+        //Ganesh D: no need of iterating in arraylist for getting Ticket model,
+        // instead you can directly get that from HashMap & then do updation process, find below code
+        // Ticket ticket = this.hmTicketList.get(id);
         ArrayList<Ticket> arrTicketList =  new ArrayList<>(this.hmTicketList.values());
         if (!newAgentName.equals("")) {
             for (Ticket ticket : arrTicketList) {
@@ -147,6 +153,7 @@ public class TicketService {
      */
     public boolean createTicketService(int id, String subject, String agentName, Set<String> list) {
 
+        //Ganesh D: String data should also be checked for null values, else equals method will throw null pointer exception
         if (id > 0 && !subject.equals("") && !agentName.equals("")) {
             Ticket ticket = TicketFactory.newInstance(id, subject, agentName, list);
             this.hmTicketList.put(id, ticket);
@@ -162,8 +169,13 @@ public class TicketService {
      * @param id
      * @return
      */
+    // Ganesh D: typo again
     public boolean isTicketIdExit(int id) {
 
+        // Ganesh D: containsKey already returns a boolean value, so why not return directly,
+        // no point of using an extra condition statement,
+        // can use something like
+        // return this.hmTicketList.containsKey(id))
         if (this.hmTicketList.containsKey(id)) {
             return true;
         }

@@ -7,6 +7,7 @@ import java.util.*;
 /**
  * Created by root on 15/1/16.
  */
+// Ganesh D: take care about typo
 public class ConsolIO {
 
     public static String getAgentNAme() {
@@ -32,6 +33,8 @@ public class ConsolIO {
 
     public static int getTicketId() {
         System.out.println("Enter ticket Id ");
+        //Ganesh D: Don’t create variables that you don’t use again, instead directly return it,
+        // I see a lot variables been created in other getters as well
         int id = getIntvalue();
         return id;
     }
