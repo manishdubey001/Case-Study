@@ -24,7 +24,10 @@ public class TicketOperations {
      * @return
      */
     public TicketModel find(int id) {
+
+        //get method it self return TicketModel if present other wise null. No need to check for existence
         if (isExists(id)) {
+            //Is type casting is required?
             return (TicketModel) Repository.getInstance().ticketData.get(id);
         }
         return null;
@@ -36,7 +39,9 @@ public class TicketOperations {
      * @return
      */
     public List<TicketModel> findAll() {
+        //No need to store this byModified Function object , pass directly into sort method
         Function<TicketModel, Long> byModified = ticketModel -> ticketModel.getModified();
+        //sort according you to your requirement, no need to reverse after sort
         return Repository.getInstance().ticketData.values().stream().sorted(Comparator.comparing(byModified).reversed()).collect(Collectors.toList());
     }
 
@@ -65,6 +70,7 @@ public class TicketOperations {
      * @return
      */
     public boolean delete(int id) {
+        //Remove method itself return the null when key not found, here no need to check existence and creating TicketModel
         TicketModel tm = null;
         if (isExists(id)) {
             tm = Repository.getInstance().ticketData.remove(id);
@@ -79,6 +85,7 @@ public class TicketOperations {
      * @return
      */
     public List<TicketModel> findAllByAgentName(String agentName) {
+        //Pass this is directly into sort method
         Function<TicketModel, String> byAgentName = tm -> tm.getAgentName();
         // good use of streams!
         return Repository.getInstance().ticketData.values().stream().filter(ticketModel -> ticketModel.getAgentName().equalsIgnoreCase(agentName)).sorted(Comparator.comparing(byAgentName)).collect(Collectors.toList());
@@ -97,6 +104,7 @@ public class TicketOperations {
         final String toCheck = tag.toLowerCase();
 
         Function<TicketModel, Long> byModified = ticketModel -> ticketModel.getModified();
+        //Stream it self return the list, no need to crete new one and add all into manually into it
         ticketModelList.addAll(Repository.getInstance().ticketData.values().stream().filter(ticketModel -> ticketModel.getTags().contains(toCheck)).sorted(Comparator.comparing(byModified)).collect(Collectors.toList()));
         // Two ways to try to simplify this
         // 1. Use the for-each mechanism: for(TicketModel tm : ticketData.values())
@@ -116,6 +124,7 @@ public class TicketOperations {
         Collection<TicketModel> ticketModelCollection = Repository.getInstance().ticketData.values();
 
         if (Util.isCollectionValid(ticketModelCollection)) {
+            //Use stream instead of for each
             for (TicketModel ticketModel : ticketModelCollection) {
 
                 String agentName = ticketModel.getAgentName();
@@ -152,6 +161,7 @@ public class TicketOperations {
         if (Util.isMapValid(ticketData)) {
             return ticketData.values().stream().max((ticketModel1, ticketModel2) -> Long.compare(ticketModel1.getModified(), ticketModel2.getModified())).get();
         }
+        //Here you creating new ticket if ticket data is empty.
         return new TicketModel();
     }
 
@@ -166,6 +176,7 @@ public class TicketOperations {
         Map<Integer, TicketModel> ticketData = Repository.getInstance().ticketData;
         if (Util.isMapValid(ticketData)) {
             Function<TicketModel, Long> byModified = ticketModel -> ticketModel.getModified();
+            //sort accordingly , don't reverse after sort
             return ticketData.values().stream().filter(ticketModel -> ticketModel.getCreated() > startTimestamp && ticketModel.getCreated() <= endTimestampe).sorted(Comparator.comparing(byModified).reversed()).collect(Collectors.toList());
         }
         return new ArrayList<TicketModel>();
@@ -180,6 +191,7 @@ public class TicketOperations {
         Map<String, Integer> tagNameWithTicketCount = new HashMap<String, Integer>();
         Collection<TicketModel> ticketModelCollection = Repository.getInstance().ticketData.values();
         if (Util.isCollectionValid(ticketModelCollection)) {
+            //Used stream or internal forEach
             for (TicketModel ticketModel : ticketModelCollection) {
 
                 Set<String> tagsSet = ticketModel.getTags();

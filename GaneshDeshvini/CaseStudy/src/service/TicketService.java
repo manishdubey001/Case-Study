@@ -84,12 +84,15 @@ public class TicketService {
             int id = processId();
 
             System.out.println("Enter subject");
+            //this fails when subject having space
             String subject = scanner.next();
 
             System.out.println("Enter agent name");
+            //this fails when subject having space
             String agentName = scanner.next();
 
             System.out.println("Enter tags (Comma separated if multiple)");
+            //why need new scanner instance
             scanner = ConsoleReader.newInstance();
             String tags = scanner.nextLine();
             if (this.createTicket(id, subject, agentName, tags)) {
@@ -116,6 +119,7 @@ public class TicketService {
      */
     private int processId() {
         try {
+            //scanner not closed
             Scanner scanner = ConsoleReader.newInstance();
             System.out.println("Enter id");
             int id = scanner.nextInt();
@@ -138,6 +142,7 @@ public class TicketService {
      */
     public boolean updateTicket(int id, String agentName, String tags) {
         if (id > 0 && TicketOperations.newInstance().isExists(id)) {
+            // Here Multiple TicketOperations object is created , store above object and used
             TicketModel tm = TicketOperations.newInstance().find(id);
 
             if (Util.isStringValid(agentName)) {
@@ -145,6 +150,7 @@ public class TicketService {
             }
             Set<String> hs = getTags(tags);
             tm.setTags(hs);
+            // You calling setter method of TicketModel stored in map then no needs to put is again
             return tm.save();
         }
         System.out.println("Invalid input provided!!!");
@@ -161,12 +167,14 @@ public class TicketService {
         try {
             int id = processId();
             System.out.println("Enter agent name");
+            //This fail when agent name having space
             String agentName = scanner.next();
-
+            //Why new instance of scanner
             scanner = ConsoleReader.newInstance();
             System.out.println("Enter tags (Comma separated if multiple)");
+            //This fail when agent name having space
             String tags = scanner.next();
-
+            //What if I want only agent name not tags and vice-versa
             if (updateTicket(id, agentName, tags)) {
                 System.out.println("Ticket updated successfully");
             } else {
@@ -210,6 +218,7 @@ public class TicketService {
         if (Util.isStringValid(agentName)) {
             return TicketOperations.newInstance().findAllByAgentName(agentName);
         }
+        //Use diamond operator instead
         return new ArrayList<TicketModel>();
     }
 
@@ -298,6 +307,7 @@ public class TicketService {
      */
     TicketModel getTicket(int id) {
         if (id > 0) {
+            //What is the use of this method you can use this method single code directly , unnecessary method stack
             return getTicketDetail(id);
         }
         System.out.println("Invalid input provided!!!");
@@ -347,9 +357,12 @@ public class TicketService {
      * display all tickets
      */
     public void processGetAllTicketList() {
+        //unused sop
         System.out.println("came here");
+        //I thinks getTicketList is not required put code directly here.
         List<TicketModel> ls = getTicketList();
         if (Util.isCollectionValid(ls)) {
+            //Used internal forEach instead of external for each
             for (TicketModel tm : ls) {
                 printTicketDetails(tm);
             }
@@ -364,10 +377,12 @@ public class TicketService {
     public void processGetTicketsByAgentName() {
         try {
             System.out.println("Enter agent name");
-            String agentName = ConsoleReader.newInstance().next();
+            //Problem with space
+            String agentName = ConsoleReader.  newInstance().next();
 
             List<TicketModel> ls = findAllTicketsByAgentName(agentName);
             if (Util.isCollectionValid(ls)) {
+                //Used internal forEach instead of external for each
                 for (TicketModel tm : ls) {
                     printTicketDetails(tm);
                 }

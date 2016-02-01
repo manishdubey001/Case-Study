@@ -9,6 +9,7 @@ import java.util.*;
  */
 public class ConsoleMenu {
     public void start() {
+        //You never close scanner
         Scanner scanner = ConsoleReader.newInstance();
         boolean flag = true;
         TicketService ticketService = TicketService.newInstance();
@@ -98,6 +99,7 @@ public class ConsoleMenu {
         System.out.println("\n\nDo you want to continue(Y/N)");
         int i;
         for (i = 0; i <= 5; i++) {
+            //Every time you creating new scanner and never closed
             String s = ConsoleReader.newInstance().next();
             if (s.equalsIgnoreCase("Y")) {
                 return true;
