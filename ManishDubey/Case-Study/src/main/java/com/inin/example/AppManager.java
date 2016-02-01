@@ -65,6 +65,13 @@ public class AppManager {
                 ticketManager.displayTicketCountByTags();
                 break;
             case 13:
+                /**
+                 * Leroy Comments :
+                 *
+                 * it outputs
+                 * This feature is not implemented. ??
+                 *
+                 */
                 ticketManager.loadDummyTickets();
                 break;
             default:

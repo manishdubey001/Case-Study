@@ -27,6 +27,15 @@ public class Ticket implements Serializable{
         this.subject = subject;
         this.agentName = agentName;
         this.tags = tags;
+        /**
+         * Leroy Comments :
+         * create and modified are having the same values for LocalDateTime
+         *
+         * It can also be written as :
+         * this.created = this.modified = LocalDateTime.now();
+         *
+         * this reduced lines of code and improves readability.
+          */
         this.created = LocalDateTime.now();
         this.modified = LocalDateTime.now();
     }
