@@ -64,7 +64,7 @@ public class Ticket implements Comparable<Ticket>, Serializable{
     public void setSubject(String str) {
         this.subject = str;
     }
-
+    //Follow the proper method Name format
     public String getAgent_name() {
         return agentName;
     }
@@ -119,6 +119,7 @@ public class Ticket implements Comparable<Ticket>, Serializable{
     public int compareTo(Ticket compareTicket){
         return compareTicket.getModified().compareTo(this.getModified());
     }
+    //Use lambda instead of anonymous class
     public static Comparator<Ticket> ByAgentNameComparator = new Comparator<Ticket>() {
         @Override
         public int compare(Ticket ticket1, Ticket ticket2) {

@@ -1,5 +1,5 @@
 package com.Tickets;
-
+//Unused import statement
 import sun.invoke.empty.Empty;
 
 import java.util.InputMismatchException;
@@ -32,7 +32,7 @@ public class Sout {
     static final String ACT_GET_TICKETS_OLD  = "Enter the number to fetch ticket older than that number of Days..:";
 
     private static Scanner scanner;
-
+    //what is the use of return type
     static String getAllCommands(){
         System.out.println("Please choose an appropriate input.");
         System.out.println("1 - Create Ticket.");
@@ -44,24 +44,26 @@ public class Sout {
         System.out.println("7 - Ticket count grouped by Agent name (order by Agent name).");
         System.out.println("8 - Select all Tickets by specific Tags.");
         System.out.println("9 - Quit.");
+        //what is the use of this line.
         return "\n";
     }
-
+    // Variable declaration should be top not after method
     public TicketServiceComponent ticketServiceComponent = null;
 
     Sout(){
         ticketServiceComponent = new TicketServiceComponent();
+        //You never closed this scanner resources
         scanner = new Scanner(System.in);
     }
     public void soutCreate(){
         System.out.println(ACT_CREATE_TICKET);
-
+        //If subject having space then next method ignore after space
         System.out.println(ACT_TSUBJECT);
         String sub = getScanner().next();
-
+        //If subject having space then next method ignore after space
         System.out.println(ACT_TAGENTNAME);
         String agent = getScanner().next();
-
+        //If subject having space then next method ignore after space
         System.out.println(ACT_TTAGS);
         String tags = getScanner().next();
 
@@ -80,17 +82,18 @@ public class Sout {
             String value = null;
             boolean check = ticketServiceComponent.checkIfExists(tid);
             if (check){
-
+                //If I want both at a time?
                 System.out.println(ACT_CHOOSE_TAG_AGENT);
-
                 String sel = getScanner().next();
                 if(sel.equals("a")){
                     System.out.println(Sout.ACT_TAGENTNAME);
+                    //If subject having space then next method ignore after space
                     String selA = getScanner().next();
                     type = "agent";
                     value = selA;
                 }else if (sel.equals("b")){
                     System.out.println(Sout.ACT_TTAGS);
+                    //If subject having space then next method ignore after space
                     String selB = getScanner().next();
                     type = "tags";
                     value = selB;
@@ -110,11 +113,13 @@ public class Sout {
 
     public void soutRemoveTicket(){
         System.out.println(Sout.ACT_TID);
+        //Here you not handle InputMismatchException exception
         int selT = getScanner().nextInt();
         boolean check = ticketServiceComponent.checkIfExists(selT);
         if (check){
             System.out.println(Sout.ACT_ARE_YOU_SURE+selT);
             System.out.println(Sout.ACT_YES_OR_NO);
+            //Never used
             int selA = getScanner().nextInt();
             boolean remove = ticketServiceComponent.removeTicketById(selT);
             if (remove)
@@ -125,7 +130,9 @@ public class Sout {
 
     public void soutGetTicketById(){
         System.out.println(Sout.ACT_TID);
+        //Here you not handle InputMismatchException exception
         int selT = getScanner().nextInt();
+        //Here reference type is Object and method return type is Ticket. We used Object reference if we don't know exact return type of method.
         Object obj = ticketServiceComponent.getTicketById(selT);
         if (obj != null){
             System.out.println(Sout.ACT_TABLE_HEADER);
@@ -138,6 +145,7 @@ public class Sout {
 
     public void soutTicketsByAgent(){
         System.out.println(Sout.ACT_TAGENTNAME);
+        //If subject having space then next method ignore after space
         String selA = getScanner().next();
         List l = ticketServiceComponent.getTicketsByAgentName(selA);
         if (!l.isEmpty())
@@ -149,6 +157,7 @@ public class Sout {
     public void soutGetAllTicketsByTag(){
 
         System.out.println(Sout.ACT_TTAGS_SINGLE);
+        //If subject having space then next method ignore after space
         String selT = getScanner().next();
         ticketServiceComponent.getAllTicketsByTag(selT);
     }
