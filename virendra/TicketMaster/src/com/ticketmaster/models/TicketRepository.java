@@ -42,6 +42,7 @@ public class TicketRepository {
         }
     }
 
+    // EB : Avoid using static methods. It will create issues when running multiple threads.
     public static TicketRepository init(){
         if(! (_instance instanceof TicketRepository)){
             _instance = new TicketRepository();
@@ -114,6 +115,7 @@ public class TicketRepository {
         return Collections.unmodifiableSet(tagList);
     }
 
+    // EB : Unused code
     public void updateTagList(Set<String> object){
         tagList.addAll(object);
 
@@ -127,6 +129,7 @@ public class TicketRepository {
         return Collections.unmodifiableSet(agentList);
     }
 
+    // EB : Unused code
     public void updateAgentList(Set<String> object){
         tagList.addAll(object);
 
@@ -153,7 +156,7 @@ public class TicketRepository {
     }
 
     public Ticket getOldestObject(){
-
+        // EB : Use ternary operator or compareTo method.
         return  ticketList.values().stream().min( (obj1,obj2)->{
             if(   obj1.getCreated() < obj2.getCreated()) {
                 return -1;

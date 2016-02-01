@@ -1,10 +1,8 @@
 package com.ticketmaster.helpers;
 
-import com.ticketmaster.Main;
 import com.ticketmaster.exceptions.TicketNotFoundException;
 import com.ticketmaster.models.Ticket;
 import com.ticketmaster.models.TicketRepository;
-import com.ticketmaster.utils.DetailProvider;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -136,7 +134,7 @@ public class TicketService /*implements Comparable<Ticket>*/ {
     }
 
     private Map<String, Object> prepareTicketMap(Ticket ticket){
-
+        // EB : Return an empty collection instead of returning a null. As per suggestion from Chad/ Best Practice.
         if (ticket == null){
             return null;
         }
@@ -265,7 +263,7 @@ public class TicketService /*implements Comparable<Ticket>*/ {
      */
     public Ticket getTicketObject(){
         return this.ticket;
-    }
+    } // EB : Unused code
 
     protected List<Map<String,? super Object>> formatPrintData(List l){
         List<Map<String,? super Object>> l1 = new ArrayList<>();

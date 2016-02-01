@@ -131,6 +131,7 @@ public class AppRunner {
      */
     protected void processChoice(int ch)
             throws IOException, ClassNotFoundException, TicketNotFoundException {
+        // EB: Small issue of style. List fields according to class definition. Use generics for type safety.
         TicketService helper= new TicketService();
         Map tmpMap;
 
@@ -178,7 +179,7 @@ public class AppRunner {
 
                 System.out.println("Update Agent?(y/n)");
 
-                if(details.readStringInput().equals("y")){
+                if(details.readStringInput().equals("y")){ // EB : use .toLowerCase()
                     System.out.println("Enter Agent Name: ");
                     txtAgent = details.readStringInput();
                     ticket.setAgent(txtAgent);
@@ -202,7 +203,7 @@ public class AppRunner {
                 id = details.readIntInput();
 
 
-                ticket = null;
+                ticket = null; // EB : Not necessary.
 
 
                 System.out.printf("Are you sure you want to delete ticket #%010d ? (y/n)\n", id);
@@ -269,7 +270,7 @@ public class AppRunner {
                 tmpMap.forEach((k,e)-> System.out.println(k+"\t\t| \t\t"+e));
                 break;
 
-            case 8: case 13:
+            case 8:case 13: // EB : Case 13 only. Misunderstood the requirement (Expected tag wise ticket count)
                 System.out.println("Enter tag name: ");
 
                 String tag = details.readStringInput();
@@ -295,6 +296,7 @@ public class AppRunner {
                 //get the oldest ticket in the system
                 tmpMap = helper.getOldestTicket();
 
+                // EB : Use of isEmpty check could be done.
                 if (tmpMap!= null){
                     System.out.printf("==== Ticket #%010d ====\n",tmpMap.get("id"));
                     tmpMap.forEach((k,v)->System.out.println(k+"\t:\t"+v));

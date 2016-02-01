@@ -22,6 +22,7 @@ public class SerializerUtil {
 
     }
 
+    // EB : Unused Method.
     public SerializerUtil(String filename){
         fileName = filename;
 
@@ -114,10 +115,11 @@ public class SerializerUtil {
         disconnectWriter();
     }
 
+    // EB : Return type Object is obvious. Returning specific Data type/Collection makes the method confined to specific/expected operations.
     public Object readFromFile()
             throws IOException, ClassNotFoundException{
 
-        checkFiles(fileName);
+        checkFiles(fileName); // EB: Good practice to use 'this' keyword.
 
         Map<Integer, Ticket> tempMap = new HashMap<>();
 
@@ -127,7 +129,7 @@ public class SerializerUtil {
 
             try{
 
-                while(true){
+                while(true){ // EB : Not a recommended/standard way, instead use flag.
                     Ticket temp = (Ticket) fIn.readObject();
                     tempMap.put(new Integer(temp.getId()), temp);
                 }
