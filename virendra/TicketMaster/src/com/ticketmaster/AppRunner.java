@@ -269,7 +269,7 @@ public class AppRunner {
                 tmpMap.forEach((k,e)-> System.out.println(k+"\t\t| \t\t"+e));
                 break;
 
-            case 8: case 13:
+            case 8:
                 System.out.println("Enter tag name: ");
 
                 String tag = details.readStringInput();
@@ -295,7 +295,7 @@ public class AppRunner {
                 //get the oldest ticket in the system
                 tmpMap = helper.getOldestTicket();
 
-                if (tmpMap!= null){
+                if (tmpMap != null){
                     System.out.printf("==== Ticket #%010d ====\n",tmpMap.get("id"));
                     tmpMap.forEach((k,v)->System.out.println(k+"\t:\t"+v));
                 }
@@ -312,18 +312,20 @@ public class AppRunner {
                 if (tempList != null) {
                     tempList.forEach(System.out::println); //printing result by method referencing of lambda expressions
                 }
-
-
-
-
-
                 break;
+
             case 12:
                 //print all the tags present in the system
                 Set<String> obj = (Set<String>)helper.getTagsOfTicket();
                 System.out.println("Total Tags present in the System: ");
                 System.out.println(obj);
 
+                break;
+
+            case 13:
+                tmpMap = helper.getTagsTicketCount();
+                System.out.println("Tag Name\t|\tNo. of Ticket(s)");
+                tmpMap.forEach((k,e)-> System.out.println(k+"\t| \t"+e));
                 break;
 
             case 0: System.out.println("Thank you for using application"); break;

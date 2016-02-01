@@ -258,9 +258,48 @@ public class TicketService /*implements Comparable<Ticket>*/ {
         return m;
     }
 
+    public Map<String,Integer> getTagsTicketCount()
+            throws IOException, ClassNotFoundException {
+
+        Map<String,Integer> m = new TreeMap<>();
+
+        repository.updatePool();
+
+        //get entrySet from the map
+        Set tmpSet = repository.getList().entrySet();
+
+        //get list of tags from the set
+        Set<String> tagList = repository.getTagList();
+
+        Ticket tmp;
+
+        for (String tagName: tagList ) {
+
+            Iterator itr = tmpSet.iterator();
+            while (itr.hasNext()){
+                int count = 0;
+
+                Map.Entry me = (Map.Entry)itr.next();
+                tmp = (Ticket) me.getValue();
+                if(tmp.tags.contains(tagName)){
+                    if(m.containsKey(tagName)){
+                        count = m.get(tagName);
+                        m.put(tagName, count+1);
+                    }else {
+                        m.put(tagName,1);
+                    }
+                }
+            }
+
+        }
+
+        return m;
+
+    }
+
     /**
      * getTicketObject method
-     * used to get the cusrrent object of Ticket class
+     * used to get the current object of Ticket class
      * @return
      */
     public Ticket getTicketObject(){
