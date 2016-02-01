@@ -59,6 +59,14 @@ public void createTicket(){
 
     public void readAllTicketsFromFile(){
         tickets.putAll(fh.readAll());
+        //virendra: for the below code it can be problematic to have max id from ticket list size. Let's say at
+        // one time we have 10 tickets in the list and we have deleted 2 tickets from it . In this case once
+        // application starts again and tries to read from file at that time max id will start from 8 and if
+        // there is a ticket with id 8 present in file. it will get duplicated.
+        // You should use some other approach for this. Like managing the number in file.
+        // Case 2: Consider you have deleted last ticket (id:10) and now you try to add new ticket it will be
+        // created with same id which was deleted lastly.
+
         if(tickets.size() > 0)
             max_id = tickets.get(tickets.size()).getId();
 //        System.out.println(max_id);
@@ -303,6 +311,9 @@ public void createTicket(){
 
     public List<Ticket> oldestTicketsReport(){
         LocalDateTime oldestDate = tickets.values().stream().sorted(Comparator.comparing(Ticket::getCreated)).findFirst().get().getCreated();
+        //Virendra: What's the difference between above and below line ?
+        //This should return one ticket and get would return the single ticket if you use findFirst over filter in
+        // lambda expression.
         return tickets.values().stream().filter(ticket -> ticket.getCreated().equals(oldestDate)).collect(Collectors.toList());
     }
 
@@ -319,6 +330,9 @@ public void createTicket(){
 
     public void ticketsReportForTag(){
         String tag = MyReader.readInput("Enter A Tag: ");
+        //Virendra: I think this is misinterpreted. You have to print list of tags with no. of tickets in which they are
+        // used. Ex. Tag 1 | 5 , Tag 2 | 3 etc.
+        // Please make the necessary changes
         System.out.println("Number of Tickets with tag \'" + tag + "\': " + this.ticketsCountForTag(tag));
     }
     public int ticketsCountForTag(String tag){

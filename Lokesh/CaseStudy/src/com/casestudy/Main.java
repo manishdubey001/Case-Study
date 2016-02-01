@@ -10,6 +10,8 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
         Service s = new Service();
+        //virendra: naming conventions must be meaningful
+
 //        for(int i=1;i<=20;i++)
 
         //Create Dummy Tickets (only if not available in file) and write them in file with Serialization
