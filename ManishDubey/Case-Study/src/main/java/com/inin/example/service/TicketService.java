@@ -1,3 +1,12 @@
+/**
+ * Leroy Comments:
+ *
+ * There is un-necessary file read/write operations on Update / delete
+ * At a time it might turn out to be a heavy operation.
+ * I would suggest you create a separate class file to handle serialization of tickets as it not mandatory to serialize on all operation considering File as database.
+ *
+ * Good usage of unmodifiable List is to be seen and nicely implemented,
+ */
 package com.inin.example.service;
 
 import com.inin.example.factory.TicketFactory;
