@@ -1,10 +1,13 @@
 package com.services;
 
+import com.model.Tag;
 import com.model.Ticket;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Created by root on 30/1/16.
@@ -14,8 +17,9 @@ public class TicketReports {
     private Map<Long, Ticket> ticketHashMap = null;
 
     TicketReports(){
-        TicketOperations objTicketOperations = new TicketOperations();
-        ticketHashMap = objTicketOperations.getAllTicket();
+        /*TicketOperations objTicketOperations = new TicketOperations();
+        ticketHashMap = objTicketOperations.getAllTicket();*/
+        ticketHashMap = TicketSerializedClass.readTicketsFromFile();
     }
 
     public long countNoOfTicketInSystem(){
@@ -37,4 +41,27 @@ public class TicketReports {
         return tempMap;
     }
 
+    public Map<String, List<Ticket>> getTicketCountByTag(){
+        Map<String, List<Ticket>> tagCountMap = new HashMap<>();
+        ticketHashMap.values().stream()
+                .forEach(ticket -> {
+                    ticket.getTags().forEach(tag ->{
+                        if(tagCountMap.containsKey(tag))
+                            tagCountMap.get(tag).add(ticket);
+                        else{
+                            List<Ticket> list = new ArrayList<>();
+                            list.add(ticket);
+                            tagCountMap.put(tag, list);
+                        }
+
+                    });
+                });
+
+        return tagCountMap;
+    }
+
+
+    public void displayTagTicketCount(Map<String, List<Ticket>> tagCountMap){
+        tagCountMap.forEach((String tagName,List<Ticket> ticketList)-> System.out.println(tagName+"   :   "+ticketList.size()));
+    }
 }

@@ -86,6 +86,11 @@ public class TicketMenu {
                                 objTicktOperation.getTickets(objTicktReports.getOldestTicket());
                                 break;
 
+                            case 3:
+                                System.out.println("Number of tags in system:");
+                                objTicktReports.displayTagTicketCount(objTicktReports.getTicketCountByTag());
+                                break;
+
                             case 0:
                                 report = false;
                                 objTicktReports = null;

@@ -137,9 +137,7 @@ public class TicketOperations {
 
         /*
         * Stream implementation of sorting and comparator */
-        Stream<Ticket> stream = ticketMap.values().stream();
-
-        stream.sorted((Ticket t1, Ticket t2) -> Long.valueOf(t2.getModified()).compareTo(Long.valueOf( t1.getModified())))
+        ticketMap.values().stream().sorted((Ticket t1, Ticket t2) -> Long.valueOf(t2.getModified()).compareTo(Long.valueOf( t1.getModified())))
               .forEach((Ticket ticket) -> System.out.println(
                       ticket.getId()+" | "+ticket.getSubject()+" | "+ticket.getAgentName()+
                               " | "+ticket.getTags()+" | "+ticket.getModified()));
