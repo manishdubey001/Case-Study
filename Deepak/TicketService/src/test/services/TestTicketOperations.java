@@ -260,7 +260,7 @@ public class TestTicketOperations {
         objTicketOperation.deleteTicketById((int) createdTicket.getId());
 
         Map<Long, Ticket> getTicket = objTicketOperation.getTicketById((int)createdTicket.getId());
-        assertTrue(getTicket.isEmpty());
+        assertFalse(getTicket.containsKey(createdTicket.getId()));
 
     }
 

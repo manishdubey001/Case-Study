@@ -217,6 +217,8 @@ public class TicketOperations {
             ticket.setAgentName(agentName);
             ticket.setTags(tagHashSet);
             ticket.setModified(unixTime);
+            TicketSerializedClass.saveTicketsInFile(ticketHashMap, false);
+
             return ticket;
         }
 
@@ -235,7 +237,8 @@ public class TicketOperations {
         // on the arraylist directly (but that doesn't make it any more efficient).
         try{
             if(ticketHashMap.containsKey(Long.valueOf(id))) {
-                ticketHashMap.remove(Long.valueOf(id));
+                if(ticketHashMap.remove(Long.valueOf(id)) != null);
+                    TicketSerializedClass.saveTicketsInFile(ticketHashMap, false);
                 return true;
             }
             else
@@ -244,6 +247,7 @@ public class TicketOperations {
         catch (UserInputException ue){
             System.out.println(ue.getMessage());
         }
+
         return false;
     }
 
