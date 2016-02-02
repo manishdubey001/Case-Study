@@ -67,6 +67,12 @@ public void createTicket(){
         // Case 2: Consider you have deleted last ticket (id:10) and now you try to add new ticket it will be
         // created with same id which was deleted lastly.
 
+
+        // Update for Virendra: For first case: Seems you didn't tried running the code and checking result.
+        // What the logic do is, on every fresh start, max_id will be initialized to the maximum id of ticket present in file, and all new tickets thereafter will be with next value to that.
+
+        // Case 2: Why should not I re-use the Ticket ID of a (hard)deleted ticket. That deleted ticket is now no more in existence and I can re-use same ID to create new Ticket.
+
         if(tickets.size() > 0)
             max_id = tickets.get(tickets.size()).getId();
 //        System.out.println(max_id);
@@ -314,6 +320,9 @@ public void createTicket(){
         //Virendra: What's the difference between above and below line ?
         //This should return one ticket and get would return the single ticket if you use findFirst over filter in
         // lambda expression.
+
+        // Update: I can have multiple tickets created at Same time.
+        // First line give me LocalDateTime object for one of the oldest tickets and second line gets me List of Tickets which are created on that oldest LocalDateTime.
         return tickets.values().stream().filter(ticket -> ticket.getCreated().equals(oldestDate)).collect(Collectors.toList());
     }
 
@@ -333,6 +342,9 @@ public void createTicket(){
         //Virendra: I think this is misinterpreted. You have to print list of tags with no. of tickets in which they are
         // used. Ex. Tag 1 | 5 , Tag 2 | 3 etc.
         // Please make the necessary changes
+
+        // Update: What this Line read from Chad's mail: "# of tickets with a tag" => I think I did not misread it.
+        // Nevertheless, I am displaying # of tickets for just one tag for which user queried, it's not of any much difference to get it for all tags the same thing.
         System.out.println("Number of Tickets with tag \'" + tag + "\': " + this.ticketsCountForTag(tag));
     }
     public int ticketsCountForTag(String tag){

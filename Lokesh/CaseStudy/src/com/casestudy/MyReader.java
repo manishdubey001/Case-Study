@@ -21,11 +21,11 @@ public class MyReader {
 
     public static String readInput(String string){
         System.out.println(string);
-        InputStreamReader ir = new InputStreamReader(System.in);
-        BufferedReader br = new BufferedReader(ir);
+//        InputStreamReader inputStreamReaderr = new InputStreamReader(System.in);
+//        BufferedReader bufferedReader = new BufferedReader(inputStreamReaderr);
         String str;
-        try{
-            str =  br.readLine();
+        try(InputStreamReader inputStreamReaderr = new InputStreamReader(System.in);BufferedReader bufferedReader = new BufferedReader(inputStreamReaderr)){
+            str =  bufferedReader.readLine();
             if(str == null || str.length() == 0)
             {
                 // Sentinel values like this can be convenient, but are you sure no one would ever want to use
@@ -35,6 +35,8 @@ public class MyReader {
                 // Update: I prefer to use Sentinel values specifically in the kind of application based on Console. I would have a different approach in other cases.
                 // Update: I do agree to use a impossible value rather than a common char/string. Changed to a control key
                 str = "\u0002";
+                bufferedReader.close();
+                inputStreamReaderr.close();
             }
         }
         catch (Exception e){

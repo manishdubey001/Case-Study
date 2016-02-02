@@ -33,26 +33,26 @@ public class Ticket implements Comparable<Ticket>, Serializable{
         this.updated = updated;
     }
 
-    private void writeObject(ObjectOutputStream oos) throws IOException {
-        oos.writeInt(id);
-        oos.writeUTF(subject);
-        oos.writeUTF(agent);
-        oos.writeObject(tags);
+    private void writeObject(ObjectOutputStream objectOutputStream) throws IOException {
+        objectOutputStream.writeInt(id);
+        objectOutputStream.writeUTF(subject);
+        objectOutputStream.writeUTF(agent);
+        objectOutputStream.writeObject(tags);
         /*oos.writeUTF(created.toString());
         oos.writeUTF(updated.toString());*/
-        oos.writeObject(created);
-        oos.writeObject(updated);
+        objectOutputStream.writeObject(created);
+        objectOutputStream.writeObject(updated);
     }
 
-    private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException{
-        id = ois.readInt();
-        subject = ois.readUTF();
-        agent = ois.readUTF();
-        tags = (HashSet<String>) ois.readObject();
+    private void readObject(ObjectInputStream objectInputStream) throws IOException, ClassNotFoundException{
+        id = objectInputStream.readInt();
+        subject = objectInputStream.readUTF();
+        agent = objectInputStream.readUTF();
+        tags = (HashSet<String>) objectInputStream.readObject();
         /*created = LocalDateTime.parse(ois.readUTF());
         updated = LocalDateTime.parse(ois.readUTF());*/
-        created = (LocalDateTime) ois.readObject();
-        updated = (LocalDateTime) ois.readObject();
+        created = (LocalDateTime) objectInputStream.readObject();
+        updated = (LocalDateTime) objectInputStream.readObject();
     }
 
     // rather than create Longs here you can instead use Long.compare() on the primitive types
