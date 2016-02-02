@@ -26,11 +26,9 @@ public class TicketOperations {
     public TicketModel find(int id) {
 
         //get method it self return TicketModel if present other wise null. No need to check for existence
-        if (isExists(id)) {
-            //Is type casting is required?
-            return (TicketModel) Repository.getInstance().ticketData.get(id);
-        }
-        return null;
+        //Is type casting is required?
+        //Update : removed typecasting
+        return Repository.getInstance().ticketData.get(id);
     }
 
     /**
@@ -40,9 +38,12 @@ public class TicketOperations {
      */
     public List<TicketModel> findAll() {
         //No need to store this byModified Function object , pass directly into sort method
-        Function<TicketModel, Long> byModified = ticketModel -> ticketModel.getModified();
         //sort according you to your requirement, no need to reverse after sort
-        return Repository.getInstance().ticketData.values().stream().sorted(Comparator.comparing(byModified).reversed()).collect(Collectors.toList());
+        //Update: Removed function object & changed sorting logic
+        return Repository.getInstance().ticketData.values().
+                stream().
+                sorted((ticketModel1, ticketModel2) -> Long.compare(ticketModel2.getModified(), ticketModel1.getModified())).
+                collect(Collectors.toList());
     }
 
     /**
@@ -71,11 +72,8 @@ public class TicketOperations {
      */
     public boolean delete(int id) {
         //Remove method itself return the null when key not found, here no need to check existence and creating TicketModel
-        TicketModel tm = null;
-        if (isExists(id)) {
-            tm = Repository.getInstance().ticketData.remove(id);
-        }
-        return tm != null ? true : false;
+        //Update : changes done
+        return Repository.getInstance().ticketData.remove(id) != null;
     }
 
     /**
@@ -86,9 +84,9 @@ public class TicketOperations {
      */
     public List<TicketModel> findAllByAgentName(String agentName) {
         //Pass this is directly into sort method
-        Function<TicketModel, String> byAgentName = tm -> tm.getAgentName();
+        //Update: changes done
         // good use of streams!
-        return Repository.getInstance().ticketData.values().stream().filter(ticketModel -> ticketModel.getAgentName().equalsIgnoreCase(agentName)).sorted(Comparator.comparing(byAgentName)).collect(Collectors.toList());
+        return Repository.getInstance().ticketData.values().stream().filter(ticketModel -> ticketModel.getAgentName().equalsIgnoreCase(agentName)).sorted(Comparator.comparing(tm -> tm.getAgentName())).collect(Collectors.toList());
     }
 
     /**
@@ -100,18 +98,17 @@ public class TicketOperations {
     // Sort by modifiied date, right?
     //UPDATE : right, I have fixed it
     public List<TicketModel> findAllByTag(String tag) {
-        List<TicketModel> ticketModelList = new ArrayList<TicketModel>();
         final String toCheck = tag.toLowerCase();
 
         Function<TicketModel, Long> byModified = ticketModel -> ticketModel.getModified();
         //Stream it self return the list, no need to crete new one and add all into manually into it
-        ticketModelList.addAll(Repository.getInstance().ticketData.values().stream().filter(ticketModel -> ticketModel.getTags().contains(toCheck)).sorted(Comparator.comparing(byModified)).collect(Collectors.toList()));
+        //Update: changes done
+        return Repository.getInstance().ticketData.values().stream().filter(ticketModel -> ticketModel.getTags().contains(toCheck)).sorted(Comparator.comparing(byModified)).collect(Collectors.toList());
         // Two ways to try to simplify this
         // 1. Use the for-each mechanism: for(TicketModel tm : ticketData.values())
         // or
         // 2. Use streams.
         //UPDATE : used stream
-        return ticketModelList;
     }
 
     /**
@@ -125,18 +122,16 @@ public class TicketOperations {
 
         if (Util.isCollectionValid(ticketModelCollection)) {
             //Use stream instead of for each
-            for (TicketModel ticketModel : ticketModelCollection) {
-
+            //Update : used streams
+            ticketModelCollection.forEach(ticketModel -> {
                 String agentName = ticketModel.getAgentName();
-
                 int cnt = 1;
-
                 if (tmAgentNameCount.containsKey(agentName)) {
                     cnt = tmAgentNameCount.get(agentName);
                     cnt++;
                 }
                 tmAgentNameCount.put(agentName, cnt);
-            }
+            });
         }
         return tmAgentNameCount;
         //
@@ -162,7 +157,8 @@ public class TicketOperations {
             return ticketData.values().stream().max((ticketModel1, ticketModel2) -> Long.compare(ticketModel1.getModified(), ticketModel2.getModified())).get();
         }
         //Here you creating new ticket if ticket data is empty.
-        return new TicketModel();
+        //Update: changed to null value
+        return null;
     }
 
     /**
@@ -177,7 +173,11 @@ public class TicketOperations {
         if (Util.isMapValid(ticketData)) {
             Function<TicketModel, Long> byModified = ticketModel -> ticketModel.getModified();
             //sort accordingly , don't reverse after sort
-            return ticketData.values().stream().filter(ticketModel -> ticketModel.getCreated() > startTimestamp && ticketModel.getCreated() <= endTimestampe).sorted(Comparator.comparing(byModified).reversed()).collect(Collectors.toList());
+            //Update : changes done
+            return ticketData.values().stream().
+                    filter(ticketModel -> ticketModel.getCreated() > startTimestamp && ticketModel.getCreated() <= endTimestampe).
+                    sorted((ticketModel1, ticketModel2) -> Long.compare(ticketModel2.getModified(), ticketModel1.getModified())).
+                    collect(Collectors.toList());
         }
         return new ArrayList<TicketModel>();
     }

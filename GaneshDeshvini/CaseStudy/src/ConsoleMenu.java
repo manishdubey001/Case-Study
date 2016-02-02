@@ -10,6 +10,8 @@ import java.util.*;
 public class ConsoleMenu {
     public void start() {
         //You never close scanner
+        //Update: currently there is some problem in scanner, also Scanner is used for Console input, which we won't be
+        //using in our project, so that's why I haven't closed it
         Scanner scanner = ConsoleReader.newInstance();
         boolean flag = true;
         TicketService ticketService = TicketService.newInstance();
@@ -81,13 +83,10 @@ public class ConsoleMenu {
             } catch (Exception e) {
 //                e.printStackTrace();
                 flag = false;
-            } finally {
-                scanner.nextLine();
             }
             flag = continueMenu();
         }
         while (flag);
-        scanner = null;
     }
 
     /**
@@ -98,19 +97,25 @@ public class ConsoleMenu {
     boolean continueMenu() {
         System.out.println("\n\nDo you want to continue(Y/N)");
         int i;
-        for (i = 0; i <= 5; i++) {
-            //Every time you creating new scanner and never closed
-            String s = ConsoleReader.newInstance().next();
-            if (s.equalsIgnoreCase("Y")) {
-                return true;
-            } else if (s.equalsIgnoreCase("N")) {
-                return false;
-            } else {
-                System.out.println("Invalid input. Please provide valid input");
+        Scanner scanner = ConsoleReader.newInstance();
+        try {
+            for (i = 0; i <= 5; i++) {
+                //Every time you creating new scanner and never closed
+                //Update: removed multiple scanner but never closed as I have already explained earlier scanner issue
+                String s = scanner.next();
+                if (s.equalsIgnoreCase("Y")) {
+                    return true;
+                } else if (s.equalsIgnoreCase("N")) {
+                    return false;
+                } else {
+                    System.out.println("Invalid input. Please provide valid input");
+                }
             }
-        }
-        if (i == 6) {
-            System.out.println("Exitting...Maximum retry done!!!");
+            if (i == 6) {
+                System.out.println("Exitting...Maximum retry done!!!");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return false;
     }

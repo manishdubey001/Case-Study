@@ -14,6 +14,7 @@ import java.util.*;
  */
 public class TicketService {
 
+    TicketOperations ticketOperations = TicketOperations.newInstance();
     /**
      * processCreateTicket ticket service object
      *
@@ -42,7 +43,7 @@ public class TicketService {
      * @return boolean
      */
     boolean isDuplicateTicketId(int id) {
-        return TicketOperations.newInstance().isExists(id);
+        return ticketOperations.isExists(id);
     }
 
     /**
@@ -80,19 +81,23 @@ public class TicketService {
      */
     public void processCreateTicket() {
         Scanner scanner = ConsoleReader.newInstance();
+        System.out.println("came here");
         try {
             int id = processId();
 
             System.out.println("Enter subject");
             //this fails when subject having space
-            String subject = scanner.next();
+            //Update: added nextLine function which avoids the same
+            String subject = scanner.nextLine();
 
             System.out.println("Enter agent name");
             //this fails when subject having space
-            String agentName = scanner.next();
+            //Update: added nextLine function which avoids the same
+            String agentName = scanner.nextLine();
 
             System.out.println("Enter tags (Comma separated if multiple)");
             //why need new scanner instance
+            //Update: again avoiding problem of scanner
             scanner = ConsoleReader.newInstance();
             String tags = scanner.nextLine();
             if (this.createTicket(id, subject, agentName, tags)) {
@@ -106,8 +111,6 @@ public class TicketService {
             System.out.println("Invalid input provided!!!");
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            scanner = null;
         }
     }
 
@@ -120,6 +123,7 @@ public class TicketService {
     private int processId() {
         try {
             //scanner not closed
+            //Update: again avoiding problem of scanner
             Scanner scanner = ConsoleReader.newInstance();
             System.out.println("Enter id");
             int id = scanner.nextInt();
@@ -141,9 +145,10 @@ public class TicketService {
      * @return
      */
     public boolean updateTicket(int id, String agentName, String tags) {
-        if (id > 0 && TicketOperations.newInstance().isExists(id)) {
+        if (id > 0 && ticketOperations.isExists(id)) {
             // Here Multiple TicketOperations object is created , store above object and used
-            TicketModel tm = TicketOperations.newInstance().find(id);
+            //Update: used instance variable
+            TicketModel tm = ticketOperations.find(id);
 
             if (Util.isStringValid(agentName)) {
                 tm.setAgentName(agentName);
@@ -168,13 +173,17 @@ public class TicketService {
             int id = processId();
             System.out.println("Enter agent name");
             //This fail when agent name having space
-            String agentName = scanner.next();
+            //Update: used nextLine
+            String agentName = scanner.nextLine();
             //Why new instance of scanner
+            //Update: again to avoid problem of scanner
             scanner = ConsoleReader.newInstance();
             System.out.println("Enter tags (Comma separated if multiple)");
             //This fail when agent name having space
-            String tags = scanner.next();
+            //Update: used nextLine
+            String tags = scanner.nextLine();
             //What if I want only agent name not tags and vice-versa
+            //Update: currently in case-study we didn't mentioned that we are updating only one, so updated both
             if (updateTicket(id, agentName, tags)) {
                 System.out.println("Ticket updated successfully");
             } else {
@@ -184,19 +193,7 @@ public class TicketService {
             System.out.println("Invalid input provided!!!");
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            scanner = null;
         }
-    }
-
-    /**
-     * get ticket detail
-     *
-     * @param id
-     * @return
-     */
-    public TicketModel getTicketDetail(int id) {
-        return TicketOperations.newInstance().find(id);
     }
 
     /**
@@ -205,7 +202,7 @@ public class TicketService {
      * @return
      */
     public List<TicketModel> getTicketList() {
-        return TicketOperations.newInstance().findAll();
+        return ticketOperations.findAll();
     }
 
     /**
@@ -216,10 +213,11 @@ public class TicketService {
      */
     public List<TicketModel> findAllTicketsByAgentName(String agentName) {
         if (Util.isStringValid(agentName)) {
-            return TicketOperations.newInstance().findAllByAgentName(agentName);
+            return ticketOperations.findAllByAgentName(agentName);
         }
         //Use diamond operator instead
-        return new ArrayList<TicketModel>();
+//        Update: changes done
+        return new ArrayList<>();
     }
 
     /**
@@ -230,7 +228,7 @@ public class TicketService {
      */
     public List<TicketModel> getAllTicketsByTags(String tag) {
         if (Util.isStringValid(tag)) {
-            return TicketOperations.newInstance().findAllByTag(tag);
+            return ticketOperations.findAllByTag(tag);
         }
         return new ArrayList<TicketModel>();
     }
@@ -259,7 +257,7 @@ public class TicketService {
      * @return
      */
     public TreeMap<String, Integer> findAllAgentWithTicketCount() {
-        return TicketOperations.newInstance().findAllAgentWithTicketCount();
+        return ticketOperations.findAllAgentWithTicketCount();
     }
 
     /**
@@ -270,7 +268,7 @@ public class TicketService {
      */
     public boolean deleteTicket(int id) {
         if (id > 0) {
-            return TicketOperations.newInstance().delete(id);
+            return ticketOperations.delete(id);
         }
         System.out.println("Invalid input provided!!!");
         return false;
@@ -305,10 +303,11 @@ public class TicketService {
      * @param id
      * @return
      */
-    TicketModel getTicket(int id) {
+    public TicketModel getTicketDetail(int id) {
         if (id > 0) {
             //What is the use of this method you can use this method single code directly , unnecessary method stack
-            return getTicketDetail(id);
+            //Update : changed it
+            return ticketOperations.find(id);
         }
         System.out.println("Invalid input provided!!!");
         return null;
@@ -320,13 +319,7 @@ public class TicketService {
     public void processGetTicketDetail() {
         try {
             int id = processId();
-
-            TicketModel tm = getTicket(id);
-            if (tm != null) {
-                printTicketDetails(tm);
-            } else {
-                System.out.println("No data found!!!");
-            }
+            printTicketDetails(getTicketDetail(id));
         } catch (InputMismatchException ime) {
             System.out.println("Invalid input provided");
         } catch (Exception e) {
@@ -340,7 +333,6 @@ public class TicketService {
      * @param tm
      */
     void printTicketDetails(TicketModel tm) {
-        System.out.println("printing");
         if (tm != null) {
             System.out.println("----------------------");
             System.out.println("Ticket id  : " + tm.getId());
@@ -350,6 +342,8 @@ public class TicketService {
             System.out.println("Created    : " + DateTimeUtil.getFormattedDateTime(tm.getCreated()));
             System.out.println("Modified   : " + DateTimeUtil.getFormattedDateTime(tm.getModified()));
             System.out.println("----------------------");
+        } else {
+            System.out.println("No data found!!!");
         }
     }
 
@@ -358,14 +352,17 @@ public class TicketService {
      */
     public void processGetAllTicketList() {
         //unused sop
-        System.out.println("came here");
+        //Update: removed sop
+
         //I thinks getTicketList is not required put code directly here.
+        //Update: I disagree in this scenario as I am segregating code, I have segregated listing function & then continued
+        // with printing process, consider you want to perform testing on getTicketList function, so considering current
+        // code it would be much easier to test individual function
         List<TicketModel> ls = getTicketList();
         if (Util.isCollectionValid(ls)) {
             //Used internal forEach instead of external for each
-            for (TicketModel tm : ls) {
-                printTicketDetails(tm);
-            }
+            //Update : used internal foreach
+            ls.forEach(ticketModel -> printTicketDetails(ticketModel));
         } else {
             System.out.println("No data found!!!");
         }
@@ -378,14 +375,14 @@ public class TicketService {
         try {
             System.out.println("Enter agent name");
             //Problem with space
-            String agentName = ConsoleReader.  newInstance().next();
+            //Update: removed space
+            String agentName = ConsoleReader.newInstance().next();
 
             List<TicketModel> ls = findAllTicketsByAgentName(agentName);
             if (Util.isCollectionValid(ls)) {
                 //Used internal forEach instead of external for each
-                for (TicketModel tm : ls) {
-                    printTicketDetails(tm);
-                }
+                //Update: used internal foreach
+                ls.forEach(ticketModel -> printTicketDetails(ticketModel));
             } else {
                 System.out.println("No data found!!!");
             }
