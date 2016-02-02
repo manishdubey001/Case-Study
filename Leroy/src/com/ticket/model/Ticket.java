@@ -1,20 +1,16 @@
-package com.Tickets;
+package com.ticket.model;
 
-// Why this import?
-
-
-
-// Best practice is to avoid wildcard imports;
-// it can cause confusion and conflicts. IntelliJ
-// has a setting to manage this automatically.
-import java.io.*;
+import java.io.IOException;
+import java.io.Serializable;
+import java.io.ObjectOutputStream;
 import java.time.LocalDateTime;
+import java.io.ObjectInputStream;
 import java.util.*;
 
 /**
  * Created by root on 13/1/16.
  */
-public class Ticket implements Comparable<Ticket>, Serializable{
+public class Ticket implements Serializable{
     private int id;
     private String subject;
     private String agentName;
@@ -23,7 +19,7 @@ public class Ticket implements Comparable<Ticket>, Serializable{
     private Set<String> tags;
 
 
-    Ticket(int id, String subject, Set tags, String name){
+    public Ticket(int id, String subject,String name, Set tags){
         this.id = id;
         this.agentName = name;
         this.subject = subject;
@@ -31,7 +27,7 @@ public class Ticket implements Comparable<Ticket>, Serializable{
         this.created = this.modified = LocalDateTime.now();
     }
 
-    Ticket(int id, String subject, Set tags, String name, boolean  b){
+    public Ticket(int id, String subject, Set tags, String name, boolean  b){
         this.id = id;
         this.agentName = name;
         this.subject = subject;
@@ -64,12 +60,12 @@ public class Ticket implements Comparable<Ticket>, Serializable{
     public void setSubject(String str) {
         this.subject = str;
     }
-    //Follow the proper method Name format
-    public String getAgent_name() {
+
+    public String getAgentName() {
         return agentName;
     }
 
-    public void setAgent_name(String agent_name) {
+    public void setAgentName(String agent_name) {
         this.setModified();
         this.agentName = agent_name;
     }
@@ -90,10 +86,10 @@ public class Ticket implements Comparable<Ticket>, Serializable{
     /**
      Overriding Read / Write for Serialization
      */
-    public void writeSingleObject(ObjectOutputStream oos) throws IOException{
+    public void writeSingleObject(ObjectOutputStream oos) throws IOException {
         oos.writeInt(getId());
         oos.writeUTF(getSubject());
-        oos.writeUTF(getAgent_name());
+        oos.writeUTF(getAgentName());
         oos.writeObject(getTags());
         oos.writeObject(getCreated());
         oos.writeObject(getModified());
@@ -110,28 +106,15 @@ public class Ticket implements Comparable<Ticket>, Serializable{
     public Ticket readSingleObject(ObjectInputStream ois) throws IOException,ClassNotFoundException{
         this.setId(ois.readInt());
         this.setSubject(ois.readUTF());
-        this.setAgent_name(ois.readUTF());
+        this.setAgentName(ois.readUTF());
         this.setTags((Set<String>) ois.readObject());
-        return new Ticket(this.id, this.subject, this.tags, agentName);
+        this.created = (LocalDateTime) ois.readObject();
+        this.modified  = (LocalDateTime) ois.readObject();
+        return new Ticket(this.id, this.subject, agentName, this.tags);
     }
-
-    @Override
-    public int compareTo(Ticket compareTicket){
-        return compareTicket.getModified().compareTo(this.getModified());
-    }
-    //Use lambda instead of anonymous class
-    public static Comparator<Ticket> ByAgentNameComparator = new Comparator<Ticket>() {
-        @Override
-        public int compare(Ticket ticket1, Ticket ticket2) {
-            String agent1 = ticket1.getAgent_name();
-            String agent2 = ticket2.getAgent_name();
-            return agent1.compareTo(agent2);
-        }
-    };
 
     @Override
     public String toString(){
-        // Java's original Date class has a lot of problems. Usually it's better to use Java 8's LocalDate/Time classes.
         LocalDateTime dt  = this.created;
         LocalDateTime dt2 = this.modified;
         return "  "+this.id+"  |  "+this.agentName+"  |  "+this.subject+"  |  "+this.tags+"  |  "+dt+"  |   "+dt2;
