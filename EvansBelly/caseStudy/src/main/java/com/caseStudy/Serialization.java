@@ -107,10 +107,10 @@ public class Serialization {
 		tagCountMap.keySet().forEach(key -> System.out.println(key + " -> " + tagCountMap.get(key)));
 
 		// Tickets older than a certain number of days
-		Scanner scanner = new Scanner(System.in);
 		//Virendra: Scanner resource is not closed. After printing reports
+		//UPDATE : Noted and done.
 		System.out.println("Tickets for last 'n' days. Enter value of n");
-		try {
+		try(Scanner scanner = new Scanner(System.in)) {
 			int days = scanner.nextInt();
 			List<Ticket> tkList = deSer.stream().filter(t -> t.getModified().compareTo(LocalDateTime.now().minusDays(days)) < 0).collect(Collectors.toList());
 
