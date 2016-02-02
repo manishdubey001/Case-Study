@@ -14,7 +14,6 @@ import java.util.stream.Collectors;
  */
 public class Serialization {
 	String file = "ticket.txt";
-	Util util = new Util();
 
 	public static void main(String[] args) throws Exception {
 
@@ -24,36 +23,27 @@ public class Serialization {
 	}
 
 	public void singleTicket() throws Exception {
+
 		Set tags = new HashSet<>(Arrays.asList("info", "latest", "edited"));
 		Ticket ticket = TicketFactory.ticketInstance(1, "Test", "Evans", tags);
+		try (FileOutputStream fileOutputStream = new FileOutputStream(file)) {
+			ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+			ticket.writeObject(objectOutputStream);
+			objectOutputStream.close();
+		}
 
-		FileOutputStream fileOutputStream = new FileOutputStream(file);
-		ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
-		ticket.writeObject(objectOutputStream);
-		objectOutputStream.close();
-
-		FileInputStream fileInputStream = new FileInputStream(file);
-		ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
-		Ticket ticketData = ticket.readObject(objectInputStream);
-		objectInputStream.close();
-		System.out.println("Single ticket");
-		util.printData(ticketData);
+		try (FileInputStream fileInputStream = new FileInputStream(file)) {
+			ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+			Ticket ticketData = ticket.readObject(objectInputStream);
+			objectInputStream.close();
+			System.out.println("Single ticket");
+			Util.printData(ticketData);
+		}
 	}
 
 	public void multipleTickets() throws IOException, ClassNotFoundException, InterruptedException {
-		Set tags1 = new HashSet<>(Arrays.asList("info", "latest", "edited"));
-		Ticket ticket1 = TicketFactory.ticketInstance(1, "Test", "Evans", tags1);
 
-		Set tags2 = new HashSet<>(Arrays.asList("info", "new", "dummy"));
-		Ticket ticket2 = TicketFactory.ticketInstance(2, "Result", "Leroy", tags2);
-
-		Set tags3 = new HashSet<>(Arrays.asList("info", "deleted", "new"));
-		Ticket ticket3 = TicketFactory.ticketInstance(3, "Complain", "Sweta", tags3);
-
-		ArrayList<Ticket> listOfTickets = new ArrayList<>();
-		listOfTickets.add(ticket1);
-		listOfTickets.add(ticket2);
-		listOfTickets.add(ticket3);
+		ArrayList<Ticket> listOfTickets = this.testDataGen();
 
 		// Serialize
 		this.multiSerialize(listOfTickets);
@@ -61,28 +51,31 @@ public class Serialization {
 		// you are closing the resource.
 		//if I close a connection and after again open connection to write new tickets.
 		// What would be effect of that ? please check that as well.
+		//UPDATE : Done with closing of resources wherever required.
 
 		// De-Serialize
 		System.out.println("_____________________________________________");
 		System.out.println("Multiple tickets");
 		ArrayList<Ticket> deSer = multiDeSerialize();
-		deSer.forEach(util::printData);
+		deSer.forEach(Util::printData);
 		System.out.println("_____________________________________________");
 		this.reports(deSer);
 
 	}
 
 	public void multiSerialize(ArrayList list) throws IOException {
-		ObjectOutputStream objOut = new ObjectOutputStream(new FileOutputStream(file));
-		objOut.writeObject(list);
-		objOut.close();
+		try (ObjectOutputStream objOut = new ObjectOutputStream(new FileOutputStream(file))) {
+			objOut.writeObject(list);
+			objOut.close();
+		}
 	}
 
 	public ArrayList multiDeSerialize() throws IOException, ClassNotFoundException {
-		ObjectInputStream objIn = new ObjectInputStream(new FileInputStream(file));
-		ArrayList readList = (ArrayList) objIn.readObject();
-		objIn.close();
-		return readList;
+		try (ObjectInputStream objIn = new ObjectInputStream(new FileInputStream(file))) {
+			ArrayList readList = (ArrayList) objIn.readObject();
+			objIn.close();
+			return readList;
+		}
 	}
 
 	public void reports(ArrayList<Ticket> deSer) throws InterruptedException, IOException, ClassNotFoundException {
@@ -95,7 +88,7 @@ public class Serialization {
 		Ticket ticketData = deSer.stream().min((Ticket obj1, Ticket obj2) -> obj1.getModified().compareTo(obj2.getModified())).get();
 		System.out.println("_____________________________________________");
 		System.out.println("Oldest ticket in the system is below");
-		util.printData(ticketData);
+		Util.printData(ticketData);
 
 		// tag wise ticket count
 		List<Set> tagList = deSer.stream().map(Ticket::getTags).collect(Collectors.toList());
@@ -120,12 +113,30 @@ public class Serialization {
 			int days = scanner.nextInt();
 			List<Ticket> tkList = deSer.stream().filter(t -> t.getModified().compareTo(LocalDateTime.now().minusDays(days)) < 0).collect(Collectors.toList());
 			if (!tkList.isEmpty())
-				tkList.forEach(util::printData);
+				tkList.forEach(Util::printData);
 			else System.out.println("No tickets found in the system");
 		}
 		catch (Exception e) {
 			System.out.println("Invalid data");
 			this.multipleTickets();
 		}
+	}
+
+	public ArrayList<Ticket> testDataGen() {
+
+		Set tags1 = new HashSet<>(Arrays.asList("info", "latest", "edited"));
+		Ticket ticket1 = TicketFactory.ticketInstance(1, "Test", "Evans", tags1);
+
+		Set tags2 = new HashSet<>(Arrays.asList("info", "new", "dummy"));
+		Ticket ticket2 = TicketFactory.ticketInstance(2, "Result", "Leroy", tags2);
+
+		Set tags3 = new HashSet<>(Arrays.asList("info", "deleted", "new"));
+		Ticket ticket3 = TicketFactory.ticketInstance(3, "Complain", "Sweta", tags3);
+
+		ArrayList<Ticket> listOfTickets = new ArrayList<>();
+		listOfTickets.add(ticket1);
+		listOfTickets.add(ticket2);
+		listOfTickets.add(ticket3);
+		return listOfTickets;
 	}
 }

@@ -16,7 +16,6 @@ public class TicketOperations {
 	public boolean createFlag = true;
 	TicketService ticketService = new TicketService();
 	Collection<Ticket> valueSet = ticketDetails.values();
-	Util utilOps = new Util();
 
 	//create ticket
 	public void createTicket() {
@@ -162,7 +161,7 @@ public class TicketOperations {
 			int id = readTicketId();
 			Ticket ticketInfo = ticketService.showTicket(ticketDetails, id);
 			if (ticketInfo != null)
-				utilOps.printData(ticketInfo);
+				Util.printData(ticketInfo);
 			else System.out.println("Invalid ticket Id : " + id + " given. No Content available.");
 		}
 	}
@@ -173,7 +172,7 @@ public class TicketOperations {
 			System.out.println("Errrrr.... No tickets in the house. Please create a new one.");
 		}
 		else {
-			valueSet.stream().sorted((Ticket obj1, Ticket obj2) -> -obj1.getModified().compareTo(obj2.getModified())).forEach(utilOps::printData);
+			valueSet.stream().sorted((Ticket obj1, Ticket obj2) -> -obj1.getModified().compareTo(obj2.getModified())).forEach(Util::printData);
 		}
 	}
 
@@ -201,7 +200,7 @@ public class TicketOperations {
 
 			List<Ticket> ticketObjs = ticketService.agentSearchTicket(agent, ticketDetails);
 			if (!ticketObjs.isEmpty())
-				ticketObjs.forEach(utilOps::printData);
+				ticketObjs.forEach(Util::printData);
 			else System.out.println("No Content available for agent : " + agent);
 		}
 	}
@@ -229,7 +228,7 @@ public class TicketOperations {
 
 			List<Ticket> ticketObjs = ticketService.tagSearchTicket(tag, ticketDetails);
 			if (!ticketObjs.isEmpty())
-				ticketObjs.forEach(utilOps::printData);
+				ticketObjs.forEach(Util::printData);
 			else System.out.println("No content available for tag : " + tag);
 		}
 	}

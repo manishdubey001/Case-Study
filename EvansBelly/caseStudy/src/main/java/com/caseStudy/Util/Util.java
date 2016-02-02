@@ -8,7 +8,7 @@ import com.caseStudy.Model.Ticket;
 public class Util {
 
 	// menu section for displaying operations
-	public void menuPopUp() {
+	public static void menuPopUp() {
 		System.out.println(
 				"1. Create Ticket\n" +
 						"2. Update Ticket by id\n" +
@@ -23,7 +23,7 @@ public class Util {
 	}
 
 	// fetch and print the data of the ticket
-	public void printData(Ticket ticketData) {
+	public static void printData(Ticket ticketData) {
 
 		System.out.println("---------------------------------------------");
 		System.out.println("Id       : " + ticketData.getId());

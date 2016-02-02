@@ -104,9 +104,10 @@ public class Ticket implements Serializable {
 
 	// Small issue of style: it is most common to list fields first in a class definition.
 	private int id;
-	private LocalDateTime created;
-	private LocalDateTime modified;
 	private String agent;
 	private String subject;
 	private Set<String> tags;
+	private LocalDateTime created;
+	private LocalDateTime modified;
+
 }
