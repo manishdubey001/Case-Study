@@ -36,7 +36,7 @@ public class MenuClass {
                 ticketManager.searchTicketsUsingtag();
                 break;
             case 6:
-                ticketManager.showTicketcountAgent();
+                ticketManager.showTicketCountAgent();
                 break;
             case 7:
                 ticketManager.removeTicket();

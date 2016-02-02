@@ -24,14 +24,14 @@ public class TicketService {
 
         //Ganesh D: good use of streams, just try to check case-insensitive way
         List<Ticket> list = this.hmTicketList.values().stream()
-                .filter(t -> t.getAgentName().equals(agentName))
+                .filter(t -> t.getAgentName().equalsIgnoreCase(agentName))
                 .collect(Collectors.toList());
 
         return list;
     }
 
     /**
-     * Search all tickets by specific tag Agent name using Stream
+     * Search all tickets by specific tag  using Stream
      */
     public List<Ticket> searchTicketsUsingtagService(String tag) {
 
@@ -57,20 +57,18 @@ public class TicketService {
     /**
      * this method for Ticket count grouped by agent name(order by agent name).
      */
-    public TreeMap<String, Integer> showTicketcountAgentService() {
+    public TreeMap<String, Integer> showTicketCountAgentService() {
 
         TreeMap<String, Integer> tmCount = new TreeMap<>();
         ArrayList<Ticket> arrTicketList = new ArrayList<>(this.hmTicketList.values());
 
         for (Ticket ticket : arrTicketList) {
-
             if (tmCount.containsKey(ticket.getAgentName())) {
                 int ticketCount = tmCount.get(ticket.getAgentName()) + 1;
                 tmCount.put(ticket.getAgentName(), ticketCount);
             } else {
                 tmCount.put(ticket.getAgentName(), 1);
             }
-
         }
         return tmCount;
     }

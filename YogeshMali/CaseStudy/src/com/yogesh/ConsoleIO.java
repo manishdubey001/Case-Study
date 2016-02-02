@@ -12,31 +12,29 @@ public class ConsoleIO {
 
     public static String getAgentNAme() {
         System.out.println("Enter Agent name ");
-        String agentName = getString();
-        return agentName;
+        return getString();
     }
 
 
     public static String getSubject() {
         System.out.println("Enter Subject ");
-        String agentName = getString();
-        return agentName;
+        return getString();
     }
 
     public static Set getTags() {
         Scanner scanIn = new Scanner(System.in);
         System.out.println("Enter tags (multiple tags separate by Comma) ");
         String tags = scanIn.next();
-        Set<String> list = new HashSet<String>(Arrays.asList(tags.split(",")));
-        return list;
+        return new HashSet<String>(Arrays.asList(tags.split(",")));
     }
 
     public static int getTicketId() {
         System.out.println("Enter ticket Id ");
         //Ganesh D: Don’t create variables that you don’t use again, instead directly return it,
         // I see a lot variables been created in other getters as well
-        int id = getIntvalue();
-        return id;
+
+        // update :: remove Local variabless
+        return getIntvalue();
     }
 
 
@@ -57,7 +55,7 @@ public class ConsoleIO {
     static String getString() {
         Scanner scanIn = new Scanner(System.in);
         String s = scanIn.nextLine();
-        return s;
+        return scanIn.nextLine();
 
     }
 

@@ -335,7 +335,7 @@ public class TicketServiceTest {
          categories = new HashSet<String>(Arrays.asList("tag1", "tag2"));
         assertTrue(ticketService.createTicketService(id, subject, agent, categories));
 
-        TreeMap<String, Integer> tmCount = ticketService.showTicketcountAgentService();
+        TreeMap<String, Integer> tmCount = ticketService.showTicketCountAgentService();
         Assert.assertEquals(2, (int) tmCount.get("James"));
         Assert.assertEquals(1, (int) tmCount.get("Yogesh"));
 

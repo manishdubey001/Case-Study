@@ -6,7 +6,6 @@ import com.yogesh.service.TicketService;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.TreeMap;
 
 /**
@@ -18,16 +17,11 @@ public class TicketManager {
 
     public void createTicket() {
 
-        int id = ConsoleIO.getTicketId();
-        String subject = ConsoleIO.getSubject();
-        String agentName = ConsoleIO.getAgentNAme();
-        Set<String> list = ConsoleIO.getTags();
-
         //Ganesh D: I think isTicketIDExit logic should be implemented in createTicketService functions,
         // coz when we expose createTicketService to outside world then the duplicate ticket id validation will fail/skip
 
         // update  ::  Changed the logic as you suggested
-        if (ticketService.createTicketService(id, subject, agentName, list)) {
+        if (ticketService.createTicketService(ConsoleIO.getTicketId(), ConsoleIO.getSubject(), ConsoleIO.getAgentNAme(), ConsoleIO.getTags())) {
             ConsoleIO.showMsg("Ticket has been added successfully");
         }
 
@@ -47,8 +41,7 @@ public class TicketManager {
         ConsoleIO.showMsg("Press t to update Tags  ");
         String updatedTag = ConsoleIO.getString();
         if (updatedTag.equals("t")) {
-            Set<String> newlist = ConsoleIO.getTags();
-            if (ticketService.updateTags(id, newlist)) {
+            if (ticketService.updateTags(id, ConsoleIO.getTags())) {
                 ConsoleIO.showMsg("Ticket Tags has been updated");
             }
         }
@@ -63,7 +56,6 @@ public class TicketManager {
         List<Ticket> list = ticketService.showAllTicketService();
         if (list.isEmpty()) {
             ConsoleIO.showMsg("No record Found");
-
         } else {
             //Ganesh D: Suggestions used of foreach loop is good, but you can check forEach + lambda expression
 
@@ -98,9 +90,9 @@ public class TicketManager {
 
     }
 
-    public void showTicketcountAgent() {
+    public void showTicketCountAgent() {
         ConsoleIO.showMsg("Agent Name  =>   Total Count");
-        TreeMap<String, Integer> tmCount = ticketService.showTicketcountAgentService();
+        TreeMap<String, Integer> tmCount = ticketService.showTicketCountAgentService();
 
         for (Map.Entry<String, Integer> entry : tmCount.entrySet()) {
             String agentName = entry.getKey();

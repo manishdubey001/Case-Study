@@ -3,8 +3,10 @@ package com.yogesh.fileReadWrite;
 /**
  * Created by root on 22/1/16.
  */
+
 import com.yogesh.ConsoleIO;
 import com.yogesh.model.Ticket;
+
 import java.io.*;
 import java.util.*;
 
@@ -14,7 +16,7 @@ import java.util.*;
 
 public class ExerciseSerializable {
 
-    public static String filepath =  "SerTicket.ser";
+    public static String filepath = "SerTicket.ser";
 
     public static void main(String... arguments) {
         singleTicketReadWriteOperation();
@@ -25,17 +27,17 @@ public class ExerciseSerializable {
 
         Ticket ticket = new Ticket(1, "Subject", "Yogesh", new HashSet<>(Arrays.asList("tag1")));
 
-        try {
-
-            ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(filepath));
+        try (ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(filepath))) {
             os.writeObject(ticket);
 
-            ObjectInputStream objIn = new ObjectInputStream(new FileInputStream(filepath));
-            Ticket objTicket = (Ticket) objIn.readObject();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
 
+        try (ObjectInputStream objIn = new ObjectInputStream(new FileInputStream(filepath))) {
+            Ticket objTicket = (Ticket) objIn.readObject();
             ConsoleIO.ticketListHeader();
             ConsoleIO.showTicket(ticket);
-
 
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -45,7 +47,6 @@ public class ExerciseSerializable {
     private static void listOfTicketReadWriteOperation() {
         Ticket ticket = new Ticket(1, "Subject", "Yogesh", new HashSet<>(Arrays.asList("tag1")));
         Ticket tic = new Ticket(2, "Subject1", "Ganesh", new HashSet<>(Arrays.asList("tag1")));
-
 
 
         ArrayList<Ticket> arr = new ArrayList<>();
@@ -68,9 +69,6 @@ public class ExerciseSerializable {
             ConsoleIO.showTicket(objTicket);
         }
     }
-
-
-
 
 
 }
