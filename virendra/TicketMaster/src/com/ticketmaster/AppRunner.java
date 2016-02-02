@@ -132,18 +132,13 @@ public class AppRunner {
     protected void processChoice(int ch)
             throws IOException, ClassNotFoundException, TicketNotFoundException {
         // EB: Small issue of style. List fields according to class definition. Use generics for type safety.
-        TicketService helper= new TicketService();
-        Map tmpMap;
 
-        // cjm - 'b' is an OK name for a BufferedReader, but 'a' is not a descriptive name for the list.
-        // Prefer to declare the list in the context where you plan to use it (unless you need it to survive longer.
-        // In this case if you use a type parameter List<T>, T would be different from block to block, so you would have
-        // to use a separate list.
-
-        List tempList;
-        Set tagsSet;
         int id;
         String txtAgent, txtSubject;
+        List<Map<String, ? super Object>> tempList;
+        Set<String> tagsSet;
+        Map<String, ? super Object> tmpMap;
+        TicketService helper= new TicketService();
         Ticket ticket;
 
         switch (ch){

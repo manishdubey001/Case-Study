@@ -228,9 +228,9 @@ public class TicketService /*implements Comparable<Ticket>*/ {
      * @return Map of agent and count of tickets for each agent
      */
 
-    public Map<String,Integer> getTicketCount()
+    public Map<String,? super Object> getTicketCount()
             throws IOException, ClassNotFoundException{
-        Map<String,Integer> m = new LinkedHashMap<>();
+        Map<String,? super Object> m = new LinkedHashMap<>();
 
         repository.updatePool();
 
@@ -243,7 +243,7 @@ public class TicketService /*implements Comparable<Ticket>*/ {
             tmp = (Ticket) me.getValue();
 
             if(m.containsKey(tmp.getAgent()) ){
-                count = m.get(tmp.getAgent());
+                count = (Integer)m.get(tmp.getAgent());
 
                 m.put(tmp.getAgent(), count+1);
             }else if (tmp.getAgent() !=null){
@@ -256,10 +256,10 @@ public class TicketService /*implements Comparable<Ticket>*/ {
         return m;
     }
 
-    public Map<String,Integer> getTagsTicketCount()
+    public Map<String,? super Object> getTagsTicketCount()
             throws IOException, ClassNotFoundException {
 
-        Map<String,Integer> m = new TreeMap<>();
+        Map<String,? super Object> m = new TreeMap<>();
 
         repository.updatePool();
 
@@ -281,7 +281,7 @@ public class TicketService /*implements Comparable<Ticket>*/ {
                 tmp = (Ticket) me.getValue();
                 if(tmp.tags.contains(tagName)){
                     if(m.containsKey(tagName)){
-                        count = m.get(tagName);
+                        count = (Integer)m.get(tagName);
                         m.put(tagName, count+1);
                     }else {
                         m.put(tagName,1);
