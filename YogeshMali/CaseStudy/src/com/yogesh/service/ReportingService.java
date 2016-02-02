@@ -1,9 +1,11 @@
 package com.yogesh.service;
 
+import com.yogesh.DateComparator;
 import com.yogesh.model.Ticket;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Created by root on 29/1/16.
@@ -35,39 +37,24 @@ public class ReportingService {
 
     public Ticket oldestTicket() {
 
-        int minid = 0;
-        LocalDateTime minDate = LocalDateTime.now().minusDays(1);
-        ArrayList<Ticket> arrTicketList = new ArrayList<>(this.hmTicketList.values());
-
         //Ganesh D: logic is good, you can also see how to do with streams, it has inbuild functions to check minimum, maximum, etc.,
-        for (Ticket ticket : arrTicketList) {
-            if (ticket.getCreated().isBefore(minDate)) {
-                minid = ticket.getId();
-                minDate = ticket.getCreated();
-            }
-        }
-        return hmTicketList.get(minid);
+
+        // update :: used Stream
+        return hmTicketList.values().stream().max((Ticket date1, Ticket date2) -> date2.getCreated().compareTo(date1.getCreated())).get();
+
     }
 
-    public ArrayList<Ticket> olderTicketFromDays(int noofDays) {
+    public List<Ticket> olderTicketFromDays(int noofDays) {
 
-        ArrayList<Ticket> listofTicket = new ArrayList<>();
-        ArrayList<Ticket> arrTicketList = new ArrayList<>(this.hmTicketList.values());
-        for (Ticket ticket : arrTicketList) {
-            if (ticket.getCreated().isBefore(LocalDateTime.now().minusDays(noofDays))) {
-                listofTicket.add(ticket);
-            }
-        }
-        return listofTicket;
+        return this.hmTicketList.values().stream()
+                .filter(tickets -> tickets.getCreated().isBefore(LocalDateTime.now().minusDays(noofDays))).collect(Collectors.toList());
 
     }
 
     public HashMap tagWithTicketCounts() {
         HashMap<String, Integer> hmtTotalTags = new HashMap();
 
-        ArrayList<Ticket> arrTicketList = new ArrayList<>(this.hmTicketList.values());
-
-        for (Ticket ticket : arrTicketList) {
+        for (Ticket ticket : this.hmTicketList.values()) {
             for (String tag : ticket.getTags()) {
                 if (!hmtTotalTags.containsKey(tag)) {
                     hmtTotalTags.put(tag, 1);
@@ -86,4 +73,6 @@ public class ReportingService {
 
         return new ArrayList<>(this.hmTicketList.values());
     }
+
+
 }

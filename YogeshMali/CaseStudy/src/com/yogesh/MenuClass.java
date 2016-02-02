@@ -1,13 +1,5 @@
 package com.yogesh;
 
-import com.yogesh.model.Ticket;
-import com.yogesh.service.TicketService;
-
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-
 /**
  * Created by root on 15/1/16.
  */
@@ -68,13 +60,13 @@ public class MenuClass {
      */
     public void msg() {
 
-        ConsolIO.showMsg("Please Press 1 : Continue   ");
-        int msgId = ConsolIO.getIntvalue();
+        ConsoleIO.showMsg("Please Press 1 : Continue   ");
+        int msgId = ConsoleIO.getIntvalue();
         if (msgId == 1) {
             displayList();
 
         } else {
-            ConsolIO.showMsg("thank you");
+            ConsoleIO.showMsg("thank you");
         }
     }
 
@@ -83,9 +75,9 @@ public class MenuClass {
      */
     public void displayList() {
 
-        ConsolIO.displayList();
-        ConsolIO.showMsg("Select Operation ");
-        int menuId = ConsolIO.getIntvalue();
+        ConsoleIO.displayList();
+        ConsoleIO.showMsg("Select Operation ");
+        int menuId = ConsoleIO.getIntvalue();
         this.operation(menuId);
         msg();
     }

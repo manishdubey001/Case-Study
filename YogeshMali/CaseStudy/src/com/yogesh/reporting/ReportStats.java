@@ -1,7 +1,7 @@
 package com.yogesh.reporting;
 
 
-import com.yogesh.ConsolIO;
+import com.yogesh.ConsoleIO;
 import com.yogesh.model.Ticket;
 import com.yogesh.service.ReportingService;
 
@@ -22,9 +22,9 @@ public class ReportStats {
     }
 
     private void dislayList() {
-        ConsolIO.showReportingMenu();
-        ConsolIO.showMsg("Select Operation ");
-        int menuId = ConsolIO.getIntvalue();
+        ConsoleIO.showReportingMenu();
+        ConsoleIO.showMsg("Select Operation ");
+        int menuId = ConsoleIO.getIntvalue();
         this.menu(menuId);
         msg();
     }
@@ -63,7 +63,7 @@ public class ReportStats {
      */
 
     private void totalTicket() {
-        ConsolIO.showMsg("No Of Ticket in the System --> " + rService.totalTicket());
+        ConsoleIO.showMsg("No Of Ticket in the System --> " + rService.totalTicket());
     }
 
     /**
@@ -72,8 +72,8 @@ public class ReportStats {
 
 
     private void oldestTicket() {
-        ConsolIO.showMsg("Oldest Ticket in the System --> ");
-        ConsolIO.showTicket(rService.oldestTicket());
+        ConsoleIO.showMsg("Oldest Ticket in the System --> ");
+        ConsoleIO.showTicket(rService.oldestTicket());
     }
 
     /**
@@ -83,10 +83,10 @@ public class ReportStats {
     private void olderTicketFromDays() {
         Scanner scanner = new Scanner(System.in);
         System.out.println();
-        ConsolIO.showMsg("Tickets older than a certain number of days : Enter no of days");
+        ConsoleIO.showMsg("Tickets older than a certain number of days : Enter no of days");
         int noofDays = scanner.nextInt();
         for (Ticket ticket : rService.olderTicketFromDays(noofDays)) {
-            ConsolIO.showTicket(ticket);
+            ConsoleIO.showTicket(ticket);
         }
     }
 
@@ -95,11 +95,11 @@ public class ReportStats {
      */
     private void TagWithTicketCounts() {
         HashMap<String, Integer> hmtTotalTags = rService.tagWithTicketCounts();
-        ConsolIO.showMsg("Tag -- > Ticket Count");
+        ConsoleIO.showMsg("Tag -- > Ticket Count");
         for (Map.Entry<String, Integer> entry : hmtTotalTags.entrySet()) {
             String tag = entry.getKey();
             Integer count = entry.getValue();
-            ConsolIO.showMsg(tag + " => " + count);
+            ConsoleIO.showMsg(tag + " => " + count);
         }
     }
 
@@ -109,7 +109,7 @@ public class ReportStats {
     private void showAllTicket() {
 
         for (Ticket ticket : rService.showAllTicket()) {
-            ConsolIO.showTicket(ticket);
+            ConsoleIO.showTicket(ticket);
         }
     }
 
@@ -118,13 +118,13 @@ public class ReportStats {
      */
     public void msg() {
 
-        ConsolIO.showMsg("Please Press 1 : Continue   ");
-        int msgId = ConsolIO.getIntvalue();
+        ConsoleIO.showMsg("Please Press 1 : Continue   ");
+        int msgId = ConsoleIO.getIntvalue();
         if (msgId == 1) {
             dislayList();
 
         } else {
-            ConsolIO.showMsg("thank you");
+            ConsoleIO.showMsg("thank you");
         }
     }
 

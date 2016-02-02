@@ -8,7 +8,8 @@ import org.junit.Test;
 import java.util.*;
 
 import static java.util.Arrays.asList;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by root on 18/1/16.
@@ -71,7 +72,7 @@ public class TicketServiceTest {
         assertTrue(ticketService.createTicketService(id, subject, agent, categories));
 
         id = 1;
-        assertTrue(ticketService.isTicketIdExit(id));
+        assertTrue(ticketService.isTicketIdExist(id));
     }
 
     @Test
@@ -84,7 +85,7 @@ public class TicketServiceTest {
         assertTrue(ticketService.createTicketService(id, subject, agent, categories));
 
         id = 2;
-        assertFalse(ticketService.isTicketIdExit(id));
+        assertFalse(ticketService.isTicketIdExist(id));
     }
 
 
@@ -143,7 +144,7 @@ public class TicketServiceTest {
         assertTrue(ticketService.createTicketService(id, subject, agent, categories));
 
         assertTrue(ticketService.removeTicketService(id));
-        assertFalse(ticketService.isTicketIdExit(id));
+        assertFalse(ticketService.isTicketIdExist(id));
 
     }
 

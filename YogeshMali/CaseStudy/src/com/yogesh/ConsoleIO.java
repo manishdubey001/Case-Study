@@ -8,7 +8,7 @@ import java.util.*;
  * Created by root on 15/1/16.
  */
 // Ganesh D: take care about typo
-public class ConsolIO {
+public class ConsoleIO {
 
     public static String getAgentNAme() {
         System.out.println("Enter Agent name ");

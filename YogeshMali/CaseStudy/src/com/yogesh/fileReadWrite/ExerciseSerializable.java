@@ -3,7 +3,7 @@ package com.yogesh.fileReadWrite;
 /**
  * Created by root on 22/1/16.
  */
-import com.yogesh.ConsolIO;
+import com.yogesh.ConsoleIO;
 import com.yogesh.model.Ticket;
 import java.io.*;
 import java.util.*;
@@ -33,8 +33,8 @@ public class ExerciseSerializable {
             ObjectInputStream objIn = new ObjectInputStream(new FileInputStream(filepath));
             Ticket objTicket = (Ticket) objIn.readObject();
 
-            ConsolIO.ticketListHeader();
-            ConsolIO.showTicket(ticket);
+            ConsoleIO.ticketListHeader();
+            ConsoleIO.showTicket(ticket);
 
 
         } catch (Exception ex) {
@@ -62,10 +62,10 @@ public class ExerciseSerializable {
             cnfe.printStackTrace();
         }
 
-        ConsolIO.ticketListHeader();
+        ConsoleIO.ticketListHeader();
         for (Ticket objTicket : arrlist) {
 
-            ConsolIO.showTicket(objTicket);
+            ConsoleIO.showTicket(objTicket);
         }
     }
 

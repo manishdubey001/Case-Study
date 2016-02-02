@@ -1,5 +1,6 @@
 package com.yogesh;
 
+import com.yogesh.Exception.TicketNotFountException;
 import com.yogesh.model.Ticket;
 import com.yogesh.service.TicketService;
 
@@ -17,120 +18,112 @@ public class TicketManager {
 
     public void createTicket() {
 
-        int id = ConsolIO.getTicketId();
-        String subject = ConsolIO.getSubject();
-        String agentName = ConsolIO.getAgentNAme();
-        Set<String> list = ConsolIO.getTags();
+        int id = ConsoleIO.getTicketId();
+        String subject = ConsoleIO.getSubject();
+        String agentName = ConsoleIO.getAgentNAme();
+        Set<String> list = ConsoleIO.getTags();
 
         //Ganesh D: I think isTicketIDExit logic should be implemented in createTicketService functions,
         // coz when we expose createTicketService to outside world then the duplicate ticket id validation will fail/skip
-        if (ticketService.isTicketIdExit(id)) {
-            ConsolIO.showMsg("ticket Id is already Exist");
-        } else {
-            if (ticketService.createTicketService(id, subject, agentName, list)) {
-                ConsolIO.showMsg("Ticket has been added successfully");
-            }
+
+        // update  ::  Changed the logic as you suggested
+        if (ticketService.createTicketService(id, subject, agentName, list)) {
+            ConsoleIO.showMsg("Ticket has been added successfully");
         }
+
 
     }
 
     public void updateTicket() {
-        int id = ConsolIO.getTicketId();
-        if (ticketService.isTicketIdExit(id)) {
-            ConsolIO.showMsg("Press a to update Agent name  ");
-            String updatedId = ConsolIO.getString();
-            if (updatedId.equals("a")) {
-                String newAgentName = ConsolIO.getAgentNAme();
-                if (ticketService.updateAgentName(id, newAgentName)) {
-                    ConsolIO.showMsg(" Agent name has been updated ");
-                }
+        int id = ConsoleIO.getTicketId();
+        ConsoleIO.showMsg("Press a to update Agent name ");
+        String updatedId = ConsoleIO.getString();
+        if (updatedId.equals("a")) {
+            String newAgentName = ConsoleIO.getAgentNAme();
+            if (ticketService.updateAgentName(id, newAgentName)) {
+                ConsoleIO.showMsg(" Agent name has been updated ");
             }
-            ConsolIO.showMsg("Press t to update Tags  ");
-            String updatedTag = ConsolIO.getString();
-            if (updatedTag.equals("t")) {
-                Set<String> newlist = ConsolIO.getTags();
-                if (ticketService.updateTags(id, newlist)) {
-                    ConsolIO.showMsg("Ticket Tags has been updated");
-                }
-            }
-
-        } else {
-            ConsolIO.showMsg("Ticket is not Exists");
         }
+        ConsoleIO.showMsg("Press t to update Tags  ");
+        String updatedTag = ConsoleIO.getString();
+        if (updatedTag.equals("t")) {
+            Set<String> newlist = ConsoleIO.getTags();
+            if (ticketService.updateTags(id, newlist)) {
+                ConsoleIO.showMsg("Ticket Tags has been updated");
+            }
+        }
+
+
     }
 
 
     public void showAllTicket() {
 
-        ConsolIO.ticketListHeader();
+        ConsoleIO.ticketListHeader();
         List<Ticket> list = ticketService.showAllTicketService();
         if (list.isEmpty()) {
-            ConsolIO.showMsg("No record Found");
+            ConsoleIO.showMsg("No record Found");
 
         } else {
             //Ganesh D: Suggestions used of foreach loop is good, but you can check forEach + lambda expression
-            for (Ticket ticket : list) {
-                ConsolIO.showTicket(ticket);
-            }
+
+            // update :: used forEach + lambda
+            list.forEach(ticket -> ConsoleIO.showTicket(ticket));
         }
     }
 
     public void showSingleTicket() {
-        ConsolIO.ticketListHeader();
-        int id = ConsolIO.getTicketId();
-        Ticket ticket = ticketService.showSingleTicketService(id);
-        if (ticket == null) {
-            ConsolIO.showMsg("Ticket Not found");
-        } else {
-            ConsolIO.showTicket(ticket);
+
+        int id = ConsoleIO.getTicketId();
+        ConsoleIO.ticketListHeader();
+        try {
+            Ticket ticket = ticketService.showSingleTicketService(id);
+            ConsoleIO.showTicket(ticket);
+        } catch (TicketNotFountException tnfe) {
         }
     }
 
     public void searchTicketsUsingtag() {
-        ConsolIO.showMsg("Enter the tag want to search");
-        String tag = ConsolIO.getString();
+        ConsoleIO.showMsg("Enter the tag want to search");
+        String tag = ConsoleIO.getString();
 
-        ConsolIO.ticketListHeader();
+        ConsoleIO.ticketListHeader();
         List<Ticket> list = ticketService.searchTicketsUsingtagService(tag);
         if (list.isEmpty()) {
-            ConsolIO.showMsg("Ticket Not found");
+            ConsoleIO.showMsg("Ticket Not found");
         } else {
-            for (Ticket ticket : list) {
-                ConsolIO.showTicket(ticket);
-            }
+            // update :: used forEach + lambda
+            list.forEach(ticket -> ConsoleIO.showTicket(ticket));
         }
 
     }
 
     public void showTicketcountAgent() {
-        ConsolIO.showMsg("Agent Name  =>   Total Count");
+        ConsoleIO.showMsg("Agent Name  =>   Total Count");
         TreeMap<String, Integer> tmCount = ticketService.showTicketcountAgentService();
 
         for (Map.Entry<String, Integer> entry : tmCount.entrySet()) {
             String agentName = entry.getKey();
             Integer count = entry.getValue();
-            ConsolIO.showMsg(agentName + " => " + count);
+            ConsoleIO.showMsg(agentName + " => " + count);
         }
-
     }
 
-
     public void removeTicket() {
-        if (ticketService.removeTicketService(ConsolIO.getTicketId())) {
-            ConsolIO.showMsg(" Ticket deleted Successfully");
+        if (ticketService.removeTicketService(ConsoleIO.getTicketId())) {
+            ConsoleIO.showMsg(" Ticket deleted Successfully");
         }
     }
 
     public void searchTicketsUsingAgentname() {
 
-        List<Ticket> list = ticketService.searchTicketsUsingAgentnameService(ConsolIO.getAgentNAme());
-        ConsolIO.ticketListHeader();
+        List<Ticket> list = ticketService.searchTicketsUsingAgentnameService(ConsoleIO.getAgentNAme());
+        ConsoleIO.ticketListHeader();
         if (list.isEmpty()) {
-            ConsolIO.showMsg("Ticket Not found");
+            ConsoleIO.showMsg("Ticket Not found");
         } else {
-            for (Ticket ticket : list) {
-                ConsolIO.showTicket(ticket);
-            }
+            // update :: used forEach + lambda
+            list.forEach(ticket -> ConsoleIO.showTicket(ticket));
         }
     }
 

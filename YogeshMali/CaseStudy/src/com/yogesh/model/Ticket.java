@@ -35,10 +35,6 @@ public class Ticket implements Serializable {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-
-    }
 
     public String getSubject() {
         return subject;
