@@ -115,10 +115,12 @@ public class Serialization {
 
 		// Tickets older than a certain number of days
 		Scanner scanner = new Scanner(System.in);
+		//Virendra: Scanner resource is not closed. After printing reports
 		System.out.println("Tickets for last 'n' days. Enter value of n");
 		try {
 			int days = scanner.nextInt();
 			List<Ticket> tkList = deSer.stream().filter(t -> t.getModified().compareTo(LocalDateTime.now().minusDays(days)) < 0).collect(Collectors.toList());
+
 			if (!tkList.isEmpty())
 				tkList.forEach(util::printData);
 			else System.out.println("No tickets found in the system");
