@@ -119,7 +119,7 @@ public class UserConsoleInput {
             if(!file.exists())
                 file.createNewFile();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("File not found!");
         }
         return file;
     }

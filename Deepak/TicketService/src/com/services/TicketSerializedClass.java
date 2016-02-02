@@ -16,12 +16,14 @@ import java.util.Set;
  */
 public class TicketSerializedClass {
 
-    public static boolean saveTicketsInFile(Map<Long, Ticket> ticketMap, boolean append){
+    public static boolean saveTicketsInFile(Map<Long, Ticket> ticketMap, boolean append, File file){
 
         ObjectOutputStream oos = null;
         try {
             // Lokesh: Why do you need to create/check file for every ticket? Can't it be done one time when application starts?
-            File file = UserConsoleInput.createFile();
+             /** File file = UserConsoleInput.createFile();*/
+            /** Deepak:
+             * Check it at the time of start the application. */
             if(append){
                 // append to the file.
                 oos = new ObjectOutputStream(new FileOutputStream(file, true)){

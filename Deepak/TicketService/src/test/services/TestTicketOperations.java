@@ -1,4 +1,5 @@
 package test.services;
+/*
 
 import com.model.Ticket;
 import com.services.TicketOperations;
@@ -9,9 +10,11 @@ import java.util.*;
 
 import static org.junit.Assert.*;
 
+*/
 /**
  * Created by root on 18/1/16.
- */
+ *//*
+
 public class TestTicketOperations {
 
     public static String subject = null;
@@ -379,4 +382,4 @@ public class TestTicketOperations {
         assertTrue(tickets.get(createdTicket.getId()) instanceof Ticket);
     }
 
-}
+}*/

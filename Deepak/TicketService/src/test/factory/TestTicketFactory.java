@@ -1,4 +1,5 @@
 package test.factory;
+/*
 
 import com.customexceptions.UserInputException;
 import com.factory.TicketFactory;
@@ -11,9 +12,11 @@ import java.util.Set;
 
 import static org.junit.Assert.*;
 
+*/
 /**
  * Created by root on 20/1/16.
- */
+ *//*
+
 public class TestTicketFactory {
 
     @Test
@@ -33,3 +36,4 @@ public class TestTicketFactory {
         assertEquals(tagsSet, ticket.getTags());
     }
 }
+*/

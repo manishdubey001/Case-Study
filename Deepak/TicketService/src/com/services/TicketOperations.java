@@ -5,6 +5,8 @@ import com.factory.TicketFactory;
 import com.model.Ticket;
 import com.util.UserConsoleInput;
 
+import java.io.File;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -19,18 +21,30 @@ public class TicketOperations {
     // requires scanning the entire array. If there are thousands or millions of tickets,
     // this could be expensive.
     // Lokesh: When not required(or changed), why it is left declared at all? When making modification, don't forget to remove/comment redundant code.
-    private ArrayList<Ticket> ticketArrayList = null;
+    /*private ArrayList<Ticket> ticketArrayList = null;
     private Map<Long, Ticket> ticketHashMap = null;
-    public Set<String> allTagHashSet = null;
+    public Set<String> allTagHashSet = null;*/
 
     // Lokesh: When no inheritance in picture, no need to define a constructor just to initialize instance variables.
     // This can be done at the time of declaration itself or when they are actually used.
-    public TicketOperations(){
-        ticketArrayList = new ArrayList<>();
+
+    /** Deepak:
+     * To initialize instance variable we can used single liner or initializer block or constructor.
+     * Now I am not performing any pre processing operation so single liner is better way. */
+    /** TicketOperations(){
         ticketHashMap = new HashMap<>();
         allTagHashSet = new HashSet<>();
-    }
 
+    }*/
+
+    private Map<Long, Ticket> ticketHashMap = new HashMap<>();
+    public Set<String> allTagHashSet = new HashSet<>();
+    File file;
+
+    /** Deepak: Initializer block used for file creating */
+    {
+        file = UserConsoleInput.createFile();
+    }
 
     /*
     * To set parameters for Create ticket from console input */
@@ -47,13 +61,21 @@ public class TicketOperations {
 
         Set<String> tagHashSet = UserConsoleInput.getTagNames();
 
-        Ticket ticket = createTicket(subject, agentName, tagHashSet);
+        try {
+            Ticket ticket = createTicket(subject, agentName, tagHashSet);
+            System.out.println("Ticket created successful!");
+        }
+        catch(UserInputException e){
+            System.out.println(e.getMessage());
+        }
+
 
         // Lokesh: Why do you really need this check? Do you really suspect that call to createTicket can return any object other than Ticket?
-        if(ticket instanceof Ticket)
+       /* if(ticket instanceof Ticket)
             System.out.println("Ticket create successful!");
         else
-            System.out.println("Sorry your ticket has not been created!");
+            System.out.println("Sorry your ticket has not been created!");*/
+
     }
 
     /*
@@ -65,21 +87,21 @@ public class TicketOperations {
 
     // Lokesh: Seems like Chad's comment not interpreted completely.
     // Lokesh: By returning null values, you force caller to check for null returns, this should not be a practical case.
-    public Ticket createTicket(String subject, String agentName, Set<String> tagHashSet){
+    public Ticket createTicket(String subject, String agentName, Set<String> tagHashSet) throws UserInputException {
 
         Ticket ticket = null;
-        try {
+//        try {
             // Avoid accepting Null Values to your own functions. By accepting null as valid input, you force yourself to series of null checks.
             if (subject == null || subject.isEmpty())
-                throw new UserInputException("Please enter proper subject!");
+                throw new UserInputException("Please enter proper subject! Ticket Not created");
             else if (agentName == null || agentName.isEmpty())
-                throw new UserInputException("Please enter proper agent name!");
+                throw new UserInputException("Please enter proper agent name! Ticket Not created");
             else
                 ticket = TicketFactory.createTicketInstance(subject, agentName, tagHashSet);
 
-        }catch (UserInputException e) {
+       /* }catch (UserInputException e) {
             System.out.println(e.getMessage());
-        }
+        }*/
 
 
         if(ticket != null) {
@@ -90,12 +112,15 @@ public class TicketOperations {
             ticketHashMap.put(ticket.getId(), ticket);
 
             if(ticketHashMap.containsKey(ticket.getId()))
-                if (TicketSerializedClass.saveTicketsInFile(ticketHashMap, append))
+                if (TicketSerializedClass.saveTicketsInFile(ticketHashMap, append, file))
                     return ticket;
                 else
-                    return null;
+                    throw new UserInputException("Sorry! ticket creation failed!");
             else
-                return null;
+                throw new UserInputException("Sorry! ticket creation failed!");
+            /** Deepak:
+             * throw exception on failuer of ticket create and save in file.*/
+            /*return null;*/
 
         }
         else{
@@ -124,7 +149,11 @@ public class TicketOperations {
             return new HashMap<>();
         }
         // Lokesh: Rather than de-serializing for every ticket, you can use your "ticketHashMap" for this purpose, and keep serialized file and "ticketHashMap" in sync.
+        /** Deepak:
+         * I am using this file substitute for db for the time being. If Ticket is created successful and stored in my
+         * ticketHashMap but problem in Save in file. Thus to avoid redundancy Used file */
         Map<Long, Ticket> tempMap = TicketSerializedClass.readTicketsFromFile();
+
         // Stream and Lambda implementation.
         // usually you avoid storing intermediate results and just chain this together.
         tempTicketMap = tempMap.values().stream().filter(ticket -> ticket.getId() == id)
@@ -156,8 +185,7 @@ public class TicketOperations {
         stream.sorted((Ticket t1, Ticket t2) -> Long.valueOf(t2.getModified()).compareTo(Long.valueOf( t1.getModified())))
 */
 
-        ticketMap.values().stream().sorted((Ticket t1, Ticket t2) -> Long.valueOf(t2.getModified()).compareTo(Long.valueOf( t1.getModified())))
-
+        ticketMap.values().stream().sorted((Ticket t1, Ticket t2) -> t2.getModified().compareTo(t1.getModified()))
               .forEach((Ticket ticket) -> System.out.println(
                       ticket.getId()+" | "+ticket.getSubject()+" | "+ticket.getAgentName()+
                               " | "+ticket.getTags()+" | "+ticket.getModified()));
@@ -172,11 +200,7 @@ public class TicketOperations {
 
         @Override
         public int compare(Ticket t1, Ticket t2) {
-            if(t1.getModified() < t2.getModified())
-                return 1;
-            else
-                return -1;
-
+            return t1.getModified().compareTo(t2.getModified());
         }
     }
 
@@ -236,7 +260,7 @@ public class TicketOperations {
         }
 
         // Lokesh: Use LocalDateTime or Joda DateTime. Gives you control for timezones etc.
-        long unixTime = System.currentTimeMillis() / 1000L;
+        LocalDateTime unixTime = LocalDateTime.now();
 
         // Streams are kind of an awkward way to get at one element. I would expose a method
         // to get the ticket by ID explicitly.
@@ -246,7 +270,7 @@ public class TicketOperations {
             ticket.setAgentName(agentName);
             ticket.setTags(tagHashSet);
             ticket.setModified(unixTime);
-            TicketSerializedClass.saveTicketsInFile(ticketHashMap, false);
+            TicketSerializedClass.saveTicketsInFile(ticketHashMap, false, file);
 
             return ticket;
         }
@@ -267,7 +291,7 @@ public class TicketOperations {
         try{
             if(ticketHashMap.containsKey(Long.valueOf(id))) {
                 if(ticketHashMap.remove(Long.valueOf(id)) != null);
-                    TicketSerializedClass.saveTicketsInFile(ticketHashMap, false);
+                    TicketSerializedClass.saveTicketsInFile(ticketHashMap, false, file);
                 return true;
             }
             else
@@ -391,7 +415,7 @@ public class TicketOperations {
             ticketHashMap.put(ticket.getId(), ticket);
 
             if(ticketHashMap.containsKey(ticket.getId()))
-                TicketSerializedClass.saveTicketsInFile(ticketHashMap, append);
+                TicketSerializedClass.saveTicketsInFile(ticketHashMap, append, file);
 
         }
 

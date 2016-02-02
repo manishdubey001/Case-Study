@@ -1,6 +1,7 @@
 package com.model;
 
 import java.io.*;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Function;
@@ -13,6 +14,10 @@ public class Ticket implements Serializable, Function<Object, Object> {
     private static long countId = 1;
     // Lokesh: With each new Run of this application, your tickets are always starting from ID 1, even though they are already created and serialized in file.
     // They should start after max_id present in file.
+    /** Deepak :
+     * I noticed this point and I am working on it, but the MaxId from file is not the correct solution for this.
+     * As if we delete from the file it will not reflect properly. So I am going to maintain one more file to append Id's and get maxNo from it.
+     */
     private long id;
     private String subject;
     // generally Java avoids underscores in names, and uses 'camel case' like agentName
@@ -21,13 +26,12 @@ public class Ticket implements Serializable, Function<Object, Object> {
     private short status = 1;
 
     // Lokesh: Use LocalDateTime or Joda Time for Date-Time purpose. gives more controlled operations on different time zones and other stuffs.
-    private long modified;
-    private long created;
-    private long unixTime = System.currentTimeMillis() / 1000L;
+    private LocalDateTime modified;
+    private LocalDateTime created;
+    private LocalDateTime unixTime = LocalDateTime.now();
 
     // Note that you don't use many of these accessors; if you don't know a need
     // for an accessor, don't write it. Expose as little of your class as possible.
-
 
     public String getSubject() {
         return subject;
@@ -44,9 +48,6 @@ public class Ticket implements Serializable, Function<Object, Object> {
     // As ticket has been created with inappropriate subject.
     // Or in case of transfer ticket to agent with proper subject.
     // Lokesh: not in use till now, then there is no sense of defining it.
-    public void setSubject(String subject) {
-        this.subject = subject;
-    }
 
 
     public String getAgentName() {
@@ -58,23 +59,20 @@ public class Ticket implements Serializable, Function<Object, Object> {
     }
 
 
-    public long getCreated() {
+    public LocalDateTime getCreated() {
         return created;
     }
 
     // Have the ticket class manage its own created and modified timestamps
 
     // Lokesh: no lesson learned from Chad's above comment.
-    public void setCreated(long created) {
-        this.created = created;
-    }
 
 
-    public long getModified() {
+    public LocalDateTime getModified() {
         return modified;
     }
 
-    public void setModified(long modified) {
+    public void setModified(LocalDateTime modified) {
         this.modified = modified;
     }
 
@@ -122,31 +120,31 @@ public class Ticket implements Serializable, Function<Object, Object> {
     }
 
 
-    private void writeObject(ObjectOutputStream o) throws IOException{
-            o.writeLong(this.id);
-            o.writeUTF(this.subject);
-            o.writeUTF(this.agentName);
-            o.writeObject(this.tags);
-            o.writeLong(this.modified);
-            o.writeLong(this.created);
+    private void writeObject(ObjectOutputStream oos) throws IOException{
+        oos.writeLong(this.id);
+        oos.writeUTF(this.subject);
+        oos.writeUTF(this.agentName);
+        oos.writeObject(this.tags);
+        oos.writeObject(this.modified);
+        oos.writeObject(this.created);
     }
 
-    private void readObject(ObjectInputStream i) throws IOException{
+    private void readObject(ObjectInputStream ois) throws IOException{
         try {
-            this.id = i.readLong();
-            this.subject = i.readUTF();
-            this.agentName = i.readUTF();
-            this.tags = (Set<String>) i.readObject();
-            this.modified = i.readLong();
-            this.created = i.readLong();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+            this.id = ois.readLong();
+            this.subject = ois.readUTF();
+            this.agentName = ois.readUTF();
+            this.tags = (Set<String>) ois.readObject();
+            this.modified = (LocalDateTime) ois.readObject();
+            this.created = (LocalDateTime) ois.readObject();
+        }  catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
 
     //Lokesh: just because Chad written somewhere in comment, you created this function, but not in use at all?
+    /** Deepak:
+     * it is in used earlier and I kept this function to show to chad and evaluate from him*/
     public boolean hasTag(String tag){
         return this.getTags().contains(tag);
     }
