@@ -54,7 +54,6 @@ public class ConsoleIO {
 
     static String getString() {
         Scanner scanIn = new Scanner(System.in);
-        String s = scanIn.nextLine();
         return scanIn.nextLine();
 
     }

@@ -2,7 +2,6 @@ package com.yogesh.service;
 
 
 import com.yogesh.ConsoleIO;
-import com.yogesh.DateComparator;
 import com.yogesh.Exception.TicketNotFountException;
 import com.yogesh.model.Ticket;
 import com.yogesh.pattern.TicketFactory;
@@ -85,7 +84,7 @@ public class TicketService {
             return hmTicketList.get(id);
         }
 
-       throw new TicketNotFountException("Ticket not Found");
+        throw new TicketNotFountException("Ticket not Found");
     }
 
 
@@ -94,10 +93,10 @@ public class TicketService {
      */
     public List showAllTicketService() {
 
-        ArrayList<Ticket> arrTicketList = new ArrayList<>(this.hmTicketList.values());
-        // sort is based on modified date field Descending Order
-        Collections.sort(new ArrayList<>(arrTicketList), new DateComparator());
-        return arrTicketList;
+        return this.hmTicketList.values()
+                .stream()
+                .sorted((Ticket o1, Ticket o2) -> o2.getModified().compareTo(o1.getModified()))
+                .collect(Collectors.toList());
     }
 
 
