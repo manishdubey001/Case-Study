@@ -59,9 +59,11 @@ public class TicketOperations {
         System.out.println("Enter ticket Id for showing details : ");
         int id = InputDataReader.readInteger();
         Ticket ticket = ticketService.getTicketDetails(id);
+        // Lokesh: Call to your function in TicketService should  not force callers to check for NULL.
         if(ticket != null){
             System.out.println("Ticket details of ticket id : " + id);
             showHeader();
+            // Lokesh: on next level, you can override the toString function in Ticket modal to display a ticket object rather then every time calling like below line.
             System.out.println(ticket.getId() +"  |  " + ticket.getSubject() +"  |  " + ticket.getAgentName() +"  |  " + ticket.getTags() +"  |  " +
                     ticket.getCreated() +"  |  " + ticket.getModified());
         }

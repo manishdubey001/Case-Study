@@ -29,10 +29,12 @@ public class TicketService {
     }
 
     public Ticket getTicketDetails(int id){
+        // Lokesh: It may return Null. It forces callers for Null check. Rather then returning null, through an exception.
         return masterTicketsData.get(id);
     }
 
     public List<Ticket> getTicketsByAgentName(String agentName){
+        // Lokesh: it may return null, return empty collection or throw exception in place of null
         return masterTicketsData.values().stream().filter(ticket -> ticket.getAgentName().toLowerCase().equals(agentName.toLowerCase())).collect(Collectors.toList());
     }
 
@@ -72,6 +74,7 @@ public class TicketService {
         return ticket;
     }
 
+//    Lokesh: Return Set interface instead of concrete HashMap. Applied some where, missed here.
     public HashMap<Integer, Ticket> getAllTickets(){
         return masterTicketsData;
     }

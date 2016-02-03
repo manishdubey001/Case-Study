@@ -33,7 +33,9 @@ public class Ticket {
         return Collections.unmodifiableSet(tags);
     }
 
+    // Lokesh: Accept Set interface type in-place of HashSet.
     public void setTags(HashSet<String> tags) {
+        // Lokesh: Don't directly set reference to user's passed Collection for internal object, Instead copy them.
         this.tags = tags;
     }
 
@@ -45,6 +47,7 @@ public class Ticket {
         return modified;
     }
 
+    // Lokesh: why do you still require this, that too public?
     public void setModified(LocalDateTime modified) {
         this.modified = modified;
     }

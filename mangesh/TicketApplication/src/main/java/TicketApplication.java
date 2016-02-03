@@ -1,13 +1,17 @@
 public class TicketApplication {
+    // Lokesh: Shouldn't it be private?
     public TicketOperations ticketOperation = null;
 
     public TicketApplication(){
         ticketOperation = new TicketOperations();
+
+        // Lokesh: Avoid to put any kind of Logic in Constructor. Understand the purpose of Cons
         int userInput;
         do {
             displayMenuList();
             userInput = InputDataReader.readInteger();
             performTicketAction(userInput);
+            // Lokesh: Case 9 or 10 for Exit? Check below your switch-case. There is big logical mistake. Here you say 10 for exit, but switch-case says 9 for exit.
         }while (userInput != 10);
     }
 
@@ -38,6 +42,7 @@ public class TicketApplication {
             case 8 : ticketOperation.searchTicketsByTag();
                 break;
             case 9 :
+                // Lokesh: exit statement not required.
                 System.exit(0);
                 System.out.println("End of operation");
             default:
