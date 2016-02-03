@@ -1,6 +1,5 @@
 package com.yogesh.service;
 
-import com.yogesh.DateComparator;
 import com.yogesh.model.Ticket;
 
 import java.time.LocalDateTime;
@@ -40,7 +39,7 @@ public class ReportingService {
         //Ganesh D: logic is good, you can also see how to do with streams, it has inbuild functions to check minimum, maximum, etc.,
 
         // update :: used Stream
-        return hmTicketList.values().stream().max((Ticket date1, Ticket date2) -> date2.getCreated().compareTo(date1.getCreated())).get();
+        return hmTicketList.values().stream().max((objTicket1, objTicket2) -> objTicket2.getCreated().compareTo(objTicket1.getCreated())).get();
 
     }
 

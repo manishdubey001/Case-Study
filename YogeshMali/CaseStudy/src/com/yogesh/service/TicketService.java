@@ -80,7 +80,8 @@ public class TicketService {
     // update :: created custom Exception for avoid null pointer Exception
     public Ticket showSingleTicketService(int id) throws TicketNotFountException {
 
-        if (this.hmTicketList.containsKey(id)) {
+        Ticket ticket = hmTicketList.get(id);
+        if (ticket != null) {
             return hmTicketList.get(id);
         }
 
@@ -108,8 +109,8 @@ public class TicketService {
 
         //  update ::
 
-        if (isTicketIdExist(id)) {
-            Ticket ticket = this.hmTicketList.get(id);
+        Ticket ticket = this.hmTicketList.get(id);
+        if (ticket != null) {
             ticket.setTags(newlist);
             this.hmTicketList.put(id, ticket);
             return true;
@@ -134,15 +135,15 @@ public class TicketService {
 
         //update :: ganesh I forgot to remove for loop after change ArrayList to HashMap for ticket object
 
-        if (isTicketIdExist(id)) {
-            if (newAgentName != null && !newAgentName.isEmpty()) {
-                Ticket ticket = this.hmTicketList.get(id);
+        if (newAgentName != null && !newAgentName.isEmpty()) {
+            Ticket ticket = this.hmTicketList.get(id);
+            if (ticket != null) {
                 ticket.setAgentName(newAgentName);
                 this.hmTicketList.put(id, ticket);
                 return true;
+            } else {
+                ConsoleIO.showMsg("Ticket is not Found");
             }
-        } else {
-            ConsoleIO.showMsg("Ticket is not Found");
         }
         return false;
     }

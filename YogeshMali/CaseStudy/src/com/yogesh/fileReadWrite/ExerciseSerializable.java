@@ -27,17 +27,14 @@ public class ExerciseSerializable {
 
         Ticket ticket = new Ticket(1, "Subject", "Yogesh", new HashSet<>(Arrays.asList("tag1")));
 
-        try (ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(filepath))) {
-            os.writeObject(ticket);
+        FileOperations.writeObjectToFile(ticket,filepath);
 
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
 
+        Ticket objTicket =  FileOperations.readObjectFromFile(filepath);
+        ConsoleIO.ticketListHeader();
+        ConsoleIO.showTicket(ticket);
         try (ObjectInputStream objIn = new ObjectInputStream(new FileInputStream(filepath))) {
-            Ticket objTicket = (Ticket) objIn.readObject();
-            ConsoleIO.ticketListHeader();
-            ConsoleIO.showTicket(ticket);
+
 
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -55,8 +52,8 @@ public class ExerciseSerializable {
 
         ArrayList<Ticket> arrlist = null;
         try {
-            Ticket.serialize(arr);
-            arrlist = Ticket.deserialize();
+            FileOperations.serialize(arr);
+            arrlist = FileOperations.deserialize();
         } catch (IOException ioe) {
             ioe.printStackTrace();
         } catch (ClassNotFoundException cnfe) {
