@@ -1,7 +1,6 @@
 package com.ticket;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 
 /**
  * Created by root on 21/1/16.
@@ -16,21 +15,13 @@ public final class Util {
         // the value in one statement if you don't have a reason to declare
         // named variables.
 
-        //UPDATE
+        //UPDATE:
         return LocalDateTime.now();
     }
 
-    //UPDATE
+    //UPDATE:
     public static String getDateFormat(LocalDateTime timeStamp){
         DateTimeFormatter formatter =  DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
         return formatter.format(timeStamp);
-    }
-
-    //UPDATE
-    public static void printTicketListValues(List<Ticket> ticketList){
-        /*for(Ticket ticket : ticketList){
-            System.out.println(ticket);
-        }*/
-        ticketList.forEach(ticket -> System.out.println(ticket));
     }
 }

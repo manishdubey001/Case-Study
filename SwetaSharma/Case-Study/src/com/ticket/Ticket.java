@@ -47,19 +47,18 @@ public class Ticket implements Comparable<Ticket>{
 
     //UPDATE
     public void setTags(Set<String> tags) {
-        this.setModified(Util.timestamp());
+        //UPDATE
+        this.setModified();
         this.tags = tags;
     }
 
-    public LocalDateTime getCreated() {
-        return created;
-    }
     public String getAgentName() {
         return agentName;
     }
 
     public void setAgentName(String agentName) {
-        this.setModified(Util.timestamp());
+        //UPDATE
+        this.setModified();
         this.agentName = agentName;
     }
 
@@ -71,8 +70,9 @@ public class Ticket implements Comparable<Ticket>{
         return modified;
     }
 
-    private void setModified(LocalDateTime modified) {
-        this.modified = modified;
+    private void setModified() {
+        //UPDATE:
+        this.modified = Util.timestamp();
     }
 
     @Override
