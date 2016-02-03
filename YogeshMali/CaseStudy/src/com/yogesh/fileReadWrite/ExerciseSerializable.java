@@ -7,8 +7,12 @@ package com.yogesh.fileReadWrite;
 import com.yogesh.ConsoleIO;
 import com.yogesh.model.Ticket;
 
-import java.io.*;
-import java.util.*;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 
 /**
  * JDK before version 7.
@@ -27,10 +31,10 @@ public class ExerciseSerializable {
 
         Ticket ticket = new Ticket(1, "Subject", "Yogesh", new HashSet<>(Arrays.asList("tag1")));
 
-        FileOperations.writeObjectToFile(ticket,filepath);
+        FileOperations.writeObjectToFile(ticket, filepath);
 
 
-        Ticket objTicket =  FileOperations.readObjectFromFile(filepath);
+        Ticket objTicket = FileOperations.readObjectFromFile(filepath);
         ConsoleIO.ticketListHeader();
         ConsoleIO.showTicket(ticket);
         try (ObjectInputStream objIn = new ObjectInputStream(new FileInputStream(filepath))) {

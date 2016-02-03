@@ -1,11 +1,10 @@
 package com.yogesh.model;
 
 import java.io.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.Month;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Random;
+import java.util.Set;
 
 /**
  * Created by root on 31/12/15.
