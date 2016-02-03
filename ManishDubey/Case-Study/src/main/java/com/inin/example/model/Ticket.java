@@ -5,7 +5,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -21,14 +20,21 @@ public class Ticket implements Serializable{
     private LocalDateTime created;
     private LocalDateTime modified;
 
-    public Ticket(){}
-    public Ticket(int id, String subject, String agentName, HashSet<String> tags) {
+    public Ticket(int id, String subject, String agentName, Set<String> tags) {
         this.id = id;
         this.subject = subject;
         this.agentName = agentName;
         this.tags = tags;
-        this.created = LocalDateTime.now();
-        this.modified = LocalDateTime.now();
+        this.created = this.modified = LocalDateTime.now();
+    }
+
+    public Ticket(Ticket ticket){
+        this.id = ticket.getId();
+        this.subject= ticket.getSubject();
+        this.agentName = ticket.getAgentName();
+        this.tags = new HashSet<>(ticket.getTags());
+        this.created = ticket.getCreated();
+        this.modified = ticket.getModified();
     }
     public int getId() {
         return id;
@@ -44,16 +50,16 @@ public class Ticket implements Serializable{
 
     public void setAgentName(String agentName) {
         this.agentName = agentName;
-        this.setModified(LocalDateTime.now());
+        this.modified =LocalDateTime.now();
     }
 
     public Set<String> getTags() {
-        return tags == null ? null : Collections.unmodifiableSet(tags);
+        return tags;
     }
 
     public void setTags(Set<String> tags) {
-        this.tags = tags != null ? new HashSet<>(tags): null;
-        this.setModified(LocalDateTime.now());
+        this.tags = tags;
+        this.modified =LocalDateTime.now();
     }
 
     public LocalDateTime getCreated() {
@@ -64,36 +70,37 @@ public class Ticket implements Serializable{
         return modified;
     }
 
-    private void setModified(LocalDateTime modified) {
-        this.modified = modified;
-    }
-
+    /**
+     * Custom serialization of ticket object
+     * @param oos
+     * @throws Exception
+     */
     private void writeObject(ObjectOutputStream oos) throws Exception{
-        oos.writeInt(id);
-        oos.writeUTF(subject);
-        oos.writeUTF(agentName);
-        oos.writeObject(tags);
-        oos.writeObject(created);
-        oos.writeObject(modified);
+        oos.writeInt(getId());
+        oos.writeUTF(getSubject());
+        oos.writeUTF(getAgentName());
+        oos.writeObject(getTags());
+        oos.writeObject(getCreated());
+        oos.writeObject(getModified());
     }
 
+    /**
+     * Custom deserialization of ticket object
+     * @param ois
+     * @throws Exception
+     */
     private void readObject(ObjectInputStream ois) throws Exception{
-        id = ois.readInt();
-        subject = ois.readUTF();
-        agentName = ois.readUTF();
-        tags = (HashSet<String >) ois.readObject();
-        created = (LocalDateTime) ois.readObject();
-        modified = (LocalDateTime)ois.readObject();
+        this.id = ois.readInt();
+        this.subject = ois.readUTF();
+        this.agentName = ois.readUTF();
+        this.tags = (Set<String >)ois.readObject();
+        this.created = (LocalDateTime)ois.readObject();
+        this.modified = (LocalDateTime)ois.readObject();
     }
-    public Ticket copy(Ticket ticket){
-        Ticket newTicket = new Ticket();
-        newTicket.id = ticket.id;
-        newTicket.subject = ticket.subject;
-        newTicket.agentName = ticket.agentName;
-        newTicket.tags = ticket.getTags();
-        newTicket.created = ticket.getCreated();
-        newTicket.modified = ticket.modified;
-        return newTicket;
+
+    @Override
+    public String toString(){
+        return getId() + "\t" + getSubject() + "\t" + getAgentName() + "\t" + getTags() + "\t" + getCreated() + "\t" + getModified() + "\t";
     }
 
 }

@@ -1,9 +1,9 @@
-com/inin/example/service/TicketReportService.class
 com/inin/example/service/TicketService.class
 com/inin/example/App.class
 com/inin/example/AppManager.class
 com/inin/example/model/Ticket.class
 com/inin/example/factory/TicketFactory.class
+com/inin/example/exception/TicketNotFound.class
 com/inin/example/TicketManager.class
 com/inin/example/util/InputReader.class
 com/inin/example/util/TicketSerializationUtil.class

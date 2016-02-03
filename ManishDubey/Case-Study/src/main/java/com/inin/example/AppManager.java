@@ -7,13 +7,13 @@ import com.inin.example.util.TicketUtil;
  */
 public class AppManager {
 
-    public TicketManager ticketManager= null;
+    public TicketManager ticketManager;
     /**
      * Boot ticket crud application
      */
     public void startTicketApp() {
-        int userInput = 0;
-        this.ticketManager = new TicketManager();
+        int userInput;
+        ticketManager = new TicketManager();
         do{
             TicketUtil.displayTicketMenu();
             userInput = TicketUtil.acceptUserInput();

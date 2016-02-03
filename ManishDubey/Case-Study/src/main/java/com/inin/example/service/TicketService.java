@@ -1,9 +1,13 @@
 package com.inin.example.service;
 
+import com.inin.example.exception.TicketNotFound;
 import com.inin.example.factory.TicketFactory;
 import com.inin.example.model.Ticket;
 import com.inin.example.util.TicketSerializationUtil;
+import com.inin.example.util.TicketUtil;
 
+import java.security.InvalidParameterException;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -12,78 +16,62 @@ import java.util.stream.Collectors;
  */
 public class TicketService {
 
-//    private Map<Integer,Ticket> tickets = null;
+    private Map<Integer,Ticket> tickets = new HashMap<>();
 
-    public TicketService(){
-//        tickets = new HashMap<>();
-    }
     /**
      * Create new ticket by taking user input
      */
-    public Ticket create(String subject, String agentName, HashSet<String> tags)
+    public Ticket create(String subject, String agentName, Set<String> tags) throws InvalidParameterException
     {
-        if(subject == null || subject.isEmpty() || agentName == null || agentName.isEmpty())
-            return null;
+        if(!TicketUtil.isValidString(subject) || !TicketUtil.isValidString(agentName))
+            throw new InvalidParameterException();
+        tags = tags != null ? new HashSet<>(tags): new HashSet<>();
         Ticket ticket = TicketFactory.newInstance(subject, agentName, tags);
-        Map<Integer,Ticket>  tickets = new HashMap<>();
         tickets.put(ticket.getId(),ticket );
-        TicketSerializationUtil.serializeTickets(tickets, true);
-        return ticket.copy(ticket);
+        return TicketFactory.newInstance(ticket);
     }
     /**
      * Delete Ticket by id
      */
     public boolean delete(int id){
-        Map<Integer,Ticket> tickets = TicketSerializationUtil.deserializeTickets();
-        Ticket ticket = tickets.remove(id);
-        if(ticket !=null)
-        {
-            TicketSerializationUtil.serializeTickets(tickets, false);
-            return true;
-        }
-        return false;
+        return tickets.remove(id) != null ? true : false;
     }
 
     /**
      * Update ticket by id
      */
-    public Ticket update(int id,String agentName, HashSet<String> tags)
+    public Ticket update(int id,String agentName, Set<String> tags) throws InvalidParameterException
     {
-        Map<Integer,Ticket> tickets = TicketSerializationUtil.deserializeTickets();
         Ticket ticket = tickets.get(id);
-        boolean modified = false;
-        if (ticket != null) {
-            if (agentName != null && !agentName.isEmpty()) {
-                ticket.setAgentName(agentName);
-                modified = true;
-            }
-            if (tags != null) {
-                ticket.setTags(tags);
-                modified = true;
-            }
-            if(modified)
-                TicketSerializationUtil.serializeTickets(tickets, false);
+        if(ticket == null ||( !TicketUtil.isValidString(agentName) && !TicketUtil.isValidCollection(tags)))
+            throw new InvalidParameterException();
+
+        if (TicketUtil.isValidString(agentName))
+            ticket.setAgentName(agentName);
+        if (TicketUtil.isValidCollection(tags)) {
+            ticket.getTags().clear();
+            ticket.getTags().addAll(tags);
         }
-        return ticket.copy(ticket);
+
+        return TicketFactory.newInstance(ticket);
     }
 
     /**
      * Display single ticket by id
      */
-    public Ticket ticket(int id)
+    public Ticket ticket(int id) throws InvalidParameterException
     {
-        Map<Integer,Ticket> tickets = TicketSerializationUtil.deserializeTickets();
-        if(tickets.get(id) != null)
-         return tickets.get(id).copy(tickets.get(id));
-        return null;
+        Ticket ticket = tickets.get(id);
+        if(ticket == null)
+            throw new InvalidParameterException();
+        return ticket;
     }
 
     /**
-     * Display all ticket on console
+     * Return Ticket List
      */
     public List<Ticket> tickets()
     {
-        Map<Integer,Ticket> tickets = TicketSerializationUtil.deserializeTickets();
         return Collections.unmodifiableList(tickets.values()
                 .stream()
                 .sorted((Ticket o1, Ticket o2) -> o2.getModified().compareTo(o1.getModified()))
@@ -96,7 +84,6 @@ public class TicketService {
      * @return List<Ticket>
      */
     public List<Ticket> ticketsByAgent(String agentName){
-        Map<Integer,Ticket> tickets = TicketSerializationUtil.deserializeTickets();
         return Collections.unmodifiableList(tickets.values()
                 .stream()
                 .filter(ticket -> ticket.getAgentName().toLowerCase().equals(agentName.toLowerCase()))
@@ -110,7 +97,6 @@ public class TicketService {
      * @return List<Ticket>
      */
     public List<Ticket> ticketsByTag(String tag){
-        Map<Integer,Ticket> tickets = TicketSerializationUtil.deserializeTickets();
         return Collections.unmodifiableList(tickets.values()
                 .stream()
                 .filter(ticket -> ticket.getTags().contains(tag.toLowerCase()))
@@ -124,7 +110,6 @@ public class TicketService {
      */
     public Map<String,List<Ticket>> ticketsGroupByAgent()
     {
-        Map<Integer,Ticket> tickets = TicketSerializationUtil.deserializeTickets();
         return Collections.unmodifiableMap(new TreeMap<>(
                     tickets.values()
                     .stream()
@@ -138,8 +123,69 @@ public class TicketService {
      */
     public boolean isTicketExist(int id)
     {
-        Map<Integer,Ticket> tickets = TicketSerializationUtil.deserializeTickets();
         return tickets.containsKey(id);
+    }
+
+    /**
+     * Return the total count of Tickets
+     * @return int
+     */
+    public int totalTicketCount()
+    {
+        return tickets.size();
+    }
+
+    /**
+     * Return the oldest Ticket
+     * @return Ticket
+     */
+    public Ticket oldestTicket()
+    {
+        if(tickets.isEmpty())
+            throw new TicketNotFound("No Ticket In the system");
+
+        return TicketFactory.newInstance(
+                tickets.values()
+                .stream()
+                .sorted((Ticket t1, Ticket t2) -> t1.getCreated().compareTo(t2.getCreated()))
+                .findFirst()
+                .get()
+            );
+    }
+
+    /**
+     * Return Ticket By Date
+     * @param date
+     * @return List<Ticket>
+     */
+    public List<Ticket> ticketOlderByDate(LocalDateTime date){
+        return Collections.unmodifiableList(tickets.values()
+                .stream()
+                .filter(ticket -> date.compareTo(ticket.getCreated()) >= 0 )
+                .collect(Collectors.toList()));
+    }
+
+    /**
+     * Return Ticket group by tags
+     * @return Map<String, List<Ticket>>
+     */
+    public Map<String, Integer> ticketsGroupByTag(){
+        Map<String,Integer> ticketByTag = new HashMap<>();
+        tickets.values()
+                .stream()
+                .forEach(ticket -> {
+                    ticket.getTags().forEach( tag -> {
+                        if(ticketByTag.containsKey(tag))
+                            ticketByTag.put(tag,ticketByTag.get(tag)+1);
+                        else {
+                            List<Ticket> list = new ArrayList<>();
+                            list.add(ticket);
+                            ticketByTag.put(tag, 1);
+                        }
+                    });
+                });
+        return Collections.unmodifiableMap(ticketByTag);
+
     }
 
     /**
@@ -147,6 +193,13 @@ public class TicketService {
      * @param noOfTickets
      */
     public void loadDummyTickets(int noOfTickets){
-        System.out.println("This feature is not implemented");
+        Random rd = new Random();
+        for (int i = 1;i <= noOfTickets; i++){
+            Set<String > tags = new HashSet<>();
+            tags.add("tag"+rd.nextInt(100));
+            tags.add("tag"+rd.nextInt(100));
+            Ticket ticket = TicketFactory.newInstance("Subject"+rd.nextInt(100),"Agent"+rd.nextInt(100),tags);
+            tickets.put(ticket.getId(),ticket);
+        }
     }
 }

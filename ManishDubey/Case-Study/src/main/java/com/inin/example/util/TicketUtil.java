@@ -1,7 +1,11 @@
 package com.inin.example.util;
 
+import com.sun.media.sound.InvalidFormatException;
+
 import java.io.*;
 import java.security.InvalidParameterException;
+import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.Properties;
 
 /**
@@ -38,7 +42,7 @@ public class TicketUtil {
      * @return int
      */
     public static int acceptUserInput(){
-        int userInput  = 0;
+        int userInput = 0;
         try {
             userInput = InputReader.readInt();
             if (userInput <= 0 || userInput > 14)
@@ -124,6 +128,11 @@ public class TicketUtil {
         return file;
     }
 
+    /**
+     * Return the property file name
+     * @param property
+     * @return String
+     */
     private static String getPropertyFileName(String property){
         switch (property)
         {
@@ -132,6 +141,52 @@ public class TicketUtil {
             default:
                 return "config.properties";
         }
+    }
+
+    /**
+     * Validate string by checking null and empty
+     * @param str
+     * @return boolean
+     */
+    public static boolean isValidString(String str)
+    {
+        return str != null && !str.isEmpty();
+    }
+
+    /**
+     * Validate string by checking null and empty
+     * @param collection
+     * @return boolean
+     */
+    public static boolean isValidCollection(Collection collection)
+    {
+        return collection !=null && !collection.isEmpty();
+    }
+
+    /**
+     * Validate date string of format dd/mm/yyyy
+     * @param date
+     * @param delimiter
+     * @return LocalDateTime
+     */
+    public static boolean validDateString(String date,String delimiter){
+        try {
+            if (TicketUtil.isValidString(date)) {
+                String[] dateArr = date.split(delimiter);
+                if (dateArr.length == 3) {
+                    int day  = Integer.parseInt(dateArr[0]);
+                    int month  = Integer.parseInt(dateArr[1]);
+                    int year  = Integer.parseInt(dateArr[2]);
+                    if(day > 0 && day <= 31 && month > 1 && month <= 12 && year > 1600) {
+                         return true;
+                    }
+                }
+            }
+        }catch (NumberFormatException e)
+        {
+            e.printStackTrace();
+        }
+        return false;
     }
 
 }

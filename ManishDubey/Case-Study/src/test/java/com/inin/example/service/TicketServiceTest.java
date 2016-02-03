@@ -4,6 +4,8 @@ import com.inin.example.model.Ticket;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.security.InvalidParameterException;
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -11,31 +13,27 @@ import java.util.*;
  */
 public class TicketServiceTest {
 
-    @Test
+    @Test(expected = InvalidParameterException.class)
     public void testCreateTicketWithNullSubject(){
         TicketService ticketService = new TicketService();
-        Ticket ticket = ticketService.create(null,"Agent1",new HashSet<>());
-        Assert.assertNull(ticket);
+        ticketService.create(null,"Agent1",new HashSet<>());
     }
 
-    @Test
+    @Test(expected = InvalidParameterException.class)
     public void testCreateTicketWithNullAgent(){
         TicketService ticketService = new TicketService();
-        Ticket ticket = ticketService.create("Test Subject",null,new HashSet<>());
-        Assert.assertNull(ticket);
+        ticketService.create("Test Subject",null,new HashSet<>());
     }
-    @Test
+    @Test(expected = InvalidParameterException.class)
     public void testCreateTicketWithEmptySubject(){
         TicketService ticketService = new TicketService();
-        Ticket ticket = ticketService.create("","Agent1",new HashSet<>());
-        Assert.assertNull(ticket);
+        ticketService.create("","Agent1",new HashSet<>());
     }
 
-    @Test
+    @Test(expected = InvalidParameterException.class)
     public void testCreateTicketWithEmptyAgent(){
         TicketService ticketService = new TicketService();
-        Ticket ticket = ticketService.create("Test Subject","",new HashSet<>());
-        Assert.assertNull(ticket);
+        ticketService.create("Test Subject","",new HashSet<>());
     }
 
     @Test
@@ -45,7 +43,7 @@ public class TicketServiceTest {
         Ticket ticket = ticketService.create("Test Subject","Agent1",null);
         Assert.assertEquals("Test Subject",ticket.getSubject());
         Assert.assertEquals("Agent1",ticket.getAgentName());
-        Assert.assertEquals(null,ticket.getTags());
+        Assert.assertEquals(new HashSet<String>(),ticket.getTags());
         ticketService.delete(ticket.getId());
     }
 
@@ -112,12 +110,19 @@ public class TicketServiceTest {
         TicketService ticketService = new TicketService();
         HashSet<String> tags = new HashSet<>(Arrays.asList("tag1","tag2","tag3"));
         Ticket ticket = ticketService.create("Test Subject","Agent1",tags);
-        Assert.assertNull(ticketService.ticket(100000000));
         Ticket ticket1 = ticketService.ticket(ticket.getId());
         Assert.assertEquals("Test Subject",ticket1.getSubject());
         Assert.assertEquals("Agent1",ticket1.getAgentName());
         Assert.assertEquals(tags,ticket1.getTags());
         ticketService.delete(ticket.getId());
+    }
+    @Test(expected = InvalidParameterException.class)
+    public void testGetTicketWithInvalidId()
+    {
+        TicketService ticketService = new TicketService();
+        HashSet<String> tags = new HashSet<>(Arrays.asList("tag1","tag2","tag3"));
+        ticketService.create("Test Subject","Agent1",tags);
+        Assert.assertNull(ticketService.ticket(100000000));
     }
 
 
@@ -177,6 +182,51 @@ public class TicketServiceTest {
         else
             Assert.assertEquals(2,ticketsGroupByAgent.get("Agent2").size());
         deleteDummyTicket(dummyTicketTicketList,ticketService);
+    }
+    @Test
+    public void testTotalTicketCount()
+    {
+        TicketService ticketService = new TicketService();
+        List<Ticket> dummyTicketTicketList = generateDummyTicket(ticketService);
+        Assert.assertEquals(4,ticketService.totalTicketCount());
+        deleteDummyTicket(dummyTicketTicketList,ticketService);
+    }
+
+    @Test
+    public void testOldestTicket()
+    {
+        TicketService ticketService = new TicketService();
+        List<Ticket> dummyTicketTicketList = generateDummyTicket(ticketService);
+        Ticket oldest = ticketService.oldestTicket();
+        List<Ticket> ticketList = ticketService.tickets();
+        ticketList.forEach(ticket -> Assert.assertTrue(oldest.getCreated().compareTo(ticket.getCreated()) <= 0 ));
+        deleteDummyTicket(dummyTicketTicketList,ticketService);
+    }
+
+    @Test
+    public void testTicketOlderByDate()
+    {
+        TicketService ticketService = new TicketService();
+        List<Ticket> dummyTicketTicketList = generateDummyTicket(ticketService);
+        LocalDateTime date = LocalDateTime.now();
+        List<Ticket> ticketList = ticketService.ticketOlderByDate(date);
+        ticketList.forEach(ticket -> Assert.assertTrue(ticket.getCreated().compareTo(date) <= 0));
+        deleteDummyTicket(dummyTicketTicketList,ticketService);
+    }
+
+    @Test
+    public void testTicketsGroupByTag()
+    {
+        TicketService ticketService = new TicketService();
+        List<Ticket> dummyTicketTicketList = generateDummyTicket(ticketService);
+        Map<String,Integer> ticketGroupByTag = ticketService.ticketsGroupByTag();
+        Assert.assertEquals(3,ticketGroupByTag.get("tag1").intValue());
+        Assert.assertEquals(3,ticketGroupByTag.get("tag2").intValue());
+        Assert.assertEquals(2,ticketGroupByTag.get("tag3").intValue());
+        Assert.assertEquals(2,ticketGroupByTag.get("tag4").intValue());
+        Assert.assertEquals(1,ticketGroupByTag.get("tag5").intValue());
+        deleteDummyTicket(dummyTicketTicketList,ticketService);
+
     }
 
     private static synchronized List<Ticket> generateDummyTicket(TicketService ticketService){

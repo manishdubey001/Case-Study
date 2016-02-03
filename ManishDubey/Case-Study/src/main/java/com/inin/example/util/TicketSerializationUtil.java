@@ -39,8 +39,6 @@ public class TicketSerializationUtil {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        // note that ObjectOutputStream is AutoCloseable so you
-        // can use Try-With-Resources here. I'll send a message about this pattern.
         finally {
             if (oos != null)
                 try {
