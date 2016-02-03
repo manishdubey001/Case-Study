@@ -1,8 +1,13 @@
 package com.inin.example.service;
 
+import com.inin.example.exception.TicketNotFound;
 import com.inin.example.factory.TicketFactory;
 import com.inin.example.model.Ticket;
+import com.inin.example.util.TicketSerializationUtil;
+import com.inin.example.util.TicketUtil;
 
+import java.security.InvalidParameterException;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -11,62 +16,66 @@ import java.util.stream.Collectors;
  */
 public class TicketService {
 
-    private HashMap<Integer,Ticket> tickets = null;
+    private Map<Integer,Ticket> tickets = new HashMap<>();
 
-    public TicketService(){
-        tickets = new HashMap<>();
-    }
     /**
      * Create new ticket by taking user input
      */
-    public Ticket create(String subject, String agentName, HashSet<String> tags)
+    public Ticket create(String subject, String agentName, Set<String> tags) throws InvalidParameterException
     {
-        if(subject == null || subject.isEmpty() || agentName == null || agentName.isEmpty())
-            return null;
+        if(!TicketUtil.isValidString(subject) || !TicketUtil.isValidString(agentName))
+            throw new InvalidParameterException();
+        tags = tags != null ? new HashSet<>(tags): new HashSet<>();
         Ticket ticket = TicketFactory.newInstance(subject, agentName, tags);
         tickets.put(ticket.getId(),ticket );
-        return ticket;
+        return TicketFactory.newInstance(ticket);
     }
-
-
-
     /**
      * Delete Ticket by id
      */
     public boolean delete(int id){
-        Ticket ticket = tickets.remove(id);
-        return ticket != null ? true : false;
+        return tickets.remove(id) != null ? true : false;
     }
 
     /**
      * Update ticket by id
      */
-    public Ticket update(int id,String agentName, HashSet<String> tags)
+    public Ticket update(int id,String agentName, Set<String> tags) throws InvalidParameterException
     {
         Ticket ticket = tickets.get(id);
-        if (ticket != null) {
-            if (agentName != null && !agentName.isEmpty())
-                ticket.setAgentName(agentName);
-            if (tags != null)
-                ticket.setTags(tags);
+        if(ticket == null ||( !TicketUtil.isValidString(agentName) && !TicketUtil.isValidCollection(tags)))
+            throw new InvalidParameterException();
+
+        if (TicketUtil.isValidString(agentName))
+            ticket.setAgentName(agentName);
+        if (TicketUtil.isValidCollection(tags)) {
+            ticket.getTags().clear();
+            ticket.getTags().addAll(tags);
         }
-        return ticket;
+
+        return TicketFactory.newInstance(ticket);
     }
 
     /**
      * Display single ticket by id
      */
-    public Ticket getTicket(int id)
+    public Ticket ticket(int id) throws InvalidParameterException
     {
-        return tickets.get(id);
+        Ticket ticket = tickets.get(id);
+        if(ticket == null)
+            throw new InvalidParameterException();
+        return ticket;
     }
 
     /**
-     * Display all ticket on console
+     * Return Ticket List
      */
-    public HashMap<Integer,Ticket> getTickets()
+    public List<Ticket> tickets()
     {
-        return tickets;
+        return Collections.unmodifiableList(tickets.values()
+                .stream()
+                .sorted((Ticket o1, Ticket o2) -> o2.getModified().compareTo(o1.getModified()))
+                .collect(Collectors.toList()));
     }
 
     /**
@@ -74,12 +83,12 @@ public class TicketService {
      * @param agentName
      * @return List<Ticket>
      */
-    public List<Ticket> getTicketsByAgent(String agentName){
-        return tickets.values()
+    public List<Ticket> ticketsByAgent(String agentName){
+        return Collections.unmodifiableList(tickets.values()
                 .stream()
                 .filter(ticket -> ticket.getAgentName().toLowerCase().equals(agentName.toLowerCase()))
-                .sorted((Ticket o1, Ticket o2) -> -o1.getModified().compareTo(o2.getModified()))
-                .collect(Collectors.toList());
+                .sorted((Ticket o1, Ticket o2) -> o2.getModified().compareTo(o1.getModified()))
+                .collect(Collectors.toList()));
     }
 
     /**
@@ -87,23 +96,24 @@ public class TicketService {
      * @param tag
      * @return List<Ticket>
      */
-    public List<Ticket> getTicketsByTag(String tag){
-        return tickets.values()
+    public List<Ticket> ticketsByTag(String tag){
+        return Collections.unmodifiableList(tickets.values()
                 .stream()
                 .filter(ticket -> ticket.getTags().contains(tag.toLowerCase()))
-                .sorted((Ticket o1, Ticket o2) -> -o1.getModified().compareTo(o2.getModified()))
-                .collect(Collectors.toList());
+                .sorted((Ticket o1, Ticket o2) -> o2.getModified().compareTo(o1.getModified()))
+                .collect(Collectors.toList()));
     }
 
     /**
      * Return Ticket group by Agent
      * @return
      */
-    public Map<String,List<Ticket>> getTicketsGroupByAgent()
+    public Map<String,List<Ticket>> ticketsGroupByAgent()
     {
-        return tickets.values()
+        return Collections.unmodifiableMap(new TreeMap<>(
+                    tickets.values()
                     .stream()
-                    .collect(Collectors.groupingBy(Ticket::getAgentName));
+                    .collect(Collectors.groupingBy(Ticket::getAgentName))));
     }
 
     /**
@@ -113,8 +123,69 @@ public class TicketService {
      */
     public boolean isTicketExist(int id)
     {
-
         return tickets.containsKey(id);
+    }
+
+    /**
+     * Return the total count of Tickets
+     * @return int
+     */
+    public int totalTicketCount()
+    {
+        return tickets.size();
+    }
+
+    /**
+     * Return the oldest Ticket
+     * @return Ticket
+     */
+    public Ticket oldestTicket()
+    {
+        if(tickets.isEmpty())
+            throw new TicketNotFound("No Ticket In the system");
+
+        return TicketFactory.newInstance(
+                tickets.values()
+                .stream()
+                .sorted((Ticket t1, Ticket t2) -> t1.getCreated().compareTo(t2.getCreated()))
+                .findFirst()
+                .get()
+            );
+    }
+
+    /**
+     * Return Ticket By Date
+     * @param date
+     * @return List<Ticket>
+     */
+    public List<Ticket> ticketOlderByDate(LocalDateTime date){
+        return Collections.unmodifiableList(tickets.values()
+                .stream()
+                .filter(ticket -> date.compareTo(ticket.getCreated()) >= 0 )
+                .collect(Collectors.toList()));
+    }
+
+    /**
+     * Return Ticket group by tags
+     * @return Map<String, List<Ticket>>
+     */
+    public Map<String, Integer> ticketsGroupByTag(){
+        Map<String,Integer> ticketByTag = new HashMap<>();
+        tickets.values()
+                .stream()
+                .forEach(ticket -> {
+                    ticket.getTags().forEach( tag -> {
+                        if(ticketByTag.containsKey(tag))
+                            ticketByTag.put(tag,ticketByTag.get(tag)+1);
+                        else {
+                            List<Ticket> list = new ArrayList<>();
+                            list.add(ticket);
+                            ticketByTag.put(tag, 1);
+                        }
+                    });
+                });
+        return Collections.unmodifiableMap(ticketByTag);
+
     }
 
     /**
@@ -123,14 +194,12 @@ public class TicketService {
      */
     public void loadDummyTickets(int noOfTickets){
         Random rd = new Random();
-        for (int i = 0; i < noOfTickets; i++){
-            String agentName = "Agent"+rd.nextInt(1000);
-            HashSet<String> tagsSet = new HashSet<>();
-            tagsSet.add("tag"+rd.nextInt(1000));
-            tagsSet.add("tag"+rd.nextInt(1000));
-            Ticket ticket = TicketFactory.newInstance("Subject"+i, agentName , tagsSet);
+        for (int i = 1;i <= noOfTickets; i++){
+            Set<String > tags = new HashSet<>();
+            tags.add("tag"+rd.nextInt(100));
+            tags.add("tag"+rd.nextInt(100));
+            Ticket ticket = TicketFactory.newInstance("Subject"+rd.nextInt(100),"Agent"+rd.nextInt(100),tags);
             tickets.put(ticket.getId(),ticket);
         }
     }
-
 }

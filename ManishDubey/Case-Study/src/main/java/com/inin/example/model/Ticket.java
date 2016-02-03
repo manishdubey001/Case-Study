@@ -1,43 +1,47 @@
 package com.inin.example.model;
 
 
-import java.util.Date;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by root on 31/12/15.
  */
-public class Ticket {
+public class Ticket implements Serializable{
+    private static final long serialVersionUID = 1L;
     private int id;
     private String subject;
     private String agentName;
-    private HashSet<String> tags;
-    private Date created;
-    private Date modified;
+    private Set<String> tags;
+    private LocalDateTime created;
+    private LocalDateTime modified;
 
-    public Ticket(int id, String subject, String agentName, HashSet<String> tags) {
+    public Ticket(int id, String subject, String agentName, Set<String> tags) {
         this.id = id;
         this.subject = subject;
         this.agentName = agentName;
         this.tags = tags;
-        this.created = new Date();
-        this.modified = new Date();
+        this.created = this.modified = LocalDateTime.now();
     }
 
+    public Ticket(Ticket ticket){
+        this.id = ticket.getId();
+        this.subject= ticket.getSubject();
+        this.agentName = ticket.getAgentName();
+        this.tags = new HashSet<>(ticket.getTags());
+        this.created = ticket.getCreated();
+        this.modified = ticket.getModified();
+    }
     public int getId() {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public String getSubject() {
         return subject;
-    }
-
-    public void setSubject(String subject) {
-        this.subject = subject;
     }
 
     public String getAgentName() {
@@ -46,28 +50,58 @@ public class Ticket {
 
     public void setAgentName(String agentName) {
         this.agentName = agentName;
-        this.setModified(new Date());
+        this.modified =LocalDateTime.now();
     }
 
-    public HashSet<String> getTags() {
+    public Set<String> getTags() {
         return tags;
     }
 
-    public void setTags(HashSet<String> tags) {
+    public void setTags(Set<String> tags) {
         this.tags = tags;
-        this.setModified(new Date());
+        this.modified =LocalDateTime.now();
     }
 
-    public Date getCreated() {
+    public LocalDateTime getCreated() {
         return created;
     }
 
-    public Date getModified() {
+    public LocalDateTime getModified() {
         return modified;
     }
 
-    private void setModified(Date modified) {
-        this.modified = modified;
+    /**
+     * Custom serialization of ticket object
+     * @param oos
+     * @throws Exception
+     */
+    private void writeObject(ObjectOutputStream oos) throws Exception{
+        oos.writeInt(getId());
+        oos.writeUTF(getSubject());
+        oos.writeUTF(getAgentName());
+        oos.writeObject(getTags());
+        oos.writeObject(getCreated());
+        oos.writeObject(getModified());
     }
+
+    /**
+     * Custom deserialization of ticket object
+     * @param ois
+     * @throws Exception
+     */
+    private void readObject(ObjectInputStream ois) throws Exception{
+        this.id = ois.readInt();
+        this.subject = ois.readUTF();
+        this.agentName = ois.readUTF();
+        this.tags = (Set<String >)ois.readObject();
+        this.created = (LocalDateTime)ois.readObject();
+        this.modified = (LocalDateTime)ois.readObject();
+    }
+
+    @Override
+    public String toString(){
+        return getId() + "\t" + getSubject() + "\t" + getAgentName() + "\t" + getTags() + "\t" + getCreated() + "\t" + getModified() + "\t";
+    }
+
 }
 

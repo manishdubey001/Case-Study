@@ -1,15 +1,15 @@
 package com.inin.example.factory;
 
 import com.inin.example.model.Ticket;
+import com.inin.example.util.TicketUtil;
 
-import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by root on 31/12/15.
  */
 public class TicketFactory {
 
-    private static int currentTicketId = 0;
     /**
      * Create new Ticket object
      * @param subject
@@ -17,18 +17,27 @@ public class TicketFactory {
      * @param tags
      * @return Ticket
      */
-    public static Ticket newInstance(String subject, String agentName, HashSet<String> tags)
+    public static Ticket newInstance(String subject, String agentName, Set<String> tags)
     {
-        int id = getNextTicketId();
+        int id = getNextId();
         return new Ticket(id,subject,agentName,tags);
     }
 
-    /**
-     * Return the next ticket Id
-     * @return int
-     */
-    public static int getNextTicketId()
+    public static int getNextId()
     {
-        return ++currentTicketId;
+        int currentTicketId = Integer.valueOf(TicketUtil.getProperty("ticketId"));
+        TicketUtil.setProperty("ticketId",String.valueOf(++currentTicketId));
+        return currentTicketId;
+
+    }
+
+    /**
+     * Create copy of ticket
+     * @param ticket
+     * @return Ticket
+     */
+    public static Ticket newInstance(Ticket ticket)
+    {
+        return new Ticket(ticket);
     }
 }
