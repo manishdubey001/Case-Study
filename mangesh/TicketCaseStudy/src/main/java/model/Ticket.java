@@ -1,102 +1,77 @@
 package model;
 
-import java.io.*;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.*;
 
-/**
- * Created by root on 15/1/16.
- */
-public class Ticket implements Comparable<Ticket>, Serializable {
-    int id;
-    String subject;
-    String agent_name;
-    List<String> tags;
-    Date created;
-    Date modified;
-
-    public Ticket() {
-
-    }
-    public Ticket(int id, String subject, String agentName, List<String> tagsList) {
-        this.setId(id);
-        this.setSubject(subject);
-        this.setAgent_name(agentName);
-        this.setTags(tagsList);
-    }
+public class Ticket implements Serializable{
+    private int id;
+    private String subject;
+    private String agentName;
+    private HashSet<String> tags;
+    private LocalDateTime created;
+    private  LocalDateTime modified;
 
     public int getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getAgent_name() {
-        return agent_name;
-    }
-
-    public void setAgent_name(String agent_name) {
-        this.agent_name = agent_name;
     }
 
     public String getSubject() {
         return subject;
     }
 
-    public void setSubject(String subject) {
-        this.subject = subject;
+    public String getAgentName() {
+        return agentName;
     }
 
-    public List<String> getTags() {
-        return tags;
+    public void setAgentName(String agentName) {
+        this.agentName = agentName;
+        this.modified = LocalDateTime.now();
     }
 
-    public void setTags(List<String> tags) {
+    public Set<String> getTags() {
+        return Collections.unmodifiableSet(tags);
+    }
+
+    public void setTags(HashSet<String> tags) {
         this.tags = tags;
+        this.modified = LocalDateTime.now();
     }
 
-    public Date getCreated() {
+    public LocalDateTime getCreated() {
         return created;
     }
 
-    public void setCreated(Date created) {
-        this.created = created;
-    }
-
-    public Date getModified() {
+    public LocalDateTime getModified() {
         return modified;
     }
 
-    public void setModified(Date modified) {
-        this.modified = modified;
+    public Ticket(int id, String subject, String agentName, HashSet<String> tagSet){
+        this.id = id;
+        this.subject = subject;
+        this.agentName = agentName;
+        this.tags = tagSet;
+        this.created = this.modified = LocalDateTime.now();
     }
 
-    public int compareTo(Ticket obj) {
-        return obj.getModified().compareTo(getModified());
+    private void writeObject(ObjectOutputStream oos) throws Exception{
+        oos.writeInt(id);
+        oos.writeUTF(subject);
+        oos.writeUTF(agentName);
+        oos.writeObject(tags);
+        oos.writeObject(created);
+        oos.writeObject(modified);
     }
 
-    private void writeObject(ObjectOutputStream os) throws IOException{
-        os.writeInt(getId());
-        os.writeUTF(getSubject());
-        os.writeUTF(getAgent_name());
-        os.writeObject(getTags());
-        os.writeObject(getCreated());
-        os.writeObject(getModified());
-    }
-
-    private void  readObject(ObjectInputStream oi) throws IOException {
-        this.id = oi.readInt();
-        this.subject = oi.readUTF();
-        this.agent_name = oi.readUTF();
-        try {
-            this.tags = (List) oi.readObject();
-            this.created = (Date) oi.readObject();
-            this.modified = (Date) oi.readObject();
-        }
-        catch(ClassNotFoundException e){e.printStackTrace();}
+    private void readObject(ObjectInputStream ois) throws Exception{
+        id = ois.readInt();
+        subject = ois.readUTF();
+        agentName = ois.readUTF();
+        tags = (HashSet<String >) ois.readObject();
+        created = (LocalDateTime) ois.readObject();
+        modified = (LocalDateTime)ois.readObject();
     }
 
 }

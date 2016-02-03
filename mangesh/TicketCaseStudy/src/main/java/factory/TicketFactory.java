@@ -1,18 +1,18 @@
 package factory;
 
 import model.Ticket;
+import util.Util;
 
-import java.util.List;
+import java.util.HashSet;
 
-/**
- * Created by root on 19/1/16.
- */
 public class TicketFactory {
-    public static Ticket newInstance() {
-        return new Ticket();
+    public static Ticket newInstanceWithData(String subject, String agentName, HashSet<String> tagSet)
+    {
+        int id = getAutoId();
+        return new Ticket(id, subject,agentName,tagSet);
     }
 
-    public static Ticket newInstance(int id, String subject, String agentName, List<String> tagsList) {
-        return new Ticket(id, subject, agentName, tagsList);
+    public static int getAutoId(){
+        return Util.getTicketId();
     }
 }
