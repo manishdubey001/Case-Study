@@ -37,12 +37,6 @@ public class ExerciseSerializable {
         Ticket objTicket = FileOperations.readObjectFromFile(filepath);
         ConsoleIO.ticketListHeader();
         ConsoleIO.showTicket(ticket);
-        try (ObjectInputStream objIn = new ObjectInputStream(new FileInputStream(filepath))) {
-
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
     }
 
     private static void listOfTicketReadWriteOperation() {
