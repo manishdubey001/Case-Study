@@ -39,51 +39,54 @@ public class TicketMenu {
                      * While searching ticket is searching mechanism which not advanced as it is just console application,
                      * thus I have taken input for searched ticket here itself */
 
-                    System.out.println("Enter ticket Id");
-                    int id1 = UserConsoleInput.acceptNumber();
+                    /*System.out.println("Enter ticket Id");
+                    int id = UserConsoleInput.acceptNumber();*/
                     // Lokesh: There can be two different functions in place of "getTickets", one handling single Ticket and other handling Multiple Tickets inn Collection.
                     // Lokesh: You passed here a Collection containing single Ticket, making it more of complex operation.
                     /** Deepak:
                      * This function is used to display list of ticket. List can contain single ticket, empty Or multiple tickets
                      * So function has to be covered all the conditions. */
-                    objTicktOperation.getTickets(objTicktOperation.getTicketById(id1));
+                    /*objTicktOperation.getTickets(objTicktOperation.getTicketById(id));*/
+                    objTicktOperation.getTicket();
                     break;
 
                 case 3:
-                    System.out.println("Enter ticket Id");
-                    int id2 = UserConsoleInput.acceptNumber();
-                    objTicktOperation.updateTicketById(id2);
+                    /*System.out.println("Enter ticket Id");
+                    int id2 = UserConsoleInput.acceptNumber();*/
+                    objTicktOperation.updateTicketById();
                     break;
 
                 case 4:
-                    System.out.println("Enter ticket Id");
+                    /*System.out.println("Enter ticket Id");
                     int id3 = UserConsoleInput.acceptNumber();
                     if(objTicktOperation.deleteTicketById(id3))
                         System.out.println("Ticket delete successful!");
                     else
-                        System.out.println("Ticket not delete!");
+                        System.out.println("Ticket not delete!");*/
+                    objTicktOperation.deleteById();
                     // Lokesh: what will happen if delete fails? Else part become must here.
                     break;
 
                 case 5:
-                    objTicktOperation.getTickets(objTicktOperation.searchTicketByAgent());
+                    objTicktOperation.searchTicketByAgent();
                     break;
 
                 case 6:
-                    objTicktOperation.getTickets(objTicktOperation.searchTicketByTag());
+                    objTicktOperation.searchTicketByTag();
                     break;
                 case 7:
-                    System.out.println("Show All the Tickets");
-                    objTicktOperation.getTickets(objTicktOperation.getAllTicket());
+                    objTicktOperation.getAll();
                     break;
                 case 8:
                     System.out.println("Agents \t Counts");
-                    objTicktOperation.showAgentTicketCount(objTicktOperation.calculateAgentTicketCount());
+                    objTicktOperation.showAgentTicketCount();
                     break;
                 case 9:
-                    System.out.println("Enter no of tickets you want");
+                    /** This is just to load multiple tickets for testing load of collections */
+                    System.out.println("Please don't use it. It will used in case of creating multiple tickets.");
+                    /*System.out.println("Enter no of tickets you want");
                     int noOfTickets = UserConsoleInput.acceptNumber();
-                    objTicktOperation.getTickets(objTicktOperation.autoLoadTickets(noOfTickets));
+                    objTicktOperation.getTickets(objTicktOperation.autoLoadTickets(noOfTickets));*/
                     break;
 
                 case 10:
@@ -103,12 +106,12 @@ public class TicketMenu {
 
                             case 2:
                                 System.out.println("Oldest ticket in system : ");
-                                objTicktOperation.getTickets(objTicktReports.getOldestTicket());
+                                objTicktReports.oldestTicket();
                                 break;
 
                             case 3:
                                 System.out.println("Number of tags in system:");
-                                objTicktReports.displayTagTicketCount(objTicktReports.getTicketCountByTag());
+                                objTicktReports.displayTagTicketCount();
                                 break;
 
                             case 4:
@@ -117,7 +120,7 @@ public class TicketMenu {
                                /* System.out.println("Please enter no of days before ticket you want!");
                                 objTicktOperation.getTickets(objTicktReports.ticketOlderByDays());*/
 
-                                objTicktOperation.getTickets(objTicktReports.getTicketOlderByDays());
+                                objTicktReports.getTicketsByDays();
                                 break;
 
                             case 0:

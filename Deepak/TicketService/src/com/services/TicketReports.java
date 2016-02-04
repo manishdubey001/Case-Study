@@ -4,6 +4,7 @@ import com.customexceptions.UserInputException;
 import com.model.Ticket;
 import com.util.UserConsoleInput;
 
+import java.io.File;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.function.Function;
@@ -14,34 +15,49 @@ import java.util.stream.Collectors;
  */
 // Lokesh: Not all reporting stuffs are implemented.
 // Lokesh: This class only does is operations on Ticket data, why not these are part of TicketOperations class?
+    /**Deepak:
+     * Report is our different service. which based on ticket service.
+     * */
 public class TicketReports {
 
-    private Map<Long, Ticket> ticketHashMap = null;
+    private Map<Long, Ticket> ticketHashMap;
 
     TicketReports(){
         /*TicketOperations objTicketOperations = new TicketOperations();
         ticketHashMap = objTicketOperations.getAllTicket();*/
-        ticketHashMap = TicketSerializedClass.readTicketsFromFile();
+        File file = TicketSerializedClass.createFile("tickets.ser");
+        ticketHashMap = TicketSerializedClass.readTicketsFromFile(file);
     }
 
     public long countNoOfTicketInSystem(){
-        if(ticketHashMap == null || ticketHashMap.isEmpty())
-            return 0;
-
         return ticketHashMap.size();
     }
 
-    public Map<Long, Ticket> getOldestTicket(){
+    public Ticket getOldestTicket() throws UserInputException {
 
-        Ticket ticket = ticketHashMap.values().stream()
-                                    .sorted((Ticket t1, Ticket t2) -> t2.getCreated()
-                                        .compareTo(t1.getCreated())).findFirst().get();
+        if(ticketHashMap.isEmpty())
+            throw new UserInputException("No ticket found!");
+
+        return ticketHashMap.values().stream()
+                                    .sorted((Ticket t1, Ticket t2) -> t1.getCreated()
+                                        .compareTo(t2.getCreated())).findFirst().get();
         // Lokesh: Even for returning Simple single Ticket object, creating Map?
-        Map<Long, Ticket> tempMap = new HashMap<>();
+        /*Map<Long, Ticket> tempMap = new HashMap<>();
 
         tempMap.put(ticket.getId(), ticket);
 
-        return tempMap;
+        return tempMap;*/
+    }
+
+    public void oldestTicket(){
+        Ticket ticket = null;
+        try {
+            ticket = getOldestTicket();
+        } catch (UserInputException e) {
+            System.out.println(e.getMessage());
+        }
+
+        System.out.println(ticket);
     }
 
     public Map<String, List<Ticket>> getTicketCountByTag(){
@@ -64,7 +80,8 @@ public class TicketReports {
     }
 
 
-    public void displayTagTicketCount(Map<String, List<Ticket>> tagCountMap){
+    public void displayTagTicketCount(){
+        Map<String, List<Ticket>> tagCountMap = getTicketCountByTag();
         tagCountMap.forEach((String tagName,List<Ticket> ticketList)-> System.out.println(tagName+"   :   "+ticketList.size()));
     }
 
@@ -88,12 +105,21 @@ public class TicketReports {
         return getTicketOlderByDays(noOfdays);
     }*/
 
+
+    public void getTicketsByDays(){
+        Map<Long, Ticket> ticketMap = getTicketOlderByDays();
+        if (ticketMap.isEmpty()) {
+            System.out.println("No Ticket found!");
+            return;
+        }
+        ticketMap.values().stream().sorted((Ticket t1, Ticket t2) -> t2.getModified().compareTo(t1.getModified()))
+                .forEach((Ticket ticket) -> System.out.println(ticket));
+    }
+
     public Map<Long, Ticket> getTicketOlderByDays(){
-        System.out.println("Please enter date in form of dd/mm/yyyy");
-        String dateString= "";
         String []dateArray = null;
         try {
-           dateString = UserConsoleInput.acceptString();
+            String dateString = UserConsoleInput.acceptString("Please enter date in form of dd/mm/yyyy");
             dateArray = dateString.split("/");
             if(dateArray.length > 3 || dateArray.length < 0){
                 throw new UserInputException("Please enter date in proper format!");

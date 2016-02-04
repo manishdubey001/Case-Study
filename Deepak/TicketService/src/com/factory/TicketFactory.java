@@ -14,14 +14,14 @@ public class TicketFactory {
     // this "get" gives the impression that maybe you would return an existing one.
 
         // For invalid input, I would prefer throwing an exception over returning null.
-    public static Ticket createTicketInstance(String subject, String agentName, Set<String> tags) throws UserInputException {
+    public static Ticket createTicketInstance(long id, String subject, String agentName, Set<String> tags) throws UserInputException {
 
         if(subject == null || subject.equals("") || agentName == null || agentName.equals("")){
             throw new UserInputException("Please give proper input!");
         }
         else
         {
-            return new Ticket(subject, agentName, tags);
+            return new Ticket(id, subject, agentName, tags);
         }
     }
 }

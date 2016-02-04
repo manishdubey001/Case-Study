@@ -1,5 +1,7 @@
 package com.model;
 
+import com.services.TicketOperations;
+
 import java.io.*;
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -11,7 +13,7 @@ import java.util.function.Function;
  */
 public class Ticket implements Serializable, Function<Object, Object> {
 
-    private static long countId = 1;
+    //* private static long countId = TicketOperations.ticketId;
     // Lokesh: With each new Run of this application, your tickets are always starting from ID 1, even though they are already created and serialized in file.
     // They should start after max_id present in file.
     /** Deepak :
@@ -22,8 +24,8 @@ public class Ticket implements Serializable, Function<Object, Object> {
     private String subject;
     // generally Java avoids underscores in names, and uses 'camel case' like agentName
     private String agentName;
-    private Set<String> tags;
-    private short status = 1;
+    private HashSet<String> tags;
+//    private short status = 1;
 
     // Lokesh: Use LocalDateTime or Joda Time for Date-Time purpose. gives more controlled operations on different time zones and other stuffs.
     private LocalDateTime modified;
@@ -56,6 +58,7 @@ public class Ticket implements Serializable, Function<Object, Object> {
 
     public void setAgentName(String agentName) {
         this.agentName = agentName;
+        this.modified = unixTime;
     }
 
 
@@ -67,28 +70,27 @@ public class Ticket implements Serializable, Function<Object, Object> {
 
     // Lokesh: no lesson learned from Chad's above comment.
 
-
     public LocalDateTime getModified() {
         return modified;
     }
 
-    public void setModified(LocalDateTime modified) {
+    /*public void setModified(LocalDateTime modified) {
         this.modified = modified;
-    }
+    }*/
 
     // Lokesh: no use of this constructor.
-    public Ticket(){
+   /* public Ticket(){
 
-    }
+    }*/
 
     // Note that you don't use this constructor. Can you see how to
     // combine the code so you don't have all the same code duplicated
     // between the two constructors?
 
 
-    public Ticket(String subject, String agentName, Set<String> tags){
+    public Ticket(long id, String subject, String agentName, Set<String> tags){
 
-        this.id = countId;
+        this.id = id;
         this.subject = subject;
         this.agentName = agentName;
         // See the email I sent the API team about potential dangers of
@@ -97,9 +99,10 @@ public class Ticket implements Serializable, Function<Object, Object> {
             this.tags = new HashSet<>();
         else
             this.tags = new HashSet<>(tags);
+
         this.modified = unixTime;
         this.created = unixTime;
-        countId++;
+        //* countId++;
     }
 
     // why 2?
@@ -113,11 +116,12 @@ public class Ticket implements Serializable, Function<Object, Object> {
 
     public void setTags(Set<String> tags) {
         this.tags = new HashSet<>(tags);
+        this.modified = unixTime;
     }
 
-    public static long getCountId() {
+    /*public static long getCountId() {
         return countId;
-    }
+    }*/
 
 
     private void writeObject(ObjectOutputStream oos) throws IOException{
@@ -134,7 +138,7 @@ public class Ticket implements Serializable, Function<Object, Object> {
             this.id = ois.readLong();
             this.subject = ois.readUTF();
             this.agentName = ois.readUTF();
-            this.tags = (Set<String>) ois.readObject();
+            this.tags = (HashSet<String>) ois.readObject();
             this.modified = (LocalDateTime) ois.readObject();
             this.created = (LocalDateTime) ois.readObject();
         }  catch (ClassNotFoundException e) {
@@ -145,12 +149,17 @@ public class Ticket implements Serializable, Function<Object, Object> {
     //Lokesh: just because Chad written somewhere in comment, you created this function, but not in use at all?
     /** Deepak:
      * it is in used earlier and I kept this function to show to chad and evaluate from him*/
-    public boolean hasTag(String tag){
+    /*public boolean hasTag(String tag){
         return this.getTags().contains(tag);
-    }
+    }*/
 
     @Override
     public Object apply(Object o) {
         return null;
+    }
+
+    @Override
+    public String toString() {
+        return id+" | "+subject+" | "+agentName+" | "+tags+" | "+modified;
     }
 }

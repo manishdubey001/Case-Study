@@ -2,20 +2,18 @@ package com.services;
 
 import com.customexceptions.UserInputException;
 import com.model.Ticket;
-import com.sun.corba.se.impl.javax.rmi.CORBA.Util;
-import com.util.UserConsoleInput;
-
 import java.io.*;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by root on 27/1/16.
  */
 public class TicketSerializedClass {
 
+    /**
+     * save ticket in file
+     * @param ticketMap, append, file
+     * @return boolean */
     public static boolean saveTicketsInFile(Map<Long, Ticket> ticketMap, boolean append, File file){
 
         ObjectOutputStream oos = null;
@@ -41,6 +39,7 @@ public class TicketSerializedClass {
                 for (Map.Entry entry : entrySet)
                     oos.writeObject(entry.getValue());
 
+            return true;
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -55,13 +54,16 @@ public class TicketSerializedClass {
                 }
         }
 
-        return true;
+        return false;
     }
 
+    /**
+     * read ticket from file
+     * @param  file
+     * @return Map<Long, Ticket> */
+    public static Map<Long, Ticket> readTicketsFromFile(File file){
 
-    public static Map<Long, Ticket> readTicketsFromFile(){
-
-        File file = UserConsoleInput.createFile();
+        /*File file = createFile();*/
         Map<Long, Ticket> tempTicketMap = new HashMap<>();
         if(file.length() == 0) {
             try {
@@ -73,7 +75,7 @@ public class TicketSerializedClass {
         }
 
 
-        ObjectInputStream ois = null;
+/*        ObjectInputStream ois = null;
         FileInputStream fis = null;
 
         try {
@@ -94,7 +96,68 @@ public class TicketSerializedClass {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        finally {
+            if(fis != null) {
+                try {
+                    fis.close();
+                    if(ois != null)
+                        ois.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
 
+        return tempTicketMap;*/
+
+        try(ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
+            while (true) {
+                Ticket ticket = (Ticket)ois.readObject();
+                tempTicketMap.put(ticket.getId(),ticket);
+            }
+        }catch (EOFException e){
+//            System.out.println("Reached EOF file");
+        }catch (IOException e) {
+            e.printStackTrace();
+        }catch (ClassNotFoundException e){
+            e.printStackTrace();
+        }
         return tempTicketMap;
+    }
+
+    /**
+     * To check file and create if not present*/
+    public static File createFile(String nameOfFile){
+        File file = null;
+        try {
+            file = new File("src/com/resources/"+nameOfFile);
+            if(!file.exists())
+                file.createNewFile();
+        } catch (IOException e) {
+            System.out.println("File not found!");
+        }
+        return file;
+    }
+
+    /**
+     * to update property file*/
+    public static void updatePropertyFile(File file, Properties properties, Long ticketId){
+        FileWriter writer = null;
+        try{
+            properties = new Properties();
+            properties.setProperty("ticketId", ticketId.toString());
+            writer = new FileWriter(file);
+            properties.store(writer, "host settings");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        finally {
+            if(writer != null)
+                try {
+                    writer.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+        }
     }
 }

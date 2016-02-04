@@ -6,11 +6,12 @@ import com.model.Ticket;
 import com.util.UserConsoleInput;
 
 import java.io.File;
-import java.time.LocalDateTime;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Created by root on 15/1/16.
@@ -37,13 +38,35 @@ public class TicketOperations {
 
     }*/
 
-    private Map<Long, Ticket> ticketHashMap = new HashMap<>();
-    public Set<String> allTagHashSet = new HashSet<>();
+    private Map<Long, Ticket> ticketHashMap; //* = new HashMap<>();
+//    public Set<String> allTagHashSet = new HashSet<>();
+    private static long ticketId;
     File file;
+    File ticketIdFile;
+    Properties properties;
 
     /** Deepak: Initializer block used for file creating */
-    {
-        file = UserConsoleInput.createFile();
+
+    public TicketOperations() {
+        file = TicketSerializedClass.createFile("tickets.ser");
+        ticketHashMap = TicketSerializedClass.readTicketsFromFile(file);
+        ticketIdFile = TicketSerializedClass.createFile("ticketIdFile.properties");
+        try {
+            if (properties == null) {
+                if(ticketIdFile.length() == 0)
+                {
+                    TicketSerializedClass.updatePropertyFile(ticketIdFile, properties, Long.valueOf(1));
+                }
+                FileReader reader = new FileReader(ticketIdFile);
+                properties = new Properties();
+                properties.load(reader);
+                ticketId = Long.parseLong(properties.getProperty("ticketId"));
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /*
@@ -56,19 +79,27 @@ public class TicketOperations {
         // Note that you create a new HashSet here but never use it; it is thrown
         // away when you assign it the result of getTagNames() below.
 
-        String subject = UserConsoleInput.getSubject();
-        String agentName = UserConsoleInput.getAgentName();
+        /*String subject = UserConsoleInput.getSubject();
+        String agentName = UserConsoleInput.getAgentName();*/
+        String subject = UserConsoleInput.acceptString("Enter subject");
+        String agentName = UserConsoleInput.acceptString("Enter Agent name");
 
-        Set<String> tagHashSet = UserConsoleInput.getTagNames();
+        System.out.println("Do you want to enter Tag? y/n");
+        String updateTag = UserConsoleInput.getPermission("y", "n");
+        Set<String> tagHashSet;
+
+        if(updateTag.toLowerCase().equals("y"))
+            tagHashSet = UserConsoleInput.getTagNames();
+        else
+            tagHashSet = new HashSet<>();
 
         try {
-            Ticket ticket = createTicket(subject, agentName, tagHashSet);
+            createTicket(subject, agentName, tagHashSet);
             System.out.println("Ticket created successful!");
         }
         catch(UserInputException e){
             System.out.println(e.getMessage());
         }
-
 
         // Lokesh: Why do you really need this check? Do you really suspect that call to createTicket can return any object other than Ticket?
        /* if(ticket instanceof Ticket)
@@ -89,7 +120,7 @@ public class TicketOperations {
     // Lokesh: By returning null values, you force caller to check for null returns, this should not be a practical case.
     public Ticket createTicket(String subject, String agentName, Set<String> tagHashSet) throws UserInputException {
 
-        Ticket ticket = null;
+        Ticket ticket;
 //        try {
             // Avoid accepting Null Values to your own functions. By accepting null as valid input, you force yourself to series of null checks.
             if (subject == null || subject.isEmpty())
@@ -97,69 +128,80 @@ public class TicketOperations {
             else if (agentName == null || agentName.isEmpty())
                 throw new UserInputException("Please enter proper agent name! Ticket Not created");
             else
-                ticket = TicketFactory.createTicketInstance(subject, agentName, tagHashSet);
+                ticket = TicketFactory.createTicketInstance(ticketId, subject, agentName, tagHashSet);
 
        /* }catch (UserInputException e) {
             System.out.println(e.getMessage());
         }*/
 
-
         if(ticket != null) {
             boolean append = true;
-            if(ticketHashMap.isEmpty())
+            if(file.length() == 0)
                 append = false;
 
-            ticketHashMap.put(ticket.getId(), ticket);
-
-            if(ticketHashMap.containsKey(ticket.getId()))
-                if (TicketSerializedClass.saveTicketsInFile(ticketHashMap, append, file))
+                if (TicketSerializedClass.saveTicketsInFile(ticketHashMap, append, file)){
+                    ticketId++;
+                    TicketSerializedClass.updatePropertyFile(ticketIdFile, properties, ticketId);
+                    ticketHashMap.put(ticket.getId(), ticket);
                     return ticket;
+                }
                 else
                     throw new UserInputException("Sorry! ticket creation failed!");
-            else
-                throw new UserInputException("Sorry! ticket creation failed!");
-            /** Deepak:
-             * throw exception on failuer of ticket create and save in file.*/
-            /*return null;*/
 
+            /** Deepak:
+             * throw exception on failure of ticket create and save in file.*/
+            /*return null;*/
         }
         else{
-            return null;
+            throw new UserInputException("Sorry! ticket creation failed!");
         }
     }
 
+
+    public void getAll(){
+        Map<Long, Ticket> allTickets = getAllTicket();
+        getTickets(allTickets);
+    }
 
     /*
     * Show all the tickets in ArrayList */
     // call this 'get' if you are just returning the list.
     public Map<Long, Ticket> getAllTicket(){
-        Map<Long, Ticket> tempMap = TicketSerializedClass.readTicketsFromFile();
-        return tempMap;
+        /*return TicketSerializedClass.readTicketsFromFile(file);*/
+        return ticketHashMap;
     }
 
 
     /*
     * Show Ticket By Id */
     // Same comment about 'get' versus 'show'
-    public Map<Long, Ticket> getTicketById(int id){
+    public Ticket getTicketById(int id) throws UserInputException {
 
         /* if id beyond the limit */
-        Map<Long, Ticket> tempTicketMap;
-        if(id <= 0 || id > Ticket.getCountId()){
-            return new HashMap<>();
+        //Map<Long, Ticket> tempTicketMap = null;
+
+        if(id <= 0 || id > ticketId-1){
+            //return new HashMap<>();
+            throw new UserInputException("Invalid ticket id! please enter valid ticket id");
         }
         // Lokesh: Rather than de-serializing for every ticket, you can use your "ticketHashMap" for this purpose, and keep serialized file and "ticketHashMap" in sync.
         /** Deepak:
          * I am using this file substitute for db for the time being. If Ticket is created successful and stored in my
-         * ticketHashMap but problem in Save in file. Thus to avoid redundancy Used file */
-        Map<Long, Ticket> tempMap = TicketSerializedClass.readTicketsFromFile();
+         * ticketHashMap but problem in Save in file. Thus to avoid redundancy I Used file */
+        /*Map<Long, Ticket> tempMap = TicketSerializedClass.readTicketsFromFile();*/
 
         // Stream and Lambda implementation.
         // usually you avoid storing intermediate results and just chain this together.
-        tempTicketMap = tempMap.values().stream().filter(ticket -> ticket.getId() == id)
+        /*tempTicketMap = ticketHashMap.values().stream().filter(ticket -> ticket.getId() == id)
                                         .collect(Collectors.toMap(Ticket::getId, Function.identity()));
+        return tempTicketMap;*/
 
-        return tempTicketMap;
+        Ticket ticket = ticketHashMap.get(Long.valueOf(id));
+        if(ticket == null)
+            throw new UserInputException("Sorry Ticket not found!");
+        else
+            return ticket;
+
     }
 
 
@@ -174,35 +216,50 @@ public class TicketOperations {
         /*
         * Stream implementation of sorting and comparator */
 
-/*
+
         // Lokesh: No lesson leaned from Chad's comment: usually you avoid storing intermediate results and just chain this together.
         // Redundant "stream" in below line can be avoided.
-        Stream<Ticket> stream = ticketMap.values().stream();
+        /*Stream<Ticket> stream = ticketMap.values().stream();*/
         // Lokesh: Generating Long is not required for Comparator.
         // Lokesh: More effective ways to use stream API available: This simple line would have done for below:
         // ticketMap.values().stream().sorted((t1,t2) -> Long.compare(t2.getModified(),t1.getModified())).forEach((t)-> System.out.println("YOUR TICKET OBJECT"));
 
-        stream.sorted((Ticket t1, Ticket t2) -> Long.valueOf(t2.getModified()).compareTo(Long.valueOf( t1.getModified())))
-*/
+        /** stream.sorted((Ticket t1, Ticket t2) -> Long.valueOf(t2.getModified()).compareTo(Long.valueOf( t1.getModified()))) */
 
-        ticketMap.values().stream().sorted((Ticket t1, Ticket t2) -> t2.getModified().compareTo(t1.getModified()))
+        /*ticketMap.values().stream().sorted((Ticket t1, Ticket t2) -> t2.getModified().compareTo(t1.getModified()))
               .forEach((Ticket ticket) -> System.out.println(
                       ticket.getId()+" | "+ticket.getSubject()+" | "+ticket.getAgentName()+
-                              " | "+ticket.getTags()+" | "+ticket.getModified()));
+                              " | "+ticket.getTags()+" | "+ticket.getModified()));*/
+
+        ticketMap.values().stream().sorted((Ticket t1, Ticket t2) -> t2.getModified().compareTo(t1.getModified()))
+                .forEach(System.out::println);
    }
+
+    /**
+     * Display single ticket */
+    public void getTicket(){
+        System.out.println("Enter ticket Id");
+        int id = UserConsoleInput.acceptNumber();
+        try {
+            Ticket ticket = getTicketById(id);
+            System.out.println(ticket);
+        } catch (UserInputException e) {
+            System.out.println(e.getMessage());
+        }
+    }
 
 
     /*
     * Inner class for sorting using comparator on modified date */
     // Lokesh: We can avoid Comparator for primitives types. Find ways to use: Comparator.comparing. There may be some more.
     // Lokesh: Why custom comparator, when not used?
-    class ModifiedComparator implements Comparator<Ticket>{
+    /*class ModifiedComparator implements Comparator<Ticket>{
 
         @Override
         public int compare(Ticket t1, Ticket t2) {
             return t1.getModified().compareTo(t2.getModified());
         }
-    }
+    }*/
 
 
     /*
@@ -213,54 +270,100 @@ public class TicketOperations {
     // What if I want to update only agent and expect to tags unchanged? In your case I need to enter same tags string :D
     // What if I just want to add one tag only existing ones? In your case I have to enter string of tags including tags which are already there.
     // What if I want to remove one tag only? In  your case I have to enter string of tags skipping the one that I don't want.
-    public void updateTicketById(int id){
-        if(id <= 0){
+    public void updateTicketById(){
+        System.out.println("Enter ticket Id");
+        int id = UserConsoleInput.acceptNumber();
+
+        /*if(id <= 0){
             System.out.println("Ticket id is not valid");
+            return;
+        }*/
+
+        Ticket modifyTicket;
+        try {
+            modifyTicket = getTicketById(id);
+
+        } catch (UserInputException e) {
+            System.out.println(e.getMessage());
             return;
         }
 
-        Map<Long, Ticket> ticketU = getTicketById(id);
-
-        if(ticketU == null || ticketU.isEmpty()){
+        /*if(modifyTicket == null || modifyTicket.isEmpty()){
             System.out.println("Ticket with id: "+id+" is not available");
             return;
         }
         else{
-            getTickets(ticketU);
+            getTickets(modifyTicket);
+        }*/
+
+        System.out.println(modifyTicket);
+
+        String agentName;
+        Set<String> tagHashSet;
+
+        System.out.println("Do you want to update agent? : y/n");
+        String updateAgent = UserConsoleInput.getPermission("y", "n");
+
+        if(updateAgent.toLowerCase().equals("y")){
+            /*agentName = UserConsoleInput.getAgentName();*/
+            agentName = UserConsoleInput.acceptString("Enter Agent Name");
+        }
+        else {
+            agentName = modifyTicket.getAgentName();
         }
 
-        String agentName = UserConsoleInput.getAgentName();
-        Set<String> tagHashSet = UserConsoleInput.getTagNames();
+        System.out.println("Do you want to update Tag? y/n");
+        String updateTag = UserConsoleInput.getPermission("y", "n");
 
-        Ticket ticket = updateTicket(id, agentName, tagHashSet);
+        if(updateTag.toLowerCase().equals("y")){
 
-        if(ticket == null){
+            System.out.println("You want to add/remove Tag? (a/r):");
+            String addOrRemove = UserConsoleInput.getPermission("a", "r");
+            tagHashSet = UserConsoleInput.getTagNames();
+            if(addOrRemove.equals("a"))
+                tagHashSet.addAll(modifyTicket.getTags());
+            if(addOrRemove.equals("r")) {
+                Set<String> tempTags = modifyTicket.getTags();
+                tempTags.removeAll(tagHashSet);
+                tagHashSet = tempTags;
+            }
+        }
+        else {
+            tagHashSet = modifyTicket.getTags();
+        }
+
+        /*tagHashSet = UserConsoleInput.getTagNames();*/
+
+        try {
+            Ticket ticket = updateTicket(id, agentName, tagHashSet);
+            System.out.println("Ticket update successful...!");
+            getTicketById((int) ticket.getId());
+
+        } catch (UserInputException e) {
+            System.out.println(e.getMessage());
+        }
+
+    /*    if(ticket == null){
             System.out.println("Ticket update failed!");
         }
         else{
             System.out.println("Ticket update successful");
-        }
+        }*/
 
     }
 
-
-    public Ticket updateTicket(int id, String agentName, Set<String> tagHashSet){
+    public Ticket updateTicket(int id, String agentName, Set<String> tagHashSet) throws UserInputException {
         // A method that returns null can lead to problems for callers. In the case
         // of invalid input, I prefer throwing exceptions to returning null.
         // Lokesh: No-lesson learned from Chad's above comment, still returning null?
-        try {
             // Lokesh: avoid accepting null in your function and avoid null checks.
             if (id <= 0 || agentName == null || agentName.isEmpty()) {
                throw new UserInputException("Please give proper agent name!");
             }
-        }
-        catch (UserInputException ue){
-            System.out.println(ue.getMessage());
-            return null;
-        }
+
 
         // Lokesh: Use LocalDateTime or Joda DateTime. Gives you control for timezones etc.
-        LocalDateTime unixTime = LocalDateTime.now();
+        //LocalDateTime unixTime = LocalDateTime.now();
 
         // Streams are kind of an awkward way to get at one element. I would expose a method
         // to get the ticket by ID explicitly.
@@ -269,48 +372,56 @@ public class TicketOperations {
         if(ticket != null){
             ticket.setAgentName(agentName);
             ticket.setTags(tagHashSet);
-            ticket.setModified(unixTime);
+            //ticket.setModified(unixTime);
             TicketSerializedClass.saveTicketsInFile(ticketHashMap, false, file);
 
             return ticket;
         }
-
-        return null;
-
+        else
+            throw new UserInputException("Ticket update failed!");
     }
 
 
+    public void deleteById(){
+        System.out.println("Enter ticket Id to delete ticket");
+        int id = UserConsoleInput.acceptNumber();
+
+        try {
+            if(deleteTicketById(id))
+                System.out.println("Ticket delete successful!");
+            else
+                System.out.println("Ticket not able to delete!");
+        } catch (UserInputException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
     /*
     * Delete ticket by id*/
-    public boolean deleteTicketById(int id){
+    public boolean deleteTicketById(int id) throws UserInputException{
 
         // Delete is also pretty inefficient for the data structure. Consider a different structure to hold the tickets.
         // To do this with streams, note you could use the opposite filter (not equal to this id) to construct a
         // new list. Or you could define Ticket.equals() to use the ticket ID; then you could call remove
         // on the arraylist directly (but that doesn't make it any more efficient).
-        try{
-            if(ticketHashMap.containsKey(Long.valueOf(id))) {
-                if(ticketHashMap.remove(Long.valueOf(id)) != null);
-                    TicketSerializedClass.saveTicketsInFile(ticketHashMap, false, file);
-                return true;
-            }
-            else
-                throw new UserInputException("Ticket with id is not available!");
-        }
-        catch (UserInputException ue){
-            System.out.println(ue.getMessage());
-        }
+                if(ticketHashMap.remove(Long.valueOf(id)) != null)
+                    if(TicketSerializedClass.saveTicketsInFile(ticketHashMap, false, file))
+                        return true;
+                    else
+                        return false;
+                else
+                    throw new UserInputException("Ticket with id is not available!");
 
-        return false;
     }
 
 
     /*
     * Search tickets assign to specific agent */
-    public Map<Long, Ticket> searchTicketByAgent(){
-        String agentName = UserConsoleInput.getAgentName();
+    public void searchTicketByAgent(){
+        /*String agentName = UserConsoleInput.getAgentName();*/
+        String agentName = UserConsoleInput.acceptString("Enter Agent name");
 
-        return searchTicketsWithAgent(agentName);
+        getTickets(searchTicketsWithAgent(agentName));
     }
 
 
@@ -333,25 +444,23 @@ public class TicketOperations {
 
     /*
     * Search tickets by tag names*/
-    public Map<Long, Ticket> searchTicketByTag(){
+    public void searchTicketByTag(){
         // No reason to create a new HashSet when you assign to something else on the next line.
         Set<String> tagHashSet = UserConsoleInput.getTagNames();
 
-        return searchTicketsWithTags(tagHashSet);
+        getTickets(searchTicketsWithTags(tagHashSet));
 
     }
 
 
     public Map<Long, Ticket> searchTicketsWithTags(Set<String> tagHashSet){
 
-        Map<Long, Ticket> tempTicketHashMap;
+//        Map<Long, Ticket> tempTicketHashMap;
         // you never use tempTicketSet
 
         if(tagHashSet == null || tagHashSet.isEmpty()){
             return new HashMap<>();
         }
-
-        // Above code using Stream and Lambda
 
 
         // note that 'lst' here is a Ticket; give it a better name.
@@ -361,14 +470,11 @@ public class TicketOperations {
         // inefficient in that it creates a new list of tags
         // and sees if the size is zero, just to know if the tag
         // is present.
-        tempTicketHashMap = ticketHashMap.values().stream().
+        return ticketHashMap.values().stream().
                 filter(ticket -> ticket.getTags()
                         .stream()
                         .anyMatch(tag -> tagHashSet.contains(tag)))
                 .collect(Collectors.toMap(Ticket::getId, Function.identity()));
-
-        return tempTicketHashMap;
-
     }
 
 
@@ -382,7 +488,8 @@ public class TicketOperations {
 
     /*
     * NEW Show agent and ticket count */
-    public void showAgentTicketCount(Map<String, List<Ticket>> agentCountMap){
+    public void showAgentTicketCount(){
+        Map<String, List<Ticket>> agentCountMap = calculateAgentTicketCount();
         agentCountMap.forEach((String agentName,List<Ticket> ticketList)-> System.out.println(agentName+"   :   "+ticketList.size()));
     }
 
@@ -403,23 +510,31 @@ public class TicketOperations {
 
             Ticket ticket = null;
             try {
-                ticket = TicketFactory.createTicketInstance(subject, agent, tagSet);
+                ticket = TicketFactory.createTicketInstance(ticketId, subject, agent, tagSet);
             } catch (UserInputException e) {
                 e.printStackTrace();
             }
 
-            boolean append = true;
-            if(ticketHashMap.isEmpty())
-                append = false;
+            /*if(ticketHashMap.put(ticket.getId(), ticket) != null)
+                TicketSerializedClass.saveTicketsInFile(ticketHashMap, append, file);*/
 
-            ticketHashMap.put(ticket.getId(), ticket);
+            if(ticketHashMap.put(ticket.getId(), ticket) != null)
+                ticketId++;
+        }
 
-            if(ticketHashMap.containsKey(ticket.getId()))
-                TicketSerializedClass.saveTicketsInFile(ticketHashMap, append, file);
+        boolean append = true;
+        if(ticketHashMap.isEmpty())
+            append = false;
 
+        if (TicketSerializedClass.saveTicketsInFile(ticketHashMap, append, file)){
+            TicketSerializedClass.updatePropertyFile(ticketIdFile, properties, ticketId);
         }
 
         return ticketHashMap;
     }
 
+/*    protected void finalize() throws Throwable{
+        System.out.println("Inside finalize block....");
+        TicketSerializedClass.updatePropertyFile(ticketIdFile, properties, ticketId);
+    }*/
 }

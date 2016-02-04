@@ -3,6 +3,7 @@ package com.util;
 import com.customexceptions.UserInputException;
 import com.services.TicketOperations;
 
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
@@ -38,13 +39,23 @@ public class UserConsoleInput {
 
     /*
     * To get the String from user from console */
-    public static String acceptString() throws UserInputException {
-        String inputString = scanner.nextLine();
-        inputString = inputString.trim();
-        if(inputString == null || inputString.equals("")){
-            throw new UserInputException("Please give some proper input");
+    public static String acceptString(String message){
+        String inputString = null;
+        boolean loop = true;
+        while (loop){
+            System.out.println(message);
+            inputString = scanner.nextLine();
+            inputString = inputString.trim();
+            if(inputString == null || inputString.equals("")){
+                try {
+                    throw new UserInputException("Please give some proper value");
+                } catch (UserInputException e) {
+                    System.out.println(e.getMessage());
+                }
+            }else{
+                loop = false;
+            }
         }
-
         return inputString;
     }
 
@@ -52,25 +63,25 @@ public class UserConsoleInput {
     /*
     * to get the subject */
 
-    public static String getSubject(){
-        boolean subjectLoop1 = true;
+    /*public static String getSubject(){
+        boolean subjectLoop = true;
         String subject = "";
-        while (subjectLoop1) {
+        while (subjectLoop) {
             System.out.println("Please Enter Subject");
             try {
                 subject = UserConsoleInput.acceptString();
-                subjectLoop1 = false;
+                subjectLoop = false;
             } catch (UserInputException e) {
                 System.out.println(e.getMessage()+" for subject!");
             }
         }
         return subject;
-    }
+    }*/
 
 
     /*
     * To get name of agent*/
-    public static String getAgentName(){
+    /*public static String getAgentName(){
         boolean agentLoop = true;
         String agentName = "";
         while (agentLoop) {
@@ -85,34 +96,27 @@ public class UserConsoleInput {
         }
 
         return agentName;
-    }
+    }*/
 
 
     /*
     * To get multiple tag names, separated by Comma*/
     public static Set<String> getTagNames(){
-        System.out.println("Please Enter tags separated by Comma");
         Set<String> tagHashSet = new HashSet<>();
-        try {
-            String[] tagNames = UserConsoleInput.acceptString().split(",");
+        System.out.println("Enter tag names separated by comma(,)");
+        String[] tagNames = acceptString("Enter Tags").split(",");
 
-            TicketOperations ticketOperations = new TicketOperations();
             for(String tag : tagNames){
                 tag = tag.trim();
                 if(!(tag.equals(""))){
-                    ticketOperations.allTagHashSet.add(tag);
                     tagHashSet.add(tag);
                 }
             }
-
-        }catch (UserInputException e) {
-            System.out.println("Okay you don't want any tag, it's fine!");
-        }
-
         return tagHashSet;
     }
+
 // Lokesh: File create/check in UserConsoleInput?
-    public static File createFile(){
+    /*public static File createFile(){
         File file = null;
         try {
             file = new File("src/com/resources/tickets.ser");
@@ -122,5 +126,18 @@ public class UserConsoleInput {
             System.out.println("File not found!");
         }
         return file;
+    }*/
+
+    public static String getPermission(String str1, String str2){
+        boolean permission = true;
+        String option = "";
+        while(permission){
+            option = acceptString("Enter "+str1+"/"+str2);
+            if(option.toLowerCase().equals(str1) || option.toLowerCase().equals(str2))
+                permission = false;
+        }
+
+        return option.toLowerCase();
     }
+
 }
