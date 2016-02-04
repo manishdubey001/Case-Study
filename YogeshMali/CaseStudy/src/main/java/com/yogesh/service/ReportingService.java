@@ -53,16 +53,26 @@ public class ReportingService {
     public HashMap tagWithTicketCounts() {
         HashMap<String, Integer> hmtTotalTags = new HashMap();
 
-        for (Ticket ticket : this.hmTicketList.values()) {
-            for (String tag : ticket.getTags()) {
-                if (!hmtTotalTags.containsKey(tag)) {
-                    hmtTotalTags.put(tag, 1);
+//        for (Ticket ticket : this.hmTicketList.values()) {
+//            for (String tag : ticket.getTags()) {
+//                if (!hmtTotalTags.containsKey(tag)) {
+//                    hmtTotalTags.put(tag, 1);
+//                } else {
+//                    int tcount = hmtTotalTags.get(tag) + 1;
+//                    hmtTotalTags.put(tag, tcount);
+//                }
+//            }
+//        }
+        hmTicketList.values().stream().forEach(ticket -> {
+            ticket.getTags().forEach(tag -> {
+                if (hmtTotalTags.containsKey(tag)) {
+                    hmtTotalTags.put(tag, hmtTotalTags.get(tag) + 1);
                 } else {
-                    int tcount = hmtTotalTags.get(tag) + 1;
-                    hmtTotalTags.put(tag, tcount);
+                    hmtTotalTags.put(tag, 1);
                 }
-            }
-        }
+
+            });
+        });
 
         return hmtTotalTags;
 

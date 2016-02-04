@@ -6,7 +6,10 @@ import com.yogesh.Exception.TicketNotFountException;
 import com.yogesh.model.Ticket;
 import com.yogesh.pattern.TicketFactory;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 /**
@@ -59,16 +62,15 @@ public class TicketService {
     public TreeMap<String, Integer> showTicketCountAgentService() {
 
         TreeMap<String, Integer> tmCount = new TreeMap<>();
-        ArrayList<Ticket> arrTicketList = new ArrayList<>(this.hmTicketList.values());
 
-        for (Ticket ticket : arrTicketList) {
+        hmTicketList.values().stream().forEach(ticket -> {
             if (tmCount.containsKey(ticket.getAgentName())) {
-                int ticketCount = tmCount.get(ticket.getAgentName()) + 1;
-                tmCount.put(ticket.getAgentName(), ticketCount);
+                tmCount.put(ticket.getAgentName(), tmCount.get(ticket.getAgentName()) + 1);
             } else {
                 tmCount.put(ticket.getAgentName(), 1);
             }
-        }
+        });
+
         return tmCount;
     }
 

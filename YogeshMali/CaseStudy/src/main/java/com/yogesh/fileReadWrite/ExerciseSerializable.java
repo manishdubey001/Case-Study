@@ -7,9 +7,7 @@ package com.yogesh.fileReadWrite;
 import com.yogesh.ConsoleIO;
 import com.yogesh.model.Ticket;
 
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
