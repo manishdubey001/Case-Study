@@ -21,8 +21,6 @@ public class MyReader {
 
     public static String readInput(String string){
         System.out.println(string);
-//        InputStreamReader inputStreamReaderr = new InputStreamReader(System.in);
-//        BufferedReader bufferedReader = new BufferedReader(inputStreamReaderr);
         String str;
         try(InputStreamReader inputStreamReaderr = new InputStreamReader(System.in);BufferedReader bufferedReader = new BufferedReader(inputStreamReaderr)){
             str =  bufferedReader.readLine();
