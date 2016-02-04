@@ -11,8 +11,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import static junit.framework.Assert.*;
-import static junit.framework.TestCase.assertNull;
+import static junit.framework.TestCase.*;
 
 /**
  * Created by root on 19/1/16.
@@ -127,7 +126,7 @@ public class TicketServiceTest {
      * supply subject and agent
      */
     @Test
-    public void testCreateTicketWithSubjectAgent() {
+    public void testCreateTicketWithSubjectAgent() throws IOException, ClassNotFoundException{
 
         Ticket object = null;
         final String txtSubject = "testSubject";
@@ -204,7 +203,7 @@ public class TicketServiceTest {
      * supply all input data
      */
     @Test
-    public void testCreateTicketWithAllInput() {
+    public void testCreateTicketWithAllInput() throws IOException, ClassNotFoundException{
 
         Ticket object = null;
         final String txtSubject = "testSubject";
@@ -234,7 +233,7 @@ public class TicketServiceTest {
      * supply all data
      */
     @Test
-    public void testCreateTicketWithTreeMapAllData(){
+    public void testCreateTicketWithTreeMapAllData()throws IOException, ClassNotFoundException{
 
         Main.collectionChoice = 2;
         Ticket object = null;
@@ -263,8 +262,7 @@ public class TicketServiceTest {
      * supply all data
      */
     @Test
-    public void testCreateTicketWithLinkedHashMapAllData(){
-
+    public void testCreateTicketWithLinkedHashMapAllData()throws IOException, ClassNotFoundException{
         Main.collectionChoice = 3;
         Ticket object = null;
         final String txtSubject = "testSubject";
@@ -295,7 +293,7 @@ public class TicketServiceTest {
      * no data is supplied
      */
     @Test
-    public void testUpdateTicketWithNoData(){
+    public void testUpdateTicketWithNoData()throws IOException, ClassNotFoundException{
 
         Ticket object = null,
                 result = null;
@@ -328,7 +326,7 @@ public class TicketServiceTest {
      * agent name is supplied
      */
     @Test
-    public void testUpdateTicketWithAgent(){
+    public void testUpdateTicketWithAgent()throws IOException, ClassNotFoundException{
 
         Ticket object = null,
                 result = null;
@@ -363,7 +361,7 @@ public class TicketServiceTest {
      * supply tags
      */
     @Test
-    public void testUpdateTicketWithTags(){
+    public void testUpdateTicketWithTags()throws IOException, ClassNotFoundException{
 
         Ticket object = null,
                 result = null;
@@ -400,7 +398,7 @@ public class TicketServiceTest {
      * supply both agent and tags
      */
     @Test
-    public void testUpdateTicketWithAgentAndTags(){
+    public void testUpdateTicketWithAgentAndTags()throws IOException, ClassNotFoundException{
 
         Ticket object = null,
                 result = null;
@@ -438,7 +436,7 @@ public class TicketServiceTest {
      * supply random invalid id
      */
     @Test
-    public void testGetTicketWithInvalidId(){
+    public void testGetTicketWithInvalidId()throws IOException, ClassNotFoundException{
 
         Ticket object = null;
         Map result = null;
@@ -472,7 +470,7 @@ public class TicketServiceTest {
      * supply valid ticket id
      */
     @Test
-    public void testGetTicketWithValidId(){
+    public void testGetTicketWithValidId()throws IOException, ClassNotFoundException{
 
         Ticket object = null;
         Map result = null;
@@ -504,7 +502,7 @@ public class TicketServiceTest {
      * testGetTicketObjectForId test method to check the result as ticket object
      */
     @Test
-    public void testGetTicketObjectForId(){
+    public void testGetTicketObjectForId()throws IOException, ClassNotFoundException{
 
         Ticket object = null,result = null;
         int randomId = 0;
@@ -535,7 +533,7 @@ public class TicketServiceTest {
      * testGetTicketObjectForInvalidId test method
      */
     @Test
-    public void testGetTicketObjectForInvalidId(){
+    public void testGetTicketObjectForInvalidId()throws IOException, ClassNotFoundException{
 
         Ticket object = null,result = null, result1= null;
         int randomId = 0;

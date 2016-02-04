@@ -1,7 +1,6 @@
 package com.ticketmaster.utils;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashSet;
 import java.util.Scanner;
@@ -13,7 +12,6 @@ import java.util.Set;
 public class DetailProvider {
 
     Scanner scanner;
-    BufferedReader reader;
     private static DetailProvider _instance;
 
     /**
@@ -23,10 +21,6 @@ public class DetailProvider {
         if(scanner == null){
             scanner = new Scanner(System.in);
         }
-        if (reader == null){
-            reader = new BufferedReader(new InputStreamReader(System.in));
-        }
-
     }
 
     /**
@@ -46,14 +40,15 @@ public class DetailProvider {
      * @return
      */
     public String readStringInput(){
-        return scanner.next();
+        return scanner.nextLine();
     }
-
     /**
      * readIntInput Method is used to read the integer input from the user from console
      */
     public int readIntInput() {
-        return scanner.nextInt(); //Integer.parseInt(reader.readLine());
+        int value = scanner.nextInt();
+        this.readStringInput();
+        return value;
     }
 
     /**
@@ -62,9 +57,10 @@ public class DetailProvider {
      */
     public Set readTagsInput(){
 
-        Set tagSet = new HashSet<>();
+        Set<String> tagSet = new HashSet<>();
         System.out.println("Enter tags (y/n): ");
-        if (this.readStringInput().equals("y")){
+        String t = this.readStringInput();
+        if (t.toLowerCase().equals("y")){
             System.out.println("Enter tags separated by colon (:) : ");
             String tmp = this.readStringInput();
             String[] tmp1 = tmp.split(":");
@@ -72,7 +68,6 @@ public class DetailProvider {
             for (int i=0;i<tmp1.length;i++){
                 tagSet.add(tmp1[i]);
             }
-
         }
         return tagSet;
     }

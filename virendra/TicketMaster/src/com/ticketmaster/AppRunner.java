@@ -9,7 +9,14 @@ import com.ticketmaster.utils.DetailProvider;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.*;
+
+import java.util.Scanner;
+import java.util.Set;
+import java.util.Map;
+import java.util.List;
+import java.util.InputMismatchException;
+
+
 
 /**
  * AppRunner class
@@ -25,7 +32,6 @@ public class AppRunner {
         if (details == null){
             details = DetailProvider.init();
         }
-
     }
 
     /**
@@ -36,7 +42,6 @@ public class AppRunner {
         if (! (_instance instanceof AppRunner))
             _instance = new AppRunner();
         return _instance;
-
     }
 
     /**
@@ -54,24 +59,18 @@ public class AppRunner {
             do{
                 ch = printMenu(); //print menu and ask for user selection
                 processChoice(ch);
-            }while (ch !=9);
+            }while (ch !=0);
 
         }catch (InputMismatchException | IOException  e){
-
-//            e.printStackTrace(); //check stack trace
-            System.out.println("Invalid Option Selection");
-
+            System.out.println(e.getMessage() != null ? e.getMessage() : "Invalid Option Selection");
         }catch (ClassNotFoundException e){
-//            e.printStackTrace(); // check stack trace
             System.out.println("Ops! class you are looking does not exist");
-
         }catch (Exception e){
-//            e.printStackTrace();
+            e.printStackTrace();
             System.out.println("Application halted due to exception: "+e.getMessage());
-
         }finally {
 
-            if(ch!=9){
+            if(ch!=0){
                 System.out.println("Do You want to continue (y/n) ? ");
                 if(b == null)
                     b = new BufferedReader(new InputStreamReader(System.in));
@@ -111,13 +110,9 @@ public class AppRunner {
         System.out.println("=============== Menu ===============");
         menu.forEach((k,v)-> System.out.println(k+"\t:\t "+v)); //using lambda expression to print menu
 
-        // not using BufferedReader here
-//        b= new BufferedReader(new InputStreamReader(System.in));
-
         s = new Scanner(System.in);
         System.out.println("Select your option: ");
         int a = s.nextInt();
-
         return a;
     }
 
@@ -131,18 +126,13 @@ public class AppRunner {
      */
     protected void processChoice(int ch)
             throws IOException, ClassNotFoundException, TicketNotFoundException {
-        TicketService helper= new TicketService();
-        Map tmpMap;
 
-        // cjm - 'b' is an OK name for a BufferedReader, but 'a' is not a descriptive name for the list.
-        // Prefer to declare the list in the context where you plan to use it (unless you need it to survive longer.
-        // In this case if you use a type parameter List<T>, T would be different from block to block, so you would have
-        // to use a separate list.
-
-        List tempList;
-        Set tagsSet;
         int id;
         String txtAgent, txtSubject;
+        List<Map<String, ? super Object>> tempList;
+        Set<String> tagsSet;
+        Map<String, ? super Object> tmpMap;
+        TicketService helper= new TicketService();
         Ticket ticket;
 
         switch (ch){
@@ -178,7 +168,7 @@ public class AppRunner {
 
                 System.out.println("Update Agent?(y/n)");
 
-                if(details.readStringInput().equals("y")){
+                if(details.readStringInput().toLowerCase().equals("y")){ // EB : use .toLowerCase()
                     System.out.println("Enter Agent Name: ");
                     txtAgent = details.readStringInput();
                     ticket.setAgent(txtAgent);
@@ -186,33 +176,23 @@ public class AppRunner {
                     txtAgent = null;
                 }
 
-
-                System.out.println("Enter tags (y/n): ");
-
-                if (details.readStringInput().equals("y")) {
-                    tagsSet = new HashSet<>();
-                    details.readTagsInput();
-                }else {
-                    tagsSet = null;
-                }
+                tagsSet = details.readTagsInput();
 
                 ticket = helper.updateTicket(ticket, txtAgent, tagsSet);
 
                 if (ticket == null){
                     System.out.println("Nothing to update");
                 }else {
-                    System.out.println("Ticket (id: "+String.format("%010d", ticket.getId())+") updated successfully");
+                    System.out.println("Ticket (id: #"+String.format("%010d", ticket.getId())+") updated successfully");
                 }
 
                 break;
             case 3:
                 System.out.println("Enter Ticket id:");
                 id = details.readIntInput();
-                ticket = null;
-
 
                 System.out.printf("Are you sure you want to delete ticket #%010d ? (y/n)\n", id);
-                if(details.readStringInput().equals("y")){
+                if(details.readStringInput().toLowerCase().equals("y")){
 
                     ticket = helper.deleteTicket(id);
 
@@ -233,17 +213,17 @@ public class AppRunner {
 
                 tmpMap = helper.getTicket(id);
 
-                if (tmpMap!= null){
+                if (!tmpMap.isEmpty()) {
                     System.out.printf("==== Ticket #%010d ====\n",tmpMap.get("id"));
                     tmpMap.forEach((k,v)->System.out.println(k+"\t:\t"+v));
                 }
 
                 break;
 
-            case 5:
+            case 5:case 9:
                 tempList = helper.getTickets();
-                System.out.println("Total tickets: "+(tempList!= null ? tempList.size(): 0)+"\nResults:");
-                if (tempList != null) {
+                System.out.println("Total tickets: "+(!tempList.isEmpty() ? tempList.size(): 0)+"\n\t=============== Results ===============");
+                if (!tempList.isEmpty()) {
                     tempList.forEach(System.out::println); //printing result by method referencing of lambda expressions
                 }
 
@@ -251,8 +231,7 @@ public class AppRunner {
 
             case 6:
                 System.out.println("Enter name of agent: ");
-                String name = b.readLine();
-
+                String name = details.readStringInput();
 
                 // cjm - here let Tickets or another class manage this search. Don't expose the collection directly
                 // (so implement something like Tickets.hasAgent())
@@ -260,7 +239,7 @@ public class AppRunner {
                     System.out.println(String.format("Agent \"%s\" is not present in the system", name ));
                 }else {
                     tempList = helper.searchTicket("agent", name);
-                    if (tempList != null) {
+                    if (!tempList.isEmpty()) {
                         System.out.println("Total tickets: "+tempList.size()+"\nResults:");
                         tempList.forEach(System.out::println);
                     }else {
@@ -276,14 +255,17 @@ public class AppRunner {
                 tmpMap.forEach((k,e)-> System.out.println(k+"\t\t| \t\t"+e));
                 break;
 
-            case 8:
+            case 8: // EB : Case 13 only. Misunderstood the requirement (Expected tag wise ticket count)
+                //update: updated the code with new case below
                 System.out.println("Enter tag name: ");
-                String tag = b.readLine();
+
+                String tag = details.readStringInput();
+
                 if (! Ticket.hasTag(tag)){
                     System.out.println(String.format("Tag \"%s\" is not present in the system", tag ));
                 }else {
                     tempList=  helper.searchTicket("tags", tag);
-                    if (tempList!=null){
+                    if (!tempList.isEmpty()){
                         System.out.println("Total tickets: "+tempList.size()+"\nResults:");
                         tempList.forEach(System.out::println);  //printing result by method referencing of lambda expressions
                     }else {
@@ -293,8 +275,49 @@ public class AppRunner {
 
                 break;
 
-            case 9: System.out.println("Thank you for using application"); break;
-            default: case 0: throw new IOException("option selected is out of bounds");
+            /*Reporting options in case study*/
+
+            case 10:
+                //get the oldest ticket in the system
+                tmpMap = helper.getOldestTicket();
+
+                // EB : Use of isEmpty check could be done.
+                //update: Noted and Done.
+                if (!tmpMap.isEmpty()){
+                    System.out.printf("==== Ticket #%010d ====\n",tmpMap.get("id"));
+                    tmpMap.forEach((k,v)->System.out.println(k+"\t:\t"+v));
+                }
+
+                break;
+            case 11:
+                //ticket older than number of days
+                System.out.println("Enter no. of days: ");
+                int days= details.readIntInput();
+                tempList = helper.getOlderTickets(days);
+
+                System.out.println("Total tickets: "+(tempList!= null ? tempList.size(): 0)+
+                        "\n\t=============== Results ===============");
+                if (!tempList.isEmpty()){
+                    tempList.forEach(System.out::println); //printing result by method referencing of lambda expressions
+                }
+                break;
+
+            case 12:
+                //print all the tags present in the system
+                Set<String> obj = (Set<String>)helper.getTagsOfTicket();
+                System.out.println("Total Tags present in the System: ");
+                System.out.println(obj);
+
+                break;
+
+            case 13:
+                tmpMap = helper.getTagsTicketCount();
+                System.out.println("Tag Name\t|\tNo. of Ticket(s)");
+                tmpMap.forEach((k,e)-> System.out.println(k+"\t| \t"+e));
+                break;
+
+            case 0: System.out.println("Thank you for using application"); break;
+            default: throw new IOException("option selected is out of bounds");
 
         }
 

@@ -2,27 +2,43 @@ package com.ticketmaster.helpers;
 
 import com.ticketmaster.exceptions.TicketNotFoundException;
 import com.ticketmaster.models.Ticket;
-import com.ticketmaster.utils.DetailProvider;
+import com.ticketmaster.models.TicketRepository;
 
 import java.io.IOException;
-import java.util.*;
+
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+
 import java.util.stream.Collectors;
+import java.util.Set;
+import java.util.List;
+import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.Collections;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.TreeMap;
+
 
 /**
  * TicketService class
  * This class is service class to perform actions on ticket object
  * Created by Virendra on 31/12/15.
  */
-public class TicketService /*implements Comparable<Ticket>*/ {
+public class TicketService {
     private Ticket ticket;
-    public Map<String, ? super Object> map;
+    TicketRepository repository;
 
     /**
      * Default constructor
      */
 
     public TicketService(){
-        map = new TreeMap<>();
+        repository = TicketRepository.init();
 
     }
 
@@ -68,7 +84,10 @@ public class TicketService /*implements Comparable<Ticket>*/ {
             flag  =true;
         }
 
-        if (tags != null){
+        if (!tags.isEmpty()){
+            if (ticketObj.tags == null){
+                ticketObj.tags = new HashSet<>();
+            }
             ticketObj.tags.addAll(tags);
             flag = true;
         }
@@ -95,7 +114,7 @@ public class TicketService /*implements Comparable<Ticket>*/ {
 
         Ticket ticket = this.getTicketDetail(id);
 
-        if (ticket ==null){
+        if (ticket == null){
             throw new TicketNotFoundException("Record with id: "+id +" does not exists");
         }
 
@@ -111,21 +130,35 @@ public class TicketService /*implements Comparable<Ticket>*/ {
      */
     public Map getTicket(int id) throws IOException, ClassNotFoundException, TicketNotFoundException {
 
+        repository.updatePool();
+
         Ticket ticket = getTicketDetail(id);
         if (ticket ==null){
             throw new TicketNotFoundException("Record with id: "+id +" does not exists");
         }
 
+        return prepareTicketMap(ticket);
+
+    }
+
+    public Map getOldestTicket() throws IOException, ClassNotFoundException, TicketNotFoundException {
+        Ticket ticket = repository.getOldestObject();
+        return prepareTicketMap(ticket);
+    }
+
+    private Map<String, Object> prepareTicketMap(Ticket ticket){
+
         Map tempMap = new LinkedHashMap<>();
+        if (ticket == null){
+            return tempMap;
+        }
         tempMap.put("id", ticket.getId());
         tempMap.put("subject", ticket.getSubject());
         tempMap.put("agent", ticket.getAgent());
         tempMap.put("tags", ticket.tags == null ? new HashSet(): ticket.tags.toString());
         tempMap.put("created", new Date(ticket.getCreated()));
         tempMap.put("updated", new Date(ticket.getModified()) );
-
         return tempMap;
-
     }
 
     /**
@@ -135,21 +168,24 @@ public class TicketService /*implements Comparable<Ticket>*/ {
      * @throws ClassNotFoundException
      * @throws TicketNotFoundException
      */
-    public List<Map<String,? super Object>> getTickets() {
+    public List<Map<String,? super Object>> getTickets() throws ClassNotFoundException, IOException{
 
-        if (Ticket.ticketList == null){
-            return null;//(List<Map<String, ? super Object>>) Ticket.ticketList;
-//            throw new TicketNotFoundException("No Records Found");
+        repository.updatePool();
+
+        if (repository.getTicketListSize() <= 0){
+            return null;
         }
 
-        List l = new LinkedList<>(Ticket.ticketList.entrySet());
+        List l = new LinkedList(repository.getList().entrySet());
 
+        Collections.sort(l, (obj1, obj2) ->{
+            if ( ( (Ticket) ((Map.Entry) obj1).getValue()).getModified() <
+                    ( (Ticket) ((Map.Entry) obj2).getValue()).getModified() ){
+                return 1;
+            }else {
+                return -1;
+            }
 
-        Collections.sort(l, (o1, o2) ->{
-            if ( ( (Ticket)(((Map.Entry) o1).getValue()) ).getModified() <
-                    ( (Ticket)(((Map.Entry) o2).getValue()) ).getModified() )
-                    return 1;
-            else return -1;
             });
 
         return formatPrintData(l);
@@ -161,17 +197,20 @@ public class TicketService /*implements Comparable<Ticket>*/ {
      * @param values
      * @return
      */
-    public List<Map<String,? super Object>> searchTicket(String key, String... values){
+    public List<Map<String,? super Object>> searchTicket(String key, String... values)
+            throws IOException, ClassNotFoundException{
 
         String searchKey;
-        List a = null;
+        List list = null;
+
+        repository.updatePool();
 
 
         if(values.length == 1){ //fetch first value
 
             searchKey = values[0];
 
-            a= (List) Ticket.getListStream().filter(
+            list = (List) Ticket.getListStream().filter(
                     (obj) ->{ Map.Entry me = (Map.Entry)obj;
                         if (key.equals("agent")){
                             return ( (Ticket)(me.getValue())).getAgent().toLowerCase().equals(searchKey.toLowerCase());
@@ -189,11 +228,8 @@ public class TicketService /*implements Comparable<Ticket>*/ {
         }else {
             //this block is reserved for future usage
         }
-
         //adding sorted section in streams to further optimize
-
-
-        return formatPrintData(a);
+        return formatPrintData(list);
 
     }
 
@@ -202,10 +238,13 @@ public class TicketService /*implements Comparable<Ticket>*/ {
      * @return Map of agent and count of tickets for each agent
      */
 
-    public Map<String,Integer> getTicketCount(){
-        Map<String,Integer> m = new LinkedHashMap<>();
+    public Map<String,? super Object> getTicketCount()
+            throws IOException, ClassNotFoundException{
+        Map<String,? super Object> m = new LinkedHashMap<>();
 
-        Set s= Ticket.ticketList.entrySet();
+        repository.updatePool();
+
+        Set s= repository.getList().entrySet();
         Iterator it = s.iterator();
         Ticket tmp;
         while (it.hasNext()){
@@ -214,7 +253,7 @@ public class TicketService /*implements Comparable<Ticket>*/ {
             tmp = (Ticket) me.getValue();
 
             if(m.containsKey(tmp.getAgent()) ){
-                count = m.get(tmp.getAgent());
+                count = (Integer)m.get(tmp.getAgent());
 
                 m.put(tmp.getAgent(), count+1);
             }else if (tmp.getAgent() !=null){
@@ -227,20 +266,50 @@ public class TicketService /*implements Comparable<Ticket>*/ {
         return m;
     }
 
-    /**
-     * getTicketObject method
-     * used to get the cusrrent object of Ticket class
-     * @return
-     */
-    public Ticket getTicketObject(){
-        return this.ticket;
+    public Map<String,? super Object> getTagsTicketCount()
+            throws IOException, ClassNotFoundException {
+
+        Map<String,? super Object> m = new TreeMap<>();
+
+        repository.updatePool();
+
+        //get entrySet from the map
+        Set tmpSet = repository.getList().entrySet();
+
+        //get list of tags from the set
+        Set<String> tagList = repository.getTagList();
+
+        Ticket tmp;
+
+        for (String tagName: tagList ) {
+
+            Iterator itr = tmpSet.iterator();
+            while (itr.hasNext()){
+                int count = 0;
+
+                Map.Entry me = (Map.Entry)itr.next();
+                tmp = (Ticket) me.getValue();
+                if(tmp.tags.contains(tagName)){
+                    if(m.containsKey(tagName)){
+                        count = (Integer)m.get(tagName);
+                        m.put(tagName, count+1);
+                    }else {
+                        m.put(tagName,1);
+                    }
+                }
+            }
+
+        }
+
+        return m;
+
     }
 
     protected List<Map<String,? super Object>> formatPrintData(List l){
         List<Map<String,? super Object>> l1 = new ArrayList<>();
 
         if (l == null){
-            return null;
+            return l1;
         }
 
         l.forEach( (e)-> {
@@ -263,26 +332,55 @@ public class TicketService /*implements Comparable<Ticket>*/ {
         return l1;
     }
 
-/*
-    @Override
-    public int compareTo(Ticket obj) {
-
-        return  obj.getAgent().toLowerCase().compareTo(obj.getAgent().toLowerCase());
-    }*/
-
-
-
     public Ticket getTicketDetail(int id){
 
         if (id == 0 ) {
             return null;
         }else {
-            return  (Ticket) Ticket.ticketList.get(id);
+            return  repository.getTicket(id);
         }
 
     }
 
     public void clearList(){
         Ticket.clearList();
+    }
+
+    public void setTicketList(Map<Integer, Ticket> values){
+        TicketRepository.init().updateList(values);
+    }
+
+    public void initTags(){
+        repository.initTagList();
+    }
+    public void initAgents(){
+        repository.initAgentList();
+    }
+
+    public Set<?> getTagsOfTicket(){
+        return repository.getTagList();
+    }
+
+    public List<Map<String,? super Object>> getOlderTickets(int days){
+
+        if (repository.getTicketListSize() <= 0){
+            return null;
+        }
+
+        long time = LocalDateTime.now(ZoneId.of("UTC")).minusDays(days).toInstant(ZoneOffset.UTC).toEpochMilli();
+        List list = new LinkedList(repository.getList().entrySet());
+
+        List lst = (ArrayList) list.stream()
+                .filter((e)->((Ticket) ((Map.Entry) e).getValue()).getCreated() <= time )
+                .sorted((o1, o2) ->{
+                    if ( ( (Ticket)(((Map.Entry) o1).getValue()) ).getModified() <=
+                            ( (Ticket)(((Map.Entry) o2).getValue()) ).getModified() ) {
+                        return 1;
+                    }
+                    else return -1;
+                })
+                .collect(Collectors.toList());
+
+        return formatPrintData(lst);
     }
 }

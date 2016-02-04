@@ -1,9 +1,17 @@
 package com.ticketmaster.utils;
 
+import com.ticketmaster.Main;
 import com.ticketmaster.exceptions.TicketNotFoundException;
+import com.ticketmaster.helpers.TicketService;
 import com.ticketmaster.models.Ticket;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.*;
 
 /**
@@ -26,8 +34,15 @@ public class AppUtil {
         menu.put(5,"Retrieve all tickets");
         menu.put(6,"Select ticket Assigned to agent");
         menu.put(7,"Number of Ticket assigned to each Agents");
-        menu.put(8,"Ticket marked with selected Tag");
-        menu.put(9,"End (Quit)");
+        menu.put(8,"Ticket marked with selected Tag\n" +
+                "=============== Reporting Menu ===============");
+        menu.put(9,"Total Number of tickets in System");
+        menu.put(10,"Oldest Ticket in the System");
+        menu.put(11,"Ticket older than days");
+        menu.put(12,"List of Tags present in System");
+        menu.put(13,"No. of Tickets with tag\n" +
+                "=============== General Menu ===============");
+        menu.put(0,"End Application (Quit)");
         return menu;
     }
 
@@ -54,33 +69,29 @@ public class AppUtil {
         return hasReturn ? s : 0;
     }
 
-    public static void initializeApp(final int size, final int agents)
+    public static void initializeApp()
             throws ClassNotFoundException,TicketNotFoundException, IOException{
 
-        Set<String> tags = new HashSet<>();
+        SerializerUtil util = new SerializerUtil();
+        Ticket.setMasterId(Integer.parseInt(util.readProperty("id")));
+        TicketService service = new TicketService();
 
-        for (int i=0;i<size;i++){
+        service.setTicketList((Map<Integer, Ticket>) util.readFromFile());
+        service.initTags();
+        service.initAgents();
 
-            int tSize = (int) ( Math.random() * 10)/2, j = 0;
 
-            Set<String> tTags = new HashSet<>();
-            while (j<tSize){
-                tTags.add("tag-"+j);
-                j++;
-            }
-
-            if (!tTags.isEmpty()){
-                tags.addAll(tTags);
-                if (Ticket.tagList == null) { Ticket.tagList = new HashSet(); }
-                Ticket.tagList.addAll(tTags);
-            }
-
-            new Ticket.TicketBuilder()
-                    .withSubject("subject-"+(i+1))
-                    .withAgent("a-"+((i+1)%agents != 0 ? (i+1)%agents:agents))
-                    .withTags(tTags)
-                    .build().save();
-
-        }
     }
+
+    public static void main(String[] args) {
+
+        long time1, time2;
+        time1 = System.currentTimeMillis();
+        time2 = LocalDateTime.now(ZoneId.of("UTC")).toInstant(ZoneOffset.UTC).toEpochMilli();
+
+        System.out.println(new Date(time1) + "==>"+time1);
+
+        System.out.println(new Date(time2) + "==>"+time2);
+    }
+
 }
