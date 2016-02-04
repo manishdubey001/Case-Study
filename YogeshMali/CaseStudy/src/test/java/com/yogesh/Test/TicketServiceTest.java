@@ -29,7 +29,7 @@ public class TicketServiceTest {
         Assert.assertEquals("James", ticket.getAgentName());
         Assert.assertEquals(1, ticket.getId());
         Assert.assertEquals("Subject", ticket.getSubject());
-        Assert.assertEquals(asList("one", "two", "three"), ticket.getTags());
+        Assert.assertEquals(new HashSet<String>(Arrays.asList("tag1", "tag2")), ticket.getTags());
     }
 
     @Test
