@@ -5,18 +5,31 @@ import com.ticketmaster.models.Ticket;
 import com.ticketmaster.models.TicketRepository;
 
 import java.io.IOException;
+
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
-import java.util.*;
+
 import java.util.stream.Collectors;
+import java.util.Set;
+import java.util.List;
+import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.Collections;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.TreeMap;
+
 
 /**
  * TicketService class
  * This class is service class to perform actions on ticket object
  * Created by Virendra on 31/12/15.
  */
-public class TicketService /*implements Comparable<Ticket>*/ {
+public class TicketService {
     private Ticket ticket;
     TicketRepository repository;
 
@@ -134,7 +147,7 @@ public class TicketService /*implements Comparable<Ticket>*/ {
     }
 
     private Map<String, Object> prepareTicketMap(Ticket ticket){
-        // EB : Return an empty collection instead of returning a null. As per suggestion from Chad/ Best Practice.
+
         Map tempMap = new LinkedHashMap<>();
         if (ticket == null){
             return tempMap;
@@ -215,10 +228,7 @@ public class TicketService /*implements Comparable<Ticket>*/ {
         }else {
             //this block is reserved for future usage
         }
-
         //adding sorted section in streams to further optimize
-
-
         return formatPrintData(list);
 
     }
@@ -295,15 +305,6 @@ public class TicketService /*implements Comparable<Ticket>*/ {
 
     }
 
-    /**
-     * getTicketObject method
-     * used to get the current object of Ticket class
-     * @return
-     */
-    public Ticket getTicketObject(){
-        return this.ticket;
-    } // EB : Unused code
-
     protected List<Map<String,? super Object>> formatPrintData(List l){
         List<Map<String,? super Object>> l1 = new ArrayList<>();
 
@@ -369,9 +370,7 @@ public class TicketService /*implements Comparable<Ticket>*/ {
         long time = LocalDateTime.now(ZoneId.of("UTC")).minusDays(days).toInstant(ZoneOffset.UTC).toEpochMilli();
         List list = new LinkedList(repository.getList().entrySet());
 
-        List lst = new ArrayList<>();
-
-        lst = (ArrayList) list.stream()
+        List lst = (ArrayList) list.stream()
                 .filter((e)->((Ticket) ((Map.Entry) e).getValue()).getCreated() <= time )
                 .sorted((o1, o2) ->{
                     if ( ( (Ticket)(((Map.Entry) o1).getValue()) ).getModified() <=
@@ -383,6 +382,5 @@ public class TicketService /*implements Comparable<Ticket>*/ {
                 .collect(Collectors.toList());
 
         return formatPrintData(lst);
-
     }
 }

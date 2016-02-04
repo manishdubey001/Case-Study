@@ -4,7 +4,15 @@ import com.ticketmaster.Main;
 import com.ticketmaster.utils.SerializerUtil;
 
 import java.io.IOException;
-import java.util.*;
+
+import java.util.Set;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.TreeMap;
+import java.util.HashSet;
+import java.util.Collections;
+
 
 /**
  * Created by root on 29/1/16.
@@ -42,10 +50,6 @@ public class TicketRepository {
         }
     }
 
-    // EB : Avoid using static methods. It will create issues when running multiple threads.
-    //update: for time being I know this approach to have data in the application.
-    // I am looking for the workaround for this. I want to discuss this approach with Chad as well.
-    
     public static TicketRepository init(){
         if(! (_instance instanceof TicketRepository)){
             _instance = new TicketRepository();
@@ -54,13 +58,9 @@ public class TicketRepository {
     }
 
     public Ticket getTicket(Integer id){
-
-        if (!ticketList.containsKey(id)){
+        if (!ticketList.containsKey(id))
             return null;
-        }
         return ticketList.get(id);
-
-
     }
 
     public Map<Integer, Ticket> getList(){
@@ -103,11 +103,8 @@ public class TicketRepository {
 
     public void updatePool()
             throws ClassNotFoundException, IOException{
-
         SerializerUtil util = new SerializerUtil();
-
         Map<Integer,Ticket> temp = (Map<Integer,Ticket>) util.readFromFile();
-
         this.updateList(temp);
     }
 
@@ -118,13 +115,6 @@ public class TicketRepository {
         return Collections.unmodifiableSet(tagList);
     }
 
-    // EB : Unused code
-    //update: Done
-    /*public void updateTagList(Set<String> object){
-        tagList.addAll(object);
-
-    }*/
-
     public void addTags(Set<String> tag){
         agentList.addAll(tag);
     }
@@ -132,13 +122,6 @@ public class TicketRepository {
     public Set<String> getAgentList(){
         return Collections.unmodifiableSet(agentList);
     }
-
-    // EB : Unused code
-    //update: Done
-    /*public void updateAgentList(Set<String> object){
-        tagList.addAll(object);
-
-    }*/
 
     public void addAgent(String agent){
         agentList.add(agent);
@@ -161,13 +144,6 @@ public class TicketRepository {
     }
 
     public Ticket getOldestObject(){
-        // EB : Use ternary operator or compareTo method.
-        //update: done
-        return  ticketList.values().stream().min( (obj1,obj2)-> obj1.getCreated() < obj2.getCreated() ?  -1 : 1)
-                .get();
-
+        return  ticketList.values().stream().min( (obj1,obj2)-> obj1.getCreated() < obj2.getCreated() ?  -1 : 1).get();
     }
-
-
-
 }

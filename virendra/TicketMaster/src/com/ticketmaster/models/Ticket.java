@@ -1,14 +1,21 @@
 package com.ticketmaster.models;
 
-import com.ticketmaster.Main;
 import com.ticketmaster.exceptions.TicketNotFoundException;
 import com.ticketmaster.utils.SerializerUtil;
 
-import java.io.*;
+import java.io.ObjectInputStream;
+import java.io.Serializable;
+import java.io.ObjectOutputStream;
+import java.io.IOException;
+
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
-import java.util.*;
+
+import java.util.Set;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.HashMap;
 import java.util.stream.Stream;
 
 /**
@@ -16,17 +23,16 @@ import java.util.stream.Stream;
  * Created by Virendra on 31/12/15.
  */
 public class Ticket implements Serializable{
-    // cjm - Use a singular name like Tickets if this represents
-    // cjm - Why Serializable?
+
     int id;
-    String subject;
-    String agent;
     long created;
     long modified;
     static private int k = 1;
-    public Set<String> tags;
-
     public static final long serialVersionUID = 881811645564116084L;
+
+    String subject;
+    String agent;
+    public Set<String> tags;
 
     // cjm - Rather than make these static in the Tickets class, I would put them somewhere else.
     // Also don't expose them as public...maybe have a TicketService class with members to provide searches, etc. and these as private members
@@ -40,43 +46,34 @@ public class Ticket implements Serializable{
     // cjm - Maintaining associated collections like agentList and tagList can be useful; however it can also be
     // hard to keep things in sync. For example when you delete a ticket, stale entries are left behind.
 
-    //creating inner class to setup details in the in ticket
+    //creating inner class to setup details in the in ticket - Builder Pattern
     public static class TicketBuilder{
         private String subject = "";
         private Set<String> tags = new HashSet<>();
         private String agent = "";
-
         public TicketBuilder withSubject(String subject){
             this.subject = subject;
             return this;
         }
-
         public TicketBuilder withAgent(String agent){
             this.agent = agent;
             return this;
         }
-
         public TicketBuilder withTags(Set tags){
             if (tags != null){
                 this.tags = (Set<String>)tags;
             }
             return this;
         }
-
         public String getSubject(){
             return subject;
         }
         public String getAgent(){
             return agent;
         }
-        public Set<String> getTags(){
-            return tags;
-        }
-
         public Ticket build (){
             return new Ticket(this);
         }
-
     }
 
     /**
@@ -99,23 +96,16 @@ public class Ticket implements Serializable{
 
     }
 
-    public static void initRepository(){
-        new Ticket();
-    }
-
     //setter methods
     private void setId(int id){
         this.id = id;
     }
-
     public void setSubject(String subject){
         this.subject = subject;
     }
-
     public void setAgent(String agent){
         this.agent = agent;
     }
-
     private void setCreated(long created){
         this.created = created;
     }
@@ -124,18 +114,15 @@ public class Ticket implements Serializable{
     }
 
     //getter methods
-
     public int getId(){
         return this.id;
     }
     public String getSubject(){
         return this.subject;
     }
-
     public String getAgent(){
         return this.agent;
     }
-
     public long getCreated(){
         return this.created;
     }
@@ -150,12 +137,11 @@ public class Ticket implements Serializable{
     public Ticket delete()
             throws IOException, ClassNotFoundException {
 
-
         if(! (repository instanceof TicketRepository )){
             repository = TicketRepository.init();
         }
-        //before delete update local data set
 
+        //before delete update local data set
         SerializerUtil util = new SerializerUtil();
         System.out.println(repository);
         repository.updateList((Map<Integer, Ticket>)util.readFromFile());
@@ -169,7 +155,6 @@ public class Ticket implements Serializable{
             //write complete data again to file
             util.writeToFile(repository.getList());
         }
-
         return ticket;
     }
     /**
@@ -179,16 +164,9 @@ public class Ticket implements Serializable{
     protected boolean beforeSave(){
 
         long time = LocalDateTime.now(ZoneId.of("UTC")).toInstant(ZoneOffset.UTC).toEpochMilli();
-
-//        int rnd = (int)(Math.random() * 10);
-//        System.out.println(rnd);
-//        time = LocalDateTime.now().minusDays(rnd).toInstant(ZoneOffset.UTC).toEpochMilli();
-
-        if(created == 0){
+        if(created == 0)
             setCreated(time);
-        }
         setModified(time);
-
         return true;
     }
 
@@ -217,16 +195,12 @@ public class Ticket implements Serializable{
 
         //add ticket in file
         util.writeToFile(tempMap);
-
         //read new entries
         repository.updatePool();
-
         repository.addAgent(getAgent());
         repository.addTags(this.tags);
-
         //update id in file
         util.writeProperty("id",new Integer(Ticket.k).toString());
-
         return repository.getTicket(this.getId()) != null;
     }
 
@@ -241,12 +215,9 @@ public class Ticket implements Serializable{
     public boolean update()  throws IOException, ClassNotFoundException, TicketNotFoundException{
 
         beforeSave();
-
         SerializerUtil util = new SerializerUtil();
-
         Map<Integer, Ticket> tempMap = new HashMap<>();
         tempMap.put(getId(), this);
-
         //add ticket in file
         util.writeToFile(tempMap);
 
@@ -254,7 +225,6 @@ public class Ticket implements Serializable{
             repository = TicketRepository.init();
         }
         repository.update(this.getId(),this);
-
         return true;
     }
 
@@ -265,9 +235,7 @@ public class Ticket implements Serializable{
      * @return Stream
      */
     public static Stream getListStream(){
-
         return TicketRepository.init().getList().entrySet().stream();
-
     }
 
     /**
@@ -297,7 +265,7 @@ public class Ticket implements Serializable{
     }
 
     public static void clearList(){
-//        TicketRepository.init().getList().clear();
+        TicketRepository.init().getList().clear();
     }
 
     /**
@@ -321,7 +289,6 @@ public class Ticket implements Serializable{
         out.writeObject(this.tags);
         out.writeLong(getCreated());
         out.writeLong(getModified());
-
     }
 
 
@@ -341,6 +308,4 @@ public class Ticket implements Serializable{
     public String toString(){
         return "Ticket: id"+getId()+"|subject:"+getSubject();
     }
-
-
 }

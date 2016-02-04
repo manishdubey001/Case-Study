@@ -9,7 +9,14 @@ import com.ticketmaster.utils.DetailProvider;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.*;
+
+import java.util.Scanner;
+import java.util.Set;
+import java.util.Map;
+import java.util.List;
+import java.util.InputMismatchException;
+
+
 
 /**
  * AppRunner class
@@ -25,7 +32,6 @@ public class AppRunner {
         if (details == null){
             details = DetailProvider.init();
         }
-
     }
 
     /**
@@ -36,7 +42,6 @@ public class AppRunner {
         if (! (_instance instanceof AppRunner))
             _instance = new AppRunner();
         return _instance;
-
     }
 
     /**
@@ -57,18 +62,12 @@ public class AppRunner {
             }while (ch !=0);
 
         }catch (InputMismatchException | IOException  e){
-
-//            e.printStackTrace(); //check stack trace
             System.out.println(e.getMessage() != null ? e.getMessage() : "Invalid Option Selection");
-
         }catch (ClassNotFoundException e){
-//            e.printStackTrace(); // check stack trace
             System.out.println("Ops! class you are looking does not exist");
-
         }catch (Exception e){
             e.printStackTrace();
             System.out.println("Application halted due to exception: "+e.getMessage());
-
         }finally {
 
             if(ch!=0){
@@ -111,13 +110,9 @@ public class AppRunner {
         System.out.println("=============== Menu ===============");
         menu.forEach((k,v)-> System.out.println(k+"\t:\t "+v)); //using lambda expression to print menu
 
-        // not using BufferedReader here
-//        b= new BufferedReader(new InputStreamReader(System.in));
-
         s = new Scanner(System.in);
         System.out.println("Select your option: ");
         int a = s.nextInt();
-
         return a;
     }
 
@@ -131,7 +126,6 @@ public class AppRunner {
      */
     protected void processChoice(int ch)
             throws IOException, ClassNotFoundException, TicketNotFoundException {
-        // EB: Small issue of style. List fields according to class definition. Use generics for type safety.
 
         int id;
         String txtAgent, txtSubject;

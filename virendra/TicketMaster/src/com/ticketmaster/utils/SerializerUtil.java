@@ -22,12 +22,8 @@ public class SerializerUtil {
 
     }
 
-    // EB : Unused Method.
-    //this is been kept if some external file name needs to be supplied.
-    //this is for future use.
     public SerializerUtil(String filename){
         fileName = filename;
-
     }
 
 
@@ -41,7 +37,6 @@ public class SerializerUtil {
             file.createNewFile();
         }
     }
-
 
     private void connectWriter()
             throws IOException{
@@ -59,16 +54,12 @@ public class SerializerUtil {
 
     private void disconnectWriter()
             throws IOException{
-
         fOut.close();
-
     }
 
     private void connectReader()
             throws IOException{
-
         fIn = new ObjectInputStream(new FileInputStream(file));
-
     }
 
     private void disconnectReader()
@@ -117,8 +108,6 @@ public class SerializerUtil {
         disconnectWriter();
     }
 
-    // EB : Return type Object is obvious. Returning specific Data type/Collection makes the method confined to specific/expected operations.
-    //update: Object was used earlier while designing. It is forgotten by me to replace with Map
     public Map<?,?> readFromFile()
             throws IOException, ClassNotFoundException{
 
@@ -129,12 +118,10 @@ public class SerializerUtil {
         Map<Integer, Ticket> tempMap = new HashMap<>();
 
         if (file.length() !=0){
-
             connectReader();
-
             try{
 
-                while(flag){ // EB : Not a recommended/standard way, instead use flag.
+                while(flag){
                     //update: noted
                     Ticket temp = (Ticket) fIn.readObject();
                     tempMap.put(new Integer(temp.getId()), temp);
@@ -143,9 +130,7 @@ public class SerializerUtil {
 
             }
             disconnectReader();
-
         }
-
         return tempMap;
     }
 
@@ -212,5 +197,4 @@ public class SerializerUtil {
         return strReturn;
 
     }
-
 }

@@ -11,8 +11,6 @@ import java.util.Set;
  */
 public class DetailProvider {
 
-    // EB : Scanner and BufferedReader both read data from console. Why are both of them used? Why not any one?
-    //update: BufferedReader is redundant code. Removed it from code base.
     Scanner scanner;
     private static DetailProvider _instance;
 
@@ -44,15 +42,6 @@ public class DetailProvider {
     public String readStringInput(){
         return scanner.nextLine();
     }
-
-    /**
-     * readStringInput Method is used to read the string input from the user from console
-     * @return
-     */
-    public String readCharInput(){
-        return scanner.next();
-    }
-
     /**
      * readIntInput Method is used to read the integer input from the user from console
      */
