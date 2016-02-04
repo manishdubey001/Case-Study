@@ -2,21 +2,20 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-/**
- * Created by root on 1/2/16.
- */
 public class InputDataReader {
-    // Lokesh: This need not required to be public.
-    public static BufferedReader consoleReader = null;
+    // Lokesh: This need not required to be public.   --- done
+    //private static BufferedReader consoleReader = new BufferedReader(new InputStreamReader(System.in));
 
     public static int readInteger(){
         int userInput = 0;
         // Lokesh: Next level: use try-with-resources, rather than instance variable and local references to BufferedReader
         try{
             // Lokesh: think wisely, you are calling a function to get the member of same class. Can't it be avoided?
-            // Why it is required to have new Local reference "consoleReader"?
-            BufferedReader consoleReader = getInputReader();
+            // Why it is required to have new Local reference "consoleReader"?    --- done
+            //consoleReader = getInputReader();
+            BufferedReader consoleReader = new BufferedReader(new InputStreamReader(System.in));
             userInput = Integer.parseInt(consoleReader.readLine());
+            consoleReader.close();
         }
         catch (NumberFormatException ne) {
             System.out.println("Invalid integer Number!!!");
@@ -24,14 +23,17 @@ public class InputDataReader {
         catch (IOException ie) {
             ie.printStackTrace();
         }
+
         return userInput;
     }
 
     public static String readString(){
         String userInput = null;
         try{
-            BufferedReader consoleReader = InputDataReader.getInputReader();
+           // consoleReader = InputDataReader.getInputReader();
+            BufferedReader consoleReader = new BufferedReader(new InputStreamReader(System.in));
             userInput = consoleReader.readLine();
+            consoleReader.close();
         }catch(IOException ie) {
             ie.printStackTrace();
         }
@@ -39,12 +41,12 @@ public class InputDataReader {
         return userInput;
     }
 
-    // Lokesh: this method need not required to be public.
-    public static BufferedReader getInputReader(){
+    // Lokesh: this method need not required to be public.  --    --- done
+   /* private static BufferedReader getInputReader(){
         if(consoleReader == null) {
             System.out.println("Returning new object for reader");
             consoleReader = new BufferedReader(new InputStreamReader(System.in));
         }
         return consoleReader;
-    }
+    }*/
 }

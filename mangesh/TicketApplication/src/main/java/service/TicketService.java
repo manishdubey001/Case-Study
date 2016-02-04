@@ -4,7 +4,7 @@ import com.sun.istack.internal.NotNull;
 import factory.TicketFactory;
 import model.Ticket;
 
-import java.time.LocalDateTime;
+import java.security.InvalidParameterException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -23,27 +23,41 @@ public class TicketService {
         return ticket;
     }
 
-    public boolean deleteTicket(int id) {
+    public boolean deleteTicket(@NotNull int id) {
+        if(masterTicketsData.isEmpty())     return false;
         Ticket ticket = masterTicketsData.remove(id);
         return (ticket != null) ? true : false;
     }
 
     public Ticket getTicketDetails(int id){
-        // Lokesh: It may return Null. It forces callers for Null check. Rather then returning null, through an exception.
-        return masterTicketsData.get(id);
+        // Lokesh: It may return Null. It forces callers for Null check. Rather then returning null, through an exception. -- Done
+        Ticket ticket = masterTicketsData.get(id);
+        if(ticket == null) throw new InvalidParameterException();
+        return ticket;
     }
 
     public List<Ticket> getTicketsByAgentName(String agentName){
-        // Lokesh: it may return null, return empty collection or throw exception in place of null
-        return masterTicketsData.values().stream().filter(ticket -> ticket.getAgentName().toLowerCase().equals(agentName.toLowerCase())).collect(Collectors.toList());
-    }
+        // Lokesh: it may return null, return empty collection or throw exception in place of null -- Done
+        if (masterTicketsData.isEmpty())  return new ArrayList<>();
+
+        return Collections.unmodifiableList(masterTicketsData.values()
+                                    .stream()
+                                    .filter(ticket -> ticket.getAgentName().toLowerCase().equals(agentName.toLowerCase()))
+                                    .collect(Collectors.toList()));
+        }
 
     public List<Ticket> getTicketsByTag(String tag){
-        return masterTicketsData.values().stream().filter(ticket -> ticket.getTags().contains(tag.toLowerCase())).collect(Collectors.toList());
-    }
+        if(masterTicketsData.isEmpty())  return new ArrayList<>();
+
+        return Collections.unmodifiableList(masterTicketsData.values()
+                                        .stream()
+                                        .filter(ticket -> ticket.getTags().contains(tag.toLowerCase()))
+                                        .collect(Collectors.toList()));
+        }
 
     public Map<String , List<Ticket>> getTicketCounts(){
-        return masterTicketsData.values().stream().collect(Collectors.groupingBy(Ticket::getAgentName));
+        if(masterTicketsData.isEmpty())    return new HashMap<>();
+        return Collections.unmodifiableMap(masterTicketsData.values().stream().collect(Collectors.groupingBy(Ticket::getAgentName)));
     }
 
     public boolean isTicketExist(int id){
@@ -69,13 +83,12 @@ public class TicketService {
             });
             ticket.setTags(oldTags);
         }
-        ticket.setModified(LocalDateTime.now());
 
         return ticket;
     }
 
-//    Lokesh: Return Set interface instead of concrete HashMap. Applied some where, missed here.
-    public HashMap<Integer, Ticket> getAllTickets(){
-        return masterTicketsData;
+//    Lokesh: Return Set(Map) interface instead of concrete HashMap. Applied some where, missed here.
+    public Map<Integer, Ticket> getAllTickets(){
+        return Collections.unmodifiableMap(masterTicketsData);
     }
 }

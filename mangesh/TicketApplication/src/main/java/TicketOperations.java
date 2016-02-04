@@ -1,5 +1,7 @@
 import model.Ticket;
 import service.TicketService;
+
+import java.security.InvalidParameterException;
 import java.util.*;
 
 public class TicketOperations {
@@ -10,8 +12,6 @@ public class TicketOperations {
     }
 
     public void createTicket(){
-        System.out.println("Create ticket");
-
         System.out.println("Enter Ticket Subject : ");
         String subject = InputDataReader.readString();
         System.out.println("Enter Agent Name : ");
@@ -33,11 +33,10 @@ public class TicketOperations {
     }
 
      public void showAllTickets(){
-         HashMap<Integer, Ticket> tickets = ticketService.getAllTickets();
+         Map<Integer, Ticket> tickets = ticketService.getAllTickets();
          if(tickets.size() >0 ){
             showHeader();
-            tickets.values().stream().sorted((Ticket t1, Ticket t2) -> -t1.getModified().compareTo(t2.getModified())).forEach(ticket -> System.out.println(ticket.getId()
-                    + "  |  " + ticket.getSubject() + "  |  " + ticket.getAgentName() + "  |  " + ticket.getTags() + "  |  " + ticket.getCreated() + "  |  " + ticket.getModified()));
+            tickets.values().stream().sorted((Ticket t1, Ticket t2) -> -t1.getModified().compareTo(t2.getModified())).forEach(ticket -> System.out.println(ticket.toString()));
          }
          else
          {
@@ -58,55 +57,60 @@ public class TicketOperations {
     public void showTicketById(){
         System.out.println("Enter ticket Id for showing details : ");
         int id = InputDataReader.readInteger();
-        Ticket ticket = ticketService.getTicketDetails(id);
-        // Lokesh: Call to your function in TicketService should  not force callers to check for NULL.
+        try {
+            Ticket ticket = ticketService.getTicketDetails(id);
+            System.out.println("Details of ticket id : " + id + "\n\n" + ticket.toString());
+        }catch (InvalidParameterException e){
+            System.out.println("Invalid ticket Id . Entered ticket id " + id + " is not present in the system.");
+        }
+
+        /*// Lokesh: Call to your function in TicketService should  not force callers to check for NULL.
         if(ticket != null){
             System.out.println("Ticket details of ticket id : " + id);
             showHeader();
-            // Lokesh: on next level, you can override the toString function in Ticket modal to display a ticket object rather then every time calling like below line.
-            System.out.println(ticket.getId() +"  |  " + ticket.getSubject() +"  |  " + ticket.getAgentName() +"  |  " + ticket.getTags() +"  |  " +
-                    ticket.getCreated() +"  |  " + ticket.getModified());
+            // Lokesh: on next level, you can override the toString function in Ticket modal to display a ticket object rather then every time calling like below line. -- Done
+            System.out.println(ticket.toString());
+            *//*System.out.println(ticket.getId() +"  |  " + ticket.getSubject() +"  |  " + ticket.getAgentName() +"  |  " + ticket.getTags() +"  |  " +
+                    ticket.getCreated() +"  |  " + ticket.getModified());*//*
         }
         else
-            System.out.println("Entered ticket id " + id + " is not present in the system." );
+            System.out.println("Entered ticket id " + id + " is not present in the system." );*/
     }
 
     public  void showTicketsByAgentName() {
         System.out.println("Please enter Agent Name : ");
         String agentName = InputDataReader.readString();
-        if(agentName.isEmpty()){
-            System.out.println("Invalid agent Name. Agent Name should not be empty!!!");
-        }
-        else
-        {
+        if(!agentName.isEmpty()){
             List<Ticket> agentTicketList = ticketService.getTicketsByAgentName(agentName);
             if(agentTicketList.size()>0){
                 showHeader();
-                agentTicketList.forEach(ticket -> System.out.println(ticket.getId() + "  |  " + ticket.getSubject() + "  |  " + ticket.getAgentName() +
-                        "  |  " + ticket.getTags() + "  |  " + ticket.getCreated() + "  |  " + ticket.getModified()));
+                agentTicketList.forEach(ticket -> System.out.println(ticket.toString()));
             }
             else
                 System.out.println("No records found for entered agent " + agentName);
+        }
+        else
+        {
+            System.out.println("Invalid agent Name!!!");
         }
     }
 
     public void searchTicketsByTag(){
         System.out.println("Enter tag to search ticket(s) : ");
         String tag = InputDataReader.readString();
-        if(tag.isEmpty()){
-            System.out.println("Invalid Tag!!!. Tag Name should not be empty!!!");
-        }
-        else
-        {
+        if(!tag.isEmpty()){
             List<Ticket> ticketList = ticketService.getTicketsByTag(tag);
             if(ticketList.size()>0)
             {
                 showHeader();
-                ticketList.forEach(ticket -> System.out.println(ticket.getId() + "  |  " + ticket.getSubject() + "  |  " + ticket.getAgentName() +
-                        "  |  " + ticket.getTags() + "  |  " + ticket.getCreated() + "  |  " + ticket.getModified()));
+                ticketList.forEach(ticket -> System.out.println(ticket.toString()));
             }
             else
                 System.out.println("No tickets are found for entered tag " + tag);
+        }
+        else
+        {
+            System.out.println("Invalid Tag!!!. Tag Name should not be empty!!!");
         }
     }
 
@@ -127,11 +131,10 @@ public class TicketOperations {
             String agentName = InputDataReader.readString();
             System.out.println("Enter A-adding new tags / R-remove existing tag / N-no");
             String action = InputDataReader.readString();
-            String tag = null;
             HashSet<String> tags = null;
             if(!action.isEmpty() && (action.equals("A") || action.equals("R"))){
                 System.out.println("Enter tags seperated by comma(,) : ");
-                tag = InputDataReader.readString();
+                String tag = InputDataReader.readString();
                 tags = new HashSet<>(Arrays.asList(tag.split(",")));
             }
 
@@ -140,15 +143,14 @@ public class TicketOperations {
            if(ticket != null){
                System.out.println("Ticket id " + id + " is updated successfully");
                showHeader();
-               System.out.println(ticket.getId() + "  |  " + ticket.getSubject() + "  |  " + ticket.getAgentName() + "  |  " + ticket.getTags() + "  |  " +
-                                    ticket.getCreated() + "  |  " + ticket.getModified());
+               System.out.println(ticket.toString());
            }
         }
         else
             System.out.println("Entered Ticket id " + id + " is not present in the system.");
     }
 
-    public void showHeader(){
+    private void showHeader(){
         System.out.println("Id  |  Subject  |  Agent  |  tags  |  created  |  Modified");
     }
 }

@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class Ticket {
-    private int id;
+    final private int id;
     private String subject;
     private String agentName;
     private HashSet<String> tags;
@@ -27,6 +27,7 @@ public class Ticket {
 
     public void setAgentName(String agentName) {
         this.agentName = agentName;
+        this.modified = LocalDateTime.now();
     }
 
     public Set<String> getTags() {
@@ -34,9 +35,10 @@ public class Ticket {
     }
 
     // Lokesh: Accept Set interface type in-place of HashSet.
-    public void setTags(HashSet<String> tags) {
+    public void setTags(Set<String> tags) {
         // Lokesh: Don't directly set reference to user's passed Collection for internal object, Instead copy them.
-        this.tags = tags;
+        this.tags = (HashSet)tags;
+        this.modified = LocalDateTime.now();
     }
 
     public LocalDateTime getCreated() {
@@ -47,10 +49,11 @@ public class Ticket {
         return modified;
     }
 
-    // Lokesh: why do you still require this, that too public?
+    /*// Lokesh: why do you still require this, that too public?    --- done
+   // Update : As a practice remove the setter for modified
     public void setModified(LocalDateTime modified) {
         this.modified = modified;
-    }
+    }*/
 
     public Ticket(int id, String subject, String agentName, HashSet<String> tagSet){
         this.id = id;
@@ -58,5 +61,10 @@ public class Ticket {
         this.agentName = agentName;
         this.tags = tagSet;
         this.created = this.modified = LocalDateTime.now();
+    }
+
+    @Override
+    public String toString(){
+        return this.id + "  |  " + this.subject + "  |  " + this.agentName + "  |  " + this.tags + "  |  " + this.created + "  |  " + this.modified;
     }
 }
