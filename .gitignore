@@ -1,5 +1,7 @@
-GaneshDeshvini/CaseStudy/.idea/
-GaneshDeshvini/CaseStudy/out/
+GaneshDeshvini/CaseStudy/.idea/*
+GaneshDeshvini/CaseStudy/out/*
+GaneshDeshvini/CaseStudy/target/*
+YogeshMali/.idea/*
 .class
 .jar
 !.gitignore

@@ -39,7 +39,7 @@ public class TicketModel implements Serializable {
         this.id = id;
         this.subject = subject;
         this.agent_name = agentName;
-        this.tags = new HashSet<String>(tags);
+        this.tags = new HashSet<>(tags);
         this.created = this.modified = DateTimeUtil.getCurrentTimeStampInSeconds();
     }
 
@@ -95,7 +95,7 @@ public class TicketModel implements Serializable {
     // (instead of just a Set).
     // UPDATE : added defensive copy
     public void setTags(Set<String> tags) {
-        this.tags = new HashSet<String>(tags);
+        this.tags = new HashSet<>(tags);
         this.modified = DateTimeUtil.getCurrentTimeStampInSeconds();
     }
 
@@ -121,7 +121,7 @@ public class TicketModel implements Serializable {
 
 
     /**
-     * insert or processUpdateTicket
+     * insert
      *
      * @return boolean
      */

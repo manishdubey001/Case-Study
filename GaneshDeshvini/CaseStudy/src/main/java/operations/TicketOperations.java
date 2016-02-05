@@ -86,7 +86,11 @@ public class TicketOperations {
         //Pass this is directly into sort method
         //Update: changes done
         // good use of streams!
-        return Repository.getInstance().ticketData.values().stream().filter(ticketModel -> ticketModel.getAgentName().equalsIgnoreCase(agentName)).sorted(Comparator.comparing(tm -> tm.getAgentName())).collect(Collectors.toList());
+        return Repository.getInstance().ticketData.values().
+                stream().
+                filter(ticketModel -> ticketModel.getAgentName().equalsIgnoreCase(agentName)).
+                sorted(Comparator.comparing(tm -> tm.getAgentName())).
+                collect(Collectors.toList());
     }
 
     /**
@@ -98,12 +102,15 @@ public class TicketOperations {
     // Sort by modifiied date, right?
     //UPDATE : right, I have fixed it
     public List<TicketModel> findAllByTag(String tag) {
-        final String toCheck = tag.toLowerCase();
+        String toCheck = tag.toLowerCase();
 
-        Function<TicketModel, Long> byModified = ticketModel -> ticketModel.getModified();
         //Stream it self return the list, no need to crete new one and add all into manually into it
         //Update: changes done
-        return Repository.getInstance().ticketData.values().stream().filter(ticketModel -> ticketModel.getTags().contains(toCheck)).sorted(Comparator.comparing(byModified)).collect(Collectors.toList());
+        return Repository.getInstance().ticketData.values().
+                stream().
+                filter(ticketModel -> ticketModel.getTags().contains(toCheck)).
+                sorted(Comparator.comparing(ticketModel -> ticketModel.getModified())).
+                collect(Collectors.toList());
         // Two ways to try to simplify this
         // 1. Use the for-each mechanism: for(TicketModel tm : ticketData.values())
         // or
@@ -117,24 +124,19 @@ public class TicketOperations {
      * @return
      */
     public TreeMap<String, Integer> findAllAgentWithTicketCount() {
-        TreeMap<String, Integer> tmAgentNameCount = new TreeMap<String, Integer>();
-        Collection<TicketModel> ticketModelCollection = Repository.getInstance().ticketData.values();
-
-        if (Util.isCollectionValid(ticketModelCollection)) {
-            //Use stream instead of for each
-            //Update : used streams
-            ticketModelCollection.forEach(ticketModel -> {
-                String agentName = ticketModel.getAgentName();
-                int cnt = 1;
-                if (tmAgentNameCount.containsKey(agentName)) {
-                    cnt = tmAgentNameCount.get(agentName);
-                    cnt++;
-                }
-                tmAgentNameCount.put(agentName, cnt);
-            });
-        }
+        TreeMap<String, Integer> tmAgentNameCount = new TreeMap();
+        //Use stream instead of for each
+        //Update : used streams
+        Repository.getInstance().ticketData.values().forEach(ticketModel -> {
+            int cnt = 1;
+            String agentName = ticketModel.getAgentName();
+            if (tmAgentNameCount.containsKey(agentName)) {
+                cnt = tmAgentNameCount.get(agentName);
+                cnt++;
+            }
+            tmAgentNameCount.put(agentName, cnt);
+        });
         return tmAgentNameCount;
-        //
     }
 
     /**

@@ -1,5 +1,8 @@
-package tests;
+package service;
 
+import CustomException.DuplicateIdException;
+import CustomException.InvalidParamsException;
+import CustomException.TicketNotFoundException;
 import data.Repository;
 import helpers.Util;
 import model.TicketModel;
@@ -18,7 +21,7 @@ import static org.junit.Assert.*;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TicketServiceTest {
 
-    TicketService ts = TicketService.newInstance();
+    TicketService ticketService = TicketService.newInstance();
     int id;
     String subject;
     String agent;
@@ -26,66 +29,66 @@ public class TicketServiceTest {
     TicketModel ticketModel;
 
     @Test
-    public void test1CreateTicketValid() throws Exception {
+    public void test1CreateTicketValid() throws Exception{
         id = 1;
         subject = "sub";
         agent = "a1";
         tags = "a, b";
         HashSet<String> hsTags = new HashSet<>(Arrays.asList("a", "b"));
-        assertTrue(ts.createTicket(id, subject, agent, tags));
+        assertTrue(ticketService.createTicket(id, subject, agent, tags));
 
         //validate data which has been saved
-        ticketModel = ts.getTicketDetail(id);
+        ticketModel = ticketService.getTicketDetail(id);
         assertEquals(subject, ticketModel.getSubject());
         assertEquals(agent, ticketModel.getAgentName());
         assertEquals(hsTags, ticketModel.getTags());
 
         //cleanup
-//        ts.deleteTicket(id);
+//        ticketService.deleteTicket(id);
     }
 
-    @Test
+    @Test(expected = DuplicateIdException.class)
     public void test2CreateTicketDuplicateId() throws Exception {
         //insert a dummy re
         id = 2;
         subject = "sub2";
         agent = "a2";
         tags = "d, b";
-        assertTrue(ts.createTicket(id, subject, agent, tags));
+        assertTrue(ticketService.createTicket(id, subject, agent, tags));
 
         //duplicate id
         id = 2;
         subject = "sub3";
         agent = "a3";
         tags = "d, b";
-        assertFalse(ts.createTicket(id, subject, agent, tags));
+        ticketService.createTicket(id, subject, agent, tags);
 
         //cleanup
-//        ts.deleteTicket(id);
+//        ticketService.deleteTicket(id);
     }
 
-    @Test
+    @Test(expected = InvalidParamsException.class)
     public void test3CreateTicketNullSubject() throws Exception {
         id = 3;
         subject = null;
         agent = "a2";
         tags = "a";
-        assertFalse(ts.createTicket(id, subject, agent, tags));
+        ticketService.createTicket(id, subject, agent, tags);
 
         //cleanup
-//        ts.deleteTicket(id);
+//        ticketService.deleteTicket(id);
     }
 
-    @Test
+    @Test(expected = InvalidParamsException.class)
     public void test4CreateTicketNullAgentName() throws Exception {
         id = 4;
         subject = "sub";
         agent = null;
         tags = "";
-        assertFalse(ts.createTicket(id, subject, agent, tags));
+        ticketService.createTicket(id, subject, agent, tags);
 
         //cleanup
-//        ts.deleteTicket(id);
+//        ticketService.deleteTicket(id);
     }
 
     //
@@ -95,25 +98,25 @@ public class TicketServiceTest {
         subject = "sub";
         agent = "a1";
         tags = null;
-        assertTrue(ts.createTicket(id, subject, agent, tags));
+        assertTrue(ticketService.createTicket(id, subject, agent, tags));
 
-        ticketModel = ts.getTicketDetail(id);
+        ticketModel = ticketService.getTicketDetail(id);
         assertTrue(ticketModel.getTags().isEmpty());
 
         //cleanup
-//        ts.deleteTicket(id);
+//        ticketService.deleteTicket(id);
     }
 
-    @Test
+    @Test(expected = InvalidParamsException.class)
     public void test6CreateTicketNegativeId() throws Exception {
         id = -1;
         subject = "sub";
         agent = "a1";
         tags = null;
-        assertFalse(ts.createTicket(id, subject, agent, tags));
+        ticketService.createTicket(id, subject, agent, tags);
 
         //cleanup
-//        ts.deleteTicket(id);
+//        ticketService.deleteTicket(id);
     }
 
     @Test
@@ -123,10 +126,11 @@ public class TicketServiceTest {
         agent = "a6";
         tags = "a6, b6";
         HashSet<String> hsTags = new HashSet<>(Arrays.asList("a6", "b6"));
-        assertTrue(ts.createTicket(id, subject, agent, tags));
+        assertTrue(ticketService.createTicket(id, subject, agent, tags));
+        TicketModel ticketModel = ticketService.getTicketDetail(id);
 
         //validate data which has been saved
-        ticketModel = ts.getTicketDetail(id);
+        ticketModel = ticketService.getTicketDetail(id);
         assertEquals(subject, ticketModel.getSubject());
         assertEquals(agent, ticketModel.getAgentName());
         assertEquals(hsTags, ticketModel.getTags());
@@ -135,29 +139,29 @@ public class TicketServiceTest {
         agent = "a6 updated";
         tags = "a6updated, b6updated";
         hsTags = new HashSet<>(Arrays.asList("a6updated", "b6updated"));
-        assertTrue(ts.updateTicket(id, agent, tags));
+        assertTrue(ticketService.updateTicket(id, agent, tags));
 
         //validate data which has been saved
-        ticketModel = ts.getTicketDetail(id);
+        ticketModel = ticketService.getTicketDetail(id);
         assertEquals(subject, ticketModel.getSubject());
         assertEquals(agent, ticketModel.getAgentName());
         assertEquals(hsTags, ticketModel.getTags());
 
         //cleanup
-//        ts.deleteTicket(id);
+//        ticketService.deleteTicket(id);
     }
 
-    @Test
+    @Test(expected = InvalidParamsException.class)
     public void test8UpdateTicketInvalidId() throws Exception {
         id = 7;
         subject = "sub7";
         agent = "a7";
         tags = "a7, b7";
         HashSet<String> hsTags = new HashSet<>(Arrays.asList("a7", "b7"));
-        assertTrue(ts.createTicket(id, subject, agent, tags));
+        assertTrue(ticketService.createTicket(id, subject, agent, tags));
 
         //validate data which has been saved
-        ticketModel = ts.getTicketDetail(id);
+        ticketModel = ticketService.getTicketDetail(id);
         assertEquals(subject, ticketModel.getSubject());
         assertEquals(agent, ticketModel.getAgentName());
         assertEquals(hsTags, ticketModel.getTags());
@@ -166,53 +170,53 @@ public class TicketServiceTest {
         id = -3;
         agent = "a7 updated";
         tags = "a7updated, b7updated";
-        assertFalse(ts.updateTicket(id, agent, tags));
+        ticketService.updateTicket(id, agent, tags);
 
         //test update ticket invalid id
         id = 1000;
         agent = "a7 updated";
         tags = "a7updated, b7updated";
-        assertFalse(ts.updateTicket(id, agent, tags));
+        ticketService.updateTicket(id, agent, tags);
 
         //cleanup
-//        ts.deleteTicket(7);
+//        ticketService.deleteTicket(7);
     }
 
-    @Test
-    public void test90DeleteTicketValid() {
+    @Test(expected = TicketNotFoundException.class)
+    public void test90DeleteTicketValid() throws Exception{
         id = 8;
         subject = "sub8";
         agent = "a8";
         tags = "a8, b8";
         HashSet<String> hsTags = new HashSet<>(Arrays.asList("a8", "b8"));
-        assertTrue(ts.createTicket(id, subject, agent, tags));
+        assertTrue(ticketService.createTicket(id, subject, agent, tags));
 
         //validate data which has been saved
-        ticketModel = ts.getTicketDetail(id);
+        ticketModel = ticketService.getTicketDetail(id);
         assertEquals(subject, ticketModel.getSubject());
         assertEquals(agent, ticketModel.getAgentName());
         assertEquals(hsTags, ticketModel.getTags());
 
         //delete ticket
-        assertTrue(ts.deleteTicket(id));
+        assertTrue(ticketService.deleteTicket(id));
         //cross check if deleted or not
-        assertNull(ts.getTicketDetail(id));
+        ticketService.getTicketDetail(id);
 
 //        //cleanup
-//        ts.deleteTicket(id);
+//        ticketService.deleteTicket(id);
     }
 
-    @Test
+    @Test(expected = InvalidParamsException.class)
     public void test91DeleteTicketInvalidId() throws Exception {
         id = 9;
         subject = "sub7";
         agent = "a7";
         tags = "a7, b7";
         HashSet<String> hsTags = new HashSet<>(Arrays.asList("a7", "b7"));
-        assertTrue(ts.createTicket(id, subject, agent, tags));
+        assertTrue(ticketService.createTicket(id, subject, agent, tags));
 
         //validate data which has been saved
-        ticketModel = ts.getTicketDetail(id);
+        ticketModel = ticketService.getTicketDetail(id);
         assertEquals(subject, ticketModel.getSubject());
         assertEquals(agent, ticketModel.getAgentName());
         assertEquals(hsTags, ticketModel.getTags());
@@ -221,16 +225,16 @@ public class TicketServiceTest {
         id = -3;
         agent = "a7 updated";
         tags = "a7updated, b7updated";
-        assertFalse(ts.deleteTicket(id));
+        ticketService.deleteTicket(id);
 
         //test update ticket invalid id
         id = 1000;
         agent = "a7 updated";
         tags = "a7updated, b7updated";
-        assertFalse(ts.deleteTicket(id));
+        ticketService.deleteTicket(id);
 
 //        //cleanup
-//        ts.deleteTicket(9);
+//        ticketService.deleteTicket(9);
     }
 
     @Test
@@ -240,10 +244,10 @@ public class TicketServiceTest {
         agent = "a10";
         tags = "a10, b10";
         HashSet<String> hsTags = new HashSet<>(Arrays.asList("a10", "b10"));
-        assertTrue(ts.createTicket(id, subject, agent, tags));
+        assertTrue(ticketService.createTicket(id, subject, agent, tags));
 
         //validate data which has been saved
-        ticketModel = ts.getTicketDetail(id);
+        ticketModel = ticketService.getTicketDetail(id);
         assertNotNull(ticketModel);
 
         assertEquals(id, ticketModel.getId());
@@ -252,28 +256,28 @@ public class TicketServiceTest {
         assertEquals(hsTags, ticketModel.getTags());
 //
 //        //cleanup
-//        ts.deleteTicket(id);
+//        ticketService.deleteTicket(id);
     }
 
-    @Test
+    @Test(expected = InvalidParamsException.class)
     public void test93GetTicketDetailInValidId() throws Exception {
         id = 11;
         subject = "sub10";
         agent = "a10";
         tags = "a10, b10";
         HashSet<String> hsTags = new HashSet<>(Arrays.asList("a10", "b10"));
-        assertTrue(ts.createTicket(id, subject, agent, tags));
+        assertTrue(ticketService.createTicket(id, subject, agent, tags));
 
         //negative
         id = -1;
-        assertNull(ts.getTicketDetail(id));
+        ticketService.getTicketDetail(id);
 
         //no record found
         id = 1000000;
-        assertNull(ts.getTicketDetail(id));
+        ticketService.getTicketDetail(id);
 //
 //        //cleanup
-//        ts.deleteTicket(11);
+//        ticketService.deleteTicket(11);
     }
 
     @Test
@@ -294,11 +298,11 @@ public class TicketServiceTest {
             hmData.put("agent", agent);
             hmData.put("tags", hsTags);
             hmTicketData.put(id, hmData);
-            assertTrue(ts.createTicket(id, subject, agent, tags));
+            assertTrue(ticketService.createTicket(id, subject, agent, tags));
         }
 
         int cnt = 0;
-        List<TicketModel> ls = ts.getTicketList();
+        List<TicketModel> ls = ticketService.getTicketList();
         if (Util.isCollectionValid(ls)) {
             for (TicketModel tm : ls) {
                 int tid = tm.getId();
@@ -335,10 +339,10 @@ public class TicketServiceTest {
             HashSet<Integer> hs = hmTicketData.containsKey(agent) ? hmTicketData.get(agent) : new HashSet<Integer>();
             hs.add(id);
             hmTicketData.put(agent, hs);
-            assertTrue(ts.createTicket(id, subject, agent, tags));
+            assertTrue(ticketService.createTicket(id, subject, agent, tags));
         }
 
-        List<TicketModel> ls = ts.findAllTicketsByAgentName(chkAgentName);
+        List<TicketModel> ls = ticketService.findAllTicketsByAgentName(chkAgentName);
         HashSet<Integer> hashSetActual = new HashSet<Integer>();
         if (Util.isCollectionValid(ls)) {
             for (TicketModel tm : ls) {
@@ -361,7 +365,7 @@ public class TicketServiceTest {
             subject = "sub" + i;
             agent = "agent" + randomNumber;
 
-            assertTrue(ts.createTicket(id, subject, agent, tags));
+            assertTrue(ticketService.createTicket(id, subject, agent, tags));
 
             if (treeMapExpected.containsKey(agent)) {
                 treeMapExpected.put(agent, treeMapExpected.get(agent) + 1);
@@ -370,7 +374,7 @@ public class TicketServiceTest {
             }
         }
 
-        TreeMap<String, Integer> treeMapActual = ts.findAllAgentWithTicketCount();
+        TreeMap<String, Integer> treeMapActual = ticketService.findAllAgentWithTicketCount();
         assertEquals(treeMapExpected, treeMapActual);
     }
 
@@ -392,10 +396,10 @@ public class TicketServiceTest {
             HashSet<Integer> hs = hmTicketData.containsKey(tags) ? hmTicketData.get(tags) : new HashSet<Integer>();
             hs.add(id);
             hmTicketData.put(tags, hs);
-            assertTrue(ts.createTicket(id, subject, agent, tags));
+            assertTrue(ticketService.createTicket(id, subject, agent, tags));
         }
 
-        List<TicketModel> ls = ts.getAllTicketsByTags(chkTagName);
+        List<TicketModel> ls = ticketService.getAllTicketsByTags(chkTagName);
         HashSet<Integer> hashSetActual = new HashSet<Integer>();
         if (Util.isCollectionValid(ls)) {
             for (TicketModel tm : ls) {

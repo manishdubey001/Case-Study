@@ -1,5 +1,6 @@
 package service;
 
+import CustomException.InvalidParamsException;
 import helpers.ConsoleReader;
 import helpers.DateTimeUtil;
 import helpers.Util;
@@ -13,6 +14,9 @@ import java.util.*;
  * Created by root on 29/1/16.
  */
 public class ReportService {
+    TicketOperations ticketOperations = new TicketOperations();
+    TicketService ticketService = new TicketService();
+
     public static ReportService newInstance() {
         return new ReportService();
     }
@@ -21,16 +25,16 @@ public class ReportService {
      * total number of tickets in the system
      */
     public void totalNumberOfTickets() {
-        System.out.println("Total number of tickets : " + TicketOperations.newInstance().getTotalNumberOfTickets());
+        System.out.println("Total number of tickets : " + ticketOperations.getTotalNumberOfTickets());
     }
 
     /**
      * oldest ticket in the system
      */
     public void oldestTicket() {
-        TicketModel ticketModel = TicketOperations.newInstance().getOldestTicket();
+        TicketModel ticketModel = ticketOperations.getOldestTicket();
         System.out.println("--oldest ticket in the system--");
-        TicketService.newInstance().printTicketDetails(ticketModel);
+        ticketService.printTicketDetails(ticketModel);
         System.out.println("-------------------------------");
     }
 
@@ -43,39 +47,44 @@ public class ReportService {
             Scanner scanner = ConsoleReader.newInstance();
             System.out.println("Enter number of days");
             int noOfDays = scanner.nextInt();
-            if (noOfDays > 0) {
-                processTicketsOlderThanNDays(noOfDays - 1);
-            } else
-                System.out.println("days should be greater than 0..please try again\n");
+            List<TicketModel> ticketModelList = getTicketsOlderThanNDays(noOfDays);
+            if (Util.isCollectionValid(ticketModelList)) {
+                ticketModelList.forEach(ticketModel -> ticketService.printTicketDetails(ticketModel));
+            } else {
+                System.out.println("No data found!!!");
+            }
         } catch (InputMismatchException ime) {
             System.out.println("Invalid input..please try again\n");
+        } catch (InvalidParamsException ipe) {
+            //
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    void processTicketsOlderThanNDays(int noOfDays) {
-        long startTimeStamp = DateTimeUtil.minusDaysGetTimestamp(LocalDateTime.now(), noOfDays);
-        long endTimeStamp = DateTimeUtil.getTimeStampWithHMS(LocalDateTime.now(), 23, 59, 59);
-        List<TicketModel> ticketModelList = TicketOperations.newInstance().findAll(startTimeStamp, endTimeStamp);
-        if (Util.isCollectionValid(ticketModelList)) {
-            TicketService ticketService = TicketService.newInstance();
-            ticketModelList.forEach(ticketModel -> ticketService.printTicketDetails(ticketModel));
-        } else {
-            System.out.println("No data found!!!");
+    List<TicketModel> getTicketsOlderThanNDays(int noOfDays) throws InvalidParamsException {
+        if (noOfDays <= 0) {
+            throw new InvalidParamsException("Invalid params");
         }
+        long startTimeStamp = DateTimeUtil.minusDaysGetTimestamp(LocalDateTime.now(), noOfDays - 1);
+        long endTimeStamp = DateTimeUtil.getTimeStampWithHMS(LocalDateTime.now(), 23, 59, 59);
+        return ticketOperations.findAll(startTimeStamp, endTimeStamp);
     }
 
     /**
      * tags in used with ticket count
      */
     public void tagInUsedWithTicketCount() {
-        Map<String, Integer> s = TicketOperations.newInstance().tagsInUsedWithCount();
+        Map<String, Integer> s = getAllTagWithTicketCount();
         if (Util.isMapValid(s)) {
             System.out.println("---------------------------------");
             System.out.println("|Tag Name\t|Count|");
             s.forEach((tagName, count) -> System.out.println("| " + tagName + " | " + count + " |"));
             System.out.println("---------------------------------");
         }
+    }
+
+    Map<String, Integer> getAllTagWithTicketCount() {
+        return ticketOperations.tagsInUsedWithCount();
     }
 }

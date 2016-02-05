@@ -1,11 +1,15 @@
 package service;
 
+import CustomException.DuplicateIdException;
+import CustomException.InvalidParamsException;
+import CustomException.TicketNotFoundException;
 import factory.TicketModelFactory;
-import helpers.DateTimeUtil;
 import helpers.ConsoleReader;
+import helpers.DateTimeUtil;
 import helpers.Util;
 import model.TicketModel;
 import operations.TicketOperations;
+import sun.security.krb5.internal.Ticket;
 
 import java.util.*;
 
@@ -15,6 +19,7 @@ import java.util.*;
 public class TicketService {
 
     TicketOperations ticketOperations = TicketOperations.newInstance();
+
     /**
      * processCreateTicket ticket service object
      *
@@ -31,7 +36,7 @@ public class TicketService {
      * @return
      */
     private HashSet<String> getTags(String tags) {
-        final String pattern = "\\s*,\\s*";
+        String pattern = "\\s*,\\s*";
         return Util.isStringValid(tags) ? new HashSet<String>(Arrays.asList(tags.toLowerCase().split(pattern))) : new HashSet<String>();
     }
 
@@ -55,23 +60,20 @@ public class TicketService {
      * @param tags
      * @return
      */
-    public boolean createTicket(int id, String subject, String agentName, String tags) {
-        if (id > 0 && Util.isStringValid(subject) && Util.isStringValid(agentName)) {
-            if (isDuplicateTicketId(id)) {
-                System.out.println("Duplicate ticket id!!!");
-                return false;
-            }
-            // rather than set these here, I would have a constructor that takes these parameters
-            // (or use a builder pattern). Otherwise you have an object that is sometimes in an
-            // invalid state in between each step. Not a big deal for TicketModel but it can be for
-            // other classes.
-            // Update : used constructor way
-            HashSet<String> tagSet = getTags(tags);
-            TicketModel ticketModel = TicketModelFactory.newInstance(id, subject, agentName, tagSet);
-            return ticketModel.save();
+    public boolean createTicket(int id, String subject, String agentName, String tags) throws DuplicateIdException, InvalidParamsException {
+        if (!(id > 0 && Util.isStringValid(subject) && Util.isStringValid(agentName))) {
+            throw new InvalidParamsException("Invalid parameters");
         }
-        System.out.println("Invalid input");
-        return false;
+        if (isDuplicateTicketId(id)) {
+            throw new DuplicateIdException("Duplicate ticket id...Please try some thing else");
+        }
+        // rather than set these here, I would have a constructor that takes these parameters
+        // (or use a builder pattern). Otherwise you have an object that is sometimes in an
+        // invalid state in between each step. Not a big deal for TicketModel but it can be for
+        // other classes.
+        // Update : used constructor way
+        TicketModel ticketModel = TicketModelFactory.newInstance(id, subject, agentName, getTags(tags));
+        return ticketModel.save();
     }
 
     /**
@@ -81,7 +83,6 @@ public class TicketService {
      */
     public void processCreateTicket() {
         Scanner scanner = ConsoleReader.newInstance();
-        System.out.println("came here");
         try {
             int id = processId();
 
@@ -105,10 +106,13 @@ public class TicketService {
             } else {
                 System.out.println("Error while creating ticket");
             }
-
         } catch (InputMismatchException ime) {
 //            ime.printStackTrace();
             System.out.println("Invalid input provided!!!");
+        } catch (InvalidParamsException ipe) {
+            //
+        } catch (DuplicateIdException dide) {
+            //
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -126,8 +130,7 @@ public class TicketService {
             //Update: again avoiding problem of scanner
             Scanner scanner = ConsoleReader.newInstance();
             System.out.println("Enter id");
-            int id = scanner.nextInt();
-            return id;
+            return scanner.nextInt();
         } catch (InputMismatchException ime) {
             System.out.println("Invalid input provided!!!");
         } catch (Exception e) {
@@ -144,22 +147,24 @@ public class TicketService {
      * @param tags
      * @return
      */
-    public boolean updateTicket(int id, String agentName, String tags) {
-        if (id > 0 && ticketOperations.isExists(id)) {
-            // Here Multiple TicketOperations object is created , store above object and used
-            //Update: used instance variable
-            TicketModel tm = ticketOperations.find(id);
-
-            if (Util.isStringValid(agentName)) {
-                tm.setAgentName(agentName);
-            }
-            Set<String> hs = getTags(tags);
-            tm.setTags(hs);
-            // You calling setter method of TicketModel stored in map then no needs to put is again
-            return tm.save();
+    public boolean updateTicket(int id, String agentName, String tags) throws TicketNotFoundException, InvalidParamsException {
+        if (id <= 0) {
+            throw new InvalidParamsException("Please provide valid id!!!");
         }
-        System.out.println("Invalid input provided!!!");
-        return false;
+        // Here Multiple TicketOperations object is created , store above object and used
+        //Update: used instance variable
+        TicketModel tm = ticketOperations.find(id);
+
+        if (tm == null) {
+            throw new TicketNotFoundException("Ticket not found for update!!!");
+        }
+        if (Util.isStringValid(agentName)) {
+            tm.setAgentName(agentName);
+        }
+        tm.setTags(getTags(tags));
+        // You calling setter method of TicketModel stored in map then no needs to put is again
+        //Update: removed unwanted save
+        return true;
     }
 
     /**
@@ -184,13 +189,15 @@ public class TicketService {
             String tags = scanner.nextLine();
             //What if I want only agent name not tags and vice-versa
             //Update: currently in case-study we didn't mentioned that we are updating only one, so updated both
-            if (updateTicket(id, agentName, tags)) {
+            if (this.updateTicket(id, agentName, tags)) {
                 System.out.println("Ticket updated successfully");
-            } else {
-                System.out.println("Error while updating ticket");
             }
         } catch (InputMismatchException ime) {
             System.out.println("Invalid input provided!!!");
+        } catch (InvalidParamsException ipe) {
+            //
+        } catch (TicketNotFoundException tnfe) {
+            //
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -211,13 +218,11 @@ public class TicketService {
      * @param agentName
      * @return
      */
-    public List<TicketModel> findAllTicketsByAgentName(String agentName) {
-        if (Util.isStringValid(agentName)) {
-            return ticketOperations.findAllByAgentName(agentName);
+    public List<TicketModel> findAllTicketsByAgentName(String agentName) throws InvalidParamsException {
+        if (!Util.isStringValid(agentName)) {
+            throw new InvalidParamsException("Invalid parameter");
         }
-        //Use diamond operator instead
-//        Update: changes done
-        return new ArrayList<>();
+        return ticketOperations.findAllByAgentName(agentName);
     }
 
     /**
@@ -226,11 +231,11 @@ public class TicketService {
      * @param tag
      * @return
      */
-    public List<TicketModel> getAllTicketsByTags(String tag) {
-        if (Util.isStringValid(tag)) {
-            return ticketOperations.findAllByTag(tag);
+    public List<TicketModel> getAllTicketsByTags(String tag) throws InvalidParamsException {
+        if (!Util.isStringValid(tag)) {
+            throw new InvalidParamsException("Invalid params");
         }
-        return new ArrayList<TicketModel>();
+        return ticketOperations.findAllByTag(tag);
     }
 
     /**
@@ -266,34 +271,37 @@ public class TicketService {
      * @param id
      * @return
      */
-    public boolean deleteTicket(int id) {
-        if (id > 0) {
-            return ticketOperations.delete(id);
+    public boolean deleteTicket(int id) throws TicketNotFoundException, InvalidParamsException {
+        if (id <= 0) {
+            throw new InvalidParamsException("Please provide valid id!!!");
         }
-        System.out.println("Invalid input provided!!!");
-        return false;
+        boolean isDelete = ticketOperations.delete(id);
+        if (!isDelete) {
+            throw new TicketNotFoundException("Ticket not found!!!");
+        }
+        return true;
     }
 
     /**
      * select individual ticket by Id ticket menu
      */
-    public void processDeleteTicket() throws InterruptedException {
+    public void processDeleteTicket() {
         try {
             int id = processId();
 
             if (this.deleteTicket(id)) {
                 System.out.println("Entry removed successfully");
-            } else {
-                System.out.println("No data found!!!");
             }
         } catch (InputMismatchException ime) {
             System.out.println("Invalid input provided!!!");
         } catch (NumberFormatException nfe) {
             System.out.println("Please Enter valid number..please try again...\n\n");
-            Thread.sleep(100);
-            processDeleteTicket();
+        } catch (InvalidParamsException ipe) {
+            //
+        } catch (TicketNotFoundException tnfe) {
+            //
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
         }
     }
 
@@ -303,14 +311,17 @@ public class TicketService {
      * @param id
      * @return
      */
-    public TicketModel getTicketDetail(int id) {
-        if (id > 0) {
-            //What is the use of this method you can use this method single code directly , unnecessary method stack
-            //Update : changed it
-            return ticketOperations.find(id);
+    public TicketModel getTicketDetail(int id) throws InvalidParamsException, TicketNotFoundException {
+        if (id <= 0) {
+            throw new InvalidParamsException("Please provide valid id!!!");
         }
-        System.out.println("Invalid input provided!!!");
-        return null;
+        //What is the use of this method you can use this method single code directly , unnecessary method stack
+        //Update : changed it
+        TicketModel ticketModel = ticketOperations.find(id);
+        if (ticketModel == null) {
+            throw new TicketNotFoundException("Ticket not found!!!");
+        }
+        return ticketModel;
     }
 
     /**
@@ -322,6 +333,12 @@ public class TicketService {
             printTicketDetails(getTicketDetail(id));
         } catch (InputMismatchException ime) {
             System.out.println("Invalid input provided");
+        } catch (NumberFormatException nfe) {
+            System.out.println("Please Enter valid number..please try again...\n\n");
+        } catch (InvalidParamsException ipe) {
+            //
+        } catch (TicketNotFoundException tnfe) {
+            //
         } catch (Exception e) {
 //            e.printStackTrace();
         }
@@ -358,11 +375,11 @@ public class TicketService {
         //Update: I disagree in this scenario as I am segregating code, I have segregated listing function & then continued
         // with printing process, consider you want to perform testing on getTicketList function, so considering current
         // code it would be much easier to test individual function
-        List<TicketModel> ls = getTicketList();
-        if (Util.isCollectionValid(ls)) {
+        List<TicketModel> ticketModelList = getTicketList();
+        if (Util.isCollectionValid(ticketModelList)) {
             //Used internal forEach instead of external for each
             //Update : used internal foreach
-            ls.forEach(ticketModel -> printTicketDetails(ticketModel));
+            ticketModelList.forEach(ticketModel -> printTicketDetails(ticketModel));
         } else {
             System.out.println("No data found!!!");
         }
@@ -376,17 +393,19 @@ public class TicketService {
             System.out.println("Enter agent name");
             //Problem with space
             //Update: removed space
-            String agentName = ConsoleReader.newInstance().next();
+            String agentName = ConsoleReader.newInstance().nextLine();
 
-            List<TicketModel> ls = findAllTicketsByAgentName(agentName);
-            if (Util.isCollectionValid(ls)) {
+            List<TicketModel> ticketModelList = findAllTicketsByAgentName(agentName);
+            if (Util.isCollectionValid(ticketModelList)) {
                 //Used internal forEach instead of external for each
                 //Update: used internal foreach
-                ls.forEach(ticketModel -> printTicketDetails(ticketModel));
+                ticketModelList.forEach(ticketModel -> printTicketDetails(ticketModel));
             } else {
                 System.out.println("No data found!!!");
             }
 
+        } catch (InvalidParamsException ipe) {
+            //
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -398,17 +417,17 @@ public class TicketService {
     public void processGetAllTicketsByTag() {
         try {
             System.out.println("Enter a tag");
-            String tag = ConsoleReader.newInstance().next();
+            String tag = ConsoleReader.newInstance().nextLine();
 
             List<TicketModel> ls = getAllTicketsByTags(tag);
             if (Util.isCollectionValid(ls)) {
-                for (TicketModel tm : ls) {
-                    printTicketDetails(tm);
-                }
+                ls.forEach(ticketModel -> printTicketDetails(ticketModel));
             } else {
                 System.out.println("No data found!!!");
             }
 
+        } catch (InvalidParamsException ipe) {
+            //
         } catch (Exception e) {
             e.printStackTrace();
         }
