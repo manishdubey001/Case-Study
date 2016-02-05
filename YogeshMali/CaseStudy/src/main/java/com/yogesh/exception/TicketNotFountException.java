@@ -1,4 +1,4 @@
-package com.yogesh.Exception;
+package com.yogesh.exception;
 
 /**
  * Created by root on 2/2/16.

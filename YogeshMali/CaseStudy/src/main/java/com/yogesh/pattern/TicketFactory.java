@@ -10,7 +10,7 @@ import java.util.Set;
  */
 public class TicketFactory {
 
-    public static Ticket newInstance(int id, String subject, String agentName, Set<String> list) {
-        return new Ticket(id,subject,agentName,list);
-    }
+//    public static Ticket newInstance(int id, String subject, String agentName, Set<String> list) {
+//        return new Ticket(id,subject,agentName,list);
+//    }
 }

@@ -1,6 +1,6 @@
 package com.yogesh;
 
-import com.yogesh.Exception.TicketNotFountException;
+import com.yogesh.exception.TicketNotFountException;
 import com.yogesh.model.Ticket;
 import com.yogesh.service.TicketService;
 

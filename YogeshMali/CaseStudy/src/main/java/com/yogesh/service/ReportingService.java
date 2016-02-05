@@ -2,6 +2,7 @@ package com.yogesh.service;
 
 import com.yogesh.model.Ticket;
 
+import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -17,10 +18,30 @@ public class ReportingService {
 
     public HashMap<Integer, Ticket> hmTicketList = new HashMap();
 
+
     public void createBulkTickets() {
+
         Random random = new Random();
         for (int i = 1; i <= 10; i++) {
-            hmTicketList.put(i, new Ticket(i, "SubJect" + i, "Agent" + i, (new HashSet(Arrays.asList("Tag" + random.nextInt(5), "Tag" + random.nextInt(5), "Tag" + random.nextInt(5))))));
+
+            Ticket ticket = new Ticket.Builder().withId(i).withSubject("SubJect" + i).withAgentName("Agent" + i).withTags(new HashSet(Arrays.asList("Tag" + random.nextInt(5), "Tag" + random.nextInt(5), "Tag" + random.nextInt(5)))).build();
+
+            try {
+                Field privateCreated = ticket.getClass().getDeclaredField("created");
+                Field privateModified = ticket.getClass().getDeclaredField("modified");
+
+                privateCreated.setAccessible(true);
+                privateModified.setAccessible(true);
+
+                LocalDateTime localDateTime = LocalDateTime.now().minusDays(new Random().nextInt(20));
+                privateCreated.set(ticket, localDateTime);
+                privateModified.set(ticket, localDateTime);
+
+                hmTicketList.put(i, ticket);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -53,16 +74,6 @@ public class ReportingService {
     public HashMap tagWithTicketCounts() {
         HashMap<String, Integer> hmtTotalTags = new HashMap();
 
-//        for (Ticket ticket : this.hmTicketList.values()) {
-//            for (String tag : ticket.getTags()) {
-//                if (!hmtTotalTags.containsKey(tag)) {
-//                    hmtTotalTags.put(tag, 1);
-//                } else {
-//                    int tcount = hmtTotalTags.get(tag) + 1;
-//                    hmtTotalTags.put(tag, tcount);
-//                }
-//            }
-//        }
         hmTicketList.values().stream().forEach(ticket -> {
             ticket.getTags().forEach(tag -> {
                 if (hmtTotalTags.containsKey(tag)) {

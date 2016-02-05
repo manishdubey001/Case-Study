@@ -3,7 +3,6 @@ package com.yogesh.model;
 import java.io.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.Set;
 
 /**
@@ -18,16 +17,24 @@ public class Ticket implements Serializable {
     LocalDateTime created;
     LocalDateTime modified;
 
-    public Ticket() {
+    public Ticket(Ticket ticket) {
+        this.id = ticket.id;
+        this.subject = ticket.subject;
+        this.agentName = ticket.agentName;
+        this.tags = ticket.tags;
+        this.modified = ticket.created;
+        this.created = ticket.modified;
+
     }
 
-    public Ticket(int id, String subject, String agentName, Set tags) {
-        this.id = id;
-        this.subject = subject;
-        this.agentName = agentName;
-        this.tags = tags;
-        this.modified = this.created = LocalDateTime.now().minusDays(new Random().nextInt(20));
-    }
+//    public Ticket(int id, String subject, String agentName, Set tags) {
+//        this.id = id;
+//        this.subject = subject;
+//        this.agentName = agentName;
+//        this.tags = tags;
+//        this.modified = this.created = LocalDateTime.now();
+//    }
+
 
     //Ganesh D : check Chad's email, you don't have to expose each & every getters & setters
     public int getId() {
@@ -39,9 +46,6 @@ public class Ticket implements Serializable {
         return subject;
     }
 
-    public void setSubject(String subject) {
-        this.subject = subject;
-    }
 
     public String getAgentName() {
         return agentName;
@@ -107,6 +111,61 @@ public class Ticket implements Serializable {
         ObjectInputStream objIn = new ObjectInputStream(new FileInputStream("SerTicket.ser"));
 
         return ((ArrayList) objIn.readObject());
+    }
+
+
+    private Ticket(Builder builder) {
+        this.id = builder.id;
+        this.subject = builder.subject;
+        this.agentName = builder.agentName;
+        this.tags = builder.tags;
+        this.modified = builder.created;
+        this.created = builder.modified;
+    }
+
+    public static class Builder {
+        private int id;
+        private String subject;
+        private String agentName;
+        private Set<String> tags;
+        private LocalDateTime created;
+        private LocalDateTime modified;
+
+        public Builder withId(int id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder withSubject(final String subject) {
+            this.subject = subject;
+            return this;
+        }
+
+        public Builder withAgentName(final String agentName) {
+            this.agentName = agentName;
+            return this;
+        }
+
+        public Builder withTags(final Set tags) {
+            this.tags = tags;
+            return this;
+        }
+
+        public Builder withCreated(final LocalDateTime created) {
+            this.created = created;
+            return this;
+        }
+
+        public Builder withModified(final LocalDateTime modified) {
+            this.modified = modified;
+            return this;
+        }
+
+
+        public Ticket build() {
+            return new Ticket(this);
+        }
+
     }
 
 

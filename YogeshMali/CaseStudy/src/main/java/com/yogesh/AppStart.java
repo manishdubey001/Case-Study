@@ -5,10 +5,12 @@ package com.yogesh;
 /**
  * Created by root on 12/1/16.
  */
-public class AppStart {
+public class AppStart  implements Cloneable {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws CloneNotSupportedException
+    {
 
          new MenuClass();
+
     }
 }

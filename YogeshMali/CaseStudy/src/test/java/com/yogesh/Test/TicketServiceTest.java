@@ -1,5 +1,6 @@
 package com.yogesh.Test;
 
+import com.yogesh.exception.TicketNotFountException;
 import com.yogesh.model.Ticket;
 import com.yogesh.service.TicketService;
 import org.junit.Assert;
@@ -7,7 +8,6 @@ import org.junit.Test;
 
 import java.util.*;
 
-import static java.util.Arrays.asList;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -106,7 +106,7 @@ public class TicketServiceTest {
     }
 
     @Test
-    public void testUpdateTicketAgentNameServicewithIdBlackAgentname() throws Exception {
+    public void testUpdateTicketAgentNameServicewithIdBlankAgentname() throws Exception {
 
         int id = 1;
         String subject = "Subject";
@@ -128,10 +128,10 @@ public class TicketServiceTest {
         Set<String>  categories = new HashSet<String>(Arrays.asList("tag1", "tag2"));
         assertTrue(ticketService.createTicketService(id, subject, agent, categories));
 
-        Set<String>  newtags = new HashSet<String>(Arrays.asList());
+        Set<String>  newtags = new HashSet<String>(Arrays.asList("tag3"));
         assertTrue(ticketService.updateTags(id, newtags));
         Ticket ticket = ticketService.showSingleTicketService(id);
-        Assert.assertEquals(asList(), ticket.getTags());
+        Assert.assertEquals(new HashSet<String>(Arrays.asList("tag3")), ticket.getTags());
     }
 
     @Test
@@ -176,10 +176,10 @@ public class TicketServiceTest {
         Assert.assertEquals("James", ticket.getAgentName());
         Assert.assertEquals(1, ticket.getId());
         Assert.assertEquals("Subject", ticket.getSubject());
-        Assert.assertEquals(asList("one", "two", "three"), ticket.getTags());
+        Assert.assertEquals(new HashSet<String>(Arrays.asList("tag1", "tag2")), ticket.getTags());
     }
 
-    @Test
+    @Test(expected=TicketNotFountException.class)
     public void testSingleTicketDetailsServicewithWrongId() throws Exception {
 
         int id = 1;
@@ -190,7 +190,8 @@ public class TicketServiceTest {
 
         id = 2;
         Ticket ticket = (ticketService.showSingleTicketService(id));
-        Assert.assertEquals(null, ticket);
+
+
 
     }
 
@@ -212,17 +213,22 @@ public class TicketServiceTest {
 
         List<Ticket> list = (ticketService.showAllTicketService());
 
-        Ticket ticket = list.get(0);
-        Assert.assertEquals("James", ticket.getAgentName());
-        Assert.assertEquals(1, ticket.getId());
-        Assert.assertEquals("Subject", ticket.getSubject());
-        Assert.assertEquals(asList("one", "two", "three"), ticket.getTags());
+        list.stream().forEach(ticket -> {
+            if(ticket.getId() == 1) {
+                Assert.assertEquals("James", ticket.getAgentName());
+                Assert.assertEquals(1, ticket.getId());
+                Assert.assertEquals("Subject", ticket.getSubject());
+                Assert.assertEquals(new HashSet<String>(Arrays.asList("tag1", "tag2")), ticket.getTags());
+            }
+            else  if(ticket.getId() == 2)
+            {
+                Assert.assertEquals("James2", ticket.getAgentName());
+                Assert.assertEquals(2, ticket.getId());
+                Assert.assertEquals("Subject2", ticket.getSubject());
+                Assert.assertEquals(new HashSet<String>(Arrays.asList("tag1", "tag2")), ticket.getTags());
+            }
+        });
 
-        Ticket ticket1 = list.get(1);
-        Assert.assertEquals("James2", ticket1.getAgentName());
-        Assert.assertEquals(2, ticket1.getId());
-        Assert.assertEquals("Subject2", ticket1.getSubject());
-        Assert.assertEquals(asList("one", "two", "three"), ticket1.getTags());
 
     }
 
@@ -241,7 +247,7 @@ public class TicketServiceTest {
         Assert.assertEquals("James", ticket.getAgentName());
         Assert.assertEquals(1, ticket.getId());
         Assert.assertEquals("Subject", ticket.getSubject());
-        Assert.assertEquals(asList("one", "two", "three"), ticket.getTags());
+        Assert.assertEquals(new HashSet<String>(Arrays.asList("tag1", "tag2")), ticket.getTags());
 
     }
 
@@ -273,22 +279,18 @@ public class TicketServiceTest {
         id = 2;
         subject = "Subject2";
         agent = "James2";
-         categories = new HashSet<String>(Arrays.asList("tag1", "tag2"));
+         categories = new HashSet<String>(Arrays.asList("tag", "tag2"));
         assertTrue(ticketService.createTicketService(id, subject, agent, categories));
 
         String tag = "tag1";
         List<Ticket> list = (ticketService.searchTicketsUsingtagService(tag));
+
         Ticket ticket = list.get(0);
         Assert.assertEquals("James", ticket.getAgentName());
         Assert.assertEquals(1, ticket.getId());
         Assert.assertEquals("Subject", ticket.getSubject());
-        Assert.assertEquals(asList("one", "two", "three"), ticket.getTags());
+        Assert.assertEquals(new HashSet<String>(Arrays.asList("tag1", "tag2")), ticket.getTags());
 
-        Ticket ticket1 = list.get(1);
-        Assert.assertEquals("James2", ticket1.getAgentName());
-        Assert.assertEquals(2, ticket1.getId());
-        Assert.assertEquals("Subject2", ticket1.getSubject());
-        Assert.assertEquals(asList("one", "five", "four"), ticket1.getTags());
 
     }
 

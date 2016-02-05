@@ -2,14 +2,11 @@ package com.yogesh.service;
 
 
 import com.yogesh.ConsoleIO;
-import com.yogesh.Exception.TicketNotFountException;
+import com.yogesh.exception.TicketNotFountException;
 import com.yogesh.model.Ticket;
-import com.yogesh.pattern.TicketFactory;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeMap;
+import java.time.LocalDateTime;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -29,7 +26,7 @@ public class TicketService {
                 .filter(t -> t.getAgentName().equalsIgnoreCase(agentName))
                 .collect(Collectors.toList());
 
-        return list;
+        return Collections.unmodifiableList(list);
     }
 
     /**
@@ -42,7 +39,7 @@ public class TicketService {
                 .filter(t -> t.getTags().contains(tag))
                 .collect(Collectors.toList());
 
-        return list;
+        return Collections.unmodifiableList(list);
     }
 
     /**
@@ -79,12 +76,12 @@ public class TicketService {
      */
     //Ganesh D: Returning an empty collection might be better idea, so as to avoid NullPointerException
 
-    // update :: created custom Exception for avoid null pointer Exception
+    // update :: created custom exception for avoid null pointer exception
     public Ticket showSingleTicketService(int id) throws TicketNotFountException {
 
         Ticket ticket = hmTicketList.get(id);
         if (ticket != null) {
-            return hmTicketList.get(id);
+            return new Ticket(hmTicketList.get(id));
         }
 
         throw new TicketNotFountException("Ticket not Found");
@@ -96,10 +93,10 @@ public class TicketService {
      */
     public List showAllTicketService() {
 
-        return this.hmTicketList.values()
+        return Collections.unmodifiableList(this.hmTicketList.values()
                 .stream()
                 .sorted((Ticket o1, Ticket o2) -> o2.getModified().compareTo(o1.getModified()))
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()));
     }
 
 
@@ -140,6 +137,7 @@ public class TicketService {
         if (newAgentName != null && !newAgentName.isEmpty()) {
             Ticket ticket = this.hmTicketList.get(id);
             if (ticket != null) {
+                new Ticket.Builder().withId(id).build();
                 ticket.setAgentName(newAgentName);
                 this.hmTicketList.put(id, ticket);
                 return true;
@@ -162,7 +160,8 @@ public class TicketService {
         if (isTicketIdExist(id)) {
             ConsoleIO.showMsg("ticket Id is already Exist");
         } else if (id > 0 && subject != null && !subject.isEmpty() && agentName != null && !agentName.isEmpty()) {
-            Ticket ticket = TicketFactory.newInstance(id, subject, agentName, list);
+            //   Ticket ticket = TicketFactory.newInstance(id, subject, agentName, list);
+            Ticket ticket = new Ticket.Builder().withId(id).withSubject(subject).withAgentName(agentName).withTags(list).withCreated(LocalDateTime.now()).withModified(LocalDateTime.now()).build();
             this.hmTicketList.put(id, ticket);
             return true;
         }
