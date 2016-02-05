@@ -9,7 +9,6 @@ import helpers.DateTimeUtil;
 import helpers.Util;
 import model.TicketModel;
 import operations.TicketOperations;
-import sun.security.krb5.internal.Ticket;
 
 import java.util.*;
 
@@ -107,12 +106,11 @@ public class TicketService {
                 System.out.println("Error while creating ticket");
             }
         } catch (InputMismatchException ime) {
-//            ime.printStackTrace();
             System.out.println("Invalid input provided!!!");
         } catch (InvalidParamsException ipe) {
-            //
+            System.out.println("Invalid parameters provided!!!");
         } catch (DuplicateIdException dide) {
-            //
+            System.out.println("Duplicate Id!!!");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -195,9 +193,9 @@ public class TicketService {
         } catch (InputMismatchException ime) {
             System.out.println("Invalid input provided!!!");
         } catch (InvalidParamsException ipe) {
-            //
+            System.out.println("Invalid input provided!!!");
         } catch (TicketNotFoundException tnfe) {
-            //
+            System.out.println("Ticket not found!!!");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -297,9 +295,9 @@ public class TicketService {
         } catch (NumberFormatException nfe) {
             System.out.println("Please Enter valid number..please try again...\n\n");
         } catch (InvalidParamsException ipe) {
-            //
+            System.out.println("Invalid parameters provided!!!");
         } catch (TicketNotFoundException tnfe) {
-            //
+            System.out.println("Ticket not found!!!");
         } catch (Exception e) {
 //            e.printStackTrace();
         }
@@ -336,9 +334,9 @@ public class TicketService {
         } catch (NumberFormatException nfe) {
             System.out.println("Please Enter valid number..please try again...\n\n");
         } catch (InvalidParamsException ipe) {
-            //
+            System.out.println("Invalid parameters provided!!!");
         } catch (TicketNotFoundException tnfe) {
-            //
+            System.out.println("Ticket not found!!!");
         } catch (Exception e) {
 //            e.printStackTrace();
         }
@@ -405,7 +403,7 @@ public class TicketService {
             }
 
         } catch (InvalidParamsException ipe) {
-            //
+            System.out.println("Invalid parameters provided!!!");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -427,7 +425,7 @@ public class TicketService {
             }
 
         } catch (InvalidParamsException ipe) {
-            //
+            System.out.println("Invalid parameters provided!!!");
         } catch (Exception e) {
             e.printStackTrace();
         }

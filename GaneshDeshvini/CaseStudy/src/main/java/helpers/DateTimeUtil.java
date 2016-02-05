@@ -80,16 +80,16 @@ public class DateTimeUtil {
         return minusDaysGetTimestamp(localDateTime, noOfDays, 0, 0, 0);
     }
 
-    /**
-     * get timestamp based on hour, minute & second
-     *
-     * @param localDateTime
-     * @param hour
-     * @param minute
-     * @param second
-     * @return
-     */
-    public static long getTimeStampWithHMS(LocalDateTime localDateTime, int hour, int minute, int second) {
-        return convertToSeconds(localDateTime.withHour(hour).withMinute(minute).withSecond(second));
-    }
+//    /**
+//     * get timestamp based on hour, minute & second
+//     *
+//     * @param localDateTime
+//     * @param hour
+//     * @param minute
+//     * @param second
+//     * @return
+//     */
+//    public static long getTimeStampWithHMS(LocalDateTime localDateTime, int hour, int minute, int second) {
+//        return convertToSeconds(localDateTime.withHour(hour).withMinute(minute).withSecond(second));
+//    }
 }

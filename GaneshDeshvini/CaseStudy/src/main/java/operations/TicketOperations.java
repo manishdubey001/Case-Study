@@ -89,7 +89,7 @@ public class TicketOperations {
         return Repository.getInstance().ticketData.values().
                 stream().
                 filter(ticketModel -> ticketModel.getAgentName().equalsIgnoreCase(agentName)).
-                sorted(Comparator.comparing(tm -> tm.getAgentName())).
+                sorted(Comparator.comparing(ticketModel1 -> ticketModel1.getModified())).
                 collect(Collectors.toList());
     }
 
@@ -166,22 +166,20 @@ public class TicketOperations {
     /**
      * get all tickets within specified timestamp
      *
-     * @param startTimestamp
-     * @param endTimestampe
+     * @param timestamp
      * @return
      */
-    public List<TicketModel> findAll(long startTimestamp, long endTimestampe) {
+    public List<TicketModel> getAllTicketFromTimestamp(long timestamp) {
         Map<Integer, TicketModel> ticketData = Repository.getInstance().ticketData;
         if (Util.isMapValid(ticketData)) {
-            Function<TicketModel, Long> byModified = ticketModel -> ticketModel.getModified();
             //sort accordingly , don't reverse after sort
             //Update : changes done
             return ticketData.values().stream().
-                    filter(ticketModel -> ticketModel.getCreated() > startTimestamp && ticketModel.getCreated() <= endTimestampe).
+                    filter(ticketModel -> ticketModel.getCreated() < timestamp).
                     sorted((ticketModel1, ticketModel2) -> Long.compare(ticketModel2.getModified(), ticketModel1.getModified())).
                     collect(Collectors.toList());
         }
-        return new ArrayList<TicketModel>();
+        return new ArrayList<>();
     }
 
     /**
@@ -190,26 +188,24 @@ public class TicketOperations {
      * @return Map<String, Integer>
      */
     public Map<String, Integer> tagsInUsedWithCount() {
-        Map<String, Integer> tagNameWithTicketCount = new HashMap<String, Integer>();
+        Map<String, Integer> tagNameWithTicketCount = new HashMap<>();
         Collection<TicketModel> ticketModelCollection = Repository.getInstance().ticketData.values();
         if (Util.isCollectionValid(ticketModelCollection)) {
             //Used stream or internal forEach
-            for (TicketModel ticketModel : ticketModelCollection) {
-
-                Set<String> tagsSet = ticketModel.getTags();
-                if (Util.isCollectionValid(tagsSet)) {
-
-                    for (String tag : tagsSet) {
-
-                        int cnt = 1;
-                        if (tagNameWithTicketCount.containsKey(tag)) {
-                            cnt = tagNameWithTicketCount.get(tag);
-                            cnt++;
+            ticketModelCollection.forEach(ticketModel -> {
+                        Set<String> tagsSet = ticketModel.getTags();
+                        if (Util.isCollectionValid(tagsSet)) {
+                            for (String tag : tagsSet) {
+                                int cnt = 1;
+                                if (tagNameWithTicketCount.containsKey(tag)) {
+                                    cnt = tagNameWithTicketCount.get(tag);
+                                    cnt++;
+                                }
+                                tagNameWithTicketCount.put(tag, cnt);
+                            }
                         }
-                        tagNameWithTicketCount.put(tag, cnt);
                     }
-                }
-            }
+            );
         }
         return tagNameWithTicketCount;
     }

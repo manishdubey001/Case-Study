@@ -8,7 +8,10 @@ import model.TicketModel;
 import operations.TicketOperations;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.InputMismatchException;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
 
 /**
  * Created by root on 29/1/16.
@@ -56,7 +59,7 @@ public class ReportService {
         } catch (InputMismatchException ime) {
             System.out.println("Invalid input..please try again\n");
         } catch (InvalidParamsException ipe) {
-            //
+            System.out.println("Invalid parameters!!!");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -66,9 +69,7 @@ public class ReportService {
         if (noOfDays <= 0) {
             throw new InvalidParamsException("Invalid params");
         }
-        long startTimeStamp = DateTimeUtil.minusDaysGetTimestamp(LocalDateTime.now(), noOfDays - 1);
-        long endTimeStamp = DateTimeUtil.getTimeStampWithHMS(LocalDateTime.now(), 23, 59, 59);
-        return ticketOperations.findAll(startTimeStamp, endTimeStamp);
+        return ticketOperations.getAllTicketFromTimestamp(DateTimeUtil.minusDaysGetTimestamp(LocalDateTime.now(), noOfDays));
     }
 
     /**
