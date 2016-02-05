@@ -27,8 +27,8 @@ public class FileHelper {
     }
 
     public void write(Object obj){
-        FileOutputStream fileOutputStream = null;
-        ObjectOutputStream objectOutputStream = null;
+        FileOutputStream fileOutputStream;
+        ObjectOutputStream objectOutputStream;
         try {
             fileOutputStream = new FileOutputStream(f,true);
             objectOutputStream = new ObjectOutputStream(fileOutputStream);
@@ -38,11 +38,12 @@ public class FileHelper {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
+            System.out.println(e.getMessage());
             e.printStackTrace();
         }
     }
 
-    public Ticket read(){
+    /*public Ticket read(){
         Ticket t = null;
         FileInputStream fileInputStream = null;
         ObjectInputStream objectInputStream = null;
@@ -59,11 +60,11 @@ public class FileHelper {
             e.printStackTrace();
         }
         return t;
-    }
+    }*/
 
     public Map<Integer,Ticket> readAll(){
         Map<Integer, Ticket> tickets = new HashMap<>();
-        FileInputStream fileInputStream = null;
+        FileInputStream fileInputStream;
         ObjectInputStream objectInputStream = null;
         try{
             fileInputStream = new FileInputStream(f);
