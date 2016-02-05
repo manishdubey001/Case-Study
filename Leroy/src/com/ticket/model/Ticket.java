@@ -1,10 +1,7 @@
 package com.ticket.model;
 
-import java.io.IOException;
-import java.io.Serializable;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.time.LocalDateTime;
-import java.io.ObjectInputStream;
 import java.util.*;
 
 /**
@@ -49,17 +46,10 @@ public class Ticket implements Serializable{
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public String getSubject() {
         return subject;
     }
 
-    public void setSubject(String str) {
-        this.subject = str;
-    }
 
     public String getAgentName() {
         return agentName;
@@ -86,7 +76,7 @@ public class Ticket implements Serializable{
     /**
      Overriding Read / Write for Serialization
      */
-    public void writeSingleObject(ObjectOutputStream oos) throws IOException {
+    public void writeObject(ObjectOutputStream oos) throws IOException {
         oos.writeInt(getId());
         oos.writeUTF(getSubject());
         oos.writeUTF(getAgentName());
@@ -100,23 +90,20 @@ public class Ticket implements Serializable{
     }
 
     public List<Ticket> readMultipleListOfObjects(ObjectInputStream ois) throws IOException, ClassNotFoundException{
-        return (List) ois.readObject();
+        return (List<Ticket>) ois.readObject();
     }
 
-    public Ticket readSingleObject(ObjectInputStream ois) throws IOException,ClassNotFoundException{
-        this.setId(ois.readInt());
-        this.setSubject(ois.readUTF());
-        this.setAgentName(ois.readUTF());
-        this.setTags((Set<String>) ois.readObject());
-        this.created = (LocalDateTime) ois.readObject();
-        this.modified  = (LocalDateTime) ois.readObject();
-        return new Ticket(this.id, this.subject, agentName, this.tags);
+    public void readObject(ObjectInputStream ois) throws IOException,ClassNotFoundException{
+        this.id = ois.readInt();
+        this.subject = ois.readUTF();
+        this.agentName = ois.readUTF();
+        this.tags = (Set<String >)ois.readObject();
+        this.created = (LocalDateTime)ois.readObject();
+        this.modified = (LocalDateTime)ois.readObject();
     }
 
     @Override
     public String toString(){
-        LocalDateTime dt  = this.created;
-        LocalDateTime dt2 = this.modified;
-        return "  "+this.id+"  |  "+this.agentName+"  |  "+this.subject+"  |  "+this.tags+"  |  "+dt+"  |   "+dt2;
+        return "  "+this.id+"  |  "+this.agentName+"  |  "+this.subject+"  |  "+this.tags+"  |  "+this.created+"  |   "+this.modified;
     }
 }

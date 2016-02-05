@@ -2,7 +2,9 @@ package com.ticket.service;
 import com.ticket.util.ConsoleScan;
 import com.ticket.factory.TicketFactory;
 import com.ticket.model.Ticket;
+import com.ticket.util.Utility;
 
+import java.security.InvalidParameterException;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -12,7 +14,7 @@ import java.util.stream.Collectors;
  * Created by root on 14/1/16.
  */
 public class TicketService {
-    public Map<Integer, Ticket> ticketsMap = new HashMap<>();
+    private final Map<Integer, Ticket> ticketsMap = new HashMap<>();
 
     /**
      * function to create new Ticket in the system
@@ -21,19 +23,16 @@ public class TicketService {
      * @param tags
      * @return
      */
-    public boolean createTicket(String sub, String agent, String tags){
-        if(!sub.isEmpty() && !agent.isEmpty() && !tags.isEmpty()){
-            String[] parsedTags = tags.split(",");
-            Set<String> newTags = new HashSet<>(Arrays.asList(parsedTags));
-            Ticket ticket = TicketFactory.createNewInstance(sub,agent, newTags);
-            ticketsMap.put(ticket.getId(),ticket);
+    public Ticket createTicket(String sub, String agent, String tags) throws InvalidParameterException{
+        if(Utility.isStringValid(sub) && Utility.isStringValid(agent) && Utility.isStringValid(tags))
+            throw new InvalidParameterException();
 
-            if (checkIfExists(ticket.getId())) {
-                return true;
-            }
-        }
+        String[] parsedTags = tags.split(",");
+        Set<String> newTags = new HashSet<>(Arrays.asList(parsedTags));
+        Ticket ticket = TicketFactory.createNewInstance(sub,agent, newTags);
+        ticketsMap.put(ticket.getId(),ticket);
+        return ticket;
 
-        return false;
     }
 
     /**
@@ -46,13 +45,13 @@ public class TicketService {
     public boolean updateTicket(int id, String type, String val){
         boolean updated = false;
         Ticket ticket = ticketsMap.get(id);
-        if (ticket != null){
-            if (type.equals("agent") && !val.isEmpty()) {
+        if (Utility.isObjNull(ticket)){
+            if (type.equals("agent") && Utility.isStringValid(val)) {
                 ticket.setAgentName(val);
                 updated = true;
-            } else if (type.equals("tags") && !val.isEmpty()) {
-                String [] parsedtags = val.split(",");
-                Set set1 = new HashSet<>(Arrays.asList(parsedtags));
+            } else if (type.equals("tags") && Utility.isStringValid(val)) {
+                String [] parsedTags = val.split(",");
+                Set set1 = new HashSet<>(Arrays.asList(parsedTags));
                 ticket.setTags(set1);
                 updated = true;
             }
@@ -78,7 +77,10 @@ public class TicketService {
      * @param id
      * @return
      */
-    public Ticket getTicketById(int id){
+    public Ticket getTicketById(int id) throws InvalidParameterException{
+        if (!Utility.isObjNull(ticketsMap.get(id)))
+            throw new InvalidParameterException();
+
         return ticketsMap.get(id);
     }
 
@@ -163,7 +165,7 @@ public class TicketService {
      * function to create dummy date of multiple tickets to write to file
      * @return List of Ticket objects
      */
-    public List<Ticket> prepareMultipleTicketDataForFile(){
+    public List<Ticket> prepareMultipleTicketDataForFile(Ticket ticket){
         List<Ticket> listTickets = new ArrayList<>();
         for (int i = 1; i <=5; i++){
             Set<String> set = new HashSet<String>();

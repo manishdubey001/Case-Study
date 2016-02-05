@@ -21,7 +21,7 @@ public class SerializeService {
         try {
             fileOutputStream = new FileOutputStream(file);
             ObjectOutputStream outputStream = new ObjectOutputStream(fileOutputStream);
-            ticket.writeSingleObject(outputStream);
+            ticket.writeObject(outputStream);
             fileOutputStream.close();
             return true;
         }catch (FileNotFoundException Nf){
@@ -60,8 +60,8 @@ public class SerializeService {
     public void readSingleTicketFromFile(Ticket ticketObj){
         try (FileInputStream fileInputStream = new FileInputStream(file)){
             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
-            Ticket ticket = (Ticket) ticketObj.readSingleObject(objectInputStream);
-            System.out.println(ticket);
+            ticketObj.readObject(objectInputStream);
+            System.out.println(ticketObj);
         }catch (FileNotFoundException Nf){
             Nf.printStackTrace();
         }catch (IOException Io){
@@ -78,7 +78,7 @@ public class SerializeService {
     public void readMultipleTicketsFromFile(Ticket ticketObj){
         try (FileInputStream fileInputStream = new FileInputStream(file)){
             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
-            List<Ticket> tickets = (List) ticketObj.readMultipleListOfObjects(objectInputStream);
+            List<Ticket> tickets = ticketObj.readMultipleListOfObjects(objectInputStream);
             TicketService ticketService = new TicketService();
             ticketService.display(tickets);
         }catch (FileNotFoundException Nf){

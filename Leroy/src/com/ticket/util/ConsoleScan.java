@@ -3,6 +3,7 @@ package com.ticket.util;
 import com.ticket.model.Ticket;
 import com.ticket.service.TicketService;
 
+import java.security.InvalidParameterException;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Map;
@@ -35,18 +36,45 @@ public class ConsoleScan {
     public TicketService ticketService = null;
     private static Scanner scanner;
 
-    // get all Sout commands initially
-    public void getAllCommands(){
+    /**
+     * get all Sout commands initially
+     */
+
+    public void getAllCaseStudyCommands(){
         System.out.println("Please choose an appropriate input.");
-        System.out.println("1 - Create Ticket.");
-        System.out.println("2 - Update Ticket by Id.");
-        System.out.println("3 - Delete/Remove Ticket by Id.");
-        System.out.println("4 - Select single Ticket by Id.");
-        System.out.println("5 - Select all Tickets.");
-        System.out.println("6 - Select Tickets assigned to specific Agent.");
-        System.out.println("7 - Ticket count grouped by Agent name (order by Agent name).");
-        System.out.println("8 - Select all Tickets by specific Tags.");
-        System.out.println("9 - Quit.");
+        String [] menu = {
+                " - Create Ticket.",
+                " - Update Ticket by Id.",
+                " - Delete/Remove Ticket by Id.",
+                " - Select all Tickets.",
+                " - Select Tickets assigned to specific Agent.",
+                " - Ticket count grouped by Agent name (order by Agent name).",
+                " - Select all Tickets by specific Tags.",
+                " - Quit."
+        };
+        int i = 0;
+        for (String contents: menu) {
+            System.out.println(++i+contents);
+        }
+    }
+
+    /**
+     *  get all Report statistics commands initially
+     */
+    public void getAllSerializeCommands(){
+        System.out.println("\nReport Statistics :");
+        String [] menu = {
+                " - No of Tickets in the system.",
+                " - Oldest Ticket in the system.",
+                " - Ticket older than certain number of days ",
+               " - Tags in use/# of tickets with a tag",
+                " - Quit."
+        };
+        int i = 0;
+        for (String contents: menu) {
+            System.out.println(++i+contents);
+        }
+        System.out.println("Please choose an appropriate input.");
     }
 
     public ConsoleScan(){
@@ -54,7 +82,9 @@ public class ConsoleScan {
         scanner = new Scanner(System.in);
     }
 
-    // scan for create ticket
+    /**
+     * scan for create ticket
+     */
     public void scanCreate(){
         System.out.println(ACT_CREATE_TICKET);
         System.out.println(ACT_TSUBJECT);
@@ -65,18 +95,19 @@ public class ConsoleScan {
 
         System.out.println(ACT_TTAGS);
         String tags = getScanner().nextLine();
-
-        if (sub !=null && agent !=null && tags !=null){
-            boolean create = ticketService.createTicket(sub, agent, tags);
-            if (create)
+        try {
+            Ticket obj = ticketService.createTicket(sub, agent, tags);
+            if (Utility.isObjNull(obj)){
                 System.out.println(ACT_SUCCESS);
-
-        }else{
-            System.out.println(ACT_NOT_FOUND);
+            }
+        }catch (InvalidParameterException Ip){
+            System.out.println(ACT_NOT_FOUND+Ip);
         }
     }
 
-    // scan for update
+    /**
+     * scan for update
+     */
     public void scanUpdate(){
         try {
             System.out.println(ACT_TIDUPDATE);
@@ -89,15 +120,13 @@ public class ConsoleScan {
                 if(sel.equals("a")){
                     getScanner().nextLine();
                     System.out.println(ConsoleScan.ACT_AGENTNAME);
-                    String selA = getScanner().nextLine();
+                    value = getScanner().nextLine();
                     type = "agent";
-                    value = selA;
                 }else if (sel.equals("b")){
                     getScanner().nextLine();
                     System.out.println(ConsoleScan.ACT_TTAGS);
-                    String selB = getScanner().nextLine();
+                    value = getScanner().nextLine();
                     type = "tags";
-                    value = selB;
                 }
                 boolean update = ticketService.updateTicket(tid, type, value);
                 if (update){
@@ -112,7 +141,9 @@ public class ConsoleScan {
          }
     }
 
-    // scan for remove ticket
+    /**
+     * scan for remove ticket
+     */
     public void scanRemoveTicket(){
         try {
             System.out.println(ConsoleScan.ACT_TID);
@@ -138,16 +169,20 @@ public class ConsoleScan {
         }
     }
 
-    // scan for Ticket with Id
+    /**
+     * scan for Ticket with Id
+     */
     public void scanTicketId(){
         try{
             System.out.println(ConsoleScan.ACT_TID);
             int selT = getScanner().nextInt();
-            Ticket obj = ticketService.getTicketById(selT);
-            if (obj != null){
+            try
+            {
+                Ticket obj = ticketService.getTicketById(selT);
                 System.out.println(ConsoleScan.ACT_TABLE_HEADER);
                 System.out.println(obj);
-            }else{
+
+            }catch (InvalidParameterException Ip){
                 System.out.println(ACT_NOT_FOUND);
             }
         }catch (InputMismatchException Im){
@@ -155,39 +190,48 @@ public class ConsoleScan {
         }
     }
 
-    // scan for agentname
+    /**
+     * scan for agentname
+     */
     public void scanAgent() {
         System.out.println(ConsoleScan.ACT_AGENTNAME);
         String selA = getScanner().nextLine();
-        if (selA != null && !selA.isEmpty()) {
+        if (Utility.isStringValid(selA)) {
             List l = ticketService.getTicketsByAgentName(selA);
 
-            if (!l.isEmpty())
+            if (Utility.isObjNull(l))
                 ticketService.display(l);
             else
                 System.out.println(ACT_NOT_FOUND);
         }
     }
 
-    // scan for Tags
+    /**
+     *  scan for Tags
+     */
     public void scanTags(){
         System.out.println(ConsoleScan.ACT_TTAGS_SINGLE);
         String selT = getScanner().nextLine();
         List list = ticketService.getAllTicketsByTag(selT);
-        if (!list.isEmpty()){
+        if (Utility.isObjNull(list)){
             ticketService.display(list);
         }
     }
 
-    // scan for Ticket count against Agent
+    /**
+     * scan for Ticket count against Agent
+     */
     public void scanAgentsTicketsCount(){
 
        Map<String, List<Ticket>> tickets = ticketService.getTicketsGroupByAgent();
-        if (!tickets.isEmpty()){
+        if (Utility.isObjNull(tickets)){
             ticketService.printTicketMap(tickets);
         }
     }
 
+    /**
+     * displays all tickets
+     */
     public void scanAll(){
         ticketService.display(ticketService.getAllTickets());
     }
@@ -196,14 +240,17 @@ public class ConsoleScan {
         return scanner;
     }
 
-    // scan for Old tickets from certain numnber of days.
+    /**
+     * scan for Old tickets from certain numnber of days.
+     * @param list
+     */
     public void scanOldTickets(List<Ticket> list) {
         try {
 
             System.out.println(ConsoleScan.ACT_GET_TICKETS_OLD);
             int sel = getScanner().nextInt();
             List<Ticket> ticketList = ticketService.getDateDiff(sel, list);
-            if (!ticketList.isEmpty()){
+            if (Utility.isObjNull(ticketList)){
                 ticketService.display(ticketList);
             }
         }catch (InputMismatchException Im){

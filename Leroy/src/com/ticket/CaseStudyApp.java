@@ -8,7 +8,7 @@ import java.io.InputStreamReader;
 public class CaseStudyApp {
     public static void main(String[] args) {
         ConsoleScan consoleScan = new ConsoleScan();
-        consoleScan.getAllCommands();
+        consoleScan.getAllCaseStudyCommands();
         int count = 0;
         int MAX_TRY = 3;
 
@@ -45,7 +45,7 @@ public class CaseStudyApp {
                             break;
 
                         case 7:
-                                consoleScan.scanAgentsTicketsCount();
+                            consoleScan.scanAgentsTicketsCount();
                             break;
 
 
