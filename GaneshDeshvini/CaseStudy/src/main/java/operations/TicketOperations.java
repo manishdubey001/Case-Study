@@ -89,7 +89,7 @@ public class TicketOperations {
         return Repository.getInstance().ticketData.values().
                 stream().
                 filter(ticketModel -> ticketModel.getAgentName().equalsIgnoreCase(agentName)).
-                sorted(Comparator.comparing(ticketModel1 -> ticketModel1.getModified())).
+                sorted((ticketModel1, ticketModel2) -> Long.compare(ticketModel2.getModified(), ticketModel1.getModified())).
                 collect(Collectors.toList());
     }
 
