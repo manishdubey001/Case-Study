@@ -11,7 +11,7 @@ public class Ticket implements Serializable{
     private String subject;
     private String agentName;
     private HashSet<String> tags;
-    private LocalDateTime created;
+    private LocalDateTime created; // can not make a final because need to get & set the data from file
     private  LocalDateTime modified;
 
     public int getId() {
@@ -35,8 +35,8 @@ public class Ticket implements Serializable{
         return Collections.unmodifiableSet(tags);
     }
 
-    public void setTags(HashSet<String> tags) {
-        this.tags = tags;
+    public void setTags(Set<String> tags) {
+        this.tags = (HashSet)tags;
         this.modified = LocalDateTime.now();
     }
 
@@ -56,6 +56,11 @@ public class Ticket implements Serializable{
         this.created = this.modified = LocalDateTime.now();
     }
 
+    @Override
+    public String toString(){
+        return this.id + "  |  " + this.subject + "  |  " + this.agentName + "  |  " + this.tags + "  |  " + this.created + "  |  " + this.modified;
+    }
+
     private void writeObject(ObjectOutputStream oos) throws Exception{
         oos.writeInt(id);
         oos.writeUTF(subject);
@@ -73,5 +78,4 @@ public class Ticket implements Serializable{
         created = (LocalDateTime) ois.readObject();
         modified = (LocalDateTime)ois.readObject();
     }
-
 }

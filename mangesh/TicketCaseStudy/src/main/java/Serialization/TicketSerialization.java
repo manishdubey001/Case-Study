@@ -45,16 +45,12 @@ public class TicketSerialization {
                 ticketsData.put(t.getId(),t);
             }
         }
-        catch(EOFException e){
-            e.printStackTrace();
-        }
         catch(IOException ie) {
             ie.printStackTrace();
         }
         catch(ClassNotFoundException cnfe){
             cnfe.printStackTrace();
         }
-
         return ticketsData;
     }
 }

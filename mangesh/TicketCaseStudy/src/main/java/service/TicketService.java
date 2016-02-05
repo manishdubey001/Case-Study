@@ -6,13 +6,12 @@ import factory.TicketFactory;
 import model.Ticket;
 import util.Util;
 
+import java.security.InvalidParameterException;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
-
 public class TicketService {
-    public TicketService(){}
-
     public Ticket createTicket(String subject, String agentName, HashSet<String> tagSet){
         Ticket ticket = TicketFactory.newInstanceWithData(subject, agentName, tagSet);
         Util.writeTicketId(ticket.getId());
@@ -24,36 +23,45 @@ public class TicketService {
 
     public boolean deleteTicket(int id) {
         Map<Integer, Ticket> masterTicketsData = TicketSerialization.deserialize();
+        if(masterTicketsData.isEmpty())     return false;
         Ticket ticket = masterTicketsData.remove(id);
-        if(ticket!=null) {
-            TicketSerialization.serialize(masterTicketsData, false);
-            return true;
-        }
-        return false;
+        return (ticket != null) ? true : false;
     }
 
     public Ticket getTicketDetails(int id){
         Map<Integer, Ticket> masterTicketsData = TicketSerialization.deserialize();
-        return masterTicketsData.get(id);
+        Ticket ticket = masterTicketsData.get(id);
+        if(ticket == null) throw new InvalidParameterException();
+        return ticket;
     }
 
     public List<Ticket> getTicketsByAgentName(String agentName){
         Map<Integer, Ticket> masterTicketsData = TicketSerialization.deserialize();
-        return masterTicketsData.values().stream().filter(ticket -> ticket.getAgentName().toLowerCase().equals(agentName.toLowerCase())).collect(Collectors.toList());
+        if (masterTicketsData.isEmpty())  return new ArrayList<>();
+        return Collections.unmodifiableList(masterTicketsData.values()
+                .stream()
+                .filter(ticket -> ticket.getAgentName().toLowerCase().equals(agentName.toLowerCase()))
+                .collect(Collectors.toList()));
     }
 
     public List<Ticket> getTicketsByTag(String tag){
         Map<Integer, Ticket> masterTicketsData = TicketSerialization.deserialize();
-        return masterTicketsData.values().stream().filter(ticket -> ticket.getTags().contains(tag.toLowerCase())).collect(Collectors.toList());
+        if(masterTicketsData.isEmpty())  return new ArrayList<>();
+        return Collections.unmodifiableList(masterTicketsData.values()
+                .stream()
+                .filter(ticket -> ticket.getTags().contains(tag.toLowerCase()))
+                .collect(Collectors.toList()));
     }
 
     public Map<String , List<Ticket>> getTicketCounts(){
         Map<Integer, Ticket> masterTicketsData = TicketSerialization.deserialize();
-        return masterTicketsData.values().stream().collect(Collectors.groupingBy(Ticket::getAgentName));
+        if(masterTicketsData.isEmpty())    return new HashMap<>();
+        return Collections.unmodifiableMap(masterTicketsData.values().stream().collect(Collectors.groupingBy(Ticket::getAgentName)));
     }
 
     public boolean isTicketExist(int id){
         Map<Integer, Ticket> masterTicketsData = TicketSerialization.deserialize();
+        if(masterTicketsData.isEmpty()) return false;
         return masterTicketsData.containsKey(id);
     }
 
@@ -89,6 +97,46 @@ public class TicketService {
     }
 
     public Map<Integer, Ticket> getAllTickets(){
-        return TicketSerialization.deserialize();
+        return Collections.unmodifiableMap(TicketSerialization.deserialize());
+    }
+
+    public int getTotalTicketCounts() {
+        Map<Integer, Ticket> masterTicketsData = TicketSerialization.deserialize();
+        if(masterTicketsData.isEmpty()) return 0;
+        else
+            return TicketSerialization.deserialize().size();
+    }
+
+    public Ticket getOldestTicket() {
+        Map<Integer, Ticket> masterTicketsData = TicketSerialization.deserialize();
+        if (masterTicketsData.isEmpty()) throw  new InvalidParameterException();
+        return masterTicketsData.values().stream().sorted((Ticket t1, Ticket t2) -> t1.getCreated().compareTo(t2.getCreated())).findFirst().get();
+       }
+
+    public List<Ticket> getTicketOlderByDays(int day){
+        Map<Integer, Ticket> masterTicketsData = TicketSerialization.deserialize();
+        if(masterTicketsData.isEmpty()) return new ArrayList<>();
+        LocalDateTime date = LocalDateTime.now().minusDays(day);
+        return Collections.unmodifiableList(masterTicketsData.values().stream().filter(ticket -> date.compareTo(ticket.getCreated())>=0).collect(Collectors.toList()));
+    }
+
+    public Map<String, List<Ticket>> getTicketCountByTags() {
+        Map<Integer, Ticket> masterTicketsData = TicketSerialization.deserialize();
+
+        if(masterTicketsData.isEmpty()) return new HashMap<>();
+
+        Map<String,List<Ticket>> ticketByTag = new HashMap<>();
+        masterTicketsData.values()
+                .stream()
+                .forEach(ticket -> ticket.getTags().forEach(tag -> {
+                    if(ticketByTag.containsKey(tag))
+                        ticketByTag.get(tag).add(ticket);
+                    else {
+                        List<Ticket> list = new ArrayList<>();
+                        list.add(ticket);
+                        ticketByTag.put(tag, list);
+                    }
+                }));
+        return Collections.unmodifiableMap(ticketByTag);
     }
 }
