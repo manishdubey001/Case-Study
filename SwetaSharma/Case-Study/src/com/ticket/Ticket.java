@@ -1,5 +1,6 @@
 package com.ticket;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Collections;
 import java.util.Set;
 
@@ -24,7 +25,8 @@ public class Ticket implements Comparable<Ticket>{
         this.subject    = subject;
         this.agentName  = agentName;
         this.tags       = setOfTags;
-        this.created    = Util.timestamp();
+        //this.created    = Util.timestamp();
+        this.created = LocalDateTime.now().minus(3, ChronoUnit.DAYS);
         // most commonly if you have a modified date you set it to created date on creation.
 
         //UPDATE
@@ -62,8 +64,8 @@ public class Ticket implements Comparable<Ticket>{
         this.agentName = agentName;
     }
 
-    public int getId() {
-        return id;
+    public LocalDateTime getCreated(){
+        return created;
     }
 
     public LocalDateTime getModified() {

@@ -9,6 +9,7 @@ public class ConsoleInput {
     //Declaring scanner variable to take input from user.
     Scanner read = new Scanner(System.in);
     TicketService ticketService = new TicketService();
+    TicketReportService ticketReportService = new TicketReportService();
 
     public void takeInputFromConsole(){
         do{
@@ -40,6 +41,18 @@ public class ConsoleInput {
                 case 8:
                     ticketService.getAgentTicketCount();
                     break;
+                case 9:
+                    ticketReportService.getNumberOfTicketsPresentInSystem();
+                    break;
+                case 10:
+                    ticketReportService.getTagsInUseOfTickets();
+                    break;
+                case 11:
+                    ticketReportService.getTicketsOlderThanXDays();
+                    break;
+                case 12:
+                    ticketReportService.getOldestTicketInSystem();
+                    break;
             }
             System.out.println("Do you want to continue? press 'y' for yes or 'n' for no");
         }while (read.next().equals("y"));
@@ -57,6 +70,10 @@ public class ConsoleInput {
         System.out.println("6. Select ticket assigned to specific agent");
         System.out.println("7. Select all tickets by specific tags");
         System.out.println("8. Ticket count group by agent name");
+        System.out.println("9. How many tickets are in the system");
+        System.out.println("10. Tags count");
+        System.out.println("11. Tickets older than x days");
+        System.out.println("12. Get Oldest ticket in the system");
         System.out.println("Please enter your choice");
     }
 }
