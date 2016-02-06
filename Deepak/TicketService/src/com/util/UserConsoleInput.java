@@ -1,11 +1,7 @@
 package com.util;
 
 import com.customexceptions.UserInputException;
-import com.services.TicketOperations;
 
-import java.awt.*;
-import java.io.File;
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
@@ -25,6 +21,7 @@ public class UserConsoleInput {
         String inputString = "";
         do {
             try {
+                // EB : scanner.nextInt can be used and the value can be returned then and there only.
                 inputString = scanner.nextLine();
                 inputNumber = Integer.parseInt(inputString);
                 loop = false;

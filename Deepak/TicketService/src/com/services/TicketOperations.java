@@ -138,11 +138,11 @@ public class TicketOperations {
             boolean append = true;
             if(file.length() == 0)
                 append = false;
-
+                ticketHashMap.put(ticket.getId(), ticket);
                 if (TicketSerializedClass.saveTicketsInFile(ticketHashMap, append, file)){
                     ticketId++;
                     TicketSerializedClass.updatePropertyFile(ticketIdFile, properties, ticketId);
-                    ticketHashMap.put(ticket.getId(), ticket);
+
                     return ticket;
                 }
                 else

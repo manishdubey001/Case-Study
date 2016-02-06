@@ -34,7 +34,8 @@ public class TicketSerializedClass {
                 // update whole file.
                 oos = new ObjectOutputStream(new FileOutputStream(file));
             }
-
+                // EB : If you expect only the values, why is there a need to bring Set in picture?
+                // EB : You can use .foreach for the same. Iterate over HM and put values.
                 Set<Map.Entry<Long, Ticket>> entrySet = ticketMap.entrySet();
                 for (Map.Entry entry : entrySet)
                     oos.writeObject(entry.getValue());
@@ -144,8 +145,10 @@ public class TicketSerializedClass {
     public static void updatePropertyFile(File file, Properties properties, Long ticketId){
         FileWriter writer = null;
         try{
+            // EB : Why is Properties initialized here?
             properties = new Properties();
             properties.setProperty("ticketId", ticketId.toString());
+            // EB : Is it necessary to create a new object everytime?
             writer = new FileWriter(file);
             properties.store(writer, "host settings");
         } catch (IOException e) {
