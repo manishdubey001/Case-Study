@@ -240,6 +240,8 @@ public class TicketServiceTest {
 
     @Test
     public void test2UpdateWithFullDataSet(){
+//        test1CreateWithFullDataSet();
+        s.readAllTicketsFromFile();
         updateList.forEach((obj)->{
             Ticket t = s.updateTicket(Integer.parseInt((String)obj.get(0)),(String)obj.get(1),(String)obj.get(2),(HashSet<String>) obj.get(3));
             if(obj.get(0) == null || ((String)obj.get(0)).length() == 0 || obj.get(0).equals("1234"))
@@ -266,6 +268,8 @@ public class TicketServiceTest {
 
     @Test
     public void test3DeleteWithFullDataSet(){
+//        test2UpdateWithFullDataSet();
+        s.readAllTicketsFromFile();
         deleteList.forEach((id)->{
             Ticket t = s.deleteTicket(id);
             if(id.equals(999))
@@ -277,6 +281,8 @@ public class TicketServiceTest {
 
     @Test
     public void test4GetDetailWithFullDataSet(){
+//        test3DeleteWithFullDataSet();
+        s.readAllTicketsFromFile();
         deleteList.forEach((id)->{
             Ticket t = s.getTicketById(id);
             if(id.equals(1) || id.equals(999))
@@ -288,6 +294,8 @@ public class TicketServiceTest {
 
     @Test
     public void test5GetAllTicketsWithFullDataSet(){
+//        test4GetDetailWithFullDataSet();
+        s.readAllTicketsFromFile();
         List<Ticket> list = s.getAllTickets();
         assertEquals(1,list.size());
         assertEquals(2,list.get(0).getId());
@@ -295,9 +303,10 @@ public class TicketServiceTest {
 
     @Test
     public void test6FindAssignedToAgentWithFullDataSet(){
+//        test5GetAllTicketsWithFullDataSet();
+        s.readAllTicketsFromFile();
         getAgentTickets.forEach((agent)->{
             List<Ticket> list = s.ticketsOfAgent(agent);
-            System.out.println(list);
             if(agent.equals("a3"))
             {
                 assertNotNull(list);

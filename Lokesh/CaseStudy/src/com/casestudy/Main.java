@@ -2,6 +2,7 @@ package com.casestudy;
 
 /**
  * Created by lokesh on 12/1/16.
+ * This is Main Class defining main function to start the program, and calls functions from Service as per action from user input.
  */
 
 public class Main {
@@ -9,12 +10,7 @@ public class Main {
     final static String []menus = {"1) Create Ticket","2) Update Ticket","3) Delete Ticket","4) Get Ticket","5) Get all Ticket","6) Find Ticket assigned to Agent", "7) Get all Agent with Ticket Counts","8) Search Ticket By Tag","9) Total Ticket Count","10) Oldest Tickets Report", "11) Tickets older than n Days", "12) Count of Tickets with specific Tag", "13) Exit"};
 
     public static void main(String[] args) throws Exception {
-        Service service = new Service();
-        //virendra: naming conventions must be meaningful
-        // Update: How did I missed it? :D
-
-//        for(int i=1;i<=20;i++)
-
+        AddOnService service = new AddOnService();
         //Create Dummy Tickets (only if not available in file) and write them in file with Serialization
         service.createDummyTickets();
         //Read All Tickets from File with de-serialization and store them in local data structure
@@ -22,7 +18,7 @@ public class Main {
         int choice;
         do {
             showMainMenu();
-            choice = MyReader.readChoice("Enter your choice:");
+            choice = InputReader.readChoice("Enter your choice:");
             switch (choice) {
                 case 1:
                     //Create New Ticket
@@ -74,7 +70,8 @@ public class Main {
                 case 13:
                     System.out.println("Good Bye!!");
                     break;
-                default://Exit Case
+                default:
+                    //Exit Case
                     System.out.println("Please enter correct option.");
                     break;
             }
@@ -82,8 +79,7 @@ public class Main {
     }
 
     public static void showMainMenu() {
-        for (String option: menus
-                ) {
+        for (String option: menus) {
             System.out.println(option);
         }
     }

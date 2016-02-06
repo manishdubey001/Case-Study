@@ -6,6 +6,7 @@ import java.util.Map;
 
 /**
  * Created by lokesh on 28/1/16.
+ * A FileHelper class to Create File, Serialize objects into file and de-serialize objects written to file.
  */
 public class FileHelper {
 
@@ -76,6 +77,7 @@ public class FileHelper {
                     Ticket t = (Ticket)objectInputStream.readObject();
                     tickets.put(t.getId(),t);
                 }
+                assert objectInputStream != null;
                 objectInputStream.close();
             }
             fileInputStream.close();
@@ -85,31 +87,17 @@ public class FileHelper {
         return tickets;
     }
 
-   /* public Ticket delete(Ticket t){
-        Ticket fetched_t = null;
-        FileInputStream fileInputStream = null;
-        ObjectInputStream objectInputStream = null;
+    public void clearAll(){
         try{
-            fileInputStream = new FileInputStream(f);
-            if(f.length() > 0)
-                while(fileInputStream.available() > 0 && !t.equals(fetched_t))
-                {
-                    objectInputStream = new ObjectInputStream(fileInputStream);
-                    fetched_t = (Ticket)objectInputStream.readObject();
-//                    objectInputStream.
-                }
-            objectInputStream.close();
-            fileInputStream.close();
-        } catch (Exception e){
-            e.printStackTrace();
+            FileOutputStream fileOutputStream = new FileOutputStream(f);
+            fileOutputStream.close();
         }
-        return t;
-    }*/
+        catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
 
     public boolean checkFile() {
-        if(f.exists() && f.length() > 0)
-            return true;
-        else
-            return false;
+        return f.exists() && f.length() > 0;
     }
 }
