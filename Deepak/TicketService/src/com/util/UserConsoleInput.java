@@ -1,9 +1,9 @@
 package com.util;
 
 import com.customexceptions.UserInputException;
-import com.services.TicketOperations;
 
 import java.util.HashSet;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -11,7 +11,7 @@ import java.util.Set;
  * Created by root on 15/1/16.
  */
 public class UserConsoleInput {
-
+// Lokesh: There can be single function for All string value read from Console. I don't see any difference in function for reading agent name, subject and even tag(other than converting to HashSet).
     public static Scanner scanner = new Scanner(System.in);
 
     /*
@@ -22,6 +22,9 @@ public class UserConsoleInput {
         String inputString = "";
         do {
             try {
+                // EB : scanner.nextInt can be used and the value can be returned then and there only.
+                /** As I want to show the input in error message, by using nextInt it will directly throw the exception.
+                 * input should be visible to user for re-enter correct option. */
                 inputString = scanner.nextLine();
                 inputNumber = Integer.parseInt(inputString);
                 loop = false;
@@ -36,14 +39,23 @@ public class UserConsoleInput {
 
     /*
     * To get the String from user from console */
-    public static String acceptString() throws UserInputException {
+    public static String acceptString(String message){
         String inputString = null;
-        inputString = scanner.nextLine();
-        inputString = inputString.trim();
-        if(inputString == null || inputString.equals("")){
-            throw new UserInputException("Please give some proper input");
+        boolean loop = true;
+        while (loop){
+            System.out.println(message);
+            inputString = scanner.nextLine();
+            inputString = inputString.trim();
+            if(inputString == null || inputString.equals("")){
+                try {
+                    throw new UserInputException("Please give some proper value");
+                } catch (UserInputException e) {
+                    System.out.println(e.getMessage());
+                }
+            }else{
+                loop = false;
+            }
         }
-
         return inputString;
     }
 
@@ -51,31 +63,31 @@ public class UserConsoleInput {
     /*
     * to get the subject */
 
-    public static String getSubject(){
-        boolean subjectLoop1 = true;
+    /*public static String getSubject(){
+        boolean subjectLoop = true;
         String subject = "";
-        while (subjectLoop1) {
+        while (subjectLoop) {
             System.out.println("Please Enter Subject");
             try {
                 subject = UserConsoleInput.acceptString();
-                subjectLoop1 = false;
+                subjectLoop = false;
             } catch (UserInputException e) {
                 System.out.println(e.getMessage()+" for subject!");
             }
         }
         return subject;
-    }
+    }*/
 
 
     /*
     * To get name of agent*/
-    public static String getAgentName(){
+    /*public static String getAgentName(){
         boolean agentLoop = true;
-        String agent_name = "";
+        String agentName = "";
         while (agentLoop) {
             System.out.println("Please Enter Agent Name");
             try {
-                agent_name = UserConsoleInput.acceptString();
+                agentName = UserConsoleInput.acceptString();
                 agentLoop = false;
             } catch (UserInputException e) {
                 //e.printStackTrace();
@@ -83,32 +95,49 @@ public class UserConsoleInput {
             }
         }
 
-        return agent_name;
-    }
+        return agentName;
+    }*/
 
 
     /*
     * To get multiple tag names, separated by Comma*/
     public static Set<String> getTagNames(){
-        System.out.println("Please Enter tags separated by Comma");
-        String[] tag_names;
         Set<String> tagHashSet = new HashSet<>();
-        try {
-            tag_names = UserConsoleInput.acceptString().split(",");
+        System.out.println("Enter tag names separated by comma(,)");
+        String[] tagNames = acceptString("Enter Tags").split(",");
 
-            TicketOperations ticketOperations = new TicketOperations();
-            for(String tag : tag_names){
+            for(String tag : tagNames){
                 tag = tag.trim();
                 if(!(tag.equals(""))){
-                    ticketOperations.allTagHashSet.add(tag);
                     tagHashSet.add(tag);
                 }
             }
-
-        }catch (UserInputException e) {
-            System.out.println("Okay you don't want any tag, it's fine!");
-        }
-
         return tagHashSet;
     }
+
+// Lokesh: File create/check in UserConsoleInput?
+    /*public static File createFile(){
+        File file = null;
+        try {
+            file = new File("src/com/resources/tickets.ser");
+            if(!file.exists())
+                file.createNewFile();
+        } catch (IOException e) {
+            System.out.println("File not found!");
+        }
+        return file;
+    }*/
+
+    public static String getPermission(String str1, String str2){
+        boolean permission = true;
+        String option = "";
+        while(permission){
+            option = acceptString("Enter "+str1+"/"+str2);
+            if(option.toLowerCase().equals(str1) || option.toLowerCase().equals(str2))
+                permission = false;
+        }
+
+        return option.toLowerCase();
+    }
+
 }

@@ -4,6 +4,11 @@ package com.model;
  * Created by root on 14/1/16.
  */
 // How do you plan to use this class?
+    // This will allowed you to have default tags and one can add own custom tags in system.
+    // One can select from these predefined tags.
+    // Duplicate tags are not allowed.
+    // default tags are not deletable, custom tags can be deleted.
+    // In case of deletion of custom tag, one of default tag will applicable to respective tickets.
 public class Tag {
     private static long countId = 1;
     private long id;
