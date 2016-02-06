@@ -116,7 +116,7 @@ public class TicketSerializedClass {
                 tempTicketMap.put(ticket.getId(),ticket);
             }
         }catch (EOFException e){
-//            System.out.println("Reached EOF file");
+            System.out.println("Reached EOF file");
         }catch (IOException e) {
             e.printStackTrace();
         }catch (ClassNotFoundException e){

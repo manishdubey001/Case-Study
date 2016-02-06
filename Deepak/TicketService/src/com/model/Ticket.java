@@ -1,7 +1,5 @@
 package com.model;
 
-import com.services.TicketOperations;
-
 import java.io.*;
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -14,7 +12,7 @@ import java.util.function.Function;
 public class Ticket implements Serializable, Function<Object, Object> {
 
     //* private static long countId = TicketOperations.ticketId;
-    // Lokesh: With each new Run of this application, your tickets are always starting from ID 1, even though they are already created and serialized in file.
+
     // They should start after max_id present in file.
     /** Deepak :
      * I noticed this point and I am working on it, but the MaxId from file is not the correct solution for this.

@@ -83,7 +83,7 @@ public class TicketMenu {
                     break;
                 case 9:
                     /** This is just to load multiple tickets for testing load of collections */
-                    System.out.println("Please don't use it. It will used in case of creating multiple tickets.");
+                    System.out.println("Please don't use it. It will used in case of ");
                     /*System.out.println("Enter no of tickets you want");
                     int noOfTickets = UserConsoleInput.acceptNumber();
                     objTicktOperation.getTickets(objTicktOperation.autoLoadTickets(noOfTickets));*/
