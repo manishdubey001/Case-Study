@@ -5,6 +5,7 @@ package com.casestudy;
  * This is Core Service, providing functions to perform CRUD operations and some other relevant stuffs.
  */
 
+import java.security.InvalidParameterException;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -17,7 +18,10 @@ public class Service {
 
     public Ticket createTicket(String subject, String agent, HashSet<String> tg){
         if(subject == null || agent == null || subject.length() == 0 || agent.length() == 0)
-            return null;
+        {
+            throw new InvalidParameterException();
+//            return null;
+        }
         Ticket t = new Ticket(++max_id,subject,agent,tg, LocalDateTime.now(),LocalDateTime.now());
         tickets.put(t.getId(),t);
         fh.write(t);
@@ -52,8 +56,11 @@ public class Service {
                 t.setTags(s);
             }
             fh.write(t);
+            return t;
         }
-        return t;
+        else
+            throw new InvalidParameterException();
+
     }
 
     public Ticket deleteTicket(int id){
@@ -61,8 +68,10 @@ public class Service {
         if(t != null){
             fh.clearAll();
             tickets.values().stream().forEach(ticket->fh.write(ticket));
+            return t;
         }
-        return t;
+        else
+            throw new InvalidParameterException();
     }
 
     public List<Ticket> getAllTickets(){
@@ -70,7 +79,10 @@ public class Service {
     }
 
     public Ticket getTicketById(int id){
-        return tickets.get(id);
+        if(tickets.keySet().contains(id))
+            return tickets.get(id);
+        else
+            throw new InvalidParameterException();
     }
 
     public List<Ticket> ticketsOfAgent(String agent){

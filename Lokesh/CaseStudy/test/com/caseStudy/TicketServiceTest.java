@@ -2,10 +2,11 @@ package com.caseStudy;
 
 import com.casestudy.Service;
 import com.casestudy.Ticket;
-import org.junit.Test;
+//import org.junit.Test;
 import org.junit.*;
 import org.junit.runners.MethodSorters;
 
+import java.security.InvalidParameterException;
 import java.util.*;
 
 import static junit.framework.Assert.*;
@@ -13,6 +14,7 @@ import static junit.framework.Assert.*;
 
 /**
  * Created by lokesh on 19/1/16.
+ * Test File to unit test Core Service.
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TicketServiceTest {
@@ -191,7 +193,7 @@ public class TicketServiceTest {
     }
 
 
-    @Test
+    @Test(expected = InvalidParameterException.class)
     public void test1CreateWithFullDataSet(){
         //This is single function to test against full data set; what values are passed and what would be expected result to get pass the test case.
         createList.forEach((obj)->{
@@ -238,7 +240,7 @@ public class TicketServiceTest {
     }
 */
 
-    @Test
+    @Test(expected = InvalidParameterException.class)
     public void test2UpdateWithFullDataSet(){
 //        test1CreateWithFullDataSet();
         s.readAllTicketsFromFile();
@@ -266,7 +268,7 @@ public class TicketServiceTest {
         });
     }
 
-    @Test
+    @Test(expected = InvalidParameterException.class)
     public void test3DeleteWithFullDataSet(){
 //        test2UpdateWithFullDataSet();
         s.readAllTicketsFromFile();
@@ -279,7 +281,7 @@ public class TicketServiceTest {
         });
     }
 
-    @Test
+    @Test(expected = InvalidParameterException.class)
     public void test4GetDetailWithFullDataSet(){
 //        test3DeleteWithFullDataSet();
         s.readAllTicketsFromFile();
