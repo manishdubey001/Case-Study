@@ -115,12 +115,5 @@ public class TicketReportService {
         List<Ticket> ticketList = new ArrayList<>(TicketService.ticketList.values());
         Collections.sort(ticketList, new CreatedDateComparator());
         System.out.println("Oldest ticket in the system is "+ticketList.get(0));
-
-        /*Optional<Ticket> oldestTicket = TicketService.ticketList.values().stream().sorted(new CreatedDateComparator()).findFirst();
-        if(oldestTicket.isPresent()){
-            System.out.println(oldestTicket.get());
-        }else {
-            System.out.println("List is empty");
-        }*/
     }
 }

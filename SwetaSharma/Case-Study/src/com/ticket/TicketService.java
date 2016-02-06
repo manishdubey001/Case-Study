@@ -107,7 +107,7 @@ public class TicketService {
         }
     }
 
-    public  void getTicketListProcess(){
+    public void getTicketListProcess(){
         List<Ticket> ticketList = getTicketList();
         if(ticketList.isEmpty()){
             System.out.println("List is empty");
@@ -162,7 +162,6 @@ public class TicketService {
         }
     }
 
-    //Need to put try catch statement in below two functions
     public static Set<String> getTicketTags(){
         //Declaring scanner variable to take input from user.
         Scanner read = new Scanner(System.in);
@@ -179,7 +178,7 @@ public class TicketService {
         return setOfTags;
     }
 
-    public static  String getTicketAgentName(){
+    public static String getTicketAgentName(){
         //Declaring scanner variable to take input from user.
         Scanner read = new Scanner(System.in);
         System.out.println("please enter agent name");
@@ -236,8 +235,8 @@ public class TicketService {
             if(agentName != null){
                 ticket.setAgentName(agentName);
             }
-            if(setOfTags.size() > 0){
-                ticket.setTags(setOfTags);
+            if(setOfTags != null && !setOfTags.isEmpty()){
+                    ticket.setTags(setOfTags);
             }
             return ticket;
         }
@@ -292,20 +291,20 @@ public class TicketService {
      * Ticket count group by agent name order by agent name
      */
     public Map<String, Integer> ticketCountByAgent(){
-            // note that on the right-hand side you do not need to
-            // specify the parameter again; you can just say "new ArrayList<>();"
+        // note that on the right-hand side you do not need to
+        // specify the parameter again; you can just say "new ArrayList<>();"
 
-            //UPDATE:
-
-            TreeMap<String, Integer> treeMap = new TreeMap<>();
-            for (Ticket ticket : ticketList.values()){
-                if (treeMap.containsKey(ticket.getAgentName())){
-                    treeMap.put(ticket.getAgentName(), treeMap.get(ticket.getAgentName()) + 1);
-                }else {
-                    treeMap.put(ticket.getAgentName(), 1);
-                }
+        //UPDATE:
+        Map<String, Integer> treeMap = new TreeMap<>();
+        for (Ticket ticket : ticketList.values()){
+            if (treeMap.containsKey(ticket.getAgentName())){
+                treeMap.put(ticket.getAgentName(), treeMap.get(ticket.getAgentName()) + 1);
+            }else {
+                treeMap.put(ticket.getAgentName(), 1);
             }
-            return treeMap;
+        }
+        System.out.println(ticketList.values().stream().collect(Collectors.groupingBy(ticket1 -> ticket1.getAgentName(), Collectors.counting())));
+        return treeMap;
     }
 
     //UPDATE:
