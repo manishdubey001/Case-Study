@@ -36,9 +36,13 @@ public class TicketSerializedClass {
             }
                 // EB : If you expect only the values, why is there a need to bring Set in picture?
                 // EB : You can use .foreach for the same. Iterate over HM and put values.
-                Set<Map.Entry<Long, Ticket>> entrySet = ticketMap.entrySet();
+               /* Set<Map.Entry<Long, Ticket>> entrySet = ticketMap.entrySet();
                 for (Map.Entry entry : entrySet)
-                    oos.writeObject(entry.getValue());
+                    oos.writeObject(entry.getValue());*/
+            for (Ticket ticket : ticketMap.values()){
+                oos.writeObject(ticket);
+            }
+
 
             return true;
         } catch (FileNotFoundException e) {
@@ -76,7 +80,7 @@ public class TicketSerializedClass {
         }
 
 
-/*        ObjectInputStream ois = null;
+        ObjectInputStream ois = null;
         FileInputStream fis = null;
 
         try {
@@ -109,21 +113,19 @@ public class TicketSerializedClass {
             }
         }
 
-        return tempTicketMap;*/
+        return tempTicketMap;
 
-        try(ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
+        /*try(ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
             while (true) {
                 Ticket ticket = (Ticket)ois.readObject();
                 tempTicketMap.put(ticket.getId(),ticket);
             }
-        }catch (EOFException e){
-            System.out.println("Reached EOF file");
         }catch (IOException e) {
             e.printStackTrace();
         }catch (ClassNotFoundException e){
             e.printStackTrace();
         }
-        return tempTicketMap;
+        return tempTicketMap;*/
     }
 
     /**
@@ -146,9 +148,12 @@ public class TicketSerializedClass {
         FileWriter writer = null;
         try{
             // EB : Why is Properties initialized here?
-            properties = new Properties();
+            //properties = new Properties();
             properties.setProperty("ticketId", ticketId.toString());
             // EB : Is it necessary to create a new object everytime?
+            /**Deepak: yes it is necessary to create new object, as whenever we create ticket it has to increment ticket id
+             * in property file.
+             * Also it is closed in finally block */
             writer = new FileWriter(file);
             properties.store(writer, "host settings");
         } catch (IOException e) {

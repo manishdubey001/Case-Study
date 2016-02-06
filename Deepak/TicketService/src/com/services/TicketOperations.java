@@ -55,6 +55,7 @@ public class TicketOperations {
             if (properties == null) {
                 if(ticketIdFile.length() == 0)
                 {
+                    properties = new Properties();
                     TicketSerializedClass.updatePropertyFile(ticketIdFile, properties, Long.valueOf(1));
                 }
                 FileReader reader = new FileReader(ticketIdFile);
@@ -138,15 +139,17 @@ public class TicketOperations {
             boolean append = true;
             if(file.length() == 0)
                 append = false;
-                ticketHashMap.put(ticket.getId(), ticket);
-                if (TicketSerializedClass.saveTicketsInFile(ticketHashMap, append, file)){
-                    ticketId++;
-                    TicketSerializedClass.updatePropertyFile(ticketIdFile, properties, ticketId);
 
-                    return ticket;
-                }
-                else
-                    throw new UserInputException("Sorry! ticket creation failed!");
+            ticketHashMap.put(ticket.getId(), ticket);
+
+            if (TicketSerializedClass.saveTicketsInFile(ticketHashMap, append, file)){
+                ticketId++;
+                TicketSerializedClass.updatePropertyFile(ticketIdFile, properties, ticketId);
+
+                return ticket;
+            }
+            else
+                throw new UserInputException("Sorry! ticket creation failed!");
 
             /** Deepak:
              * throw exception on failure of ticket create and save in file.*/
@@ -387,6 +390,10 @@ public class TicketOperations {
         int id = UserConsoleInput.acceptNumber();
 
         try {
+            if(id <= 0 || id > ticketId-1){
+                throw new UserInputException("Invalid ticket id! please enter valid ticket id");
+            }
+
             if(deleteTicketById(id))
                 System.out.println("Ticket delete successful!");
             else

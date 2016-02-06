@@ -5,7 +5,9 @@ import com.model.Ticket;
 import com.util.UserConsoleInput;
 
 import java.io.File;
+import java.time.DateTimeException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -107,40 +109,53 @@ public class TicketReports {
 
 
     public void getTicketsByDays(){
-        Map<Long, Ticket> ticketMap = getTicketOlderByDays();
-        if (ticketMap.isEmpty()) {
-            System.out.println("No Ticket found!");
-            return;
-        }
-        ticketMap.values().stream().sorted((Ticket t1, Ticket t2) -> t2.getModified().compareTo(t1.getModified()))
-                .forEach((Ticket ticket) -> System.out.println(ticket));
-    }
-
-    public Map<Long, Ticket> getTicketOlderByDays(){
-        String []dateArray = null;
         try {
-            String dateString = UserConsoleInput.acceptString("Please enter date in form of dd/mm/yyyy");
-            dateArray = dateString.split("/");
-            if(dateArray.length > 3 || dateArray.length < 0){
-                throw new UserInputException("Please enter date in proper format!");
+            Map<Long, Ticket> ticketMap = getTicketOlderByDays();
+            if (ticketMap.isEmpty()) {
+                System.out.println("No Ticket found!");
+                return;
             }
-            else {
-                for (String str : dateArray) {
-                    try {
-                        Integer.parseInt(str);
-                    }
-                    catch(NumberFormatException e){
-                        System.out.println("Date is not in proper format!");
-                    }
-                }
-            }
+            ticketMap.values().stream().sorted((Ticket t1, Ticket t2) -> t2.getModified().compareTo(t1.getModified()))
+                    .forEach(System.out::println);
+
         } catch (UserInputException e) {
             System.out.println(e.getMessage());
         }
 
-        LocalDateTime uptoDate = LocalDateTime.of(Integer.parseInt(dateArray[2]), Integer.parseInt(dateArray[1]), Integer.parseInt(dateArray[0]), 0, 0);
+    }
 
-        return ticketOlderByDays(uptoDate);
+
+    public Map<Long, Ticket> getTicketOlderByDays() throws UserInputException {
+        String dateString = UserConsoleInput.acceptString("Please enter date in form of dd-mm-yyyy");
+        String []dateArray = dateString.split("-");
+
+        if(dateArray.length != 3){
+            throw new UserInputException("Please enter date in proper format!");
+        }
+
+        for (String str : dateArray) {
+            try {
+                Integer.parseInt(str);
+            }
+            catch (NumberFormatException ne){
+                System.out.println("Date is not proper number!");
+                return new HashMap<>();
+            }
+        }
+
+        String strFormat = Integer.parseInt(dateArray[2])+"-"+ Integer.parseInt(dateArray[1]) +"-"+ Integer.parseInt(dateArray[0]) +" "+ 0+":"+0;
+
+        try{
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-M-d H:m");
+            LocalDateTime dateTime = LocalDateTime.parse(strFormat, formatter); // to validate date
+            LocalDateTime uptoDate = LocalDateTime.of(Integer.parseInt(dateArray[2]), Integer.parseInt(dateArray[1]), Integer.parseInt(dateArray[0]), 0, 0);
+
+            return ticketOlderByDays(uptoDate);
+        }
+        catch (DateTimeException de){
+            System.out.println("Invalid date provide! Please provide date in proper format");
+            return new HashMap<>();
+        }
     }
 
 

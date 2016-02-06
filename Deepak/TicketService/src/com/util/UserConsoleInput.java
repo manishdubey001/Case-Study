@@ -3,6 +3,7 @@ package com.util;
 import com.customexceptions.UserInputException;
 
 import java.util.HashSet;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -22,6 +23,8 @@ public class UserConsoleInput {
         do {
             try {
                 // EB : scanner.nextInt can be used and the value can be returned then and there only.
+                /** As I want to show the input in error message, by using nextInt it will directly throw the exception.
+                 * input should be visible to user for re-enter correct option. */
                 inputString = scanner.nextLine();
                 inputNumber = Integer.parseInt(inputString);
                 loop = false;

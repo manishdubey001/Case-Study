@@ -7,9 +7,9 @@ public class UserInputException extends Exception {
     private String message = null;
 
 
-    public UserInputException(){
+    /*public UserInputException(){
         super();
-    }
+    }*/
 
 
     public UserInputException(String message){
@@ -18,9 +18,9 @@ public class UserInputException extends Exception {
     }
 
 
-    public UserInputException(Throwable cause){
+    /*public UserInputException(Throwable cause){
         super(cause);
-    }
+    }*/
 
     @Override
     public String toString(){
