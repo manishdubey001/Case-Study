@@ -80,8 +80,8 @@ public class TicketService {
 				.collect(Collectors.toList());
 	}
 
-	public Map<String, List<Ticket>> agentTicketCount(HashMap<Integer, Ticket> ticketDetails) {
+	public Map<String, Long> agentTicketCount(HashMap<Integer, Ticket> ticketDetails) {
 		return new TreeMap<>(ticketDetails.values().stream()
-				.collect(Collectors.groupingBy(Ticket::getAgent)));
+				.collect(Collectors.groupingBy(Ticket::getAgent,Collectors.counting())));
 	}
 }

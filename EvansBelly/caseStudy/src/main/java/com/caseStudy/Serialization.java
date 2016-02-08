@@ -13,7 +13,11 @@ import java.util.stream.Collectors;
  * Created by root on 22/1/16.
  */
 public class Serialization {
-	String file = "ticket.txt";
+	String file;
+
+	{
+		file = "ticket.txt";
+	}
 
 	public static void main(String[] args) throws Exception {
 

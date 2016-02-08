@@ -134,7 +134,6 @@ public class TicketOperations {
 		return ticketObj;
 	}
 
-
 	// delete ticket
 	public void deleteTicketOps() {
 		if (ticketDetails.isEmpty()) {
