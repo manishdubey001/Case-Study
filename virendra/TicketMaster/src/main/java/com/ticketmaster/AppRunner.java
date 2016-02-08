@@ -1,8 +1,8 @@
 package com.ticketmaster;
 
 import com.ticketmaster.exceptions.TicketNotFoundException;
-import com.ticketmaster.models.Ticket;
 import com.ticketmaster.helpers.TicketService;
+import com.ticketmaster.models.Ticket;
 import com.ticketmaster.utils.AppUtil;
 import com.ticketmaster.utils.DetailProvider;
 

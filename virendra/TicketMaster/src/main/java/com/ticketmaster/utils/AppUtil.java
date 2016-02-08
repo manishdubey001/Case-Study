@@ -1,13 +1,9 @@
 package com.ticketmaster.utils;
 
-import com.ticketmaster.Main;
 import com.ticketmaster.exceptions.TicketNotFoundException;
 import com.ticketmaster.helpers.TicketService;
 import com.ticketmaster.models.Ticket;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
