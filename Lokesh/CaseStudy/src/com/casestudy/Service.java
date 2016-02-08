@@ -17,15 +17,14 @@ public class Service {
     static FileHelper fh = new FileHelper("resources/","data.txt");
 
     public Ticket createTicket(String subject, String agent, HashSet<String> tg){
-        if(subject == null || agent == null || subject.length() == 0 || agent.length() == 0)
-        {
-            throw new InvalidParameterException();
-//            return null;
+        if (subject != null && agent != null && subject.length() != 0 && agent.length() != 0) {
+            Ticket t = new Ticket(++max_id, subject, agent, tg, LocalDateTime.now(), LocalDateTime.now());
+            tickets.put(t.getId(), t);
+            fh.write(t);
+            return t;
+        } else {
+            throw new InvalidParameterException("Invalid parameters passed to create Ticket.");
         }
-        Ticket t = new Ticket(++max_id,subject,agent,tg, LocalDateTime.now(),LocalDateTime.now());
-        tickets.put(t.getId(),t);
-        fh.write(t);
-        return t;
     }
 
     public void readAllTicketsFromFile(){
@@ -59,8 +58,7 @@ public class Service {
             return t;
         }
         else
-            throw new InvalidParameterException();
-
+            throw new InvalidParameterException("There is some error in updating Ticket. Check ticket id or try after some time.");
     }
 
     public Ticket deleteTicket(int id){
@@ -71,7 +69,7 @@ public class Service {
             return t;
         }
         else
-            throw new InvalidParameterException();
+            throw new InvalidParameterException("There is some error in deleting Ticket. Check if Ticket id is correct or try after some time.");
     }
 
     public List<Ticket> getAllTickets(){
@@ -82,7 +80,7 @@ public class Service {
         if(tickets.keySet().contains(id))
             return tickets.get(id);
         else
-            throw new InvalidParameterException();
+            throw new InvalidParameterException("Some error in getting ticket detail. Check ticket id or try later.");
     }
 
     public List<Ticket> ticketsOfAgent(String agent){

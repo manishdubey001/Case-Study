@@ -26,7 +26,13 @@ public class AddOnService extends Service{
 
         if(tags.equals("Y"))
             tg = this.readTags();
-        System.out.println(this.createTicket(subject,agent,tg).toString());
+        try {
+            System.out.println(this.createTicket(subject, agent, tg).toString());
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+            System.out.println(e.getCause());
+        }
     }
 
     public void createDummyTickets(){
@@ -60,9 +66,13 @@ public class AddOnService extends Service{
             if(updateTag.equals("A") || updateTag.equals("R")){
                 newTags = this.readTags();
             }
-            t = this.updateTicket(id,newAgent,updateTag,newTags);
-
-            System.out.println("Ticket has been updated: " + t.toString());
+            try {
+                t = this.updateTicket(id, newAgent, updateTag, newTags);
+                System.out.println("Ticket has been updated: " + t.toString());
+            }
+            catch (Exception e){
+                System.out.println(e.getMessage());
+            }
         }
         else{
             System.out.println("Ticket with given ID not Found.");
@@ -72,11 +82,16 @@ public class AddOnService extends Service{
     public void deleteTicket(){
         int id;
         id = InputReader.readChoice("Enter Ticket ID to delete: ");
-        Ticket t = this.deleteTicket(id);
-        if(t == null)
-            System.out.println("No ticket found with Given ID.");
-        else
-            System.out.println("Ticket has been deleted: " + t.toString());
+        try {
+            Ticket t = this.deleteTicket(id);
+            if (t == null)
+                System.out.println("No ticket found with Given ID.");
+            else
+                System.out.println("Ticket has been deleted: " + t.toString());
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+        }
     }
 
     public void getTickets(){
@@ -87,12 +102,13 @@ public class AddOnService extends Service{
     public void getTicket(){
         int id;
         id = InputReader.readChoice("Enter ticket id to get detail: ");
-        Ticket t = this.getTicketById(id);
-        if(t == null)
-            System.out.println("No ticket found with given ID.");
-        else
+        try{
+            Ticket t = this.getTicketById(id);
             System.out.println("Ticket Detail: " + t.toString());
-
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+        }
     }
 
     public void oldestTicket(){

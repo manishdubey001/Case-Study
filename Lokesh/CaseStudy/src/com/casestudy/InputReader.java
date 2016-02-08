@@ -23,8 +23,10 @@ public class InputReader {
     public static String readInput(String string){
         System.out.println(string);
         String str;
-        InputStreamReader inputStreamReader = new InputStreamReader(System.in);BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+
         try{
+            InputStreamReader inputStreamReader = new InputStreamReader(System.in);
+            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
             str =  bufferedReader.readLine();
             if(str == null || str.length() == 0)
             {
