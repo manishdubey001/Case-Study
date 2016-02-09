@@ -27,7 +27,7 @@ public class Ticket implements Serializable{
     int id;
     long created;
     long modified;
-    static private int k = 1;
+    static private int masterId = 1;
     public static final long serialVersionUID = 881811645564116084L;
 
     String subject;
@@ -59,7 +59,7 @@ public class Ticket implements Serializable{
             this.agent = agent;
             return this;
         }
-        public TicketBuilder withTags(Set tags){
+            public TicketBuilder withTags(Set tags){
             if (tags != null){
                 this.tags = (Set<String>)tags;
             }
@@ -184,11 +184,11 @@ public class Ticket implements Serializable{
 
         //fetch id from properties file
         SerializerUtil util = new SerializerUtil();
-        String masterId = util.readProperty("id");
+        String tempId = util.readProperty("id");
 
-        Ticket.k = Integer.parseInt(masterId);
+        Ticket.masterId = Integer.parseInt(tempId);
 
-        setId(Ticket.k++);
+        setId(Ticket.masterId++);
 
         Map<Integer, Ticket> tempMap = new HashMap<>();
         tempMap.put(getId(), this);
@@ -200,7 +200,7 @@ public class Ticket implements Serializable{
         repository.addAgent(getAgent());
         repository.addTags(this.tags);
         //update id in file
-        util.writeProperty("id",new Integer(Ticket.k).toString());
+        util.writeProperty("id",new Integer(Ticket.masterId).toString());
         return repository.getTicket(this.getId()) != null;
     }
 
@@ -278,7 +278,7 @@ public class Ticket implements Serializable{
     }
 
     public static void setMasterId(int val){
-        k = val;
+        masterId = val;
     }
 
     private void writeObject(ObjectOutputStream out)
