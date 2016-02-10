@@ -9,6 +9,9 @@ import java.util.List;
  */
 public class AddOnService extends Service{
 
+    public AddOnService(String path, String fileName){
+        super(path,fileName);
+    }
     public void createTicket(){
         String subject,agent,tags;
         HashSet<String> tg = new HashSet<>();

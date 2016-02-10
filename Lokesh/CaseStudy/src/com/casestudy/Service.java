@@ -14,7 +14,11 @@ public class Service {
 
     private static int max_id = 0;
     static HashMap<Integer, Ticket> tickets = new HashMap<>();
-    static FileHelper fh = new FileHelper("resources/","data.txt");
+    static FileHelper fh;
+    public Service(String path, String fileName){
+//        fh = new FileHelper("resources/","data.txt");
+        fh = new FileHelper(path, fileName);
+    }
 
     public Ticket createTicket(String subject, String agent, HashSet<String> tg){
         if (subject != null && agent != null && subject.length() != 0 && agent.length() != 0) {

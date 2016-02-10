@@ -10,7 +10,7 @@ public class Main {
     final static String []menus = {"1) Create Ticket","2) Update Ticket","3) Delete Ticket","4) Get Ticket","5) Get all Ticket","6) Find Ticket assigned to Agent", "7) Get all Agent with Ticket Counts","8) Search Ticket By Tag","9) Total Ticket Count","10) Oldest Tickets Report", "11) Tickets older than n Days", "12) Count of Tickets with specific Tag", "13) Exit"};
 
     public static void main(String[] args) throws Exception {
-        AddOnService service = new AddOnService();
+        AddOnService service = new AddOnService("resources/","data.txt");
         //Create Dummy Tickets (only if not available in file) and write them in file with Serialization
         service.createDummyTickets();
         //Read All Tickets from File with de-serialization and store them in local data structure
