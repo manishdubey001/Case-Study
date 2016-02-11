@@ -383,7 +383,7 @@ public class TicketServiceTest {
     @Test
     public void test129GetAllTickets(){
         List<Ticket> list = s.getAllTickets();
-        System.out.println("All tickets: " + list);
+//        System.out.println("All tickets: " + list);
         assertEquals(1,list.size());
         assertEquals(2,list.get(0).getId());
     }
