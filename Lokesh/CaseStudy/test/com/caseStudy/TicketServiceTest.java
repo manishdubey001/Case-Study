@@ -28,6 +28,7 @@ public class TicketServiceTest {
     static ArrayList<Integer> deleteList = new ArrayList<>(); // Holds the Integer ID's of Ticket to be deleted
     static ArrayList<Integer> getDetail = new ArrayList<>(); // Holds Integer ID's of Tickets to get Details Operation
     static ArrayList<String> getAgentTickets = new ArrayList<>(); // Holds Strings for Agent Name for which Ticket List to be fetched
+    static ArrayList<String> tagReport = new ArrayList<>(); // Holds Strings of Tags for which Report is asked
 //    Service s = new Service("resources/","data.txt");
     Service s = new Service("resources/","test.txt");
     @BeforeClass
@@ -189,6 +190,10 @@ public class TicketServiceTest {
         //Data for Agents Ticket
         getAgentTickets.add("a3"); // This will be already deleted in delete test - case when coming to getDetail test case, so it will represent a wrong agent name passed.
         getAgentTickets.add("agent1");
+
+        //Data for Tags report
+        tagReport.add("t1");
+        tagReport.add("invalid tag");
     }
 
 // Below this section contains separate functions to test against individual data set one at a time.
@@ -378,7 +383,7 @@ public class TicketServiceTest {
     @Test
     public void test129GetAllTickets(){
         List<Ticket> list = s.getAllTickets();
-//        System.out.println("All tickets: " + list);
+        System.out.println("All tickets: " + list);
         assertEquals(1,list.size());
         assertEquals(2,list.get(0).getId());
     }
@@ -398,6 +403,41 @@ public class TicketServiceTest {
         assertEquals(1,list.size());
         list.forEach(ticket -> assertEquals(data,ticket.getAgent()));
     }
+
+    @Test
+    public void test132GetByTagWithCorrectTag(){
+        assertEquals(1,s.ticketsCountForTag(tagReport.get(0)));
+    }
+
+    @Test
+    public void test133GetByTagWithInvalidTag(){
+        assertEquals(0,s.ticketsCountForTag(tagReport.get(1)));
+    }
+
+    @Test
+    public void test134OlderThanDaysReportWithInvalid(){
+        assertEquals(0,s.olderThanDaysReport(5).size());
+    }
+
+    @Test
+    public void test135OlderThanDaysReportWithValid(){
+        List<Ticket> list = s.olderThanDaysReport(0);
+        assertEquals(1,list.size());
+        assertEquals(2,list.get(0).getId());
+    }
+
+    @Test
+    public void test136OldestTicketsReport(){
+        List<Ticket> list = s.oldestTicketsReport();
+        assertEquals(1,list.size());
+        assertEquals(2,list.get(0).getId());
+    }
+
+    @Test
+    public void test137CountReport(){
+        assertEquals(1,s.countReport());
+    }
+
 
 /*    @Test(expected = InvalidParameterException.class)
     public void test1CreateWithFullDataSet(){
