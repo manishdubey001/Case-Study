@@ -28,14 +28,14 @@ public class FileHelper {
     }
 
     public void write(Object obj){
-        FileOutputStream fileOutputStream;
-        ObjectOutputStream objectOutputStream;
-        try {
-            fileOutputStream = new FileOutputStream(f,true);
-            objectOutputStream = new ObjectOutputStream(fileOutputStream);
+        /*FileOutputStream fileOutputStream;
+        ObjectOutputStream objectOutputStream;*/
+        try(FileOutputStream fileOutputStream= new FileOutputStream(f,true);ObjectOutputStream objectOutputStream= new ObjectOutputStream(fileOutputStream);) {
+            /*fileOutputStream = new FileOutputStream(f,true);
+            objectOutputStream = new ObjectOutputStream(fileOutputStream);*/
             objectOutputStream.writeObject(obj);
-            objectOutputStream.close();
-            fileOutputStream.close();
+            /*objectOutputStream.close();
+            fileOutputStream.close();*/
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -65,10 +65,10 @@ public class FileHelper {
 
     public Map<Integer,Ticket> readAll(){
         Map<Integer, Ticket> tickets = new HashMap<>();
-        FileInputStream fileInputStream;
+        /*FileInputStream fileInputStream;*/
         ObjectInputStream objectInputStream = null;
-        try{
-            fileInputStream = new FileInputStream(f);
+        try(FileInputStream fileInputStream = new FileInputStream(f)){
+            /*fileInputStream = new FileInputStream(f);*/
             if(f.length() > 0)
             {
                 while (fileInputStream.available() > 0)
@@ -80,7 +80,7 @@ public class FileHelper {
                 assert objectInputStream != null;
                 objectInputStream.close();
             }
-            fileInputStream.close();
+            /*fileInputStream.close();*/
         } catch (Exception e){
             e.printStackTrace();
         }

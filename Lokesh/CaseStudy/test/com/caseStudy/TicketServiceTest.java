@@ -18,11 +18,7 @@ import static junit.framework.Assert.*;
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TicketServiceTest {
-    /*final ArrayList<List<Object>> list= Arrays.asList(
-            Arrays.asList("test-subject","test-agent", "tag1,tag2" )
-    ) ;*/
 
-//    final List list = Arrays.asList(1,2);
     static ArrayList<List<Object>> createList = new ArrayList<>(); //Holds List of objects to create Ticket with different values of attributes for each Ticket
     static ArrayList<List<Object>> updateList = new ArrayList<>(); //Holds List of objects to update ticket with different values of attributes for each Ticket
     static ArrayList<Integer> deleteList = new ArrayList<>(); // Holds the Integer ID's of Ticket to be deleted
